@@ -1,0 +1,7 @@
+.jumbotron {
+  background-image: url("./images/desk.jpg");
+  background-size: 100%;
+  height: calc(1050px * (14 / 29));
+  position: relative;
+  width: 1050px;
+}

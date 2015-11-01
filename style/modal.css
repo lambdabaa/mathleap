@@ -1,0 +1,50 @@
+.modal {
+  cursor: default;
+  margin: 150px auto;
+  position: relative;
+  width: 600px;
+}
+
+.modal-header {
+  background-color: #f2f2f2;
+  height: 120px;
+  position: relative;
+  width: 100%;
+}
+
+.modal-body {
+  background-color: white;
+  min-height: 200px;
+  padding: 20px;
+}
+
+.modal-logo {
+  background-image: url("./images/logo.svg");
+  background-size: 100%;
+  height: 120px;
+  margin: 0 auto;
+  width: 120px;
+}
+
+.modal-exit {
+  background-color: #e95b50;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  height: 22px;
+  position: absolute;
+  right: 5px;
+  text-align: center;
+  top: 5px;
+  width: 22px;
+}
+
+.modal-exit:hover {
+  background-color: #e22517;
+}
+
+.modal input,
+.modal select {
+  margin-bottom: 10px;
+}

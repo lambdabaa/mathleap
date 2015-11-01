@@ -1,0 +1,128 @@
+body {
+  font-family: "Lato";
+  font-weight: 300;
+  height: 100vh;
+}
+
+#container {
+  height: 100vh;
+}
+
+* {
+  margin: 0;
+}
+
+#outer-container {
+  background: url("./images/graphy.png");
+  height: 100vh;
+  width: 100%;
+}
+
+#inner-container {
+  background-color: white;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  height: 100vh;
+  margin: 0 auto;
+  width: 1050px;
+}
+
+.view {
+  padding: 15px 30px;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  height: 100vh;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+input,
+select {
+  height: 34px;
+  padding: 0 10px;
+  width: calc(100% - 24px);
+}
+
+.clickable-text:hover {
+  color: #3996f0;
+  cursor: pointer;
+}
+
+.button,
+.button-inverse {
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 24px;
+  height: 39px;
+  line-height: 39px;
+  padding: 0 22px;
+  text-align: center;
+}
+
+.button {
+  background-color: white;
+  color: #3996f0;
+}
+
+.button:hover {
+  color: #2b71b5;
+}
+
+.button:active {
+  color: #6ab0f4;
+}
+
+.button-inverse {
+  background-color: #3996f0;
+  color: white;
+}
+
+.button-inverse:hover {
+  background-color: #2b71b5;
+}
+
+.button-inverse:active {
+  background-color: #6ab0f4;
+}
+
+.list-action-btn {
+  cursor: pointer;
+}
+
+.class-color {
+  border-radius: 50%;
+  cursor: pointer;
+  height: 25px;
+  margin-right: 15px;
+  width: 25px;
+}
+
+.class-code {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  font-weight: bold;
+}
+
+.class-code-key {
+  color: #808080;
+  font-size: 16px;
+}
+
+.class-code-value {
+  color: #404040;
+  font-size: 16px;
+}
+
+.backlink {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}

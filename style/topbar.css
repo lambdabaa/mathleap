@@ -1,0 +1,64 @@
+.topbar {
+  border-bottom: 1px solid #999;
+  display: flex;
+  display: -webkit-flex;
+  height: 120px;
+  position: relative;
+  width: 1050px;
+}
+
+.topbar-logo {
+  background-image: url("./images/logo.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  cursor: pointer;
+  height: 120px;
+  margin: 0 30px;
+  width: 120px;
+}
+
+.topbar-header-text {
+  align-items: center;
+  -wekbit-align-items: center;
+  display: flex;
+  display: -webkit-flex;
+  height: 120px;
+  font-size: 30px;
+  margin-right: 30px;
+  width: 500px;
+}
+
+.topbar-text-logo {
+  align-items: center;
+  -webkit-align-items: center;
+  cursor: pointer;
+  display: flex;
+  display: -webkit-flex;
+  font-family: "Exo";
+  font-size: 60px;
+  margin-right: 30px;
+  width: 500px;
+}
+
+.topbar-text-logo-math {
+  color: #3996f0;
+}
+
+.topbar-text-logo-leap {
+  color: #fc0;
+}
+
+.topbar-actions {
+  align-items: center;
+  -webkit-align-items: center;
+  display: flex;
+  -webkit-display: flex;
+  justify-content: flex-end;
+  -webkit-justify-content: flex-end;
+  width: 310px;
+}
+
+.topbar-action {
+  margin-left: 15px;
+}
