@@ -106,7 +106,6 @@ module.exports = React.createClass({
                  }
                ]}
                rows={classList} />
-
     </div>;
   },
 

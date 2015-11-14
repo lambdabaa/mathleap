@@ -37,9 +37,28 @@ module.exports = React.createClass({
   },
 
   _getRows: function() {
-    let {cols, rows} = this.props;
+    let {cols, rows, selected} = this.props;
     return rows.map((row, rowIndex) => {
-      return <div key={rowIndex} className="tabular-row">
+      let className = 'tabular-row';
+      if (selected === rowIndex) {
+        className += ' selected';
+      }
+
+      let height, tab;
+      if (!Array.isArray(row)) {
+        height = row.height;
+        tab = row.tab;
+        row = row.content;
+      }
+
+      let rowStyle = {};
+      if (height) {
+        rowStyle.height = height;
+      }
+
+      return <div key={rowIndex}
+                  className={className}
+                  style={rowStyle}>
         {
           row.map((cell, cellIndex) => {
             let style = {};
@@ -61,6 +80,12 @@ module.exports = React.createClass({
               {cell}
             </div>;
           })
+        }
+        {
+          tab &&
+          <div className="tabular-row-tab"
+               style={{backgroundColor: tab}}>
+          </div>
         }
       </div>;
     });

@@ -1,11 +1,11 @@
 body {
   font-family: "Lato";
   font-weight: 300;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 #container {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 * {
@@ -14,7 +14,8 @@ body {
 
 #outer-container {
   background: url("style/images/graphy.png");
-  height: 100vh;
+  min-height: 100vh;
+  position: relative;
   width: 100%;
 }
 
@@ -22,7 +23,7 @@ body {
   background-color: white;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0 auto;
   width: 1050px;
 }
@@ -34,7 +35,8 @@ body {
 .overlay {
   background-color: rgba(0, 0, 0, 0.6);
   cursor: pointer;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   left: 0;
   position: absolute;
   top: 0;
