@@ -13,7 +13,7 @@ body {
 }
 
 #outer-container {
-  background: url("./images/graphy.png");
+  background: url("style/images/graphy.png");
   height: 100vh;
   width: 100%;
 }

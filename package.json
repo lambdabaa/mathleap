@@ -33,7 +33,7 @@
     "lint": "eslint .",
     "prepublish": "make -j8",
     "test": "make -j8 && mocha",
-    "watch": "watchman src 'make -j8'"
+    "watch": "watchman src 'make -j8' && watchman style 'make -j8'"
   },
 
   "eslintConfig": {
