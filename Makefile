@@ -4,9 +4,10 @@ FRONTEND_JS = $(shell find src/frontend -name "*.js")
 FRONTEND_BUILT = $(patsubst src/frontend/%.js, build/frontend/%.js, $(FRONTEND_JS))
 BACKEND_JS = $(shell find src/backend -name "*.js")
 BACKEND_BUILT = $(patsubst src/backend/%.js, build/backend/%.js, $(BACKEND_JS))
+CSS = $(shell find style -name "*.css")
 
 .PHONY: all
-all: frontend.min.js backend.min.js
+all: frontend.min.js backend.min.js mathleap.min.css
 
 %.min.js: %.js
 	./node_modules/.bin/uglifyjs $< -o $@
@@ -23,3 +24,6 @@ build/%.js: src/%.js
 
 src/backend/math.js: src/backend/math.json
 	./node_modules/.bin/jison $< -o $@
+
+mathleap.min.css: $(CSS)
+	cat $^ | ./node_modules/.bin/cssmin > $@
