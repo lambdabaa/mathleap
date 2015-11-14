@@ -1,0 +1,17 @@
+{
+  "firebase": "mathleap",
+  "public": ".",
+  "ignore": [
+    "**/.*",
+    "build/**",
+    "src/**",
+    "test/**e",
+    "Makefile",
+    "README.md",
+    "backend.js",
+    "circle.yml",
+    "firebase.json",
+    "frontend.js",
+    "package.json"
+  ]
+}
