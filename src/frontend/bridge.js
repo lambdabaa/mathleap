@@ -7,7 +7,7 @@ async function connect() {
     return worker;
   }
 
-  worker = new ProxyWorker(new Worker('backend.js'));
+  worker = new ProxyWorker(new Worker('backend.min.js'));
   await worker.callWithArgs('ping');
   return worker;
 }
