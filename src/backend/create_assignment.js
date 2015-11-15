@@ -50,7 +50,7 @@ createQuestion['Solving equations of the form Ax = B'] = count => {
     let a = random.integer();
     let b = a * solution;
     let x = random.letter();
-    return `${a}${x} = ${b}`;
+    return {question: `${a}${x}=${b}`, solution};
   });
 };
 
@@ -60,7 +60,7 @@ createQuestion['Solving equations of the form x/A = B'] = count => {
     let a = random.factor(solution);
     let b = solution / a;
     let x = random.letter();
-    return `${x} / ${a} = ${b}`;
+    return {question: `${x}/${a}=${b}`, solution};
   });
 };
 
@@ -70,7 +70,7 @@ createQuestion['Solving equations in one step with addition'] = count => {
     let a = random.integer();
     let b = solution + a;
     let x = random.letter();
-    return `${x} ${a > 0 ? '+' : '-'} ${Math.abs(a)} = ${b}`;
+    return {question: `${x}${a > 0 ? '+' : '-'}${Math.abs(a)}=${b}`, solution};
   });
 };
 

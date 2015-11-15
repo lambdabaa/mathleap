@@ -15,7 +15,12 @@ function main() {
   router.route('/home', require('./components/home'));
   router.route('/classes', require('./components/classes/list'));
   router.route('/classes/:id', require('./components/classes/show'));
-  router.route('/classes/:class/assignments/new', require('./components/assignments/create'));
+  router.route('/classes/:aClass/assignments/new', require('./components/assignments/create'));
+  router.route(
+    '/classes/:aClass/assignments/:assignment/submissions/:submission/edit',
+    require('./components/submissions/edit')
+  );
+
   router.start();
 
   session.on('user', user => {

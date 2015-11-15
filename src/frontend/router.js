@@ -1,6 +1,6 @@
-let EventEmitter = require('events').EventEmitter;
+let {EventEmitter} = require('events');
 let React = require('react');
-let inherits = require('util').inherits;
+let {inherits} = require('util');
 
 function Router(options = {}) {
   this.routes = [];

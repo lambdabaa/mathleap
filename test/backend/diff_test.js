@@ -13,6 +13,19 @@ suite('backend/diff', () => {
     .equal('x^2+9=0');
   });
 
+  test('#applyDiff hard', () => {
+    diff.applyDiff(
+      [
+        {pos: 3, chr: 8, highlight: 5},
+        {pos: 3, chr: 120, highlight: null},
+        {pos: 4, chr: 8, highlight: null}
+      ],
+      '3w=45'
+    )
+    .should
+    .equal('3w=');
+  });
+
   test('#getChanges easy', () => {
     diff.getChanges(
       [
@@ -37,6 +50,43 @@ suite('backend/diff', () => {
       'highlight',
       'highlight',
       'highlight',
+      'none',
+      'none'
+    ]);
+  });
+
+  test('#getChanges easy 2', () => {
+    diff.getChanges(
+      [
+        {pos: 0, chr: 120, highlight: 2}
+      ],
+      '3w=45'
+    )
+    .should
+    .deep
+    .equal([
+      'highlight',
+      'highlight',
+      'none',
+      'none',
+      'none'
+    ]);
+  });
+
+  test('#getChanges easy 3', () => {
+    diff.getChanges(
+      [
+        {pos: 0, chr: 8, highlight: 2},
+        {pos: 0, chr: 120, highlight: null}
+      ],
+      '3w=45'
+    )
+    .should
+    .deep
+    .equal([
+      'highlight',
+      'highlight',
+      'none',
       'none',
       'none'
     ]);
@@ -78,6 +128,48 @@ suite('backend/diff', () => {
       'highlight',
       'none',
       'none'
+    ]);
+  });
+
+  test('#getChanges hard 2', () => {
+    diff.getChanges(
+      [
+        {pos: 3, chr: 8, highlight: 5},
+        {pos: 3, chr: 50, highlight: null},
+        {pos: 4, chr: 120, highlight: null},
+        {pos: 3, chr: 8, highlight: 5}
+      ],
+      '3w=45'
+    )
+    .should
+    .deep
+    .equal([
+      'none',
+      'none',
+      'none',
+      'strikethrough',
+      'strikethrough'
+    ]);
+  });
+
+  test('#getChanges hard 3', () => {
+    diff.getChanges(
+      [
+        {pos: 3, chr: 8, highlight: 5},
+        {pos: 3, chr: 50, highlight: null},
+        {pos: 4, chr: 120, highlight: null},
+        {pos: 3, chr: 120, highlight: 5}
+      ],
+      '3w=45'
+    )
+    .should
+    .deep
+    .equal([
+      'none',
+      'none',
+      'none',
+      'highlight',
+      'highlight'
     ]);
   });
 });

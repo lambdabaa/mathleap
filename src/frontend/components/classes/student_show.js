@@ -101,7 +101,7 @@ module.exports = React.createClass({
     } else {
       // Create a new, in-progress, empty submission.
       let responses = assignment.questions.map(question => {
-        return {question, work: [{operation: 'begin', state: [question]}]};
+        return {question, work: [{operation: 'noop', state: [question.question]}]};
       });
 
       let studentId = session.get('user').uid;

@@ -6,7 +6,7 @@ let Tabular = require('../tabular');
 let Topbar = require('../topbar');
 let classes = require('../../store/classes');
 let debug = console.log.bind(console, '[components/classes/teacher_list]');
-let getPalette = require('../../colors').getPalette;
+let {getPalette} = require('../../colors');
 let handleEnter = require('../../handle_enter');
 let session = require('../../session');
 

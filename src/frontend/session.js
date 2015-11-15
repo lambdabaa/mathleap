@@ -1,5 +1,5 @@
-let EventEmitter = require('events').EventEmitter;
-let inherits = require('util').inherits;
+let {EventEmitter} = require('events');
+let {inherits} = require('util');
 
 function Session() {
   // Hydrate cookie data.

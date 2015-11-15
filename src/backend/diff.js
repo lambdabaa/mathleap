@@ -1,7 +1,54 @@
+let debug = console.log.bind(console, '[service/diff]');
+let {eachChar} = require('../common/string');
 let flatten = require('lodash/array/flatten');
 let map = require('lodash/collection/map');
 let range = require('lodash/utility/range');
-let replaceIndex = require('./array').replaceIndex;
+let {replaceIndex} = require('./array');
+
+/**
+ * Temporary bridge from api that the frontend expects to our
+ * existing backend thing.
+ */
+module.exports = function(statement, deltas) {
+  debug('diff', statement, JSON.stringify(deltas));
+  let adapted = flatten(
+    deltas.map(delta => {
+      let {type, range, replacement} = delta;
+      switch (type) {
+        case 'cancel':
+          return {
+            pos: range[0],
+            chr: 8,
+            highlight: range[1] === range[0] ? null : range[1] + 1
+          };
+        case 'replace':
+          let result = [];
+          result.push({
+            pos: range[0],
+            chr: replacement.charCodeAt(0),
+            highlight: range[1] === range[0] ? null : range[1] + 1
+          });
+
+          eachChar(delta.replacement.slice(1), (chr, index) => {
+            result.push({
+              pos: range[0] + index + 1,
+              chr: replacement.charCodeAt(index + 1),
+              highlight: null
+            });
+          });
+
+          return result;
+      }
+    })
+  );
+
+  debug('adapted to old api', JSON.stringify(adapted));
+
+  return {
+    result: module.exports.applyDiff(adapted, statement),
+    changes: module.exports.getChanges(adapted, statement)
+  };
+};
 
 /**
  * @fileoverview Takes equations like
@@ -25,17 +72,19 @@ let replaceIndex = require('./array').replaceIndex;
  * @param {Object.<string, Array.<Object>>} statementToDeltas string equations
  *     to list of deltas to apply.
  */
-exports.diff = function diff(statementToDeltas) {
+module.exports.diff = function diff(statementToDeltas) {
   return {
-    results: map(statementToDeltas, exports.applyDiff),
-    changes: map(statementToDeltas, exports.getChanges)
+    results: map(statementToDeltas, module.exports.applyDiff),
+    changes: map(statementToDeltas, module.exports.getChanges)
   };
 };
 
-exports.applyDiff = function applyDiff(deltas, stmt) {
+module.exports.applyDiff = function applyDiff(deltas, stmt) {
   if (deltas.length === 0) {
     return stmt;
   }
+
+  debug('applyDiff', JSON.stringify(arguments));
 
   let {pos, chr, highlight} = deltas[0];
   let tail = deltas.slice(1);
@@ -53,7 +102,7 @@ exports.applyDiff = function applyDiff(deltas, stmt) {
   return applyDiff(tail, result);
 };
 
-exports.getChanges = function getChanges(deltas, stmt) {
+module.exports.getChanges = function getChanges(deltas, stmt) {
   let {blocks} = deltas.reduce(
     (data, delta) => {
       let fn = delta.highlight ? handleHighlight : handleChar;
@@ -79,14 +128,16 @@ function handleHighlight(blocks, cursor, delta) {
   let {chr, pos, highlight} = delta;
   let selected = getSelectedBlocks(blocks, pos, highlight);
   let {block, index} = selected[0];
-  let left = getBlockIndex(blocks, pos);
-  let right = getBlockIndex(blocks, highlight);
+  let left = getBlockIndex(blocks, pos, false /* inclusive */);
+  let right = getBlockIndex(blocks, highlight, true /* inclusive */);
+
+  debug(`${selected.length} blocks selected!`);
 
   // NOTE: We need special treatment for the first and last selected blocks
   // since it's possible that we haven't highlighted the entirety of those.
   if (selected.length === 1) {
     if (block.type === 'highlight') {
-      return handleHighlightSelection(blocks, index, left, right);
+      return handleHighlightSelection(blocks, chr, index, left, right);
     }
 
     if (left === 0) {
@@ -117,7 +168,7 @@ function handleHighlight(blocks, cursor, delta) {
     if (i === 0) {
       // This could either be a right selection or an outer selection.
       if (block.type === 'highlight') {
-        return handleHighlightSelection(block, left, block.len);
+        return handleHighlightSelection(block, chr, left, block.len);
       }
 
       return left === 0 ?
@@ -128,7 +179,7 @@ function handleHighlight(blocks, cursor, delta) {
     if (i === selected.length - 1) {
       // This could either be a left selection or an outer selection.
       if (block.type === 'highlight') {
-        return handleHighlightSelection(block, 0, right);
+        return handleHighlightSelection(block, chr, 0, right);
       }
 
       return right === block.len ?
@@ -138,7 +189,7 @@ function handleHighlight(blocks, cursor, delta) {
 
     // Now we know that this is an outer selection.
     if (block.type === 'highlight') {
-      return handleHighlightSelection(block, 0, block.len);
+      return handleHighlightSelection(block, chr, 0, block.len);
     }
 
     return handleOuterSelection(block, chr);
@@ -148,9 +199,16 @@ function handleHighlight(blocks, cursor, delta) {
 /**
  * Handles highlighted block selections instead of untouched blocks.
  */
-function handleHighlightSelection(blocks, index, left, right) {
+function handleHighlightSelection(blocks, chr, index, left, right) {
+  debug('handleHighlightSelection', JSON.stringify(arguments));
   let block = blocks[index];
-  let dist = right - left;
+  let dist;
+  if (chr === 8) {
+    dist = right - left;
+  } else {
+    dist = right - left + 1;
+  }
+
   return replaceIndex(blocks, index, {
     type: block.len === dist ? 'strikethrough' : block.type,
     range: block.range,
@@ -162,6 +220,7 @@ function handleHighlightSelection(blocks, index, left, right) {
  * For the case when an entire block is selected.
  */
 function handleOuterSelection(blocks, index, chr) {
+  debug('handleOuterSelection', JSON.stringify(arguments));
   let block = blocks[index];
   return replaceIndex(
     blocks,
@@ -176,30 +235,31 @@ function handleOuterSelection(blocks, index, chr) {
  * For the case when the left side of a block is selected.
  */
 function handleLeftSelection(blocks, block, index, chr, right) {
+  debug('handleLeftSelection', JSON.stringify(arguments));
   let offspring;
   if (chr === 8) {
     offspring = {
       type: 'strikethrough',
       range: [block.range[0], block.range[0] + right],
-      len: right
+      len: 0
     };
   } else {
     offspring = {
       type: 'highlight',
       range: [block.range[0], block.range[0] + right],
-      len: right + 1
+      len: 1
     };
   }
 
   return {
-    cursor: index + 1,
+    cursor: index,
     blocks: replaceIndex(blocks, index, [
+      offspring,
       {
         type: block.type,
         range: [block.range[0] + right, block.range[1]],
-        len: block.len
-      },
-      offspring
+        len: block.len - (offspring.range[1] - offspring.range[0])
+      }
     ])
   };
 }
@@ -208,18 +268,19 @@ function handleLeftSelection(blocks, block, index, chr, right) {
  * For the case when the right side of a block is selected.
  */
 function handleRightSelection(blocks, block, index, chr, left) {
+  debug('handleRightSelection', JSON.stringify(arguments));
   let offspring;
   if (chr === 8) {
     offspring = {
       type: 'strikethrough',
       range: [block.range[0] + left, block.range[1]],
-      len: block.len - left
+      len: 0
     };
   } else {
     offspring = {
       type: 'highlight',
       range: [block.range[0] + left, block.range[1]],
-      len: block.len - left + 1
+      len: 1
     };
   }
 
@@ -229,7 +290,7 @@ function handleRightSelection(blocks, block, index, chr, left) {
       {
         type: block.type,
         range: [block.range[0], block.range[0] + left],
-        len: block.len
+        len: block.len - (offspring.range[1] - offspring.range[0])
       },
       offspring
     ])
@@ -240,6 +301,7 @@ function handleRightSelection(blocks, block, index, chr, left) {
  * For the case when only an inner slice of a block is selected.
  */
 function handleInnerSelection(blocks, block, index, chr, left, right) {
+  debug('handleInnerSelection', JSON.stringify(arguments));
   let leftSpawn = {
     type: 'none',
     range: [block.range[0], block.range[0] + left],
@@ -256,12 +318,12 @@ function handleInnerSelection(blocks, block, index, chr, left, right) {
     {
       type: 'strikethrough',
       range: [block.range[0] + left, block.range[0] + right],
-      len: right - left
+      len: 0
     } :
     {
       type: 'highlight',
       range: [block.range[0] + left, block.range[0] + right],
-      len: right - left + 1
+      len: 1
     };
 
   return {
@@ -275,6 +337,7 @@ function handleInnerSelection(blocks, block, index, chr, left, right) {
 }
 
 function handleChar(blocks, cursor, delta) {
+  debug('handleChar', JSON.stringify(arguments));
   let block = blocks[cursor];
   let {chr, pos} = delta;
   if (chr === 8) {
@@ -320,7 +383,7 @@ function getSelectedBlocks(blocks, left, right) {
   let results = [];
   blocks.forEach((block, index) => {
     let {len} = block;
-    if (marker < right && marker + len >= left) {
+    if (marker < right && marker + len > left) {
       results.push({index, block});
     }
 
@@ -333,11 +396,17 @@ function getSelectedBlocks(blocks, left, right) {
 /**
  * Normalize a position on the list of blocks to the block in which it lands.
  */
-function getBlockIndex(blocks, marker) {
+function getBlockIndex(blocks, marker, inclusive) {
   for (let i = 0; i < blocks.length; i++) {
     let {len} = blocks[i];
-    if (len > marker) {
-      return marker;
+    if (inclusive) {
+      if (len >= marker) {
+        return marker;
+      }
+    } else {
+      if (len > marker) {
+        return marker;
+      }
     }
 
     marker -= len;

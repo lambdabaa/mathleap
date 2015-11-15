@@ -39,7 +39,7 @@ module.exports = React.createClass({
       'topics'
     );
 
-    let id = this.props.class;
+    let id = this.props.aClass;
     this.bindAsArray(
       new Firebase(`https://mathleap.firebaseio.com/classes/${id}/assignments/`),
       'assignments'
@@ -285,7 +285,7 @@ module.exports = React.createClass({
       {content: '', width: 100},
       {content: '', width: 460}
     ];
-    let rows = preview.map((question, index) => [`${index + 1}.`, question]);
+    let rows = preview.map((question, index) => [`${index + 1}.`, question.question]);
 
     this.props.showModal(
       <div className="assignment-preview">
@@ -323,6 +323,6 @@ module.exports = React.createClass({
   },
 
   _handleBack: function() {
-    location.hash = `#!/classes/${this.props.class}/`;
+    location.hash = `#!/classes/${this.props.aClass}/`;
   }
 });
