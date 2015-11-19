@@ -1,15 +1,15 @@
-let ClassCode = require('../class_code');
+let ClassCode = require('../ClassCode');
 let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
-let Tabular = require('../tabular');
-let Topbar = require('../topbar');
+let Tabular = require('../Tabular');
+let Topbar = require('../Topbar');
 let classes = require('../../store/classes');
-let debug = console.log.bind(console, '[components/classes/show]');
+let debug = console.log.bind(console, '[components/classes/Show]');
 let students = require('../../store/students');
 
 module.exports = React.createClass({
-  displayName: 'classes/teacher_show',
+  displayName: 'classes/TeacherShow',
 
   mixins: [ReactFire],
 

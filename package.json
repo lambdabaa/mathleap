@@ -26,15 +26,15 @@
     "eslint-plugin-react": "3.8.0",
     "jison": "0.4.13",
     "mocha": "2.3.2",
-    "uglify-js": "2.4.24",
-    "watchman": "0.1.8"
+    "uglify-js": "2.4.24"
   },
 
   "scripts": {
+    "deploy": "npm install && rm -rf node_modules && npm install --production && firebase deploy",
     "lint": "eslint .",
     "prepublish": "make -j8",
     "test": "make -j8 && mocha",
-    "watch": "watchman . 'make -j8'"
+    "watch": "watchman-make -p '**/*' -t all"
   },
 
   "eslintConfig": {

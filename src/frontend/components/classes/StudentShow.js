@@ -1,16 +1,16 @@
-let ClassCode = require('../class_code');
+let ClassCode = require('../ClassCode');
 let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
-let Tabular = require('../tabular');
-let Topbar = require('../topbar');
+let Tabular = require('../Tabular');
+let Topbar = require('../Topbar');
 let classes = require('../../store/classes');
 let findKey = require('lodash/object/findKey');
 let session = require('../../session');
 let submissions = require('../../store/submissions');
 
 module.exports = React.createClass({
-  displayName: 'classes/student_show',
+  displayName: 'classes/StudentShow',
 
   mixins: [ReactFire],
 

@@ -2,18 +2,18 @@ let $ = document.querySelector.bind(document);
 let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
-let Tabular = require('../tabular');
-let Topbar = require('../topbar');
+let Tabular = require('../Tabular');
+let Topbar = require('../Topbar');
 let classes = require('../../store/classes');
-let debug = console.log.bind(console, '[components/classes/teacher_list]');
+let debug = console.log.bind(console, '[components/classes/TeacherList]');
 let {getPalette} = require('../../colors');
-let handleEnter = require('../../handle_enter');
+let handleEnter = require('../../handleEnter');
 let session = require('../../session');
 
 let classesRef = new Firebase('https://mathleap.firebaseio.com/classes');
 
 module.exports = React.createClass({
-  displayName: 'classes/teacher_list',
+  displayName: 'classes/TeacherList',
 
   mixins: [ReactFire],
 

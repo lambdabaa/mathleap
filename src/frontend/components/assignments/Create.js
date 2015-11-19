@@ -1,12 +1,12 @@
 /**
  * @fileoverview Assignment generator.
  */
-let ClassCode = require('../class_code');
+let ClassCode = require('../ClassCode');
 let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
-let Tabular = require('../tabular');
-let Topbar = require('../topbar');
+let Tabular = require('../Tabular');
+let Topbar = require('../Topbar');
 let bridge = require('../../bridge');
 let classes = require('../../store/classes');
 let colors = require('../../colors');
@@ -14,7 +14,7 @@ let debug = console.log.bind(console, '[components/assignments/create]');
 let moment = require('moment');
 
 module.exports = React.createClass({
-  displayName: 'assignments/create',
+  displayName: 'assignments/Create',
 
   mixins: [ReactFire],
 

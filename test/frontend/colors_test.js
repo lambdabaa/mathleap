@@ -1,7 +1,7 @@
 let colors = require('../../src/frontend/colors');
 
 suite('colors', () => {
-  test('getPalette', () => {
+  test('#getPalette', () => {
     let palette = colors.getPalette(8);
     palette.length.should.equal(3);
     palette.forEach(row => {
@@ -11,7 +11,7 @@ suite('colors', () => {
     });
   });
 
-  test('random', () => {
+  test('#random', () => {
     colors.colors.should.include(colors.random());
   });
 });

@@ -1,13 +1,13 @@
 let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
-let Tabular = require('../tabular');
-let Topbar = require('../topbar');
+let Tabular = require('../Tabular');
+let Topbar = require('../Topbar');
 let assignments = require('../../store/assignments');
 let bridge = require('../../bridge');
-let charFromKeyEvent = require('../../char_from_key_event');
+let charFromKeyEvent = require('../../charFromKeyEvent');
 let classes = require('../../store/classes');
-let debug = console.log.bind(console, '[components/submissions/edit]');
+let debug = console.log.bind(console, '[components/submissions/Edit]');
 let includes = require('lodash/collection/includes');
 let {mapChar} = require('../../../common/string');
 let submissions = require('../../store/submissions');

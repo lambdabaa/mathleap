@@ -1,5 +1,5 @@
 let $ = document.querySelector.bind(document);
-let Container = require('./components/container');
+let Container = require('./components/Container');
 let React = require('react');
 let ReactDOM = require('react-dom');
 let Router = require('./router');
@@ -11,14 +11,14 @@ function main() {
     location.hash = '#!/home/';
   }
 
-  let router = new Router({miss: require('./components/not_found')});
-  router.route('/home', require('./components/home'));
-  router.route('/classes', require('./components/classes/list'));
-  router.route('/classes/:id', require('./components/classes/show'));
-  router.route('/classes/:aClass/assignments/new', require('./components/assignments/create'));
+  let router = new Router({miss: require('./components/NotFound')});
+  router.route('/home', require('./components/Home'));
+  router.route('/classes', require('./components/classes/List'));
+  router.route('/classes/:id', require('./components/classes/Show'));
+  router.route('/classes/:aClass/assignments/new', require('./components/assignments/Create'));
   router.route(
     '/classes/:aClass/assignments/:assignment/submissions/:submission/edit',
-    require('./components/submissions/edit')
+    require('./components/submissions/Edit')
   );
 
   router.start();

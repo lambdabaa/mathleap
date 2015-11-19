@@ -1,4 +1,4 @@
-let {createQuestion} = require('../../src/backend/create_assignment');
+let {createQuestion} = require('../../src/backend/createAssignment');
 
 suite('service/createAssignment', function() {
   test('Ax=B', function() {

@@ -1,8 +1,8 @@
 let $ = document.querySelector.bind(document);
 let React = require('react');
-let Topbar = require('./topbar');
+let Topbar = require('./Topbar');
 let debug = console.log.bind(console, '[components/home]');
-let handleEnter = require('../handle_enter');
+let handleEnter = require('../handleEnter');
 let students = require('../store/students');
 let teachers = require('../store/teachers');
 let users = require('../store/users');

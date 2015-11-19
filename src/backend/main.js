@@ -4,7 +4,7 @@ let {proxy} = require('proxyworker/lib/proxy');
 
 proxy({
   methods: {
-    createAssignment: require('./create_assignment'),
+    createAssignment: require('./createAssignment'),
     diff: require('./diff'),
     parse: require('./parse'),
     ping: async function() {},

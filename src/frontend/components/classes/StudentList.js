@@ -2,17 +2,17 @@ let $ = document.querySelector.bind(document);
 let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
-let Tabular = require('../tabular');
-let Topbar = require('../topbar');
+let Tabular = require('../Tabular');
+let Topbar = require('../Topbar');
 let debug = console.log.bind(console, '[components/classes/student_list]');
 let session = require('../../session');
 let classes = require('../../store/classes');
-let handleEnter = require('../../handle_enter');
+let handleEnter = require('../../handleEnter');
 
 let studentsRef = new Firebase('https://mathleap.firebaseio.com/students');
 
 module.exports = React.createClass({
-  displayName: 'classes/student_list',
+  displayName: 'classes/StudentList',
 
   mixins: [ReactFire],
 
