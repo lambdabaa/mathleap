@@ -9,6 +9,10 @@ CSS = $(shell find style -name "*.css")
 .PHONY: all
 all: frontend.min.js backend.min.js mathleap.min.css
 
+.PHONY: clean
+clean:
+	rm -rf *.css *.js build src/backend/math.js
+
 %.min.js: %.js
 	./node_modules/.bin/uglifyjs $< -o $@
 

@@ -225,6 +225,10 @@ module.exports = React.createClass({
   },
 
   _handleKeyPress: function(event) {
+    if (event.keyCode === 8) {
+      event.preventDefault();
+    }
+
     let {cursor, equation, num} = this.state;
     if (typeof num !== 'number') {
       return;
