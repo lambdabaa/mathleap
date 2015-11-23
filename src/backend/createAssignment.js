@@ -74,20 +74,68 @@ createQuestion['Solving equations in one step with addition'] = count => {
   });
 };
 
-createQuestion['Solving equations in two steps'] = () => {
-  // TODO
+createQuestion['Solving equations in two steps'] = count => {
+  let solutions = random.integerList(count);
+  return solutions.map(solution => {
+    let a = random.integer();
+    let b = random.integer();
+    let c = a * solution + b;
+    let x = random.letter();
+    let question = b > 0 ?
+      `${a}${x}+${b}=${c}` :
+      `${a}${x}-${Math.abs(b)}=${c}`;
+    return {question, solution};
+  });
 };
 
-createQuestion['Equations with variables on both sides'] = () => {
-  // TODO
+createQuestion['Equations with variables on both sides'] = count => {
+  let solutions = random.integerList(count);
+  return solutions.map(solution => {
+    let a = random.integer();
+    let b = random.integer();
+    let c = random.integer();
+    let d = a * solution + b - c * solution;
+    let x = random.letter();
+    let left = b > 0 ?
+      `${a}${x}+${b}` :
+      `${a}${x}-${Math.abs(b)}`;
+    let right = d > 0 ?
+      `${c}${x}+${d}` :
+      `${c}${x}-${Math.abs(d)}`;
+    return {question: `${left}=${right}`, solution};
+  });
 };
 
-createQuestion['Simple distribution'] = () => {
-  // TODO
+createQuestion['Simple distribution'] = count => {
+  let solutions = random.integerList(count);
+  return solutions.map(solution => {
+    let a = random.integer();
+    let b = random.integer();
+    let c = a * (solution + b);
+    let x = random.letter();
+    let question = b > 0 ?
+      `${a}(${x}+${b})=${c}` :
+      `${a}(${x}-${Math.abs(b)})=${c}`;
+    return {question, solution};
+  });
 };
 
-createQuestion['Clever distribution'] = () => {
-  // TODO
+createQuestion['Clever distribution'] = count => {
+  let solutions = random.superCompositeList(count);
+  return solutions.map(solution => {
+    let c = random.compositeFactor(solution);
+    let a = random.factor(c);
+    let b = random.integer();
+    let d = solution / a + b - solution / c;
+    let x = random.letter();
+    let left = b > 0 ?
+      `${x}/${a}+${b}` :
+      `${x}/${a}-${Math.abs(b)}`;
+    let right = d > 0 ?
+      `${x}/${c}+${d}` :
+      `${x}/${c}-${Math.abs(d)}`;
+    return {question: `${left}=${right}`, solution};
+  });
 };
 
 createQuestion['Applying operations to both sides'] = () => {
