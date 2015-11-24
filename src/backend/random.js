@@ -14,6 +14,13 @@ let composites = exports.composites = [
   30, 32, 33, 34, 35, 36, 38, 39
 ];
 
+let superComposites = exports.superComposites = [
+  -12, -16, -18, -20, -24, -28,
+  -30, -32, -36,
+  12, 16, 18, 20, 24, 28,
+  30, 32, 36
+];
+
 let chrs = exports.chrs = [
   'a', 'b', 'c',
   'g', 'h', 'j',
@@ -24,11 +31,22 @@ let chrs = exports.chrs = [
 
 let randomInteger = random.bind(null, -25, 25);
 let randomComposite = sample.bind(null, composites);
+let randomSuperComposite = sample.bind(null, superComposites);
 exports.integer = uniqueRandom.bind(exports, randomInteger);
 exports.composite = uniqueRandom.bind(exports, randomComposite);
+exports.superComposite = uniqueRandom.bind(exports, randomSuperComposite);
 exports.integerList = randomList.bind(exports, exports.integer);
 exports.compositeList = randomList.bind(exports, exports.composite);
+exports.superCompositeList = randomList.bind(exports, exports.superComposite);
+exports.factorList = randomList.bind(exports, exports.factor);
+exports.boolean = sample.bind(null, [true, false]);
 exports.letter = sample.bind(null, chrs);
+
+exports.nonZero = function() {
+  let magnitude = random(1, 25);
+  let negative = exports.boolean();
+  return negative ? -magnitude : magnitude;
+};
 
 /**
  * TODO: There are better ways to do this...
@@ -43,6 +61,12 @@ exports.factor = function(value) {
         return value % candidate === 0 || value % candidate === -0;
       })
   );
+};
+
+exports.compositeFactor = function(value) {
+  return sample(composites.filter(candidate => {
+    return value % candidate === 0 || value % candidate === -0;
+  }));
 };
 
 /**
