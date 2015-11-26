@@ -31,8 +31,12 @@ module.exports = React.createClass({
 
     return <div id="home">
       <Topbar actions={actions} />
-      <div className="jumbotron">
-      </div>
+      <video className="jumbotron"
+             src="style/videos/mathleap.mp4"
+             preload="auto"
+             width="1050"
+             controls>
+      </video>
     </div>;
   },
 
