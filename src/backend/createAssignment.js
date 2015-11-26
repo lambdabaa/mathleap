@@ -3,6 +3,8 @@ let flatten = require('lodash/array/flatten');
 let groupBy = require('lodash/collection/groupBy');
 let mapValues = require('lodash/object/mapValues');
 let random = require('./random');
+let range = require('lodash/utility/range');
+let sample = require('lodash/collection/sample');
 
 /**
  * @param {Array} composition spec for assignment.
@@ -43,6 +45,48 @@ function createQuestions(count, type) {
 
 let createQuestion = {};
 createAssignment.createQuestion = createQuestion;
+
+createQuestion['Simple addition'] = count => {
+  let solutions = random.integerList(count);
+  return solutions.map(solution => {
+    let a = random.integer();
+    return {question: `${a}+${solution - a}`, solution};
+  });
+};
+
+createQuestion['Simple subtraction'] = count => {
+  let solutions = random.integerList(count);
+  return solutions.map(solution => {
+    let a = random.integer();
+    return {question: `${a}-${a - solution}`, solution};
+  });
+};
+
+createQuestion['Simple multiplication'] = count => {
+  let solutions = random.compositeList(count);
+  return solutions.map(solution => {
+    let a = random.factor(solution);
+    return {question: `${a}*${solution / a}`, solution};
+  });
+};
+
+createQuestion['Simple division'] = count => {
+  let operands = random.compositeList(count);
+  return operands.map(operand => {
+    let solution = random.factor(operand);
+    return {question: `${operand}/${operand / solution}`, solution};
+  });
+};
+
+createQuestion['Simple exponentiation'] = count => {
+  let small = range(-10, 10);
+  let tiny = range(0, 4);
+  return range(0, count).map(() => {
+    let base = sample(small);
+    let exp = sample(tiny);
+    return {question: `${base}^${exp}`, solution: Math.pow(base, exp)};
+  });
+};
 
 createQuestion['Solving equations of the form Ax = B'] = count => {
   let solutions = random.integerList(count);
@@ -136,62 +180,6 @@ createQuestion['Clever distribution'] = count => {
       `${x}/${c}-${Math.abs(d)}`;
     return {question: `${left}=${right}`, solution};
   });
-};
-
-createQuestion['Applying operations to both sides'] = () => {
-  // TODO
-};
-
-createQuestion['Combining like terms'] = () => {
-  // TODO
-};
-
-createQuestion['Complex two variable linear equations'] = () => {
-  // TODO
-};
-
-createQuestion['Finding axis intercepts'] = () => {
-  // TODO
-};
-
-createQuestion['Multiplying and dividing with inequalities'] = () => {
-  // TODO
-};
-
-createQuestion['Solving two-step inequalities'] = () => {
-  // TODO
-};
-
-createQuestion['Complex inequalities'] = () => {
-  // TODO
-};
-
-createQuestion['Absolute value inequalities'] = () => {
-  // TODO
-};
-
-createQuestion['Two equations in two variables'] = () => {
-  // TODO
-};
-
-createQuestion['Three equations in three variables'] = () => {
-  // TODO
-};
-
-createQuestion['Solving quadratic equations by taking the square root'] = () => {
-  // TODO
-};
-
-createQuestion['Solving quadratic equations by factoring'] = () => {
-  // TODO
-};
-
-createQuestion['Solving quadratic equations by completing the square'] = () => {
-  // TODO
-};
-
-createQuestion['Using the quadratic equation'] = () => {
-  // TODO
 };
 
 module.exports = createAssignment;
