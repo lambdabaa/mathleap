@@ -1,6 +1,73 @@
 let {createQuestion} = require('../../src/backend/createAssignment');
 
 suite('service/createAssignment', function() {
+  test('Simple addition', () => {
+    let questions = createQuestion['Simple addition'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      question.should.match(/^(-?\d+)\+(-?\d+)$/);
+      let a = parseInt(RegExp.$1, 10);
+      let b = parseInt(RegExp.$2, 10);
+      let sum = a + b;
+      sum.should.equal(solution);
+    });
+  });
+
+  test('Simple subtraction', () => {
+    let questions = createQuestion['Simple subtraction'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      question.should.match(/^(-?\d+)\-(-?\d+)$/);
+      let a = parseInt(RegExp.$1, 10);
+      let b = parseInt(RegExp.$2, 10);
+      let diff = a - b;
+      diff.should.equal(solution);
+    });
+  });
+
+  test('Simple multiplication', () => {
+    let questions = createQuestion['Simple multiplication'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      question.should.match(/^(-?\d+)\*(-?\d+)$/);
+      let a = parseInt(RegExp.$1, 10);
+      let b = parseInt(RegExp.$2, 10);
+      let product = a * b;
+      product.should.equal(solution);
+    });
+  });
+
+  test('Simple division', () => {
+    let questions = createQuestion['Simple division'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      question.should.match(/^(-?\d+)\/(-?\d+)$/);
+      let a = parseInt(RegExp.$1, 10);
+      let b = parseInt(RegExp.$2, 10);
+      let quotient = a / b;
+      quotient.should.equal(solution);
+    });
+  });
+
+  test('Simple exponentiation', () => {
+    let questions = createQuestion['Simple exponentiation'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      question.should.match(/^(-?\d+)\^(-?\d+)$/);
+      let a = parseInt(RegExp.$1, 10);
+      let b = parseInt(RegExp.$2, 10);
+      Math.abs(a).should.be.lte(10);
+      b.should.be.lte(4);
+      let result = Math.pow(a, b);
+      result.should.equal(solution);
+    });
+  });
+
   test('Ax=B', () => {
     let questions = createQuestion['Solving equations of the form Ax = B'](10);
     questions.should.have.length(10);
