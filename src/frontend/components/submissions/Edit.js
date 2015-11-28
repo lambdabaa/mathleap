@@ -12,18 +12,7 @@ let includes = require('lodash/collection/includes');
 let {mapChar} = require('../../../common/string');
 let submissions = require('../../store/submissions');
 
-let skipStops = Object.freeze([
-  '=',
-  '>',
-  '≥',
-  '<',
-  '≤',
-  '+',
-  '-',
-  '*',
-  '/',
-  '^'
-]);
+let skipStops = Object.freeze(['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']);
 
 module.exports = React.createClass({
   displayName: 'submissions/Edit',
@@ -35,12 +24,26 @@ module.exports = React.createClass({
       aClass: {},
       assignment: {},
       responses: [],
+
+      // index of active equation
       num: null,
+
+      // position of cursor in active equation
       cursor: null,
+
+      // boolean array w/ highlight state of active equation characters
       highlight: null,
+
+      // unmodified active equation
       equation: null,
+
+      // string that's being applied to both sides
       append: '',
+
+      // changes being made in current operation
       deltas: [],
+
+      // array of tokens to represent changes being made to each equation character
       changes: null
     };
   },
@@ -53,14 +56,17 @@ module.exports = React.createClass({
       'responses'
     );
 
-    let theClass = await classes.get(aClass);
-    let theAssignment = await assignments.get(aClass, assignment);
+    let [theClass, theAssignment] = await Promise.all([
+      classes.get(aClass),
+      assignments.get(aClass, assignment)
+    ]);
+
     this.setState({aClass: theClass, assignment: theAssignment});
-    document.addEventListener('keydown', this._handleKeyPress, true);
+    document.addEventListener('keydown', this._handleKeyDown, true);
   },
 
   componentWillUnmount: function() {
-    document.removeEventListener('keydown', this._handleKeyPress);
+    document.removeEventListener('keydown', this._handleKeyDown);
   },
 
   render: function() {
@@ -68,8 +74,7 @@ module.exports = React.createClass({
     return <div id="submissions-edit">
       <Topbar headerText={assignment.name} />
       <div className="view">
-        <div className="backlink clickable-text"
-             onClick={this._handleBack}>
+        <div className="backlink clickable-text" onClick={this._handleBack}>
           &lt; {aClass && aClass.name}
         </div>
         <div className="submissions-edit-workspace">
@@ -84,13 +89,13 @@ module.exports = React.createClass({
     let {responses, num} = this.state;
     let questions = responses.map((aResponse, index) => {
       return [
-        <div key={`left-${index}`}
+        <div key={`number-${index}`}
              className="clickable-text"
              style={{fontWeight: 'bold'}}
              onClick={this._selectQuestion.bind(this, index)}>
           {index + 1}
         </div>,
-        <div key={`right-${index}`}
+        <div key={`question-${index}`}
              className="clickable-text"
              onClick={this._selectQuestion.bind(this, index)}>
           {aResponse.question.question}
@@ -237,11 +242,11 @@ module.exports = React.createClass({
       changes: mapChar(equation, () => 'none'),
       highlight: mapChar(equation, () => false),
       cursor: equation.length,
-      delta: []
+      deltas: []
     });
   },
 
-  _handleKeyPress: function(event) {
+  _handleKeyDown: function(event) {
     if (event.keyCode === 8) {
       event.preventDefault();
     }
@@ -397,6 +402,7 @@ module.exports = React.createClass({
       return;
     }
 
+    event.preventDefault();
     return this._appendDelta(
       {type: 'cancel', range: [cursor, cursor]},
       cursor - 1
@@ -432,24 +438,31 @@ module.exports = React.createClass({
     debug('handle first char', operator);
 
     if (!operator) {
-      // random characters typed...?
+      debug('random characters typed...?');
       return;
     }
 
+    event.preventDefault();
     this.setState({append: operator});
   },
 
   _handleBothSidesChar: function(event) {
     debug('handle both sides char');
     let {append} = this.state;
-    let chr = charFromKeyEvent(event);
-    if (!chr) {
-      return;
+
+    if (event.keyCode === 8) {
+      append = append.slice(0, append.length - 1);
+    } else {
+      let chr = charFromKeyEvent(event);
+      if (!chr) {
+        debug('Unable to resolve character from key event');
+        return;
+      }
+
+      append += chr;
     }
 
-    append = event.keyCode === 8 ?
-      append.slice(0, append.length - 1) :
-      append + chr;
+    event.preventDefault();
     this.setState({append});
   },
 
@@ -473,6 +486,7 @@ module.exports = React.createClass({
       ];
     }
 
+    event.preventDefault();
     return this._appendDelta(...args);
   },
 
