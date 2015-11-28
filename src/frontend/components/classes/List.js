@@ -18,6 +18,10 @@ module.exports = React.createClass({
 
   render: function() {
     let user = this.state.user;
+    if (!user) {
+      return <h1>Redirecting to homepage</h1>;
+    }
+
     switch (user.role) {
       case 'student':
         return React.createElement(require('./StudentList'), this.props);

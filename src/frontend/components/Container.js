@@ -2,7 +2,7 @@ let React = require('react');
 let defer = require('../../common/defer');
 
 module.exports = React.createClass({
-  displayName: 'container',
+  displayName: 'Container',
 
   getInitialState: function() {
     return {modal: null, onceComponentUpdate: null};

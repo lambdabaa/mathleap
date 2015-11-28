@@ -3,7 +3,7 @@ let session = require('../session');
 let users = require('../store/users');
 
 module.exports = React.createClass({
-  displayName: 'topbar',
+  displayName: 'Topbar',
 
   render: function() {
     return <div className="topbar">

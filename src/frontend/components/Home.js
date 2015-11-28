@@ -8,7 +8,7 @@ let teachers = require('../store/teachers');
 let users = require('../store/users');
 
 module.exports = React.createClass({
-  displayName: 'home',
+  displayName: 'Home',
 
   render: function() {
     let actions = [

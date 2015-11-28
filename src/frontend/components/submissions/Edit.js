@@ -26,7 +26,7 @@ let skipStops = Object.freeze([
 ]);
 
 module.exports = React.createClass({
-  displayName: 'submissions/edit',
+  displayName: 'submissions/Edit',
 
   mixins: [ReactFire],
 
@@ -84,12 +84,14 @@ module.exports = React.createClass({
     let {responses, num} = this.state;
     let questions = responses.map((aResponse, index) => {
       return [
-        <div className="clickable-text"
+        <div key={`left-${index}`}
+             className="clickable-text"
              style={{fontWeight: 'bold'}}
              onClick={this._selectQuestion.bind(this, index)}>
           {index + 1}
         </div>,
-        <div className="clickable-text"
+        <div key={`right-${index}`}
+             className="clickable-text"
              onClick={this._selectQuestion.bind(this, index)}>
           {aResponse.question.question}
         </div>
@@ -154,23 +156,37 @@ module.exports = React.createClass({
                 break;
             }
 
-            return <div style={style}>
+            return <div key={index} style={style}>
               <span style={{color: 'black'}}>{chr}</span>
             </div>;
           }
 
-          function renderAppendChar(chr) {
-            return <div style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
+          function renderAppendChar(chr, index) {
+            return <div key={index} style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
               <span style={{color: 'black'}}>{chr}</span>
             </div>;
           }
 
           let [left, right] = equation.split('=');
           return mapChar(left, renderEquationChar)
-            .concat(mapChar(append, renderAppendChar))
-            .concat([renderEquationChar('=', left.length)])
-            .concat(mapChar(right, (chr, index) => renderEquationChar(chr, index + left.length + 1)))
-            .concat(mapChar(append, renderAppendChar));
+            .concat(
+              mapChar(append, (chr, index) => {
+                return renderAppendChar(chr, index + left.length);
+              })
+            )
+            .concat(
+              [renderEquationChar('=', left.length + append.length)]
+            )
+            .concat(
+              mapChar(right, (chr, index) => {
+                return renderEquationChar(chr, index + left.length + append.length + 1);
+              })
+            )
+            .concat(
+              mapChar(append, (chr, index) => {
+                return renderAppendChar(chr, index + left.length + append.length + 1 + right.length)
+              })
+            );
         })()
       }
     </div>;
@@ -182,7 +198,8 @@ module.exports = React.createClass({
     }
 
     let {highlight} = this.state;
-    return <div className="submissions-edit-active">
+    return <div key={JSON.stringify({equation, cursor})}
+                className="submissions-edit-active">
       {
         mapChar(equation.slice(0, cursor), (chr, index) => {
           let style = {};
@@ -190,7 +207,7 @@ module.exports = React.createClass({
             style.backgroundColor = 'rgba(57, 150, 240, 0.5)';
           }
 
-          return <div style={style}>{chr}</div>;
+          return <div key={index} style={style}>{chr}</div>;
         })
       }
 
@@ -203,7 +220,7 @@ module.exports = React.createClass({
             style.backgroundColor = 'rgba(57, 150, 240, 0.5)';
           }
 
-          return <div style={style}>{chr}</div>;
+          return <div key={index} style={style}>{chr}</div>;
         })
       }
     </div>;

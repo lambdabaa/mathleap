@@ -1,7 +1,7 @@
 let React = require('react');
 
 module.exports = React.createClass({
-  displayName: 'tabular',
+  displayName: 'Tabular',
 
   render: function() {
     let className = `tabular ${this.props.className || ''}`;

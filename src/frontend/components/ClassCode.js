@@ -1,7 +1,7 @@
 let React = require('react');
 
 module.exports = React.createClass({
-  displayName: 'class_code',
+  displayName: 'ClassCode',
 
   render: function() {
     return <div className="class-code">
