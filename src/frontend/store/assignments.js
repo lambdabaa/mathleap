@@ -1,8 +1,9 @@
 let Firebase = require('firebase/lib/firebase-web');
 let debug = console.log.bind(console, '[store/assignments]');
+let {firebaseUrl} = require('../constants');
 let request = require('./request');
 
-let classesRef = new Firebase('https://mathleap.firebaseio.com/classes');
+let classesRef = new Firebase(`${firebaseUrl}/classes`);
 
 exports.create = async function create(aClass, details) {
   debug('create assignment', JSON.stringify(aClass), JSON.stringify(details));
@@ -16,7 +17,10 @@ exports.create = async function create(aClass, details) {
 
 exports.get = async function get(classId, assignmentId) {
   debug('get assignment', classId, assignmentId);
-  let assignmentRef = classesRef.child(`${classId}/assignments/${assignmentId}`);
+  let assignmentRef = classesRef.child(
+    `${classId}/assignments/${assignmentId}`
+  );
+
   let result = await request(assignmentRef, 'once', 'value');
   debug('get assignment ok', JSON.stringify(result));
   return result;

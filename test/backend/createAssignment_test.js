@@ -95,7 +95,8 @@ suite('service/createAssignment', function() {
   });
 
   test('Solving equations in one step with addition', () => {
-    let questions = createQuestion['Solving equations in one step with addition'](10);
+    let questions =
+      createQuestion['Solving equations in one step with addition'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question} = aQuestion;
@@ -113,11 +114,14 @@ suite('service/createAssignment', function() {
   });
 
   test('Equations with variables on both sides', () => {
-    let questions = createQuestion['Equations with variables on both sides'](10);
+    let questions =
+      createQuestion['Equations with variables on both sides'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question} = aQuestion;
-      question.should.match(/^(-?[1-9]\d*)[a-z][\+, \-](\d*)=(-?[1-9]\d*)[a-z][\+, \-](\d*)$/);
+      question.should.match(
+        /^(-?[1-9]\d*)[a-z][\+, \-](\d*)=(-?[1-9]\d*)[a-z][\+, \-](\d*)$/
+      );
     });
   });
 
@@ -135,7 +139,9 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question} = aQuestion;
-      question.should.match(/^[a-z]\/-?\d*[\+, \-]\d*=[a-z]\/-?\d*[\+, \-]\d*$/);
+      question.should.match(
+        /^[a-z]\/-?\d*[\+, \-]\d*=[a-z]\/-?\d*[\+, \-]\d*$/
+      );
     });
   });
 });

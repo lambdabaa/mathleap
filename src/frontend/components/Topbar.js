@@ -26,7 +26,7 @@ module.exports = React.createClass({
           </div>
         }
       </div>
-    </div>
+    </div>;
   },
 
   _handleLogoClick: function() {

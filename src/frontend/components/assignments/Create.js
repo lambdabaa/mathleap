@@ -11,6 +11,7 @@ let bridge = require('../../bridge');
 let classes = require('../../store/classes');
 let colors = require('../../colors');
 let debug = console.log.bind(console, '[components/assignments/create]');
+let {firebaseUrl} = require('../../constants');
 let moment = require('moment');
 
 module.exports = React.createClass({
@@ -34,14 +35,14 @@ module.exports = React.createClass({
   },
 
   componentWillMount: async function() {
+    let id = this.props.aClass;
     this.bindAsArray(
-      new Firebase('https://mathleap.firebaseio.com/topics'),
+      new Firebase(`${firebaseUrl}/topics`),
       'topics'
     );
 
-    let id = this.props.aClass;
     this.bindAsArray(
-      new Firebase(`https://mathleap.firebaseio.com/classes/${id}/assignments/`),
+      new Firebase(`${firebaseUrl}/classes/${id}/assignments`),
       'assignments'
     );
 
@@ -129,6 +130,8 @@ module.exports = React.createClass({
   _renderAssignmentComposition: function() {
     let {composition} = this.state;
     let rows = composition.map((part, index) => {
+      let increment = this._handleIncrementTopicCount.bind(this, index);
+      let decrement = this._handleDecrementTopicCount.bind(this, index);
       return {
         content: [
           part.topic.name,
@@ -138,10 +141,10 @@ module.exports = React.createClass({
             <div className="composition-increment-container">
               <img className="list-action-btn"
                    src="style/images/increase_btn.png"
-                   onClick={this._handleIncrementTopicCount.bind(this, index)}/>
+                   onClick={increment}/>
               <img className="list-action-btn"
                    src="style/images/decrease_btn.png"
-                   onClick={this._handleDecrementTopicCount.bind(this, index)} />
+                   onClick={decrement} />
             </div>
           </div>
         ],
@@ -285,7 +288,10 @@ module.exports = React.createClass({
       {content: '', width: 100},
       {content: '', width: 460}
     ];
-    let rows = preview.map((question, index) => [`${index + 1}.`, question.question]);
+
+    let rows = preview.map((question, index) => {
+      return [`${index + 1}.`, question.question];
+    });
 
     this.props.showModal(
       <div className="assignment-preview">

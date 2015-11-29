@@ -5,7 +5,9 @@ let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let classes = require('../../store/classes');
+let debug = console.log.bind(console, '[components/classes/StudentShow]');
 let findKey = require('lodash/object/findKey');
+let {firebaseUrl} = require('../../constants');
 let session = require('../../session');
 let submissions = require('../../store/submissions');
 
@@ -20,7 +22,7 @@ module.exports = React.createClass({
 
   componentWillMount: async function() {
     let {id} = this.props;
-    let classRef = new Firebase(`https://mathleap.firebaseio.com/classes/${id}`);
+    let classRef = new Firebase(`${firebaseUrl}/classes/${id}`);
     this.bindAsArray(classRef.child('assignments'), 'assignments');
     let aClass = await classes.get(id);
     this.setState({aClass});
@@ -44,7 +46,7 @@ module.exports = React.createClass({
           {assignment.name}
         </div>,
         assignment.deadline,
-        this._getAssignmentStatus(assignment)
+        getAssignmentStatus(assignment)
       ];
     });
 
@@ -66,54 +68,77 @@ module.exports = React.createClass({
     </div>;
   },
 
-  _getAssignmentStatus: function(assignment) {
-    let submission = this._getStudentSubmission(assignment);
-    if (!submission) {
-      return 'Not started';
-    }
-
-    return submission.complete ? 'Submitted' : 'In progress';
-  },
-
-  _getStudentSubmission: function(assignment) {
-    let {uid} = session.get('user');
-    let {submissions} = assignment;
-    if (!submissions) {
-      return null;
-    }
-
-    let key = findKey(submissions, submission => submission.studentId === uid);
-    if (!key) {
-      return null;
-    }
-
-    return {key, submission: submissions[key]};
-  },
-
   _handleShowAssignment: async function(assignment) {
     let classId = this.props.id;
     let assignmentId = assignment['.key'];
-    let submission = this._getStudentSubmission(assignment);
-
-    let submissionId;
-    if (submission) {
-      submissionId = submission.key;
-    } else {
-      // Create a new, in-progress, empty submission.
-      let responses = assignment.questions.map(question => {
-        return {question, work: [{operation: 'noop', state: [question.question]}]};
-      });
-
-      let studentId = session.get('user').uid;
-      submissionId = await submissions.create({
-        classId,
-        assignmentId,
-        studentId,
-        responses,
-        complete: false
-      });
-    }
-
+    let submission = await findOrCreateStudentSubmission(classId, assignment);
+    let submissionId = submission.key;
     location.hash = `#!/classes/${classId}/assignments/${assignmentId}/submissions/${submissionId}/edit`;
   }
 });
+
+async function findOrCreateStudentSubmission(classId, assignment) {
+  debug('findOrCreateStudentSubmission', JSON.stringify(arguments));
+  if (!containsStudentSubmission(assignment)) {
+    await createStudentSubmission(classId, assignment);
+    assignment.submissions = await submissions.list(
+      classId,
+      assignment['.key']
+    );
+  }
+
+  return getStudentSubmission(assignment);
+}
+
+function getAssignmentStatus(assignment) {
+  debug('getAssignmentStatus', JSON.stringify(arguments));
+  if (!containsStudentSubmission(assignment)) {
+    return 'Not started';
+  }
+
+  let submission = getStudentSubmission(assignment);
+  return submission.complete ? 'Submitted' : 'In progress';
+}
+
+function containsStudentSubmission(assignment) {
+  debug('containsStudentSubmission', JSON.stringify(arguments));
+  let submissionList = assignment.submissions;
+  if (!submissionList) {
+    return false;
+  }
+
+  let {uid} = session.get('user');
+  let key = findKey(submissionList, submission => submission.studentId === uid);
+  return !!key;
+}
+
+function getStudentSubmission(assignment) {
+  debug('getStudentSubmission', JSON.stringify(arguments));
+  let submissionList = assignment.submissions;
+  let {uid} = session.get('user');
+  let key = findKey(submissionList, submission => submission.studentId === uid);
+  return {key, submission: submissionList[key]};
+}
+
+/**
+ * Create a new, in-progress, empty submission.
+ */
+function createStudentSubmission(classId, assignment) {
+  debug('createStudentSubmission', JSON.stringify(arguments));
+  let responses = assignment.questions.map(question => {
+    return {
+      question,
+      work: [{operation: 'noop', state: [question.question]}]
+    };
+  });
+
+  let assignmentId = assignment['.key'];
+  let studentId = session.get('user').uid;
+  return submissions.create({
+    classId,
+    assignmentId,
+    studentId,
+    responses,
+    complete: false
+  });
+}

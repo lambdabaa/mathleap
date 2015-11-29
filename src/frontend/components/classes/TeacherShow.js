@@ -6,6 +6,7 @@ let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let classes = require('../../store/classes');
 let debug = console.log.bind(console, '[components/classes/Show]');
+let {firebaseUrl} = require('../../constants');
 let students = require('../../store/students');
 
 module.exports = React.createClass({
@@ -24,7 +25,7 @@ module.exports = React.createClass({
 
   componentWillMount: async function() {
     let {id} = this.props;
-    let classRef = new Firebase(`https://mathleap.firebaseio.com/classes/${id}`);
+    let classRef = new Firebase(`${firebaseUrl}/classes/${id}`);
     this.bindAsArray(classRef.child('students'), 'studentIds');
     this.bindAsArray(classRef.child('assignments'), 'assignments');
     let aClass = await classes.get(id);

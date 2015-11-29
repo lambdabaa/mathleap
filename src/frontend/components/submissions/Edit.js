@@ -8,11 +8,14 @@ let bridge = require('../../bridge');
 let charFromKeyEvent = require('../../charFromKeyEvent');
 let classes = require('../../store/classes');
 let debug = console.log.bind(console, '[components/submissions/Edit]');
+let {firebaseUrl} = require('../../constants');
 let includes = require('lodash/collection/includes');
 let {mapChar} = require('../../../common/string');
 let submissions = require('../../store/submissions');
 
-let skipStops = Object.freeze(['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']);
+let skipStops = Object.freeze(
+  ['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']
+);
 
 module.exports = React.createClass({
   displayName: 'submissions/Edit',
@@ -43,7 +46,8 @@ module.exports = React.createClass({
       // changes being made in current operation
       deltas: [],
 
-      // array of tokens to represent changes being made to each equation character
+      // array of tokens to represent changes being made to each
+      // equation character
       changes: null
     };
   },
@@ -52,7 +56,7 @@ module.exports = React.createClass({
     let {aClass, assignment, submission} = this.props;
 
     this.bindAsArray(
-      new Firebase(`https://mathleap.firebaseio.com/classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
+      new Firebase(`${firebaseUrl}/classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
       'responses'
     );
 
@@ -130,7 +134,11 @@ module.exports = React.createClass({
 
         let next = work[index + 1];
         return [
-          this._renderChanges(step.state[0], step.changes[0], step.appends ? step.appends[0] : ''),
+          this._renderChanges(
+            step.state[0],
+            step.changes[0],
+            step.appends ? step.appends[0] : ''
+          ),
           this._renderResults(next.state[0])
         ];
       });
@@ -150,7 +158,11 @@ module.exports = React.createClass({
         (() => {
           function renderEquationChar(chr, index) {
             let style = {};
-            let change = changes[index];
+            // TODO(gaye): Need to handle non-equality statements...
+            let changeIndex = index >= equation.indexOf('=') ?
+              index - append.length :
+              index;
+            let change = changes[changeIndex];
             switch (change) {
               case 'highlight':
                 style.backgroundColor = 'rgba(57, 150, 240, 0.5)';
@@ -159,6 +171,10 @@ module.exports = React.createClass({
                 style.textDecoration = 'line-through';
                 style.color = '#e22517';
                 break;
+              case 'none':
+                break;
+              default:
+                throw new Error(`Unexpected change token ${change}`);
             }
 
             return <div key={index} style={style}>
@@ -167,12 +183,23 @@ module.exports = React.createClass({
           }
 
           function renderAppendChar(chr, index) {
-            return <div key={index} style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
+            return <div key={index}
+                        style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
               <span style={{color: 'black'}}>{chr}</span>
             </div>;
           }
 
           let [left, right] = equation.split('=');
+          if (equation.length > changes.length) {
+            // Ahhh? This is a workaround for an issue
+            // I don't totally understand. Sometimes we get changes
+            // for an equation with both sides applied and the equation
+            // has both sides applied. We should make sure to remove
+            // the append from the equation in this case.
+            left = left.slice(0, left.length - append.length);
+            right = right.slice(0, right.length - append.length);
+          }
+
           return mapChar(left, renderEquationChar)
             .concat(
               mapChar(append, (chr, index) => {
@@ -184,12 +211,18 @@ module.exports = React.createClass({
             )
             .concat(
               mapChar(right, (chr, index) => {
-                return renderEquationChar(chr, index + left.length + append.length + 1);
+                return renderEquationChar(
+                  chr,
+                  index + left.length + append.length + 1
+                );
               })
             )
             .concat(
               mapChar(append, (chr, index) => {
-                return renderAppendChar(chr, index + left.length + append.length + 1 + right.length)
+                return renderAppendChar(
+                  chr,
+                  index + left.length + append.length + 1 + right.length
+                );
               })
             );
         })()
@@ -251,11 +284,15 @@ module.exports = React.createClass({
       event.preventDefault();
     }
 
-    let {cursor, equation, num} = this.state;
+    let {num} = this.state;
     if (typeof num !== 'number') {
       return;
     }
 
+    return this._handleKeyEvent(event);
+  },
+
+  _handleKeyEvent: function(event) {
     if (event.shiftKey) {
       return this._handleShiftKey(event);
     }
@@ -264,6 +301,11 @@ module.exports = React.createClass({
       return this._handleCtrlKey(event);
     }
 
+    return this._handleNoModifierKey(event);
+  },
+
+  _handleNoModifierKey: function(event) {
+    let {equation, cursor} = this.state;
     switch (event.keyCode) {
       case 37:
         event.preventDefault();
@@ -349,6 +391,8 @@ module.exports = React.createClass({
       case 85:  // u
         event.preventDefault();
         return this._selectQuestion(num === 0 ? responses.length - 1 : num - 1);
+      default:
+        debug(`Unknown control sequence ${event.keyCode}`);
     }
   },
 
@@ -417,21 +461,24 @@ module.exports = React.createClass({
     let operator;
     switch (event.keyCode) {
       case 54:
-        if (event.shiftKey) operator = '^';
+        if (event.shiftKey) { operator = '^'; }
         break;
       case 56:
-        if (event.shiftKey) operator = '*';
+        if (event.shiftKey) { operator = '*'; }
         break;
       case 61:
       case 187:
-        if (event.shiftKey) operator = '+';
+        if (event.shiftKey) { operator = '+'; }
         break;
       case 173:
       case 179:
+      case 189:
         operator = '-';
         break;
       case 191:
         operator = '/';
+        break;
+      default:
         break;
     }
 
@@ -455,8 +502,7 @@ module.exports = React.createClass({
     } else {
       let chr = charFromKeyEvent(event);
       if (!chr) {
-        debug('Unable to resolve character from key event');
-        return;
+        return debug('Unable to resolve character from key event');
       }
 
       append += chr;
@@ -477,7 +523,7 @@ module.exports = React.createClass({
     } else {
       let chr = charFromKeyEvent(event);
       if (!chr) {
-        return;
+        return debug('Unable to resolve character from key event');
       }
 
       args = [
@@ -555,8 +601,6 @@ module.exports = React.createClass({
     let {state} = work[work.length - 1];
     deltas.push(delta);
     let {result, changes} = await bridge('diff', state[0], deltas);
-    debug('result', result);
-    debug('changes', JSON.stringify(changes));
     // Clear highlight.
     this.setState({
       deltas: deltas,

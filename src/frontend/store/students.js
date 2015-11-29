@@ -1,9 +1,10 @@
 let Firebase = require('firebase/lib/firebase-web');
 let debug = console.log.bind(console, '[store/students]');
+let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let users = require('./users');
 
-let studentsRef = new Firebase('https://mathleap.firebaseio.com/students');
+let studentsRef = new Firebase(`${firebaseUrl}/students`);
 
 exports.create = async function(options) {
   let student = {

@@ -1,4 +1,4 @@
-let array = require('../../src/backend/array');
+let array = require('../../src/common/array');
 
 suite('array', () => {
   test('#partition', () => {
@@ -23,5 +23,12 @@ suite('array', () => {
     .should
     .deep
     .equal([3, 2, 3, 1, 4, 1, -2, 0, 6]);
+  });
+
+  test('#someValue', () => {
+    array
+      .someValue([4, 2, 3, -1], num => num % 2)
+      .should
+      .equal(1);
   });
 });

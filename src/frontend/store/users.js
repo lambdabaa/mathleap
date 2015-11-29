@@ -1,10 +1,11 @@
 let Firebase = require('firebase/lib/firebase-web');
 let debug = console.log.bind(console, '[store/users]');
+let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let session = require('../session');
 let subscribe = require('./subscribe');
 
-let baseRef = new Firebase('https://mathleap.firebaseio.com');
+let baseRef = new Firebase(firebaseUrl);
 let studentsRef = baseRef.child('students');
 let teachersRef = baseRef.child('teachers');
 

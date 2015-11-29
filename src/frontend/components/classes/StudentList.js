@@ -7,9 +7,10 @@ let Topbar = require('../Topbar');
 let debug = console.log.bind(console, '[components/classes/student_list]');
 let session = require('../../session');
 let classes = require('../../store/classes');
+let {firebaseUrl} = require('../../constants');
 let handleEnter = require('../../handleEnter');
 
-let studentsRef = new Firebase('https://mathleap.firebaseio.com/students');
+let studentsRef = new Firebase(`${firebaseUrl}/students`);
 
 module.exports = React.createClass({
   displayName: 'classes/StudentList',

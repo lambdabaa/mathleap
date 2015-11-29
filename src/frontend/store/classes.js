@@ -2,12 +2,13 @@ let Firebase = require('firebase/lib/firebase-web');
 let colors = require('../colors');
 let createCode = require('../code').create;
 let debug = console.log.bind(console, '[store/classes]');
+let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let session = require('../session');
 
-let classesRef = new Firebase('https://mathleap.firebaseio.com/classes');
-let studentsRef = new Firebase('https://mathleap.firebaseio.com/students');
-let teachersRef = new Firebase('https://mathleap.firebaseio.com/teachers');
+let classesRef = new Firebase(`${firebaseUrl}/classes`);
+let studentsRef = new Firebase(`${firebaseUrl}/students`);
+let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
 
 exports.create = async function create() {
   debug('request add class');
@@ -26,26 +27,25 @@ exports.create = async function create() {
 };
 
 exports.join = async function join(code) {
-  let student = session.get('user');
-  let studentId = btoa(student.email);
-
+  let studentId = getStudentId();
   let aClass = await exports.get(code, {key: 'code'});
   let id = Object.keys(aClass)[0];
 
-  let classRef = classesRef.child(id);
-  let classStudentsRef = classRef.child('students');
-  let classStudentRef = classStudentsRef.push();
+  let classStudentRef = classesRef
+    .child(id)
+    .child('students')
+    .push();
 
-  let studentClassesRef = studentsRef
+  let studentClassRef = studentsRef
     .child(studentId)
-    .child('classes');
-  let studentClassRef = studentClassesRef.push();
+    .child('classes')
+    .push();
 
   // TODO(gaye): We should make this a single request so we don't
   //     get in a bad state if one but not both requests succeeds.
   await Promise.all([
-    request(studentClassRef, 'set', id),          // add to student/:id/classes
-    request(classStudentRef, 'set', studentId)    // add to class/:id/students
+    request(classStudentRef, 'set', studentId),   // add to class/:id/students
+    request(studentClassRef, 'set', id)           // add to student/:id/classes
   ]);
 };
 
@@ -57,41 +57,16 @@ exports.join = async function join(code) {
  */
 exports.get = async function get(id, options = {}) {
   debug('classes get', id, JSON.stringify(options));
-  let ref;
-  if (typeof options.key !== 'string') {
-    ref = classesRef.child(id);
-  } else {
-    ref = classesRef
-      .orderByChild(options.key)
-      .equalTo(id);
-  }
-
+  let ref = typeof options.key !== 'string' ?
+    classesRef.child(id) :
+    classesRef.orderByChild(options.key).equalTo(id);
   let aClass = await request(ref, 'once', 'value');
   if (!aClass) {
     return null;
   }
 
   aClass.id = id;
-
-  // Hydrate extra fields hanging off of the class.
-  if (Array.isArray(options.include)) {
-    let include = options.include;
-    for (let i = 0; i < include.length; i++) {
-      let field = include[i];
-      switch (field) {
-        case 'teacher':
-          let teacherRef = teachersRef
-            .orderByChild('uid')
-            .equalTo(aClass.teacher);
-          let teachers = await request(teacherRef, 'once', 'value');
-          aClass.teacher = teachers[Object.keys(teachers)[0]];
-          break;
-        default:
-          throw new Error(`Unknown include key ${field}`);
-      }
-    }
-  }
-
+  await hydrateClass(aClass, options.include);
   return aClass;
 };
 
@@ -116,3 +91,26 @@ exports.createAssignment = async function createAssignment(aClass, details) {
   let ref = assignmentsRef.push();
   await request(ref, 'set', details);
 };
+
+function getStudentId() {
+  let {email} = session.get('user');
+  return btoa(email);
+}
+
+function hydrateClass(aClass, include = []) {
+  return Promise.all(
+    include.map(async function(field) {
+      switch (field) {
+        case 'teacher':
+          let ref = teachersRef
+            .orderByChild('uid')
+            .equalTo(aClass.teacher);
+          let teachers = await request(ref, 'once', 'value');
+          aClass.teacher = teachers[Object.keys(teachers)[0]];
+          break;
+        default:
+          throw new Error(`Unknown include key ${field}`);
+      }
+    })
+  );
+}

@@ -1,6 +1,7 @@
 let {EventEmitter} = require('events');
 let React = require('react');
 let {inherits} = require('util');
+let {someValue} = require('../common/array');
 
 function Router(options = {}) {
   this.routes = [];
@@ -49,14 +50,8 @@ Router.prototype.route = function(urlFormat, component) {
 };
 
 Router.prototype.load = function(options) {
-  let routes = this.routes;
-  for (let i = 0; i < routes.length; i++) {
-    let route = routes[i];
-    let result = route(options);
-    if (!result) {
-      continue;
-    }
-
+  let result = someValue(this.routes, route => route(options));
+  if (result) {
     return result;
   }
 

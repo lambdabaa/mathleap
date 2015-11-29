@@ -55,7 +55,8 @@ module.exports = React.createClass({
         <input type="text" className="teacher-first" placeholder="First name" />
         <input type="text" className="teacher-last" placeholder="Last name" />
         <input type="email" className="teacher-email" placeholder="Email" />
-        <input type="password" className="teacher-password" placeholder="Password"
+        <input type="password" className="teacher-password"
+               placeholder="Password"
                onKeyDown={handleEnter(this._onSignupTeacherSubmit)} />
         <div className="teacher-submit button-inverse"
              onClick={this._onTeacherSubmit}>
@@ -73,7 +74,8 @@ module.exports = React.createClass({
       <div className="student-form">
         <input type="text" className="student-first" placeholder="First name" />
         <input type="text" className="student-last" placeholder="Last name" />
-        <input type="text" className="student-username" placeholder="Username" />
+        <input type="text" className="student-username"
+               placeholder="Username" />
         <input type="text" className="student-password" placeholder="Password"
                onKeyDown={handleEnter(this._onSignupStudentSubmit)} />
         <div className="student-submit button-inverse"
@@ -90,7 +92,8 @@ module.exports = React.createClass({
     debug('login');
     await this.props.showModal(
       <div className="login-form">
-        <input type="text" className="login-email" placeholder="Email or username" />
+        <input type="text" className="login-email"
+               placeholder="Email or username" />
         <input type="password" className="login-password" placeholder="Password"
                onKeyDown={handleEnter(this._onLoginSubmit)} />
         <div className="login-submit button-inverse"
@@ -105,11 +108,7 @@ module.exports = React.createClass({
 
   _onTeacherSubmit: async function() {
     debug('teacher submit');
-    let title = $('.teacher-title').value;
-    let first = $('.teacher-first').value;
-    let last = $('.teacher-last').value;
-    let email = $('.teacher-email').value;
-    let password = $('.teacher-password').value;
+    let {title, first, last, email, password} = getTeacherData();
     await teachers.create({title, first, last, email, password});
     await users.login({email, password});
     this.props.closeModal();
@@ -117,10 +116,7 @@ module.exports = React.createClass({
 
   _onStudentSubmit: async function() {
     debug('student submit');
-    let first = $('.student-first').value;
-    let last = $('.student-last').value;
-    let username = $('.student-username').value;
-    let password = $('.student-password').value;
+    let {first, last, username, password} = getStudentData();
     let email = `${username}@mathleap.org`;
     await students.create({email, first, last, username, password});
     await users.login({email, password});
@@ -129,10 +125,32 @@ module.exports = React.createClass({
 
   _onLoginSubmit: async function() {
     debug('login submit');
-    let uid = $('.login-email').value;
-    let password = $('.login-password').value;
+    let {uid, password} = getLoginData();
     let email = uid.includes('@') ? uid : `${uid}@mathleap.org`;
     await users.login({email, password});
     this.props.closeModal();
   }
 });
+
+function getTeacherData() {
+  let title = $('.teacher-title').value;
+  let first = $('.teacher-first').value;
+  let last = $('.teacher-last').value;
+  let email = $('.teacher-email').value;
+  let password = $('.teacher-password').value;
+  return {title, first, last, email, password};
+}
+
+function getStudentData() {
+  let first = $('.student-first').value;
+  let last = $('.student-last').value;
+  let username = $('.student-username').value;
+  let password = $('.student-password').value;
+  return {first, last, username, password};
+}
+
+function getLoginData() {
+  let uid = $('.login-email').value;
+  let password = $('.login-password').value;
+  return {uid, password};
+}

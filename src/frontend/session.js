@@ -24,19 +24,29 @@ Session.prototype.get = function(key) {
 };
 
 Session.prototype.set = function(key, value) {
-  // Write through cache.
   this.data[key] = value;
   if (typeof value === 'object') {
-    value = value ? JSON.stringify(value) : '';
+    value = JSON.stringify(value);
   }
 
-  // Cookie should expire one month from now.
-  let expiration = new Date();
-  expiration.setMonth(expiration.getMonth() + 1);
-  expiration = expiration.toUTCString();
-  this.data.expires = expiration;
+  this.data.expires = getExpiration();
+  this._persist();
+  this.emit(key, value);
+};
 
-  // Persist to cookie store.
+Session.prototype.clear = function() {
+  let prev = this.data;
+  this.data = {expires: 'Thu, 01 Jan 1970 00:00:00 UTC'};
+  this._persist();
+  for (let key in prev) {
+    this.emit(key, null);
+  }
+};
+
+/**
+ * Persist to cookie store.
+ */
+Session.prototype._persist = function() {
   for (let key in this.data) {
     let value = this.data[key];
     value = typeof value === 'object' ? JSON.stringify(value) : value;
@@ -44,22 +54,16 @@ Session.prototype.set = function(key, value) {
   }
 
   this.emit('change');
-  this.emit(key, value);
 };
 
-Session.prototype.clear = function() {
-  let prev = this.data;
-  this.data = {};
-
-  // Expire the existing cookie.
-  this.data.expires = 'Thu, 01 Jan 1970 00:00:00 UTC';
-  document.cookie = `expires=${this.data.expires}`;
-
-  this.emit('change');
-  for (let key in prev) {
-    this.emit(key, null);
-  }
-};
+/**
+ * Cookie should expire one month from now.
+ */
+function getExpiration() {
+  let expiration = new Date();
+  expiration.setMonth(expiration.getMonth() + 1);
+  return expiration.toUTCString();
+}
 
 let session = module.exports = new Session();
 

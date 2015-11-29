@@ -1,14 +1,18 @@
 let Firebase = require('firebase/lib/firebase-web');
 let debug = console.log.bind(console, '[store/assignments]');
+let {firebaseUrl} = require('../constants');
 let includes = require('lodash/collection/includes');
 let request = require('./request');
 
-let classesRef = new Firebase('https://mathleap.firebaseio.com/classes');
+let classesRef = new Firebase(`${firebaseUrl}/classes`);
 
 exports.create = async function(details) {
   debug('create submission', JSON.stringify(details));
   let {classId, assignmentId} = details;
-  let submissionsRef = classesRef.child(`${classId}/assignments/${assignmentId}/submissions`);
+  let submissionsRef = classesRef.child(
+    `${classId}/assignments/${assignmentId}/submissions`
+  );
+
   let submissionRef = submissionsRef.push();
   await request(submissionRef, 'set', details);
   debug('create submission ok');
@@ -23,7 +27,16 @@ exports.get = async function(classId, assignmentId, submissionId) {
   return result;
 };
 
-exports.commitDelta = async function(classId, assignmentId, submissionId, question, work, changes, appends, state) {
+exports.list = async function(classId, assignmentId) {
+  debug('list submissions', JSON.stringify(arguments));
+  let ref = getSubmissionsRef(classId, assignmentId);
+  let result = await request(ref, 'once', 'value');
+  debug('list submissions ok', JSON.stringify(result));
+  return result;
+};
+
+exports.commitDelta = async function(classId, assignmentId, submissionId,
+                                     question, work, changes, appends, state) {
   debug('commit delta', JSON.stringify(arguments));
 
   let ref = getSubmissionRef(classId, assignmentId, submissionId);
@@ -50,6 +63,10 @@ exports.commitDelta = async function(classId, assignmentId, submissionId, questi
   ]);
 };
 
+function getSubmissionsRef(classId, assignmentId) {
+  return classesRef.child(`${classId}/assignments/${assignmentId}/submissions`);
+}
+
 function getSubmissionRef(classId, assignmentId, submissionId) {
-  return classesRef.child(`${classId}/assignments/${assignmentId}/submissions/${submissionId}`);
+  return getSubmissionsRef(classId, assignmentId).child(submissionId);
 }

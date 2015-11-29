@@ -2,8 +2,8 @@ let debug = console.log.bind(console, '[service/diff]');
 let {eachChar} = require('../common/string');
 let flatten = require('lodash/array/flatten');
 let map = require('lodash/collection/map');
-let range = require('lodash/utility/range');
-let {replaceIndex} = require('./array');
+let span = require('lodash/utility/range');
+let {replaceIndex} = require('../common/array');
 
 /**
  * Temporary bridge from api that the frontend expects to our
@@ -38,6 +38,8 @@ module.exports = function(statement, deltas) {
           });
 
           return result;
+        default:
+          throw new Error(`Unexpected delta type ${type}`);
       }
     })
   );
@@ -119,7 +121,7 @@ module.exports.getChanges = function getChanges(deltas, stmt) {
 
   return flatten(
     blocks.map(block => {
-      return range(...block.range).map(() => block.type);
+      return span(...block.range).map(() => block.type);
     })
   );
 };
@@ -164,7 +166,8 @@ function handleHighlight(blocks, cursor, delta) {
   // Now we've ruled out the case where there was only one block selected so
   // we know that we start in one block and end in another.
   return selected.map((item, i) => {
-    let {block, index} = item;
+    block = item.block;
+    index = item.index;
     if (i === 0) {
       // This could either be a right selection or an outer selection.
       if (block.type === 'highlight') {
@@ -399,14 +402,8 @@ function getSelectedBlocks(blocks, left, right) {
 function getBlockIndex(blocks, marker, inclusive) {
   for (let i = 0; i < blocks.length; i++) {
     let {len} = blocks[i];
-    if (inclusive) {
-      if (len >= marker) {
-        return marker;
-      }
-    } else {
-      if (len > marker) {
-        return marker;
-      }
+    if (inclusive && len >= marker || !inclusive && len > marker) {
+      return marker;
     }
 
     marker -= len;

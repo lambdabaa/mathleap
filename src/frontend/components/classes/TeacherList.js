@@ -6,11 +6,12 @@ let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let classes = require('../../store/classes');
 let debug = console.log.bind(console, '[components/classes/TeacherList]');
+let {firebaseUrl} = require('../../constants');
 let {getPalette} = require('../../colors');
 let handleEnter = require('../../handleEnter');
 let session = require('../../session');
 
-let classesRef = new Firebase('https://mathleap.firebaseio.com/classes');
+let classesRef = new Firebase(`${firebaseUrl}/classes`);
 
 module.exports = React.createClass({
   displayName: 'classes/TeacherList',
@@ -86,6 +87,7 @@ module.exports = React.createClass({
 
   _renderMutableClass: function(aClass, index) {
     let editable = this.state.editable;
+    let changeName = this._handleChangeName.bind(this, aClass);
     return <div className="class-details">
       {
         editable.field === 'color' &&
@@ -94,14 +96,20 @@ module.exports = React.createClass({
                src="style/images/color_picker_triangle.png" />
           <div className="class-color-picker-matrix">
             {
-              getPalette(8).map((row, index) => {
-                return <div key={index} className="class-color-picker-row">
+              getPalette(8).map((row, rowIndex) => {
+                return <div key={rowIndex} className="class-color-picker-row">
                   {
                     row.map(color => {
+                      let changeColor = this._handleChangeColor.bind(
+                        this,
+                        aClass,
+                        color
+                      );
+
                       return <div key={color}
                                   className="class-color-picker-choice"
                                   style={{backgroundColor: color}}
-                                  onClick={this._handleChangeColor.bind(this, aClass, color)}>
+                                  onClick={changeColor}>
                       </div>;
                     })
                   }
@@ -119,8 +127,8 @@ module.exports = React.createClass({
         editable.field === 'name' ?
           <input className="classes-list-edit-class-name"
                  onClick={event => event.stopPropagation()}
-                 onKeyDown={handleEnter(this._handleChangeName.bind(this, aClass))}
-                 onBlur={this._handleChangeName.bind(this, aClass)} /> :
+                 onKeyDown={handleEnter(changeName)}
+                 onBlur={changeName} /> :
           <div className="clickable-text">{aClass.name}</div>
       }
     </div>;

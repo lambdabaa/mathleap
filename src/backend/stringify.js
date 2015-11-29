@@ -1,4 +1,4 @@
-let {partition} = require('./array');
+let {partition} = require('../common/array');
 
 let symbol = Object.freeze({
   equals: '=',

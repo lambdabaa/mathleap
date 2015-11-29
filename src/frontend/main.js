@@ -6,22 +6,16 @@ let Router = require('./router');
 let session = require('./session');
 
 function main() {
+  let router = createRouter();
+  observeLocation(router);
+  ReactDOM.render(<Container router={router} />, $('#container'));
+}
+
+function observeLocation(router) {
   let hash = location.hash;
   if (hash.length < 2) {
     location.hash = '#!/home/';
   }
-
-  let router = new Router({miss: require('./components/NotFound')});
-  router.route('/home', require('./components/Home'));
-  router.route('/classes', require('./components/classes/List'));
-  router.route('/classes/:id', require('./components/classes/Show'));
-  router.route('/classes/:aClass/assignments/new', require('./components/assignments/Create'));
-  router.route(
-    '/classes/:aClass/assignments/:assignment/submissions/:submission/edit',
-    require('./components/submissions/Edit')
-  );
-
-  router.start();
 
   session.on('user', user => {
     // If we're on the home page and a user has logged in
@@ -33,7 +27,24 @@ function main() {
     }
   });
 
-  ReactDOM.render(<Container router={router} />, $('#container'));
+}
+
+function createRouter() {
+  let router = new Router({miss: require('./components/NotFound')});
+  router.route('/home', require('./components/Home'));
+  router.route('/classes', require('./components/classes/List'));
+  router.route('/classes/:id', require('./components/classes/Show'));
+  router.route(
+    '/classes/:aClass/assignments/new',
+    require('./components/assignments/Create')
+  );
+  router.route(
+    '/classes/:aClass/assignments/:assignment/submissions/:submission/edit',
+    require('./components/submissions/Edit')
+  );
+
+  router.start();
+  return router;
 }
 
 window.onload = main;

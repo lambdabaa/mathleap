@@ -13,12 +13,22 @@ suite('random', () => {
     result.should.have.length(10);
   });
 
+  test('#superCompositeList', () => {
+    let result = random.superCompositeList(10);
+    result.forEach(checkSuperComposite);
+    result.should.have.length(10);
+  });
+
   test('#integer', () => {
     checkInteger(random.integer());
   });
 
   test('#composite', () => {
     checkComposite(random.composite());
+  });
+
+  test('#superComposite', () => {
+    checkSuperComposite(random.superComposite());
   });
 
   test('#factor', () => {
@@ -30,6 +40,12 @@ suite('random', () => {
   test('#letter', () => {
     random.chrs.should.include(random.letter());
   });
+
+  test('#nonZero', () => {
+    let result = random.nonZero();
+    checkInteger(result);
+    result.should.not.equal(0);
+  });
 });
 
 function checkInteger(integer) {
@@ -40,4 +56,8 @@ function checkInteger(integer) {
 
 function checkComposite(composite) {
   random.composites.should.include(composite);
+}
+
+function checkSuperComposite(superComposite) {
+  random.superComposites.should.include(superComposite);
 }
