@@ -10,9 +10,12 @@
 }
 
 .tabular-headers {
+  height: 30px;
+}
+
+.tabular-header {
   color: #808080;
   font-weight: bold;
-  height: 30px;
 }
 
 .tabular-row {

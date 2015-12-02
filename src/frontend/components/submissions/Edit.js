@@ -10,12 +10,30 @@ let classes = require('../../store/classes');
 let debug = console.log.bind(console, '[components/submissions/Edit]');
 let {firebaseUrl} = require('../../constants');
 let includes = require('lodash/collection/includes');
+let map = require('lodash/collection/map');
 let {mapChar} = require('../../../common/string');
 let submissions = require('../../store/submissions');
 
 let skipStops = Object.freeze(
   ['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']
 );
+
+let navigationHotkeys = Object.freeze({
+  'ctrl a': 'Move cursor to beginning of active equation',
+  'ctrl e': 'Move cursor to end of active equation',
+  'ctrl →': 'Move cursor one term right',
+  'ctrl ←': 'Move cursor one term left',
+  'ctrl u': 'Open the previous problem',
+  'ctrl d': 'Open the next problem'
+});
+
+let actionHotkeys = Object.freeze({
+  'shift →': 'Highlight a character to the right',
+  'shift ←': 'Highlight a character to the left',
+  'enter': 'Commit the changes in the current step',
+  'ctrl z': 'Undo',
+  'ctrl shift z': 'Redo'
+});
 
 module.exports = React.createClass({
   displayName: 'submissions/Edit',
@@ -27,6 +45,7 @@ module.exports = React.createClass({
       aClass: {},
       assignment: {},
       responses: [],
+      isHelpDialogShown: false,
 
       // index of active equation
       num: null,
@@ -74,7 +93,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let {aClass, assignment} = this.state;
+    let {aClass, assignment, isHelpDialogShown} = this.state;
     return <div id="submissions-edit">
       <Topbar headerText={assignment.name} />
       <div className="view">
@@ -84,6 +103,10 @@ module.exports = React.createClass({
         <div className="submissions-edit-workspace">
           {this._renderQuestionList()}
           {this._renderQuestion()}
+          {isHelpDialogShown && this._renderHelpDialog()}
+          <img className="submissions-edit-help-button"
+               src="style/images/question-mark.svg"
+               onClick={this._showHelpDialog} />
         </div>
       </div>
     </div>;
@@ -261,6 +284,38 @@ module.exports = React.createClass({
           return <div key={index} style={style}>{chr}</div>;
         })
       }
+    </div>;
+  },
+
+  _renderHelpDialog: function() {
+    return <div className="submissions-edit-help-dialog"
+         onClick={event => event.stopPropagation()}>
+      <div className="tabular-header">Hotkeys</div>
+      <div className="modal-exit" onClick={this._hideHelpDialog}>x</div>
+      <div className="submissions-edit-help-dialog-contents">
+        <div className="submissions-edit-help-dialog-col">
+          <div className="submissions-edit-help-dialog-label">Navigation</div>
+          {map(navigationHotkeys, this._renderHotkey)}
+        </div>
+
+        <div className="submissions-edit-help-dialog-col">
+          <div className="submissions-edit-help-dialog-label">Actions</div>
+          {map(actionHotkeys, this._renderHotkey)}
+        </div>
+      </div>
+    </div>;
+  },
+
+  _renderHotkey: function(explanation, shortcut) {
+    return <div className="submissions-edit-help-dialog-shortcut">
+      <div className="submissions-edit-help-dialog-keycode-container">
+        <div className="submissions-edit-help-dialog-keycode">
+          {shortcut}
+        </div>
+      </div>
+      <div className="submissions-edit-help-dialog-explanation">
+        {explanation}
+      </div>
     </div>;
   },
 
@@ -629,6 +684,16 @@ module.exports = React.createClass({
 
     // This will reset all of our work on the current state.
     this._selectQuestion(num);
+  },
+
+  _showHelpDialog: function() {
+    debug('Show help dialog');
+    this.setState({isHelpDialogShown: true});
+  },
+
+  _hideHelpDialog: function() {
+    debug('Hide help dialog');
+    this.setState({isHelpDialogShown: false});
   },
 
   _handleBack: function() {
