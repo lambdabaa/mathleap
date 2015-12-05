@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Utility methods to generate random data.
+ */
+
 let random = require('lodash/number/random');
 let range = require('lodash/utility/range');
 let sample = require('lodash/collection/sample');

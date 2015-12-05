@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Reactive cookie abstraction.
+ */
+
 let {EventEmitter} = require('events');
 let {inherits} = require('util');
 

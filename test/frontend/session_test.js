@@ -1,6 +1,6 @@
 let expect = require('chai').expect;
 
-suite('Session', () => {
+suite('session', () => {
   let session;
 
   setup(() => {

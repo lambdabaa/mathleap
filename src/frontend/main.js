@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Main application frontend entrypoint.
+ */
+
 let $ = document.querySelector.bind(document);
 let Container = require('./components/Container');
 let React = require('react');

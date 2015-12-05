@@ -1,4 +1,8 @@
-let debug = console.log.bind(console, '[service/createAssignment]');
+/**
+ * @fileoverview Generate random sets of questions by question type(s).
+ */
+
+let debug = console.log.bind(console, '[createAssignment]');
 let flatten = require('lodash/array/flatten');
 let groupBy = require('lodash/collection/groupBy');
 let mapValues = require('lodash/object/mapValues');

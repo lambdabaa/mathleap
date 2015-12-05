@@ -1,4 +1,9 @@
-let debug = console.log.bind(console, '[service/diff]');
+/**
+ * @fileoverview Translate a series of keyboard events into data to back
+ *     the realtime problem editor ui.
+ */
+
+let debug = console.log.bind(console, '[diff]');
 let {eachChar} = require('../common/string');
 let flatten = require('lodash/array/flatten');
 let map = require('lodash/collection/map');
@@ -82,26 +87,13 @@ module.exports.diff = function diff(statementToDeltas) {
 };
 
 module.exports.applyDiff = function applyDiff(deltas, stmt) {
-  if (deltas.length === 0) {
+  if (!deltas.length) {
     return stmt;
   }
 
   debug('applyDiff', JSON.stringify(arguments));
-
-  let {pos, chr, highlight} = deltas[0];
-  let tail = deltas.slice(1);
-  let result;
-  if (highlight) {
-    result = chr === 8 ?
-      stmt.slice(0, pos) + stmt.slice(highlight) :
-      stmt.slice(0, pos) + String.fromCharCode(chr) + stmt.slice(highlight);
-  } else {
-    result = chr === 8 ?
-      stmt.slice(0, pos - 1) + stmt.slice(pos) :
-      stmt.slice(0, pos) + String.fromCharCode(chr) + stmt.slice(pos);
-  }
-
-  return applyDiff(tail, result);
+  let [head, ...tail] = deltas;
+  return applyDiff(tail, applyDeltaToStatement(stmt, head));
 };
 
 module.exports.getChanges = function getChanges(deltas, stmt) {
@@ -125,6 +117,19 @@ module.exports.getChanges = function getChanges(deltas, stmt) {
     })
   );
 };
+
+function applyDeltaToStatement(stmt, delta) {
+  let {pos, chr, highlight} = delta;
+  if (highlight) {
+    return chr === 8 ?
+      stmt.slice(0, pos) + stmt.slice(highlight) :
+      stmt.slice(0, pos) + String.fromCharCode(chr) + stmt.slice(highlight);
+  }
+
+  return chr === 8 ?
+    stmt.slice(0, pos - 1) + stmt.slice(pos) :
+    stmt.slice(0, pos) + String.fromCharCode(chr) + stmt.slice(pos);
+}
 
 function handleHighlight(blocks, cursor, delta) {
   let {chr, pos, highlight} = delta;

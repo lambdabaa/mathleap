@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Utility methods for strings.
+ */
+
 exports.mapChar = function(str, fn) {
   let result = [];
   exports.eachChar(str, (chr, index) => result.push(fn(chr, index)));

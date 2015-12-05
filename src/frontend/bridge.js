@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Proxy api requests from frontend to backend.
+ */
+
 let ProxyWorker = require('proxyworker/lib/proxyworker');
 
 let worker;
