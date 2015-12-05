@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Wrapper around jison parser for parsing math statements.
+ */
+
 let math = require('./math').parser;
 
 math.yy = {

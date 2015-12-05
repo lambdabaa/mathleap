@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Generate pseudo unique class identifiers.
+ */
+
 let random = require('lodash/number/random');
 let range = require('lodash/utility/range');
 let times = require('lodash/utility/times');

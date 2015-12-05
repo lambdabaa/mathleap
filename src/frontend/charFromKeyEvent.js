@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Translate a keyboard event to a string character.
+ */
+
 module.exports = function(event) {
   let chr;
   switch (event.keyCode) {

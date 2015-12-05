@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Promise.defer()
+ */
+
 module.exports = function() {
   let resolve, reject;
   let promise = new Promise((_resolve, _reject) => {

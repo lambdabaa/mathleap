@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Tiny client-side router implementation based on hashchange.
+ */
+
 let {EventEmitter} = require('events');
 let React = require('react');
 let {inherits} = require('util');

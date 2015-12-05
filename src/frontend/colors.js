@@ -1,3 +1,7 @@
+/**
+ * @fileoverview MathLeap color palette.
+ */
+
 let sample = require('lodash/collection/sample');
 
 exports.colors = [

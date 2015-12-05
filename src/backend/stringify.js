@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Conversion from parsed math tree to string.
+ */
+
 let {partition} = require('../common/array');
 
 let symbol = Object.freeze({
