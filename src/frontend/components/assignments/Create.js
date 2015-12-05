@@ -7,12 +7,12 @@ let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
-let bridge = require('../../bridge');
 let classes = require('../../store/classes');
 let colors = require('../../colors');
 let debug = console.log.bind(console, '[components/assignments/create]');
 let {firebaseUrl} = require('../../constants');
 let moment = require('moment');
+let questions = require('../../store/questions');
 
 module.exports = React.createClass({
   displayName: 'assignments/Create',
@@ -278,9 +278,9 @@ module.exports = React.createClass({
 
   _handlePreview: async function() {
     debug('preview assignment');
-    let {aClass, assignments, deadline, preview} = this.state;
+    let {aClass, assignments, composition, deadline, preview} = this.state;
     if (!preview) {
-      preview = await bridge('createAssignment', this.state.composition);
+      preview = await questions.createAssignment(composition);
       this.setState({preview});
     }
 
@@ -316,7 +316,7 @@ module.exports = React.createClass({
     debug('create assignment');
     let {aClass, assignments, composition, deadline, preview} = this.state;
     if (!preview) {
-      preview = await bridge('createAssignment', composition);
+      preview = await questions.createAssignment(composition);
     }
 
     await classes.createAssignment(aClass, {

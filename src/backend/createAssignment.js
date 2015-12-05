@@ -10,43 +10,6 @@ let random = require('./random');
 let range = require('lodash/utility/range');
 let sample = require('lodash/collection/sample');
 
-/**
- * @param {Array} composition spec for assignment.
- */
-function createAssignment(composition) {
-  debug('composition', JSON.stringify(composition));
-  let typeToQuestions = mapValues(
-    mapValues(
-      groupBy(composition, section => section.type.name),
-      sections => sections.reduce((total, section) => total + section.count, 0)
-    ),
-    createQuestions
-  );
-
-  debug('type to questions', JSON.stringify(typeToQuestions));
-  let result = flatten(
-    composition.map(section => {
-      let type = section.type.name;
-      let count = section.count;
-      let questions = typeToQuestions[type];
-      if (questions.length === count) {
-        return questions;
-      }
-
-      // For whatever reason, the teacher decided to have multiple sections with
-      // the same variety of question.
-      return questions.splice(0, count);
-    })
-  );
-
-  debug('assignment', JSON.stringify(result));
-  return result;
-}
-
-function createQuestions(count, type) {
-  return createQuestion[type](count);
-}
-
 let createQuestion = {};
 createAssignment.createQuestion = createQuestion;
 
@@ -186,4 +149,43 @@ createQuestion['Clever distribution'] = count => {
   });
 };
 
+function createQuestions(count, type) {
+  debug('createQuestions', JSON.stringify(arguments));
+  return createQuestion[type](count);
+}
+
+/**
+ * @param {Array} composition spec for assignment.
+ */
+function createAssignment(composition) {
+  debug('composition', JSON.stringify(composition));
+  let typeToQuestions = mapValues(
+    mapValues(
+      groupBy(composition, section => section.type.name),
+      sections => sections.reduce((total, section) => total + section.count, 0)
+    ),
+    createQuestions
+  );
+
+  debug('type to questions', JSON.stringify(typeToQuestions));
+  let result = flatten(
+    composition.map(section => {
+      let type = section.type.name;
+      let count = section.count;
+      let questions = typeToQuestions[type];
+      if (questions.length === count) {
+        return questions;
+      }
+
+      // For whatever reason, the teacher decided to have multiple sections with
+      // the same variety of question.
+      return questions.splice(0, count);
+    })
+  );
+
+  debug('assignment', JSON.stringify(result));
+  return result;
+}
+
 module.exports = createAssignment;
+module.exports.createQuestions = createQuestions;
