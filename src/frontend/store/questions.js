@@ -6,6 +6,7 @@ let flatten = require('lodash/array/flatten');
 let groupBy = require('lodash/collection/groupBy');
 let map = require('lodash/collection/map');
 let mapValues = require('lodash/object/mapValues');
+let pluck = require('lodash/collection/pluck');
 let request = require('./request');
 let sample = require('lodash/collection/sample');
 let topics = Array.from(require('./topics'));
@@ -48,7 +49,8 @@ exports.createAssignment = async function(composition) {
       let generated = await bridge(
         'createQuestions',
         count - cached.length,
-        type
+        type,
+        {exclude: pluck(cached, 'solution')}
       );
 
       debug('Cache the generated questions.');

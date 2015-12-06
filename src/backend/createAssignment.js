@@ -13,39 +13,40 @@ let sample = require('lodash/collection/sample');
 let createQuestion = {};
 createAssignment.createQuestion = createQuestion;
 
-createQuestion['Simple addition'] = count => {
-  let solutions = random.integerList(count);
+createQuestion['Simple addition'] = function() {
+  let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
     return {question: `${a}+${solution - a}`, solution};
   });
 };
 
-createQuestion['Simple subtraction'] = count => {
-  let solutions = random.integerList(count);
+createQuestion['Simple subtraction'] = function() {
+  let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
     return {question: `${a}-${a - solution}`, solution};
   });
 };
 
-createQuestion['Simple multiplication'] = count => {
-  let solutions = random.compositeList(count);
+createQuestion['Simple multiplication'] = function() {
+  let solutions = random.compositeList(...arguments);
   return solutions.map(solution => {
     let a = random.factor(solution);
     return {question: `${a}*${solution / a}`, solution};
   });
 };
 
-createQuestion['Simple division'] = count => {
-  let operands = random.compositeList(count);
+createQuestion['Simple division'] = function() {
+  let operands = random.compositeList(...arguments);
   return operands.map(operand => {
     let solution = random.factor(operand);
     return {question: `${operand}/${operand / solution}`, solution};
   });
 };
 
-createQuestion['Simple exponentiation'] = count => {
+// TODO(gaye): Need to handle exclude option.
+createQuestion['Simple exponentiation'] = function(count) {
   let small = range(-10, 10);
   let tiny = range(0, 4);
   return range(0, count).map(() => {
@@ -55,8 +56,8 @@ createQuestion['Simple exponentiation'] = count => {
   });
 };
 
-createQuestion['Solving equations of the form Ax = B'] = count => {
-  let solutions = random.integerList(count);
+createQuestion['Solving equations of the form Ax = B'] = function() {
+  let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
     let b = a * solution;
@@ -65,8 +66,8 @@ createQuestion['Solving equations of the form Ax = B'] = count => {
   });
 };
 
-createQuestion['Solving equations of the form x/A = B'] = count => {
-  let solutions = random.compositeList(count);
+createQuestion['Solving equations of the form x/A = B'] = function() {
+  let solutions = random.compositeList(...arguments);
   return solutions.map(solution => {
     let a = random.factor(solution);
     let b = solution / a;
@@ -75,8 +76,8 @@ createQuestion['Solving equations of the form x/A = B'] = count => {
   });
 };
 
-createQuestion['Solving equations in one step with addition'] = count => {
-  let solutions = random.integerList(count);
+createQuestion['Solving equations in one step with addition'] = function() {
+  let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
     let b = solution + a;
@@ -85,8 +86,8 @@ createQuestion['Solving equations in one step with addition'] = count => {
   });
 };
 
-createQuestion['Solving equations in two steps'] = count => {
-  let solutions = random.integerList(count);
+createQuestion['Solving equations in two steps'] = function() {
+  let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
     let b = random.integer();
@@ -99,8 +100,8 @@ createQuestion['Solving equations in two steps'] = count => {
   });
 };
 
-createQuestion['Equations with variables on both sides'] = count => {
-  let solutions = random.integerList(count);
+createQuestion['Equations with variables on both sides'] = function() {
+  let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
     let b = random.integer();
@@ -117,8 +118,8 @@ createQuestion['Equations with variables on both sides'] = count => {
   });
 };
 
-createQuestion['Simple distribution'] = count => {
-  let solutions = random.integerList(count);
+createQuestion['Simple distribution'] = function() {
+  let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
     let b = random.integer();
@@ -131,8 +132,8 @@ createQuestion['Simple distribution'] = count => {
   });
 };
 
-createQuestion['Clever distribution'] = count => {
-  let solutions = random.superCompositeList(count);
+createQuestion['Clever distribution'] = function() {
+  let solutions = random.superCompositeList(...arguments);
   return solutions.map(solution => {
     let c = random.compositeFactor(solution);
     let a = random.factor(c);
@@ -149,9 +150,14 @@ createQuestion['Clever distribution'] = count => {
   });
 };
 
-function createQuestions(count, type) {
+/**
+ * Options:
+ *
+ *   (Array) exclude list of solutions to avoid.
+ */
+function createQuestions(count, type, options = {}) {
   debug('createQuestions', JSON.stringify(arguments));
-  return createQuestion[type](count);
+  return createQuestion[type](count, options.exclude || []);
 }
 
 /**

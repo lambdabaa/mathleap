@@ -76,11 +76,20 @@ exports.compositeFactor = function(value) {
 /**
  * @param {Function} next generates next random.
  * @param {number} len how many random numbers to generate.
+ * @param {Array} exclude list of elements to omit.
  */
-function randomList(next, len) {
+function randomList(next, len, exclude = []) {
+  // Convert exclude array to an object for fast lookups.
+  let omit = {};
+  exclude.forEach(element => omit[element] = true);
+
   let uniq = {};
-  times(len, () => uniq[next(uniq)] = true);
-  return Object.keys(uniq).map(key => parseInt(key, 10));
+  times(len, () => {
+    let nextRandom = next(Object.assign({}, omit, uniq));
+    uniq[nextRandom] = true;
+  });
+
+  return Object.keys(uniq).map(key => parseInt(key));
 }
 
 /**
