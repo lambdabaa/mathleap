@@ -3,70 +3,77 @@
  */
 
 let {EventEmitter} = require('events');
-let {inherits} = require('util');
+let debug = console.log.bind(console, '[session]');
+let forEach = require('lodash/collection/forEach');
 
-function Session() {
-  // Hydrate cookie data.
-  this.data = {};
-  document.cookie.split(';').forEach(cookie => {
-    let [key, value] = cookie.trim().split('=');
-    let parsed;
-    try {
-      parsed = JSON.parse(value);
-    } catch (error) {
-      parsed = value;
-    }
+class Session extends EventEmitter {
+  constructor() {
+    super();
+    this._hydrate();
+  }
 
-    this.data[key] = parsed;
-  });
+  get(key) {
+    return key ? this.data[key] : this.data;
+  }
+
+  set(key, value) {
+    debug(`set ${key}=${JSON.stringify(value)}`);
+    this.data[key] = value;
+    super.emit('change');
+    super.emit(key, value);
+    process.nextTick(() => this._persist());
+  }
+
+  clear() {
+    debug('clear');
+    // This will expire all of the cookies.
+    this._persist('Thu, 01 Jan 1970 00:00:00 UTC');
+
+    let prev = this.data;
+    this.data = {};
+
+    forEach(prev, (value, key) => {
+      super.emit(key, null);
+    });
+
+    super.emit('change');
+  }
+
+  _hydrate() {
+    this.data = {};
+    let cookies = document.cookie.split(';');
+    cookies.forEach(cookie => {
+      let [key, value] = cookie.trim().split('=');
+      this.data[key] = safeParse(value);
+    });
+  }
+
+  _persist(expiration = getExpirationGMTString()) {
+    forEach(this.data, (value, key) => {
+      value = typeof value === 'object' ? JSON.stringify(value) : value;
+      document.cookie = `${key}=${value};expires=${expiration}`;
+    });
+  }
 }
 
-inherits(Session, EventEmitter);
-
-Session.prototype.get = function(key) {
-  return key ? this.data[key] : this.data;
-};
-
-Session.prototype.set = function(key, value) {
-  this.data[key] = value;
-  if (typeof value === 'object') {
-    value = JSON.stringify(value);
+function safeParse(value) {
+  let result;
+  try {
+    result = JSON.parse(value);
+  } catch (error) {
+    result = value;
   }
 
-  this.data.expires = getExpiration();
-  this._persist();
-  this.emit(key, value);
-};
-
-Session.prototype.clear = function() {
-  let prev = this.data;
-  this.data = {expires: 'Thu, 01 Jan 1970 00:00:00 UTC'};
-  this._persist();
-  for (let key in prev) {
-    this.emit(key, null);
-  }
-};
-
-/**
- * Persist to cookie store.
- */
-Session.prototype._persist = function() {
-  for (let key in this.data) {
-    let value = this.data[key];
-    value = typeof value === 'object' ? JSON.stringify(value) : value;
-    document.cookie = `${key}=${value}`;
-  }
-
-  this.emit('change');
-};
+  return result;
+}
 
 /**
  * Cookie should expire one month from now.
  */
-function getExpiration() {
+function getExpirationGMTString() {
   let expiration = new Date();
   expiration.setMonth(expiration.getMonth() + 1);
-  return expiration.toUTCString();
+  return expiration.toGMTString();
 }
 
 let session = module.exports = new Session();
