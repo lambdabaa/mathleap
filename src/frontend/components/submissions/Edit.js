@@ -67,7 +67,10 @@ module.exports = React.createClass({
 
       // array of tokens to represent changes being made to each
       // equation character
-      changes: null
+      changes: null,
+
+      // bit for cursor blinking
+      isCursorVisible: true
     };
   },
 
@@ -88,7 +91,12 @@ module.exports = React.createClass({
     document.addEventListener('keydown', this._handleKeyDown, true);
   },
 
+  componentDidMount: function() {
+    this.interval = setInterval(this._tick, 1500);
+  },
+
   componentWillUnmount: function() {
+    clearInterval(this.interval);
     document.removeEventListener('keydown', this._handleKeyDown);
   },
 
@@ -110,6 +118,10 @@ module.exports = React.createClass({
         </div>
       </div>
     </div>;
+  },
+
+  _tick: function() {
+    this.setState({isCursorVisible: !this.state.isCursorVisible});
   },
 
   _renderQuestionList: function() {
@@ -261,7 +273,8 @@ module.exports = React.createClass({
   },
 
   _renderResults: function(equation, cursor) {
-    if (typeof cursor !== 'number') {
+    let {isCursorVisible} = this.state;
+    if (typeof cursor !== 'number' || !isCursorVisible) {
       return equation;
     }
 
@@ -372,11 +385,11 @@ module.exports = React.createClass({
       case 37:
         event.preventDefault();
         cursor = Math.max(0, cursor - 1);
-        return this.setState({cursor});
+        return this.setState({cursor, isCursorVisible: true});
       case 39:
         event.preventDefault();
         cursor = Math.min(equation.length, cursor + 1);
-        return this.setState({cursor});
+        return this.setState({cursor, isCursorVisible: true});
       default:
         return this._handleDelta(event);
     }
@@ -393,7 +406,7 @@ module.exports = React.createClass({
 
         cursor = Math.max(cursor - 1);
         highlight[cursor] = !highlight[cursor];
-        return this.setState({cursor, highlight});
+        return this.setState({cursor, highlight, isCursorVisible: true});
       case 39:
         event.preventDefault();
         if (cursor === equation.length) {
@@ -402,7 +415,7 @@ module.exports = React.createClass({
 
         highlight[cursor] = !highlight[cursor];
         cursor = Math.max(cursor + 1);
-        return this.setState({cursor, highlight});
+        return this.setState({cursor, highlight, isCursorVisible: true});
       default:
         this._handleDelta(event);
     }
@@ -425,7 +438,7 @@ module.exports = React.createClass({
           }
         } while (cursor > 0);
 
-        return this.setState({cursor});
+        return this.setState({cursor, isCursorVisible: true});
       case 39:  // right
         event.preventDefault();
         if (cursor === equation.length) {
@@ -440,7 +453,7 @@ module.exports = React.createClass({
           }
         } while (cursor < equation.length);
 
-        return this.setState({cursor});
+        return this.setState({cursor, isCursorVisible: true});
       case 65:  // a
         event.preventDefault();
         return this.setState({cursor: 0});
