@@ -213,6 +213,13 @@ module.exports = React.createClass({
           }
 
           let [left, right] = equation.split('=');
+          if (!right) {
+            // TODO(gaye): This is still ignoring statements other
+            //     than equality.
+            // This is just an expression (e.g. arithmetic problem)
+            return mapChar(left, renderEquationChar);
+          }
+
           if (equation.length > changes.length) {
             // Ahhh? This is a workaround for an issue
             // I don't totally understand. Sometimes we get changes
