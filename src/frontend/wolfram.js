@@ -40,7 +40,8 @@ exports.findSolution = function(res) {
     'plaintext'
   );
 
-  return node.textContent;
+  return node.textContent
+    .replace('', '=');
 };
 
 function getChildByTagName(element, tagName, test) {
