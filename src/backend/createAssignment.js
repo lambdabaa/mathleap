@@ -37,6 +37,7 @@ createQuestion['Simple multiplication'] = function() {
   });
 };
 
+// TODO(gaye): Need to handle exclude option.
 createQuestion['Simple division'] = function() {
   let operands = random.compositeList(...arguments);
   return operands.map(operand => {
@@ -53,6 +54,17 @@ createQuestion['Simple exponentiation'] = function(count) {
     let base = sample(small);
     let exp = sample(tiny);
     return {question: `${base}^${exp}`, solution: Math.pow(base, exp)};
+  });
+};
+
+createQuestion['Arithmetic distribution'] = function() {
+  let solutions = random.compositeList(...arguments);
+  return solutions.map(solution => {
+    let a = random.factor(solution);
+    let b = solution / a;
+    let c = random.integerList(1, [b])[0];
+    let d = Math.abs(b - c);
+    return {question: `${a}(${c}${b > c ? '+' : '-'}${d})`, solution};
   });
 };
 
