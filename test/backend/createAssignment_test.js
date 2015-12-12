@@ -68,6 +68,22 @@ suite('service/createAssignment', function() {
     });
   });
 
+  test('Arithmetic distribution', () => {
+    let questions = createQuestion['Arithmetic distribution'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      // TODO(gaye): This is terrible.
+      let openParen = question.indexOf('(');
+      let actual = eval(
+        question.slice(0, openParen) +
+         '*' +
+         question.slice(openParen)
+      );
+      actual.should.equal(solution);
+    });
+  });
+
   test('Ax=B', () => {
     let questions = createQuestion['Solving equations of the form Ax = B'](10);
     questions.should.have.length(10);

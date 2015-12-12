@@ -23,7 +23,7 @@ module.exports = [
       },
 
       {
-        "name": "Simple distribution",
+        "name": "Arithmetic distribution",
         "example": "6 * (2 + 3)"
       },
 
