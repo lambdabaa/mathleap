@@ -686,7 +686,7 @@ module.exports = React.createClass({
       work,
       [changes],
       [append],
-      [`${left}${append}=${right}${append}`]
+      [right ? `${left}${append}=${right}${append}` : left]
     );
 
     // This will reset all of our work on the current state.
