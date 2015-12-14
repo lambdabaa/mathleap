@@ -39,9 +39,11 @@ let randomSuperComposite = sample.bind(null, superComposites);
 exports.integer = uniqueRandom.bind(exports, randomInteger);
 exports.composite = uniqueRandom.bind(exports, randomComposite);
 exports.superComposite = uniqueRandom.bind(exports, randomSuperComposite);
+exports.power = uniqueRandom.bind(exports, randomPower);
 exports.integerList = randomList.bind(exports, exports.integer);
 exports.compositeList = randomList.bind(exports, exports.composite);
 exports.superCompositeList = randomList.bind(exports, exports.superComposite);
+exports.powerList = randomList.bind(exports, exports.power);
 exports.factorList = randomList.bind(exports, exports.factor);
 exports.boolean = sample.bind(null, [true, false]);
 exports.letter = sample.bind(null, chrs);
@@ -72,6 +74,14 @@ exports.compositeFactor = function(value) {
     return value % candidate === 0 || value % candidate === -0;
   }));
 };
+
+function randomPower() {
+  let small = range(-10, 10);
+  let tiny = range(0, 3);
+  let base = sample(small);
+  let exp = sample(tiny);
+  return Math.pow(base, exp);
+}
 
 /**
  * @param {Function} next generates next random.
