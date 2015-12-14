@@ -15,7 +15,7 @@ use the production database, so be mindful :).
 
 ### Compiling MathLeap
 
-`npm run publish` compiles your source changes. This happens
+`npm run prepublish` compiles your source changes. This happens
 automatically after installing npm dependencies also. Since `npm
 prepublish` is a dependency of `npm install`.
 
@@ -39,5 +39,5 @@ tests to pass since we speak to remote apis.
 
 ### Deploying to production
 
-`npm run publish` builds and deploys MathLeap to Firebase. You'll need
+`npm run deploy` builds and deploys MathLeap to Firebase. You'll need
 to be authenticated with our MathLeap Firebase account.
