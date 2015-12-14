@@ -16,7 +16,7 @@ use the production database, so be mindful :).
 ### Compiling MathLeap
 
 `npm run prepublish` compiles your source changes. This happens
-automatically after installing npm dependencies also. Since `npm
+automatically after installing npm dependencies also since `npm
 prepublish` is a dependency of `npm install`.
 
 ### Running the tests
