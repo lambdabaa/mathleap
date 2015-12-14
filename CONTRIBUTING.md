@@ -39,5 +39,6 @@ tests to pass since we speak to remote apis.
 
 ### Deploying to production
 
+First install `firebase` globally with `npm install -g firebase-tools`.
 `npm run deploy` builds and deploys MathLeap to Firebase. You'll need
 to be authenticated with our MathLeap Firebase account.
