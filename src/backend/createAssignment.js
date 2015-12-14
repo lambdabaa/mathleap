@@ -4,10 +4,13 @@
 
 let debug = console.log.bind(console, '[createAssignment]');
 let flatten = require('lodash/array/flatten');
+let find = require('lodash/collection/find');
 let groupBy = require('lodash/collection/groupBy');
+let isInteger = require('./isInteger');
 let mapValues = require('lodash/object/mapValues');
 let random = require('./random');
 let range = require('lodash/utility/range');
+let round = require('./round');
 let sample = require('lodash/collection/sample');
 
 let createQuestion = {};
@@ -37,23 +40,28 @@ createQuestion['Simple multiplication'] = function() {
   });
 };
 
-// TODO(gaye): Need to handle exclude option.
 createQuestion['Simple division'] = function() {
-  let operands = random.compositeList(...arguments);
-  return operands.map(operand => {
-    let solution = random.factor(operand);
-    return {question: `${operand}/${operand / solution}`, solution};
+  let solutions = random.integerList(...arguments);
+  return solutions.map(solution => {
+    let denom = random.integer();
+    let num = solution * denom;
+    return {question: `${num}/${denom}`, solution};
   });
 };
 
-// TODO(gaye): Need to handle exclude option.
-createQuestion['Simple exponentiation'] = function(count) {
-  let small = range(-10, 10);
-  let tiny = range(0, 4);
-  return range(0, count).map(() => {
-    let base = sample(small);
-    let exp = sample(tiny);
-    return {question: `${base}^${exp}`, solution: Math.pow(base, exp)};
+createQuestion['Simple exponentiation'] = function() {
+  let solutions = random.powerList(...arguments);
+  return solutions.map(solution => {
+    let root = find(
+      range(0, 4).reverse(),
+      candidate => {
+        let base = round(Math.pow(solution, 1 / candidate));
+        return isInteger(base);
+      }
+    );
+
+    let base = round(Math.pow(solution, 1 / root));
+    return {question: `${base}^${root}`, solution};
   });
 };
 

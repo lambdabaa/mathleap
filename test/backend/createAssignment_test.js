@@ -1,4 +1,5 @@
 let {createQuestion} = require('../../src/backend/createAssignment');
+let mathjs = require('mathjs');
 
 suite('service/createAssignment', function() {
   test('Simple addition', () => {
@@ -73,13 +74,7 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
-      // TODO(gaye): This is terrible.
-      let openParen = question.indexOf('(');
-      let actual = eval(
-        question.slice(0, openParen) +
-         '*' +
-         question.slice(openParen)
-      );
+      let actual = +mathjs.eval(question);
       actual.should.equal(solution);
     });
   });

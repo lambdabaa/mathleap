@@ -1,3 +1,4 @@
+let isInteger = require('../../src/backend/isInteger');
 let random = require('../../src/backend/random');
 
 suite('random', () => {
@@ -45,6 +46,13 @@ suite('random', () => {
     let result = random.nonZero();
     checkInteger(result);
     result.should.not.equal(0);
+  });
+
+  test('#power', () => {
+    let power = random.power();
+    isInteger(power).should.equal(true);
+    power.should.be.gte(-1000);
+    power.should.be.lte(1000);
   });
 });
 
