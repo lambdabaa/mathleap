@@ -13,6 +13,7 @@ let includes = require('lodash/collection/includes');
 let map = require('lodash/collection/map');
 let {mapChar} = require('../../../common/string');
 let submissions = require('../../store/submissions');
+let times = require('lodash/utility/times');
 
 let skipStops = Object.freeze(
   ['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']
@@ -163,7 +164,7 @@ module.exports = React.createClass({
         if (index === work.length - 1) {
           return [
             this._renderChanges(step.state[0], this.state.changes, append),
-            this._renderResults(equation, cursor)
+            this._renderResults(equation, cursor, append)
           ];
         }
 
@@ -272,38 +273,43 @@ module.exports = React.createClass({
     </div>;
   },
 
-  _renderResults: function(equation, cursor) {
-    let {isCursorVisible} = this.state;
-    if (typeof cursor !== 'number' || !isCursorVisible) {
+  _renderResults: function(equation, cursor, append = '') {
+    if (typeof cursor !== 'number') {
       return equation;
     }
 
-    let {highlight} = this.state;
+    let {highlight, isCursorVisible} = this.state;
+    let [left, right] = equation.split('=');
+
+    function renderChar(index) {
+      let style = {};
+      let chr;
+      if (index < left.length ||
+          index >= left.length + append.length &&
+          index < equation.length + append.length) {
+        // equation proper
+        if (highlight && highlight[index]) {
+          style.backgroundColor = 'rgba(57, 150, 240, 0.5)';
+        }
+
+        chr = index < left.length ?
+          equation.charAt(index) :
+          equation.charAt(index - append.length);
+      } else {
+        // append
+        chr = index < left.length + append.length ?
+          append.charAt(index - left.length) :
+          append.charAt(index - equation.length - append.length);
+      }
+
+      return <div key={index} style={style}>{chr}</div>;
+    }
+
     return <div key={JSON.stringify({equation, cursor})}
                 className="submissions-edit-active">
-      {
-        mapChar(equation.slice(0, cursor), (chr, index) => {
-          let style = {};
-          if (highlight && highlight[index]) {
-            style.backgroundColor = 'rgba(57, 150, 240, 0.5)';
-          }
-
-          return <div key={index} style={style}>{chr}</div>;
-        })
-      }
-
-      <div className="submissions-edit-cursor">|</div>
-
-      {
-        mapChar(equation.slice(cursor), (chr, index) => {
-          let style = {};
-          if (highlight && highlight[cursor + index]) {
-            style.backgroundColor = 'rgba(57, 150, 240, 0.5)';
-          }
-
-          return <div key={index} style={style}>{chr}</div>;
-        })
-      }
+      {times(cursor, renderChar)}
+      {isCursorVisible && <div className="submissions-edit-cursor">|</div>}
+      {times(equation.length + 2 * append.length - cursor, i => renderChar(cursor + i))}
     </div>;
   },
 
@@ -509,7 +515,7 @@ module.exports = React.createClass({
 
     return this._appendDelta(
       {type: 'replace', range: [cursor, cursor], replacement: chr},
-      cursor + 1
+      cursor + 2
     );
   },
 
@@ -565,15 +571,19 @@ module.exports = React.createClass({
     }
 
     event.preventDefault();
-    this.setState({append: operator});
+    this.setState({
+      append: operator,
+      cursor: this.state.cursor + 2
+    });
   },
 
   _handleBothSidesChar: function(event) {
     debug('handle both sides char');
-    let {append} = this.state;
+    let {append, cursor} = this.state;
 
     if (event.keyCode === 8) {
       append = append.slice(0, append.length - 1);
+      cursor -= 2;
     } else {
       let chr = charFromKeyEvent(event);
       if (!chr) {
@@ -581,10 +591,11 @@ module.exports = React.createClass({
       }
 
       append += chr;
+      cursor += 2;
     }
 
     event.preventDefault();
-    this.setState({append});
+    this.setState({append, cursor});
   },
 
   _handleSelection: function(event, start, end) {
