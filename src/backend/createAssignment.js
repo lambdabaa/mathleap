@@ -20,7 +20,6 @@ let sample = require('lodash/collection/sample');
  * 
  *   (Array.<number>) exclude - don't generate solutions in this list.
  */
-
 let createQuestion = {};
 createAssignment.createQuestion = createQuestion;
 
