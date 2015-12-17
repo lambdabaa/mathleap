@@ -17,7 +17,7 @@ let sample = require('lodash/collection/sample');
  * createQuestion functions get called with two arguments:
  * a count which is the number of questions to generate
  * and an options object with the following options:
- * 
+ *
  *   (Array.<number>) exclude - don't generate solutions in this list.
  */
 let createQuestion = {};
