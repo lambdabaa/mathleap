@@ -143,13 +143,16 @@ module.exports = React.createClass({
       ];
     });
 
-    return <Tabular className="dark"
-                    cols={[
-                      {content: 'Questions', width: 30},
-                      {content: '', width: 220}
-                    ]}
-                    rows={questions}
-                    selected={num} />;
+    return <div className="submissions-edit-question-list">
+       <Tabular className="dark"
+                cols={[
+                  {content: 'Questions', width: 30},
+                  {content: '', width: 220}
+                ]}
+                rows={questions}
+                selected={num} />
+      <div className="button-inverse" onClick={this._handleSubmit}>Submit</div>
+    </div>;
   },
 
   _renderQuestion: function() {
@@ -715,6 +718,13 @@ module.exports = React.createClass({
 
     // This will reset all of our work on the current state.
     this._selectQuestion(num);
+  },
+
+  _handleSubmit: async function() {
+    debug('submit assignment');
+    let {aClass, assignment, submission} = this.props;
+    await submissions.submit(aClass, assignment, submission);
+    location.hash = `#!/classes/${aClass}/assignments/${assignment}/submissions/${submission}`;
   },
 
   _showHelpDialog: function() {
