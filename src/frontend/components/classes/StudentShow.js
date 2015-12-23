@@ -71,9 +71,10 @@ module.exports = React.createClass({
   _handleShowAssignment: async function(assignment) {
     let classId = this.props.id;
     let assignmentId = assignment['.key'];
-    let submission = await findOrCreateStudentSubmission(classId, assignment);
-    let submissionId = submission.key;
-    location.hash = `#!/classes/${classId}/assignments/${assignmentId}/submissions/${submissionId}/edit`;
+    let {key, submission} = await findOrCreateStudentSubmission(classId, assignment);
+    location.hash = submission.complete ?
+      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}` :
+      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}/edit`;
   }
 });
 
@@ -96,7 +97,7 @@ function getAssignmentStatus(assignment) {
     return 'Not started';
   }
 
-  let submission = getStudentSubmission(assignment);
+  let {key, submission} = getStudentSubmission(assignment);
   return submission.complete ? 'Submitted' : 'In progress';
 }
 

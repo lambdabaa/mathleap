@@ -43,6 +43,10 @@ function createRouter() {
     require('./components/assignments/Create')
   );
   router.route(
+    'classes/:aClass/assignments/:assignment/submissions/:submission',
+    require('./components/submissions/Show')
+  );
+  router.route(
     '/classes/:aClass/assignments/:assignment/submissions/:submission/edit',
     require('./components/submissions/Edit')
   );

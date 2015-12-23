@@ -7,6 +7,7 @@ let Topbar = require('../Topbar');
 let classes = require('../../store/classes');
 let debug = console.log.bind(console, '[components/classes/Show]');
 let {firebaseUrl} = require('../../constants');
+let reduce = require('lodash/collection/reduce');
 let students = require('../../store/students');
 
 module.exports = React.createClass({
@@ -78,7 +79,7 @@ module.exports = React.createClass({
       return [
         assignment.name,
         assignment.deadline,
-        `0 / ${this.state.students.length}`,
+        `${this._getCompleteSubmissionCount(assignment)} / ${this.state.students.length}`,
         'n / a'
       ];
     });
@@ -108,6 +109,12 @@ module.exports = React.createClass({
         </div>
       </div>
     </div>;
+  },
+
+  _getCompleteSubmissionCount: function(assignment) {
+    return reduce(assignment.submissions, (count, submission) => {
+      return count + submission.complete ? 1 : 0;
+    }, 0);
   },
 
   _handleCreateAssignment: function() {

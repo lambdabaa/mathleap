@@ -77,3 +77,7 @@
   -webkit-justify-content: center;
   width: 1px;
 }
+
+.submissions-edit-question-list > .button-inverse {
+  margin-top: 15px;
+}

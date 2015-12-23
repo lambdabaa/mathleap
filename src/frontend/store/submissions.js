@@ -63,6 +63,12 @@ exports.commitDelta = async function(classId, assignmentId, submissionId,
   ]);
 };
 
+exports.submit = async function(classId, assignmentId, submissionId) {
+  let ref = getSubmissionRef(classId, assignmentId, submissionId);
+  await request(ref.child('complete'), 'set', true);
+  debug('submission submit ok');
+};
+
 function getSubmissionsRef(classId, assignmentId) {
   return classesRef.child(`${classId}/assignments/${assignmentId}/submissions`);
 }
