@@ -7,6 +7,7 @@ let assignments = require('../../store/assignments');
 let bridge = require('../../bridge');
 let charFromKeyEvent = require('../../charFromKeyEvent');
 let classes = require('../../store/classes');
+let clone = require('lodash/lang/cloneDeep');
 let debug = console.log.bind(console, '[components/submissions/Edit]');
 let {firebaseUrl} = require('../../constants');
 let includes = require('lodash/collection/includes');
@@ -71,7 +72,13 @@ module.exports = React.createClass({
       changes: null,
 
       // bit for cursor blinking
-      isCursorVisible: true
+      isCursorVisible: true,
+
+      // stack for undo actions
+      undos: [],
+
+      // stack for redo actions
+      redos: []
     };
   },
 
@@ -359,7 +366,9 @@ module.exports = React.createClass({
       changes: mapChar(equation, () => 'none'),
       highlight: mapChar(equation, () => false),
       cursor: equation.length,
-      deltas: []
+      deltas: [],
+      undos: [],
+      redos: []
     });
   },
 
@@ -425,6 +434,10 @@ module.exports = React.createClass({
         highlight[cursor] = !highlight[cursor];
         cursor = Math.max(cursor + 1);
         return this.setState({cursor, highlight, isCursorVisible: true});
+      case 90:
+        if (event.ctrlKey) {
+          return this._handleRedo();
+        }
       default:
         this._handleDelta(event);
     }
@@ -475,6 +488,9 @@ module.exports = React.createClass({
       case 85:  // u
         event.preventDefault();
         return this._selectQuestion(num === 0 ? responses.length - 1 : num - 1);
+      case 90:  // z
+        event.preventDefault();
+        return this._handleUndo();
       default:
         debug(`Unknown control sequence ${event.keyCode}`);
     }
@@ -574,6 +590,7 @@ module.exports = React.createClass({
     }
 
     event.preventDefault();
+    this._saveState();
     this.setState({
       append: operator,
       cursor: this.state.cursor + 2
@@ -598,6 +615,7 @@ module.exports = React.createClass({
     }
 
     event.preventDefault();
+    this._saveState();
     this.setState({append, cursor});
   },
 
@@ -623,6 +641,46 @@ module.exports = React.createClass({
 
     event.preventDefault();
     return this._appendDelta(...args);
+  },
+
+  _handleUndo: async function() {
+    debug('handle undo');
+    let {undos, redos} = this.state;
+    let next;
+    if (undos.length) {
+      next = undos.pop();
+      redos.push(clone(this.state));
+      next.undos = undos;
+      next.redos = redos;
+      return this.replaceState(next);
+    }
+
+    let {aClass, assignment, submission} = this.props;
+    let {responses, num} = this.state;
+    let {work} = responses[num];
+    this.setState({redos: []});
+    await submissions.popDelta(aClass, assignment, submission, num, work);
+    this._selectQuestion(num);
+  },
+
+  _handleRedo: async function() {
+    debug('handle redo');
+    let {undos, redos} = this.state;
+    if (!redos.length) {
+      return debug('no undos to redo!');
+    }
+
+    undos.push(clone(this.state));
+    let next = redos.pop();
+    next.undos = undos;
+    next.redos = redos;
+    this.replaceState(next);
+  },
+
+  _saveState: function() {
+    let state = clone(this.state);
+    let undos = this.state.undos.concat(state);
+    this.setState({undos, redos: []});
   },
 
   _getHighlight: function() {
@@ -685,6 +743,7 @@ module.exports = React.createClass({
       }
     }
 
+    this._saveState();
     let {responses, num, deltas} = this.state;
     let {work} = responses[num];
     let {state} = work[work.length - 1];
