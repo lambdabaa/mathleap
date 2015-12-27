@@ -522,7 +522,7 @@ module.exports = React.createClass({
     );
   },
 
-  _handleBackspace: function() {
+  _handleBackspace: function(event) {
     debug('handle backspace');
     let {cursor} = this.state;
     if (cursor === 0) {

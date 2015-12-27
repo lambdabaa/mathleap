@@ -132,6 +132,7 @@ function applyDeltaToStatement(stmt, delta) {
 }
 
 function handleHighlight(blocks, cursor, delta) {
+  debug('handleHighlight', JSON.stringify(arguments));
   let {chr, pos, highlight} = delta;
   let selected = getSelectedBlocks(blocks, pos, highlight);
   let {block, index} = selected[0];
@@ -353,12 +354,22 @@ function handleChar(blocks, cursor, delta) {
     // len === 0: pretend we're highlighting one character to left
     // len === 1: current block type becomes st instead of highlight
     // len > 1: delete a character from the active block
+    if (blocks.length === 1) {
+      // There's also a special case for only one block
+      // which we can treat like the len === 0 case.
+      return handleHighlight(blocks, cursor, {
+        pos: pos - 1,
+        chr: chr,
+        highlight: pos
+      });
+    }
+
     switch (block.len) {
       case 0:
         return handleHighlight(blocks, cursor, {
-          pos: pos,
+          pos: pos - 1,
           chr: chr,
-          highlight: pos + 1
+          highlight: pos
         });
       case 1:
         return replaceIndex(blocks, cursor, {
