@@ -61,6 +61,26 @@ exports.commitDelta = async function(classId, assignmentId, submissionId,
     request(curr.child('changes'), 'set', changes),
     request(next, 'set', {operation, state})
   ]);
+
+  debug('commit delta ok');
+};
+
+exports.popDelta = async function(classId, assignmentId, submissionId,
+                                  question, work) {
+  if (work.length < 2) {
+    return debug('No deltas to pop!');
+  }
+
+  let ref = getSubmissionRef(classId, assignmentId, submissionId);
+  let curr = ref.child(`/responses/${question}/work/${work.length - 1}`);
+  let prev = ref.child(`/responses/${question}/work/${work.length - 2}`);
+  await Promise.all([
+    request(prev.child('appends'), 'remove'),
+    request(prev.child('changes'), 'remove'),
+    request(curr, 'remove')
+  ]);
+
+  debug('pop delta ok');
 };
 
 exports.submit = async function(classId, assignmentId, submissionId) {
