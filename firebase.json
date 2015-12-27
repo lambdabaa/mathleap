@@ -4,14 +4,19 @@
   "ignore": [
     "**/.*",
     "build/**",
+    "data/**",
+    "docs/**",
     "src/**",
+    "style/**",
     "test/**",
+    "CONTRIBUTING.md",
     "Makefile",
     "README.md",
     "backend.js",
     "circle.yml",
     "firebase.json",
     "frontend.js",
-    "package.json"
+    "package.json",
+    "watchman.json"
   ]
 }
