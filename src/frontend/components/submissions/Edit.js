@@ -650,10 +650,9 @@ module.exports = React.createClass({
   _handleUndo: async function() {
     debug('handle undo');
     let {undos, redos} = this.state;
-    let next;
     if (undos.length) {
-      next = undos.pop();
-      redos.push(clone(this.state));
+      let next = undos.pop();
+      redos.push(this.state);
       next.undos = undos;
       next.redos = redos;
       return this.replaceState(next);
@@ -674,8 +673,8 @@ module.exports = React.createClass({
       return debug('no undos to redo!');
     }
 
-    undos.push(clone(this.state));
     let next = redos.pop();
+    undos.push(this.state);
     next.undos = undos;
     next.redos = redos;
     this.replaceState(next);
