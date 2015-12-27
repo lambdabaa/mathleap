@@ -96,7 +96,7 @@ module.exports = React.createClass({
     ]);
 
     this.setState({aClass: theClass, assignment: theAssignment});
-    document.addEventListener('keydown', this._handleKeyDown, true);
+    document.addEventListener('keydown', this._handleKeyDown);
   },
 
   componentDidMount: function() {
