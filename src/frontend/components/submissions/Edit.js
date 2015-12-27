@@ -312,7 +312,11 @@ module.exports = React.createClass({
           append.charAt(index - equation.length - append.length);
       }
 
-      return <div key={index} style={style}>{chr}</div>;
+      return <div key={index}
+                  className="submissions-edit-character"
+                  style={style}>
+        {chr}
+      </div>;
     }
 
     return <div key={JSON.stringify({equation, cursor})}
