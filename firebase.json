@@ -7,7 +7,6 @@
     "data/**",
     "docs/**",
     "src/**",
-    "style/**",
     "test/**",
     "CONTRIBUTING.md",
     "Makefile",
