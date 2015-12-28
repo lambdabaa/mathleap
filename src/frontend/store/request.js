@@ -1,13 +1,14 @@
+let debug = console.log.bind(console, '[store/request]');
 let defer = require('../../common/defer');
 let session = require('../session');
 
 module.exports = async function(ref, method, ...args) {
   let auth = session.get('auth');
-  if (auth) {
+  if (auth && typeof ref.authWithCustomToken === 'function') {
     try {
-      await request(ref, 'auth', auth.token);
+      await request(ref, 'authWithCustomToken', auth.token);
     } catch (error) {
-      return console.error(error.toString());
+      return debug('authentication error', error);
     }
   }
 

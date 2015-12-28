@@ -43,7 +43,10 @@ class Session extends EventEmitter {
     this.data = {};
     let cookies = document.cookie.split(';');
     cookies.forEach(cookie => {
-      let [key, value] = cookie.trim().split('=');
+      cookie = cookie.trim();
+      let split = cookie.indexOf('=');
+      let key = cookie.slice(0, split);
+      let value = cookie.slice(split + 1);
       this.data[key] = safeParse(value);
     });
   }
