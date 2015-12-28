@@ -682,7 +682,7 @@ module.exports = React.createClass({
 
   _saveState: function() {
     let state = clone(this.state);
-    let undos = this.state.undos.concat(state);
+    let undos = state.undos.concat(state);
     this.setState({undos, redos: []});
   },
 
