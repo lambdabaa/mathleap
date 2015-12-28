@@ -96,7 +96,7 @@ module.exports = React.createClass({
     ]);
 
     this.setState({aClass: theClass, assignment: theAssignment});
-    document.addEventListener('keydown', this._handleKeyDown);
+    document.addEventListener('keydown', this._handleKeyDown, true);
   },
 
   componentDidMount: function() {
@@ -105,7 +105,7 @@ module.exports = React.createClass({
 
   componentWillUnmount: function() {
     clearInterval(this.interval);
-    document.removeEventListener('keydown', this._handleKeyDown);
+    document.removeEventListener('keydown', this._handleKeyDown, true);
   },
 
   render: function() {
@@ -740,7 +740,7 @@ module.exports = React.createClass({
 
     if ('replacement' in delta) {
       let {replacement} = delta;
-      if (!/^[a-zA-Z0-9\+\-\*\/\^]+$/.test(replacement)) {
+      if (!/^[a-zA-Z0-9\+\-\*\/\^\)\(]+$/.test(replacement)) {
         debug(`Invalid input character: ${replacement}`);
         return;
       }
