@@ -37,4 +37,4 @@ module.exports = function request(ref, method, ...args) {
 
   ref[method](...args);
   return deferred.promise;
-}
+};
