@@ -2,6 +2,7 @@ let debug = console.log.bind(console, '[store/request]');
 let defer = require('../../common/defer');
 let session = require('../session');
 
+/**
 module.exports = async function(ref, method, ...args) {
   let auth = session.get('auth');
   if (auth && typeof ref.authWithCustomToken === 'function') {
@@ -14,8 +15,9 @@ module.exports = async function(ref, method, ...args) {
 
   return request(ref, method, ...args);
 };
+*/
 
-function request(ref, method, ...args) {
+module.exports = function request(ref, method, ...args) {
   let deferred = defer();
   switch (method) {
     case 'once':

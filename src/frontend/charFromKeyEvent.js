@@ -5,8 +5,14 @@
 module.exports = function(event) {
   let chr;
   switch (event.keyCode) {
+    case 48:
+      if (event.shiftKey) { chr = ')'; }
+      break;
     case 54:
       if (event.shiftKey) { chr = '^'; }
+      break;
+    case 57:
+      if (event.shiftKey) { chr = '('; }
       break;
     case 56:
       if (event.shiftKey) { chr = '*'; }
