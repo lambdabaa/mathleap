@@ -1,6 +1,20 @@
 let defer = require('../../common/defer');
+let session = require('../session');
 
-module.exports = function(ref, method, ...args) {
+module.exports = async function(ref, method, ...args) {
+  let auth = session.get('auth');
+  if (auth) {
+    try {
+      await request(ref, 'auth', auth.token);
+    } catch (error) {
+      return console.error(error.toString());
+    }
+  }
+
+  return request(ref, method, ...args);
+};
+
+function request(ref, method, ...args) {
   let deferred = defer();
   switch (method) {
     case 'once':
@@ -20,4 +34,4 @@ module.exports = function(ref, method, ...args) {
 
   ref[method](...args);
   return deferred.promise;
-};
+}

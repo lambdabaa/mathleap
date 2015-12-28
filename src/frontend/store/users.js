@@ -25,6 +25,7 @@ exports.login = async function(credentials) {
     studentsRef.child(key) :
     teachersRef.child(key);
 
+  session.set('auth', auth);
   subscription = subscribe(userRef, 'value');
   subscription.on('val', user => session.set('user', user));
 };
