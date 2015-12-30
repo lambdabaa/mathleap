@@ -23,6 +23,7 @@ exports.get = async function(classId, assignmentId, submissionId) {
   debug('get submission', JSON.stringify(arguments));
   let submissionRef = getSubmissionRef(classId, assignmentId, submissionId);
   let result = await request(submissionRef, 'once', 'value');
+  result.id = submissionId;
   debug('get submission ok', JSON.stringify(result));
   return result;
 };

@@ -22,6 +22,7 @@ exports.get = async function get(classId, assignmentId) {
   );
 
   let result = await request(assignmentRef, 'once', 'value');
+  result.id = assignmentId;
   debug('get assignment ok', JSON.stringify(result));
   return result;
 };

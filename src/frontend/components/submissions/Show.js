@@ -45,10 +45,16 @@ module.exports = React.createClass({
   render: function() {
     let {user, aClass, assignment} = this.state;
     return <div id="submissions-show">
-      <Topbar headerText={`${user.first} ${user.last}, ${assignment.name}`} />
+      <Topbar headerText={`${user.first} ${user.last}${assignment.name ? ', ' + assignment.name : ''}`} />
       <div className="view">
         <div className="backlink clickable-text" onClick={this._handleBack}>
-          &lt; {aClass && aClass.name}
+          &lt; {
+            // Student should go back to class view
+            // Teacher should go back to assignment list
+            user.role === 'student' ?
+              aClass && aClass.name :
+              assignment && assignment.name
+          }
         </div>
         <Tabular cols={[
                    {content: '', width: 50},
@@ -80,7 +86,18 @@ module.exports = React.createClass({
   },
 
   _handleBack: function() {
-    location.hash = `#!/classes/${this.props.aClass}/`;
+    let user = session.get('user');
+    switch (user.role) {
+      case 'student':
+        location.hash = `#!/classes/${this.props.aClass}/`;
+        break;
+      case 'teacher':
+        let {assignment} = this.state;
+        location.hash = `#!/classes/${this.props.aClass}/assignments/${assignment.id}/`;
+        break;
+      default:
+        throw new Error(`Unexpected user role ${user.role}`);
+    }
   },
 
   _onUser: function(user) {

@@ -111,7 +111,7 @@ module.exports = React.createClass({
   render: function() {
     let {aClass, assignment, isHelpDialogShown} = this.state;
     return <div id="submissions-edit">
-      <Topbar headerText={assignment.name} />
+      <Topbar headerText={assignment.name || ''} />
       <div className="view">
         <div className="backlink clickable-text" onClick={this._handleBack}>
           &lt; {aClass && aClass.name}
