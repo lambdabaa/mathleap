@@ -77,7 +77,10 @@ module.exports = React.createClass({
 
     let assignments = this.state.assignments.map(assignment => {
       return [
-        assignment.name,
+        <div className="clickable-text"
+             onClick={this._openAssignment.bind(this, assignment)}>
+          {assignment.name}
+        </div>,
         assignment.deadline,
         `${this._getCompleteSubmissionCount(assignment)} / ${this.state.students.length}`,
         'n / a'
@@ -120,5 +123,9 @@ module.exports = React.createClass({
   _handleCreateAssignment: function() {
     debug('add assignment');
     location.hash = `#!/classes/${this.props.id}/assignments/new/`;
+  },
+
+  _openAssignment: function(assignment) {
+    location.hash = `#!/classes/${this.props.id}/assignments/${assignment['.key']}/`;
   }
 });
