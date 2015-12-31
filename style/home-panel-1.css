@@ -1,0 +1,47 @@
+.panel-1 {
+  background-color: white;
+  height: 300px;
+  padding: 30px 0;
+}
+
+.panel-1 > .home-container {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+}
+
+.proposition {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  width: 300px;
+}
+
+.proposition-icon {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 175px;
+  width: 205.288461538px;
+}
+
+.proposition-title {
+  color: #1193cd;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+.practice-icon {
+  background-image: url("style/images/practice-icon.svg");
+}
+
+.feedback-icon {
+  background-image: url("style/images/feedback-icon.svg");
+}
+
+.time-icon {
+  background-image: url("style/images/time-icon.svg");
+}

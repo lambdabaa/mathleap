@@ -1,3 +1,17 @@
-.jumbotron {
+#home {
+  left: 0;
+  overflow-x: hidden;
+  max-width: 100%;
+  position: absolute;
+  width: 100vw;
+}
+
+.home-container {
+  margin: 0 auto;
+  position: relative;
+  width: 1050px;
+}
+
+.panel {
   position: relative;
 }
