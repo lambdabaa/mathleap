@@ -1,6 +1,22 @@
 {
   "firebase": "mathleap",
   "public": ".",
+
+  "headers": [
+    {
+      "source": "**/*.@(mp4|otf|png|svg)",
+      "headers": [
+        {"key": "Cache-Control", "value": "max-age=86400"}
+      ]
+    },
+    {
+      "source": "**/*.@(css|html|js)",
+      "headers": [
+        {"key": "Cache-Control", "value": "max-age=600"}
+      ]
+    }
+  ],
+
   "ignore": [
     "**/.*",
     "build/**",
