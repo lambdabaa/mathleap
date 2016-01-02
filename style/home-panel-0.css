@@ -1,0 +1,274 @@
+.panel-0,
+.panel-5 {
+  background: linear-gradient(#63d2ef, white);
+  background: -moz-linear-gradient(#63d2ef, white);
+  background: -o-linear-gradient(#63d2ef, white);
+  background: -webkit-linear-gradient(#63d2ef, white);
+  height: 800px;
+  max-height: 800px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.tagline {
+  color: white;
+  display: flex;
+  display: -webkit-flex;
+  font-size: 66px;
+  justify-content: center;
+  -webkit-justify-content: center;
+  margin-top: 30px;
+}
+
+.tagline > .emph {
+  margin-left: 10px;
+}
+
+.subline {
+  color: #6d3fc7;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  font-size: 24px;
+  margin-top: 15px;
+}
+
+.subline > .emph {
+  border-bottom: 1px solid #6d3fc7;
+  margin-right: 5px;
+}
+
+.home-signup-button {
+  background-color: #ffc20e;
+  border: 3px solid white;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 60px auto 0 auto;
+  padding: 15px;
+  width: 200px;
+}
+
+.sun {
+  position: absolute;
+  top: 90px;
+  width: 100%;
+}
+
+.sun-ring {
+  border-radius: 50%;
+  position: absolute;
+  right: 25px;
+  top: 25px;
+}
+
+.outer-sun {
+  background-color: rgba(255, 255, 255, 0.15);
+  height: 200px;
+  right: -75px;
+  top: 15px;
+  width: 200px;
+}
+
+.middle-sun {
+  background-color: #fffabf;
+  height: 150px;
+  width: 150px;
+}
+
+.inner-sun {
+  background-color: #ffc20e;
+  height: 100px;
+  width: 100px;
+}
+
+.cloud-0 {
+  background-image: url("style/images/cloud0.svg");
+  height: 75.9765625px;
+  width: 184.6875px;
+}
+
+.cloud-1 {
+  background-image: url("style/images/cloud1.svg");
+  height: 83.9765625px;
+  width: 175.21875px;
+}
+
+.cloud-2 {
+  background-image: url("style/images/cloud2.svg");
+  height: 84px;
+  width: 194px;
+}
+
+.cloud-3 {
+  background-image: url("style/images/cloud3.svg");
+  height: 62px;
+  width: 106px;
+}
+
+.cloud-4 {
+  background-image: url("style/images/cloud4.svg");
+  height: 60px;
+  width: 126px;
+}
+
+.island {
+  bottom: 135px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+.island > .home-container {
+  display: flex;
+  display: -webkit-flex;
+  width: 737.5px;
+}
+
+.island > .home-container > * {
+  background-color: #09700c;
+  height: 30px;
+}
+
+.island-left,
+.island-right {
+  width: 25px;
+}
+
+.island-left {
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+
+.island-right {
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
+
+.island-center {
+  width: 1000px;
+}
+
+.island-hump {
+  bottom: calc(115px - 700px / 2);
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+}
+
+.island-hump > .home-container {
+  background-color: #13911a;
+  border-radius: 50%;
+  height: 500px;
+  width: 737.5px;
+}
+
+.island-features {
+  bottom: 150px;
+  position: absolute;
+  width: 100%;
+}
+
+.island-features > .home-container {
+  height: 350px;
+}
+
+.island-tree {
+  background-image: url("style/images/tree.svg");
+  height: 124px;
+  width: 102px;
+  bottom: 15px;
+  z-index: 1;
+}
+
+.island-tree-left {
+  left: 190px;
+}
+
+.island-tree-right {
+  right: 135px;
+}
+
+.island-bush {
+  bottom: 15px;
+  height: 32px;
+  width: 90px;
+  z-index: 2;
+}
+
+.island-bush-left {
+  background-image: url("style/images/grass-1.svg");
+  left: 170px;
+}
+
+.island-bush-right {
+  background-image: url("style/images/grass-1.svg");
+  left: 250px;
+}
+
+.island-turtle {
+  background-image: url("style/images/turtle.svg");
+  bottom: 0;
+  left: 305px;
+  height: 206.018px;
+  width: 281.986px;
+  z-index: 2;
+}
+
+.turtle-shadow {
+  background-image: url("style/images/turtle-shadow.svg");
+  bottom: -5px;
+  height: 14.261px;
+  left: 310px;
+  width: 172.09px;
+  z-index: 2;
+}
+
+.laptop {
+  background-image: url("style/images/laptop.svg");
+  bottom: 15px;
+  left: 545px;
+  height: 146px;
+  width: 272px;
+  z-index: 2;
+}
+
+.math-symbols {
+  background-image: url("style/images/math_icons.svg");
+  height: 212px;
+  right: 140px;
+  top: 0;
+  width: 276px;
+}
+
+.fish {
+  background-image: url("style/images/fish.svg");
+  height: 26.621px;
+  position: absolute;
+  width: 27.078px;
+}
+
+.water {
+  background-color: #1193cd;
+  bottom: 0;
+  height: 136px;
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+}
+
+.water-top {
+  background: url("style/images/wave-top.svg");
+  background-repeat: repeat;
+  bottom: 135px;
+  height: 15px;
+  position: absolute;
+  width: 100%;
+}

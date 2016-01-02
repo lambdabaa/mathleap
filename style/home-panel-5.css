@@ -1,0 +1,107 @@
+.panel-5 {
+  padding: 60px 0 0 0;
+}
+
+.panel-5 > .home-container {
+  height: 100%;
+}
+
+.call-to-action {
+  color: white;
+  display: flex;
+  display: -webkit-flex;
+  font-weight: bold;
+  justify-content: center;
+  -webkit-justify-content: center;
+  font-size: 36px;
+  margin-bottom: 60px;
+}
+
+.cloud-5 {
+  background-image: url("style/images/cloud5.svg");
+  height: 83.975px;
+  width: 176px;
+}
+
+.cloud-6 {
+  background-image: url("style/images/cloud6.svg");
+  height: 84px;
+  width: 194px;
+}
+
+.cloud-7 {
+  background-image: url("style/images/cloud7.svg");
+  height: 62px;
+  width: 106px;
+}
+
+.cloud-8 {
+  background-image: url("style/images/cloud8.svg");
+  height: 84px;
+  width: 194px;
+}
+
+.hill {
+  background-image: url("style/images/hill.svg");
+  bottom: 135px;
+  height: 128px;
+  left: 10px;
+  width: 1030px;
+}
+
+.tree-bottom {
+  background-image: url("style/images/tree.svg");
+  bottom: 210px;
+  height: 248px;
+  left: 215px;
+  position: absolute;
+  width: 204px;
+}
+
+.pencil-can-shadow {
+  background-image: url("style/images/pencil-can-shadow.svg");
+  bottom: 175px;
+  height: 20px;
+  left: 190px;
+  width: 118px;
+}
+
+.pencil-can {
+  background-image: url("style/images/pencil-can.svg");
+  bottom: 185px;
+  left: 210px;
+  height: 168px;
+  width: 80px;
+}
+
+.laptop-bottom {
+  background-image: url("style/images/laptop-bottom.svg");
+  bottom: 200px;
+  height: 232px;
+  left: 335px;
+  width: 388px;
+}
+
+.bush-bottom {
+  background-image: url("style/images/grass-1.svg");
+  bottom: 175px;
+  height: 64px;
+  left: 245px;
+  width: 180px;
+}
+
+.lightbulb-turtle {
+  background-image: url("style/images/turtle-bottom.svg");
+  bottom: 150px;
+  height: 400px;
+  right: 175px;
+  width: 260px;
+}
+
+.lightbulb-turtle-shadow {
+  background-image: url("style/images/turtle-bottom-shadow.svg");
+  bottom: 160px;
+  height: 32px;
+  right: 175px;
+  width: 251.438px;
+}
