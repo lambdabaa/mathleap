@@ -20,24 +20,32 @@
 .cloud-5 {
   background-image: url("style/images/cloud5.svg");
   height: 83.975px;
+  left: 300px;
+  top: 475px;
   width: 176px;
 }
 
 .cloud-6 {
   background-image: url("style/images/cloud6.svg");
   height: 84px;
+  left: calc(100vw - 100px);
+  top: 150px;
   width: 194px;
 }
 
 .cloud-7 {
   background-image: url("style/images/cloud7.svg");
   height: 62px;
+  left: calc(100vw - 300px);
+  top: 550px;
   width: 106px;
 }
 
 .cloud-8 {
   background-image: url("style/images/cloud8.svg");
   height: 84px;
+  left: 100px;
+  top: 90px;
   width: 194px;
 }
 
