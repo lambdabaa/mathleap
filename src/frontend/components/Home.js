@@ -207,6 +207,7 @@ module.exports = React.createClass({
         </div>
       </div>
       <div className="panel panel-3">
+        <div className="watch-the-video">WATCH THE VIDEO</div>
         <div className="home-container">
           <video className="explainer"
                  src="style/videos/mathleap.mp4"
