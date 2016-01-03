@@ -89,33 +89,52 @@
   width: 100px;
 }
 
+.cloud {
+  /* see https://davidwalsh.name/translate3d */
+  transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
 .cloud-0 {
   background-image: url("style/images/cloud0.svg");
   height: 75.9765625px;
+  left: calc(100vw - 235px);
+  top: 235px;
   width: 184.6875px;
 }
 
 .cloud-1 {
   background-image: url("style/images/cloud1.svg");
   height: 83.9765625px;
+  left: 50px;
   width: 175.21875px;
+  top: 500px;
 }
 
 .cloud-2 {
   background-image: url("style/images/cloud2.svg");
   height: 84px;
+  left: 475px;
   width: 194px;
+  top: 340px;
 }
 
 .cloud-3 {
   background-image: url("style/images/cloud3.svg");
   height: 62px;
+  left: 200px;
+  top: 100px;
   width: 106px;
 }
 
 .cloud-4 {
   background-image: url("style/images/cloud4.svg");
   height: 60px;
+  left: calc(100vw - 350px);
+  top: 525px;
   width: 126px;
 }
 
@@ -252,13 +271,40 @@
   background-image: url("style/images/fish.svg");
   height: 26.621px;
   position: absolute;
+  /* see https://davidwalsh.name/translate3d */
+  transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
   width: 27.078px;
+}
+
+.fish-0 {
+  left: calc((100vw / 2) - 150px);
+  top: 25px;
+}
+
+.fish-1 {
+  left: calc(100vw / 2);
+  top: 100px;
+}
+
+.fish-2 {
+  /* TODO: Hack around FF bug with css calc */
+  left: calc((100vw / 2) - -300px);
+  top: 50px;
 }
 
 .water {
   background-color: #1193cd;
   bottom: 0;
-  height: 136px;
+  /**
+   * The water and water-top are supposed to meet at 135px. We initially set
+   * this to 136px so that there'd be 1px of overlap, but sometimes this
+   * would still render space between the water and water-top.
+   */
+  height: 137px;
   position: absolute;
   width: 100%;
   z-index: 0;

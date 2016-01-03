@@ -3,6 +3,7 @@ let React = require('react');
 let Topbar = require('./Topbar');
 let debug = console.log.bind(console, '[components/home]');
 let handleEnter = require('../handleEnter');
+let {on} = require('../../common/events');
 let students = require('../store/students');
 let teachers = require('../store/teachers');
 let users = require('../store/users');
@@ -10,46 +11,54 @@ let users = require('../store/users');
 module.exports = React.createClass({
   displayName: 'Home',
 
-  getInitialState: function() {
-    return {
-      clouds: [
-        {top: 235, left: document.body.clientWidth - 235, width: 184.6875},
-        {top: 500, left: 50, width: 175.21875},
-        {top: 340, left: 475, width: 194},
-        {top: 100, left: 200, width: 106},
-        {top: 525, left: document.body.clientWidth - 350, width: 126},
-        {top: 475, left: 300, width: 176},
-        {top: 150, left: document.body.clientWidth - 100, width: 194},
-        {top: 550, left: document.body.clientWidth - 300, width: 106},
-        {top: 90, left: 100, width: 194}
-      ],
-      fish: [
-        {top: 25, left: document.body.clientWidth / 2 - 150, width: 27.078},
-        {top: 100, left: document.body.clientWidth / 2, width: 27.078},
-        {top: 50, left: document.body.clientWidth / 2 + 300, width: 27.078}
-      ]
-    };
-  },
-
   componentDidMount: function() {
-    this.interval = setInterval(this._tick, 40);
-  },
-
-  componentWillUnmount: function() {
-    clearInterval(this.interval);
-  },
-
-  _tick: function() {
-    let {clouds, fish} = this.state;
+    let clouds = Array.from(document.getElementsByClassName('cloud'));
     clouds.forEach(cloud => {
-      cloud.left = (cloud.left + 1) % (document.body.clientWidth + cloud.width);
+      // All of the clouds start out in different positions
+      // and since we want them to travel at the same pace
+      // we need to set their transition times based on their
+      // initial positions.
+      setTransition(
+        cloud,
+        (document.body.clientWidth - +window.getComputedStyle(cloud).left.slice(0, -2)) /
+        document.body.clientWidth
+      );
+
+      on(cloud, 'transitionend', () => {
+        // Clear the transition property while we move the cloud back
+        // to offstage left.
+        setTransition(cloud, 'none');
+        cloud.classList.remove('right');
+        cloud.style.left = `-${window.getComputedStyle(cloud).width}`;
+
+        // Full time-length transition from offstage left to offstage right.
+        setTransition(cloud, 1);
+      });
     });
 
+    let fish = Array.from(document.getElementsByClassName('fish'));
     fish.forEach(aFish => {
-      aFish.left = aFish.left <= -aFish.width ? document.body.clientWidth : aFish.left - 1;
-    });
+      // All of the fish start out in different positions
+      // and since we want them to travel at the same pace
+      // we need to set their transition times based on their
+      // initial positions.
+      setTransition(
+        aFish,
+        -window.getComputedStyle(aFish).left.slice(0, -2) /
+        document.body.clientWidth
+      );
 
-    this.setState({clouds, fish});
+      on(aFish, 'transitionend', () => {
+        // Clear the transition property while we move the fish back
+        // to offstage right.
+        setTransition(aFish, 'none');
+        aFish.classList.remove('left');
+        aFish.style.left = '100%';
+
+        // Full time-length transition from offstage right to offstage left.
+        setTransition(aFish, -1);
+      });
+    });
   },
 
   render: function() {
@@ -71,20 +80,6 @@ module.exports = React.createClass({
       </div>
     ];
 
-    let cloudStyles = this.state.clouds.map(cloud => {
-      return {
-        top: `${cloud.top}px`,
-        left: `${cloud.left - cloud.width}px`
-      };
-    });
-
-    let fishStyles = this.state.fish.map(fish => {
-      return {
-        top: `${fish.top}px`,
-        left: `${fish.left - fish.width}px`
-      };
-    });
-
     return <div id="home">
       <div className="panel panel-0">
         <div className="home-container">
@@ -100,21 +95,11 @@ module.exports = React.createClass({
             </div>
           </div>
         </div>
-        <div className="absimg cloud-0"
-             style={cloudStyles[0]}>
-        </div>
-        <div className="absimg cloud-1"
-             style={cloudStyles[1]}>
-        </div>
-        <div className="absimg cloud-2"
-             style={cloudStyles[2]}>
-        </div>
-        <div className="absimg cloud-3"
-             style={cloudStyles[3]}>
-        </div>
-        <div className="absimg cloud-4"
-             style={cloudStyles[4]}>
-        </div>
+        <div className="absimg cloud cloud-0"></div>
+        <div className="absimg cloud cloud-1"></div>
+        <div className="absimg cloud cloud-2"></div>
+        <div className="absimg cloud cloud-3"></div>
+        <div className="absimg cloud cloud-4"></div>
         <div className="home-container"
              style={{zIndex: 4}}>
           <div className="tagline">
@@ -153,15 +138,9 @@ module.exports = React.createClass({
         </div>
         <div className="water-top"></div>
         <div className="water">
-          <div className="fish"
-               style={fishStyles[0]}>
-          </div>
-          <div className="fish"
-               style={fishStyles[1]}>
-          </div>
-          <div className="fish"
-               style={fishStyles[2]}>
-          </div>
+          <div className="fish fish-0"></div>
+          <div className="fish fish-1"></div>
+          <div className="fish fish-2"></div>
         </div>
       </div>
       <div className="panel panel-1">
@@ -256,18 +235,10 @@ module.exports = React.createClass({
         </div>
       </div>
       <div className="panel panel-5">
-        <div className="absimg cloud-5"
-             style={cloudStyles[5]}>
-        </div>
-        <div className="absimg cloud-6"
-             style={cloudStyles[6]}>
-        </div>
-        <div className="absimg cloud-7"
-             style={cloudStyles[7]}>
-        </div>
-        <div className="absimg cloud-8"
-             style={cloudStyles[8]}>
-        </div>
+        <div className="absimg cloud cloud-5"></div>
+        <div className="absimg cloud cloud-6"></div>
+        <div className="absimg cloud cloud-7"></div>
+        <div className="absimg cloud cloud-8"></div>
         <div className="home-container">
           <div className="call-to-action">READY TO TAKE THE LEAP?</div>
           <div className="home-signup-button unselectable"
@@ -413,4 +384,32 @@ function getLoginData() {
   let uid = $('.login-email').value;
   let password = $('.login-password').value;
   return {uid, password};
+}
+
+function setTransition(element, percent) {
+  let {width} = window.getComputedStyle(element);
+
+  [
+    'transition',
+    'mozTransition',
+    'msTransition',
+    'oTransition',
+    'webkitTransition'
+  ].forEach(transition => {
+    element.style[transition] = typeof percent === 'number' ?
+      `${60 * Math.abs(percent)}s linear` :
+      percent;
+  });
+
+  [
+    'transform',
+    'mozTransform',
+    'msTransform',
+    'oTransition',
+    'webkitTransition'
+  ].forEach(transform => {
+    element.style[transform] = typeof percent === 'number' ?
+      `translateX(calc(${percent} * 100vw + ${width}))` :
+      'translateX(0)';
+  });
 }
