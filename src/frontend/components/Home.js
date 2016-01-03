@@ -265,6 +265,11 @@ module.exports = React.createClass({
                 <div className="legal-link">Privacy Policy</div>
               </div>
             </div>
+            <div className="fish-and-wave"></div>
+            <div className="social-media-container">
+              <a href="https://facebook.com/mathleap" className="facebook-logo"></a>
+              <a href="https://twitter.com/mathleapinc" className="twitter-logo"></a>
+            </div>
           </div>
         </div>
       </div>
