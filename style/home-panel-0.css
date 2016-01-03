@@ -4,6 +4,9 @@
   background: -moz-linear-gradient(#63d2ef, white);
   background: -o-linear-gradient(#63d2ef, white);
   background: -webkit-linear-gradient(#63d2ef, white);
+}
+
+.panel-0 {
   height: 800px;
   max-height: 800px;
   max-width: 100%;

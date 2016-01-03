@@ -1,4 +1,8 @@
 .panel-5 {
+  height: 700px;
+  max-height: 700px;
+  max-width: 100%;
+  overflow: hidden;
   padding: 60px 0 0 0;
 }
 
@@ -21,7 +25,7 @@
   background-image: url("style/images/cloud5.svg");
   height: 83.975px;
   left: 300px;
-  top: 475px;
+  top: 375px;
   width: 176px;
 }
 
@@ -37,7 +41,7 @@
   background-image: url("style/images/cloud7.svg");
   height: 62px;
   left: calc(100vw - 300px);
-  top: 550px;
+  top: 450px;
   width: 106px;
 }
 
@@ -45,7 +49,7 @@
   background-image: url("style/images/cloud8.svg");
   height: 84px;
   left: 100px;
-  top: 90px;
+  top: 100px;
   width: 194px;
 }
 
