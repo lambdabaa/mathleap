@@ -123,7 +123,8 @@ module.exports = React.createClass({
           <div className="subline">
             <span className="emph">Hassle-free</span> practice and feedback opportunities for your students.
           </div>
-          <div className="home-signup-button unselectable">
+          <div className="home-signup-button unselectable"
+               onClick={this._handleTeacher}>
             GET STARTED
           </div>
         </div>
@@ -269,7 +270,8 @@ module.exports = React.createClass({
         </div>
         <div className="home-container">
           <div className="call-to-action">READY TO TAKE THE LEAP?</div>
-          <div className="home-signup-button unselectable">
+          <div className="home-signup-button unselectable"
+               onClick={this._handleTeacher}>
             GET STARTED
           </div>
           <div className="absimg hill"></div>
