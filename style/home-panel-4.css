@@ -72,15 +72,3 @@
   color: #1193cd;
   font-size: 30px;
 }
-
-.panel-5 > .water > .home-container {
-  color: white;
-  display: flex;
-  display: -webkit-flex;
-  padding: 15px 0;
-  /*
-  justify-content: space-between;
-  -webkit-justify-content: space-between;
-   */
-}
-
