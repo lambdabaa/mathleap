@@ -25,7 +25,7 @@
 }
 
 .subline {
-  color: #6d3fc7;
+  color: black;
   display: flex;
   display: -webkit-flex;
   justify-content: center;
@@ -35,7 +35,7 @@
 }
 
 .subline > .emph {
-  border-bottom: 1px solid #6d3fc7;
+  border-bottom: 1px solid black;
   margin-right: 5px;
 }
 
