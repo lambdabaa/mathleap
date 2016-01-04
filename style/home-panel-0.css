@@ -302,20 +302,16 @@
 .water {
   background-color: #1193cd;
   bottom: 0;
-  /**
-   * The water and water-top are supposed to meet at 135px. We initially set
-   * this to 136px so that there'd be 1px of overlap, but sometimes this
-   * would still render space between the water and water-top.
-   */
-  height: 137px;
+  height: 138px;
   position: absolute;
   width: 100%;
   z-index: 0;
 }
 
 .water-top {
-  background: url("style/images/wave-top.svg");
-  background-repeat: repeat;
+  background-image: url("style/images/wave-top.svg");
+  background-repeat: repeat-x;
+  background-size: 36px;
   bottom: 135px;
   height: 15px;
   position: absolute;
