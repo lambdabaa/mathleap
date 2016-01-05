@@ -1,3 +1,4 @@
+let $ = document.querySelector.bind(document);
 let React = require('react');
 let defer = require('../../common/defer');
 
@@ -46,6 +47,12 @@ module.exports = React.createClass({
 
   _setRoute: function() {
     let router = this.props.router;
+    // Make sure to scroll to the top of the embedded view once we load it.
+    this.componentDidUpdate = () => {
+      $('.topbar').scrollIntoView();
+      delete this.componentDidUpdate;
+    };
+
     this.setState({
       route: router.load({
         showModal: this._showModal,
