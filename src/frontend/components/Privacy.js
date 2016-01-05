@@ -8,6 +8,8 @@ module.exports = React.createClass({
     return <div id="privacy">
       <Topbar headerText="Privacy Policy" actions={[]} />
       <div className="view">
+        <h2>Updated January 4, 2016</h2>
+        <br />
         <p>
           Your privacy is critically important to us. At MathLeap, we have a few fundamental principles:
         </p>
