@@ -22,12 +22,23 @@ function observeLocation(router) {
   }
 
   session.on('user', user => {
-    // If we're on the home page and a user has logged in
-    // we want to go to their dashboard. Otherwise, if
-    // we're not on the home page and a user has logged out
-    // we want to go to the home page.
-    if (!!user !== (router.view !== '/home')) {
-      location.hash = user ? '#!/classes/' : '#!/home/';
+    if (user) {
+      if (router.view === '/home') {
+        location.hash = '#!/classes/';
+      }
+
+      return;
+    }
+
+    switch (router.view) {
+      case '/home':
+      case '/privacy':
+      case '/tos':
+        break;
+      default:
+        // User is logged out and viewing a page only logged in users
+        // should be able to. Kick them back to homepage.
+        location.hash = '#!/home/';
     }
   });
 
@@ -36,6 +47,8 @@ function observeLocation(router) {
 function createRouter() {
   let router = new Router({miss: require('./components/NotFound')});
   router.route('/home', require('./components/Home'));
+  router.route('/tos', require('./components/Tos'));
+  router.route('/privacy', require('./components/Privacy'));
   router.route('/classes', require('./components/classes/List'));
   router.route('/classes/:id', require('./components/classes/Show'));
   router.route(

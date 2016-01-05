@@ -262,8 +262,8 @@ module.exports = React.createClass({
             <div className="legal-jargon">
               <div className="legal-top">© 2016 MathLeap, Inc.</div>
               <div className="legal-bottom">
-                <div className="legal-link">Terms of Service</div>
-                <div className="legal-link">Privacy Policy</div>
+                <a className="legal-link">Terms of Service</a>
+                <a className="legal-link">Privacy Policy</a>
               </div>
             </div>
             <div className="fish-and-wave"></div>
