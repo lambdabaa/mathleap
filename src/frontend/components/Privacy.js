@@ -24,7 +24,7 @@ module.exports = React.createClass({
         </p>
         <br />
         <p>
-          This privacy statement describes how MathLeap Inc. ("MathLeap") collects and uses the personal information
+          This privacy statement describes how MathLeap Inc. ("<span className="emph">MathLeap</span>") collects and uses the personal information
           you provide on our website mathleap.org. It also describes the choices available to you regarding our
           use of your personal information and how you can access and update this information.
         </p>
