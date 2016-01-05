@@ -6,6 +6,7 @@
   <style>
     body {
       background-color: #00c3f1;
+      font-family: "Lato";
     }
 
     .container {
@@ -40,10 +41,11 @@
       color: black;
     }
 
-    .button {
+    .not-found-button {
       background-color: #00709b;
       border-radius: 20px;
       color: white;
+      cursor: pointer;
       font-size: 18px;
       padding: 10px;
       text-align: center;
@@ -58,6 +60,20 @@
       height: 400px;
       width: 400px;
     }
+
+    @font-face {
+      font-family: "Lato";
+      font-style: normal;
+      font-weight: 100;
+      src: local("Lato Hairline"), local("Lato-Hairline"), url(https://fonts.gstatic.com/s/lato/v11/vhtyQldbm6hR1oTZdtDAeQ.woff2) format("woff2"), url(https://fonts.gstatic.com/s/lato/v11/mxYHCe9h99dgbtHWLb15UQ.woff) format("woff");
+    }
+
+    @font-face {
+      font-family: "Lato";
+      font-style: normal;
+      font-weight: 300;
+      src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v11/puqvkRcb0KEzqeLRHcd-Lw.woff2) format("woff2"), url(https://fonts.gstatic.com/s/lato/v11/SrH4OiQlr11FDKIskY9CXQ.woff) format("woff");
+    }
   </style>
 </head>
 <body>
@@ -69,7 +85,7 @@
         MathLeap is a feedback and assessments platform for math classes.
         Click the button below to learn more!
       </div>
-      <a class="button" href="https://mathleap.org">Go home</a>
+      <a class="not-found-button" href="https://mathleap.org">Go home</a>
     </div>
     <div class="mascot"></div>
   </div>

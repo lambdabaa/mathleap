@@ -39,10 +39,11 @@
   color: black;
 }
 
-#not-found .button {
+#not-found .not-found-button {
   background-color: #00709b;
   border-radius: 20px;
   color: white;
+  cursor: pointer;
   font-size: 18px;
   padding: 10px;
   text-align: center;

@@ -13,7 +13,7 @@ module.exports = React.createClass({
             MathLeap is a feedback and assessments platform for math classes.
             Click the button below to learn more!
           </div>
-          <a className="button" href="https://mathleap.org">Go home</a>
+          <a className="not-found-button" href="https://mathleap.org">Go home</a>
         </div>
         <div className="mascot"></div>
       </div>
