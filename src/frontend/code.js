@@ -2,6 +2,7 @@
  * @fileoverview Generate pseudo unique class identifiers.
  */
 
+let {mapChar} = require('../common/string');
 let random = require('lodash/number/random');
 let range = require('lodash/utility/range');
 let times = require('lodash/utility/times');
@@ -32,4 +33,11 @@ exports.encode = function(input) {
   })
   .map(digit => alphabet[digit])
   .join('');
+};
+
+exports.decode = function(input) {
+  return mapChar(input, chr => alphabet.indexOf(chr))
+  .reduce((sum, digit, index) => {
+    return sum + digit * Math.pow(68, index);
+  }, 0);
 };
