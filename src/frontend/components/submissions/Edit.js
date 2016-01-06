@@ -593,21 +593,47 @@ module.exports = React.createClass({
       return;
     }
 
+    let {equation, cursor} = this.state;
+    // In order to initiate a both sides operation, we either need to be
+    // immediately left of the comparison sign or at the end of the statement.
+    let offset;
+    switch (cursor) {
+      case equation.length:
+        offset = 2;
+        break;
+      case (equation.length - 1) / 2:
+        offset = 1;
+        break;
+      default:
+        debug('Both sides operation initiated in bad position');
+        return;
+    }
+
     event.preventDefault();
     this._saveState();
-    this.setState({
-      append: operator,
-      cursor: this.state.cursor + 2
-    });
+    this.setState({append: operator, cursor: cursor + offset});
   },
 
   _handleBothSidesChar: function(event) {
     debug('handle both sides char');
-    let {append, cursor} = this.state;
+    let {append, cursor, equation} = this.state;
+
+    let offset;
+    switch (cursor) {
+      case equation.length + 2 * append.length:
+        offset = 2;
+        break;
+      case (equation.length - 1) / 2 + append.length:
+        offset = 1;
+        break;
+      default:
+        debug('Both sides operation continued from bad position');
+        break;
+    }
 
     if (event.keyCode === 8) {
       append = append.slice(0, append.length - 1);
-      cursor -= 2;
+      cursor -= offset;
     } else {
       let chr = charFromKeyEvent(event);
       if (!chr) {
@@ -615,7 +641,7 @@ module.exports = React.createClass({
       }
 
       append += chr;
-      cursor += 2;
+      cursor += offset;
     }
 
     event.preventDefault();
