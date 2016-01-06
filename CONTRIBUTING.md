@@ -19,6 +19,15 @@ use the production database, so be mindful :).
 automatically after installing npm dependencies also since `npm
 prepublish` is a dependency of `npm install`.
 
+### Compiling as you go
+
+When you're developing, you probably want the changes you make to source
+files to be reflected in your local version of MathLeap. `npm run watch`
+will listen to your filesystem, note when you make changes to source
+files, and build them so that refreshing your browser will fetch the
+latest stuff. Note that you'll need to install
+[watchman](https://facebook.github.io/watchman/) first!
+
 ### Running the tests
 
 ```bash
