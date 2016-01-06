@@ -77,6 +77,11 @@ module.exports = React.createClass({
            className="topbar-action clickable-text"
            onClick={this._handleLogin}>
         LOG IN
+      </div>,
+      <div key="signup"
+           className="topbar-action signup-button"
+           onClick={this._handleTeacher}>
+        SIGN UP
       </div>
     ];
 
