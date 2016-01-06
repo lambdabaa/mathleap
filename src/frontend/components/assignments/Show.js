@@ -65,7 +65,7 @@ module.exports = React.createClass({
   render: function() {
     let {aClass, assignment} = this.state;
     return <div id="assignments-show">
-      <Topbar headerText={assignment.name} />
+      <Topbar headerText={assignment.name || ''} />
       <div className="view">
         <div className="backlink clickable-text"
              onClick={this._handleBack}>

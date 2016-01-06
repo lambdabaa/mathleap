@@ -9,7 +9,7 @@ module.exports = React.createClass({
     return <div className="topbar">
       <div className="topbar-logo" onClick={this._handleLogoClick} />
       {
-        this.props.headerText ?
+        this.props.headerText != null ?
           <div className="topbar-header-text">
             {this.props.headerText}
           </div> :
