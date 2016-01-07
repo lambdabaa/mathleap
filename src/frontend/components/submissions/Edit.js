@@ -506,10 +506,15 @@ module.exports = React.createClass({
       return this._commitDelta();
     }
 
-    let {start, end} = this._getHighlight();
-    return typeof start !== 'number' || typeof end !== 'number' ?
-      this._handleChar(event) :
-      this._handleSelection(event, start, end);
+    let chr = charFromKeyEvent(event);
+    if (event.keyCode !== 8 && !chr) {
+      return debug('Did not process delta on key event', event);
+    }
+
+    let highlights = this._getHighlights();
+    return highlights.length ?
+      this._handleSelections(event, highlights) :
+      this._handleChar(event);
   },
 
   _handleChar: function(event) {
@@ -638,8 +643,24 @@ module.exports = React.createClass({
     this.setState({append, cursor});
   },
 
+  _handleSelections: async function(event, highlights) {
+    let {cursor} = this.state;
+    highlights.reverse();
+    for (let i = 0; i < highlights.length; i++) {
+      let highlight = highlights[i];
+      let {start, end} = highlight;
+      await this._handleSelection(
+        cursor >= start && cursor <= end ?
+          event :
+          {keyCode: 8, preventDefault: () => {}},
+        start,
+        end
+      );
+    }
+  },
+
   _handleSelection: function(event, start, end) {
-    debug('handle selection');
+    debug('handle selection', JSON.stringify(arguments));
     let args;
     if (event.keyCode === 8) {
       args = [
@@ -701,54 +722,38 @@ module.exports = React.createClass({
     this.setState({undos, redos: []});
   },
 
-  _getHighlight: function() {
-    let {cursor, highlight} = this.state;
-    // Are we to the right of a highlight?
-    let right = cursor > 0 && highlight[cursor - 1];
-    // Are we to the left of a highlight?
-    let left = highlight[cursor];
-
-    let start, end;
-    if (left) {
-      if (right) {
-        // We're in the middle of a highlight.
-        start = this._getLeftBound();
-        end = this._getRightBound();
-      } else {
-        // We're on the left of a highlight.
-        start = cursor;
-        end = this._getRightBound();
+  _getHighlights: function() {
+    let result = [];
+    // The goal here is to find the maximal contiguous highlights.
+    let {highlight} = this.state;
+    let start = null;
+    for (let i = 0; i < highlight.length; i++) {
+      if (start === null) {
+        // Possibly block start
+        start = highlight[i] ? i : null;
+        continue;
       }
-    } else if (right) {
-      // We're on the left of a highlight.
-      start = this._getLeftBound();
-      end = cursor - 1;
+
+      if (!highlight[i]) {
+        // End of block
+        result.push({start, end: i - 1});
+        start = null;
+        continue;
+      }
+
+      // Still in a block...
     }
 
-    return {start, end};
-  },
-
-  _getLeftBound: function() {
-    let {cursor, highlight} = this.state;
-    let bound = cursor - 1;
-    while (highlight[bound - 1]) {
-      bound -= 1;
+    // Check to make sure we didn't end on a highlight.
+    if (start !== null) {
+      result.push({start, end: highlight.length - 1});
     }
 
-    return bound;
-  },
-
-  _getRightBound: function() {
-    let {cursor, highlight} = this.state;
-    let bound = cursor;
-    while (highlight[bound + 1]) {
-      bound += 1;
-    }
-
-    return bound;
+    return result;
   },
 
   _appendDelta: async function(delta, cursor) {
+    debug('appendDelta', JSON.stringify(arguments));
     if (!delta) {
       return;
     }
