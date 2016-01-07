@@ -34,5 +34,5 @@ module.exports = function(event) {
   }
 
   chr = chr || String.fromCharCode(event.keyCode).toLowerCase();
-  return chr;
+  return /^[0-9a-zA-Z\+\-\*\/\^$\(\)]$/.test(chr) ? chr : null;
 };
