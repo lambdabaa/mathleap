@@ -6,7 +6,11 @@ module.exports = React.createClass({
   displayName: 'Container',
 
   getInitialState: function() {
-    return {modal: null, onceComponentUpdate: null};
+    return {
+      modal: null,
+      errorMessage: null,
+      onceComponentUpdate: null
+    };
   },
 
   componentWillMount: function() {
@@ -26,6 +30,12 @@ module.exports = React.createClass({
               <div className="modal-exit" onClick={this._closeModal}>x</div>
             </div>
             <div className="modal-body">
+              {
+                this.state.errorMessage &&
+                <div className="modal-error">
+                  {this.state.errorMessage}
+                </div>
+              }
               {this.state.modal}
             </div>
           </div>
@@ -56,7 +66,9 @@ module.exports = React.createClass({
     this.setState({
       route: router.load({
         showModal: this._showModal,
-        closeModal: this._closeModal
+        closeModal: this._closeModal,
+        displayModalError: this._displayModalError,
+        clearModalError: this._clearModalError
       })
     });
   },
@@ -73,6 +85,14 @@ module.exports = React.createClass({
 
   _closeModal: function() {
     this.setState({modal: null});
+  },
+
+  _displayModalError: function(errorMessage) {
+    this.setState({errorMessage});
+  },
+
+  _clearModalError: function() {
+    this.setState({errorMessage: null});
   },
 
   _handleOverlayClick: function(event) {
