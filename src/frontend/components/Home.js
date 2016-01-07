@@ -11,6 +11,10 @@ let users = require('../store/users');
 module.exports = React.createClass({
   displayName: 'Home',
 
+  getInitialState: function() {
+    return {errorMessage: null};
+  },
+
   componentDidMount: function() {
     let clouds = Array.from(document.getElementsByClassName('cloud'));
     clouds.forEach(cloud => {
@@ -284,6 +288,7 @@ module.exports = React.createClass({
 
   _handleTeacher: async function() {
     debug('teacher');
+    this.props.clearModalError();
     await this.props.showModal(
       <div className="teacher-form">
         <select className="teacher-title">
@@ -312,6 +317,7 @@ module.exports = React.createClass({
 
   _handleStudent: async function() {
     debug('student');
+    this.props.clearModalError();
     await this.props.showModal(
       <div className="student-form">
         <input type="text" className="student-first" placeholder="First name" />
@@ -332,6 +338,7 @@ module.exports = React.createClass({
 
   _handleLogin: async function() {
     debug('login');
+    this.props.clearModalError();
     await this.props.showModal(
       <div className="login-form">
         <input type="text" className="login-email"
@@ -351,8 +358,13 @@ module.exports = React.createClass({
   _onTeacherSubmit: async function() {
     debug('teacher submit');
     let {title, first, last, email, password} = getTeacherData();
-    await teachers.create({title, first, last, email, password});
-    await users.login({email, password});
+    try {
+      await teachers.create({title, first, last, email, password});
+      await users.login({email, password});
+    } catch (error) {
+      return this.props.displayModalError(error.message);
+    }
+
     this.props.closeModal();
   },
 
@@ -360,8 +372,13 @@ module.exports = React.createClass({
     debug('student submit');
     let {first, last, username, password} = getStudentData();
     let email = `${username}@mathleap.org`;
-    await students.create({email, first, last, username, password});
-    await users.login({email, password});
+    try {
+      await students.create({email, first, last, username, password});
+      await users.login({email, password});
+    } catch (error) {
+      return this.props.displayModalError(error.message);
+    }
+
     this.props.closeModal();
   },
 
@@ -369,7 +386,12 @@ module.exports = React.createClass({
     debug('login submit');
     let {uid, password} = getLoginData();
     let email = uid.includes('@') ? uid : `${uid}@mathleap.org`;
-    await users.login({email, password});
+    try {
+      await users.login({email, password});
+    } catch (error) {
+      return this.props.displayModalError(error.message);
+    }
+
     this.props.closeModal();
   }
 });
