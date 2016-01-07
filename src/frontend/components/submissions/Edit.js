@@ -323,7 +323,7 @@ module.exports = React.createClass({
                 className="submissions-edit-active">
       {times(cursor, renderChar)}
       {isCursorVisible && <div className="submissions-edit-cursor">|</div>}
-      {times(equation.length + 2 * append.length - cursor, i => renderChar(cursor + i))}
+      {times(equation.length + 2 * append.length - cursor + 1, i => renderChar(cursor + i))}
     </div>;
   },
 
@@ -594,24 +594,16 @@ module.exports = React.createClass({
     }
 
     let {equation, cursor} = this.state;
-    // In order to initiate a both sides operation, we either need to be
-    // immediately left of the comparison sign or at the end of the statement.
-    let offset;
-    switch (cursor) {
-      case equation.length:
-        offset = 2;
-        break;
-      case (equation.length - 1) / 2:
-        offset = 1;
-        break;
-      default:
-        debug('Both sides operation initiated in bad position');
-        return;
+    let split = equation.indexOf('=');
+    if (cursor <= split) {
+      cursor = split + 1;
+    } else {
+      cursor = equation.length + 2;
     }
 
     event.preventDefault();
     this._saveState();
-    this.setState({append: operator, cursor: cursor + offset});
+    this.setState({append: operator, cursor});
   },
 
   _handleBothSidesChar: function(event) {
@@ -619,16 +611,13 @@ module.exports = React.createClass({
     let {append, cursor, equation} = this.state;
 
     let offset;
-    switch (cursor) {
-      case equation.length + 2 * append.length:
-        offset = 2;
-        break;
-      case (equation.length - 1) / 2 + append.length:
-        offset = 1;
-        break;
-      default:
-        debug('Both sides operation continued from bad position');
-        break;
+    let split = equation.indexOf('=');
+    if (cursor <= split + append.length) {
+      cursor = split + append.length;
+      offset = 1;
+    } else {
+      cursor = equation.length + 2 * append.length;
+      offset = 2;
     }
 
     if (event.keyCode === 8) {
