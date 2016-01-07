@@ -53,6 +53,8 @@
 }
 
 .modal input,
-.modal select {
+.modal select,
+.modal .button,
+.modal .button-inverse {
   margin-bottom: 10px;
 }

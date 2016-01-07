@@ -84,7 +84,7 @@ module.exports = React.createClass({
       </div>,
       <div key="signup"
            className="topbar-action signup-button"
-           onClick={this._handleTeacher}>
+           onClick={this._handleSignup}>
         SIGN UP
       </div>
     ];
@@ -118,7 +118,7 @@ module.exports = React.createClass({
             <span className="emph">Hassle-free</span> practice and feedback opportunities for your students.
           </div>
           <div className="home-signup-button unselectable"
-               onClick={this._handleTeacher}>
+               onClick={this._handleSignup}>
             GET STARTED
           </div>
         </div>
@@ -252,7 +252,7 @@ module.exports = React.createClass({
         <div className="home-container">
           <div className="call-to-action">READY TO TAKE THE LEAP?</div>
           <div className="home-signup-button unselectable"
-               onClick={this._handleTeacher}>
+               onClick={this._handleSignup}>
             GET STARTED
           </div>
           <div className="absimg hill"></div>
@@ -284,6 +284,23 @@ module.exports = React.createClass({
         </div>
       </div>
     </div>;
+  },
+
+  _handleSignup: async function() {
+    debug('signup');
+    this.props.clearModalError();
+    await this.props.showModal(
+      <div className="choose-user-role">
+        <div className="button"
+             onClick={this._handleTeacher}>
+          Teacher
+        </div>
+        <div className="button-inverse"
+             onClick={this._handleStudent}>
+          Student
+        </div>
+      </div>
+    );
   },
 
   _handleTeacher: async function() {
