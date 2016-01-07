@@ -95,6 +95,7 @@ module.exports = React.createClass({
           You are bound by any such updates or changes, including but not limited to those affecting these Terms and Conditions,
           and so should periodically review these Terms and Conditions.
         </p>
+        <br />
         <p>
           8. <span className="emph">Limitation of warranties of MathLeap, its suppliers and its licensors.</span> Except as otherwise expressly stated,
           all content posted to or available from the Service is provided "as is", and MathLeap, its suppliers and its licensors make no
