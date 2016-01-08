@@ -10,6 +10,7 @@ proxy({
   methods: {
     createQuestions: require('./createAssignment').createQuestions,
     diff: require('./diff'),
+    getPriority: require('./getPriority'),
     parse: require('./parse'),
     ping: async function() {},
     stringify: require('./stringify')

@@ -65,6 +65,12 @@ module.exports = React.createClass({
       // string that's being applied to both sides
       append: '',
 
+      // whether append needs to add parens to lh expression
+      leftParens: false,
+
+      // whether append needs to add parens to rh expression
+      rightParens: false,
+
       // changes being made in current operation
       deltas: [],
 
@@ -170,7 +176,7 @@ module.exports = React.createClass({
   },
 
   _renderQuestion: function() {
-    let {responses, num, equation, append, cursor} = this.state;
+    let {responses, num, equation, append, cursor, leftParens, rightParens} = this.state;
     let rows = [];
     let response = responses[num];
     if (response) {
@@ -180,8 +186,8 @@ module.exports = React.createClass({
         // to apply the outstanding (uncommitted) changes.
         if (index === work.length - 1) {
           return [
-            this._renderChanges(step.state[0], this.state.changes, append),
-            this._renderResults(equation, cursor, append)
+            this._renderChanges(step.state[0], this.state.changes, append, leftParens, rightParens),
+            this._renderResults(equation, cursor, append, leftParens, rightParens)
           ];
         }
 
@@ -205,7 +211,7 @@ module.exports = React.createClass({
                     rows={rows} />;
   },
 
-  _renderChanges: function(equation, changes, append = '') {
+  _renderChanges: function(equation, changes, append = '', leftParens = false, rightParens = false) {
     return <div className="submissions-edit-active">
       {
         (() => {
@@ -260,7 +266,22 @@ module.exports = React.createClass({
             right = right.slice(0, right.length - append.length);
           }
 
-          return mapChar(left, renderEquationChar)
+          return [
+              leftParens &&
+              <div key="leftp0"
+                   style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
+                <span style={{color: 'black'}}>(</span>
+              </div>
+            ].concat(
+              mapChar(left, renderEquationChar)
+            )
+            .concat(
+              leftParens &&
+              <div key="leftp1"
+                   style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
+                <span style={{color: 'black'}}>)</span>
+              </div>
+            )
             .concat(
               mapChar(append, (chr, index) => {
                 return renderAppendChar(chr, index + left.length);
@@ -270,12 +291,26 @@ module.exports = React.createClass({
               [renderEquationChar('=', left.length + append.length)]
             )
             .concat(
+              rightParens &&
+              <div key="rightp0"
+                   style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
+                <span style={{color: 'black'}}>(</span>
+              </div>
+            )
+            .concat(
               mapChar(right, (chr, index) => {
                 return renderEquationChar(
                   chr,
                   index + left.length + append.length + 1
                 );
               })
+            )
+            .concat(
+              rightParens &&
+              <div key="rightp1"
+                   style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
+                <span style={{color: 'black'}}>)</span>
+              </div>
             )
             .concat(
               mapChar(append, (chr, index) => {
@@ -290,7 +325,9 @@ module.exports = React.createClass({
     </div>;
   },
 
-  _renderResults: function(equation, cursor, append = '') {
+  _renderResults: function(equation, cursor, append = '', leftParens = false, rightParens = false) {
+    // The way we've patched rendering for https://github.com/gaye/ml/issues/71 here is pretty cute
+    // and confusing. This will get cleaned up but in the meantime beware!
     if (typeof cursor !== 'number') {
       return equation;
     }
@@ -320,11 +357,27 @@ module.exports = React.createClass({
           append.charAt(index - equation.length - append.length);
       }
 
-      return <div key={index}
-                  className="submissions-edit-character unselectable"
-                  style={style}>
+      let result = <div key={index}
+                        className="submissions-edit-character unselectable"
+                        style={style}>
         {chr}
       </div>;
+
+      if (index === left.length) {
+        return [
+          leftParens && <div key="leftp1" className="submissions-edit-character unselectable">)</div>,
+          result
+        ];
+      }
+
+      if (index === left.length + append.length) {
+        return [
+          result,
+          rightParens && <div key="rightp1" className="submissions-edit-character unselectable">)</div>
+        ];
+      }
+
+      return result;
     }
 
     return <div key={JSON.stringify({equation, cursor})}
@@ -332,9 +385,17 @@ module.exports = React.createClass({
                 onMouseDown={this._handleCursorReposition}
                 onMouseMove={this._stageCursorHighlight}
                 onMouseUp={this._commitCursorHighlight}>
+      {
+        leftParens &&
+        <div key="leftp0" className="submissions-edit-character unselectable">(</div>
+      }
       {times(cursor, renderChar)}
       {isCursorVisible && <div className="submissions-edit-cursor unselectable">|</div>}
       {times(equation.length + 2 * append.length - cursor + 1, i => renderChar(cursor + i))}
+      {
+        rightParens &&
+        <div key="rightp1" className="submissions-edit-character unselectable">)</div>
+      }
     </div>;
   },
 
@@ -378,6 +439,8 @@ module.exports = React.createClass({
       num,
       equation,
       append: '',
+      leftParens: false,
+      rightParens: false,
       changes: mapChar(equation, () => 'none'),
       highlight: mapChar(equation, () => false),
       cursor: equation.length,
@@ -577,7 +640,7 @@ module.exports = React.createClass({
    * Nothing has been done in the current step and the student
    * entered some character.
    */
-  _handleFirstChar: function(event) {
+  _handleFirstChar: async function(event) {
     let operator;
     switch (event.keyCode) {
       case 54:
@@ -617,14 +680,22 @@ module.exports = React.createClass({
       cursor = equation.length + 2;
     }
 
+    let [leftParens, rightParens] = await Promise.all(
+      equation.split('=').map(async (expression) => {
+        let expressionPriority = await bridge('getPriority', expression);
+        let operatorPriority = getOperatorPriority(operator);
+        return operatorPriority > expressionPriority;
+      })
+    );
+
     event.preventDefault();
     this._saveState();
-    this.setState({append: operator, cursor});
+    this.setState({append: operator, cursor, leftParens, rightParens});
   },
 
   _handleBothSidesChar: function(event) {
     debug('handle both sides char');
-    let {append, cursor, equation} = this.state;
+    let {append, cursor, equation, leftParens, rightParens} = this.state;
 
     let offset;
     let split = equation.indexOf('=');
@@ -639,6 +710,10 @@ module.exports = React.createClass({
     if (event.keyCode === 8) {
       append = append.slice(0, append.length - 1);
       cursor -= offset;
+      if (!append.length) {
+        leftParens = false;
+        rightParens = false;
+      }
     } else {
       let chr = charFromKeyEvent(event);
       if (!chr) {
@@ -651,7 +726,7 @@ module.exports = React.createClass({
 
     event.preventDefault();
     this._saveState();
-    this.setState({append, cursor});
+    this.setState({append, cursor, leftParens, rightParens});
   },
 
   _handleSelections: async function(event, highlights) {
@@ -795,9 +870,13 @@ module.exports = React.createClass({
 
   _commitDelta: async function() {
     let {aClass, assignment, submission} = this.props;
-    let {responses, num, changes, equation, append} = this.state;
+    let {responses, num, changes, equation, append, leftParens, rightParens} = this.state;
     let {work} = responses[num];
     let [left, right] = equation.split('=');
+    let result = right ?
+      `${leftParens ? '(' : ''}${left}${leftParens ? ')' : ''}${append}=${rightParens ? '(' : ''}${right}${rightParens ? ')' : ''}${append}` :
+      left;
+
     await submissions.commitDelta(
       aClass,
       assignment,
@@ -806,7 +885,7 @@ module.exports = React.createClass({
       work,
       [changes],
       [append],
-      [right ? `${left}${append}=${right}${append}` : left]
+      [result]
     );
 
     // This will reset all of our work on the current state.
@@ -904,4 +983,20 @@ function eventToCursorPosition(event) {
   });
 
   return typeof pos === 'number' ? pos : children.length;
+}
+
+function getOperatorPriority(operator) {
+  switch (operator) {
+    case '+':
+    case '-':
+      return 0;
+    case '*':
+      return 1;
+    case '/':
+      return 2;
+    case '^':
+      return 3;
+    default:
+      throw new Error(`Unexpected operator ${operator}`);
+  }
 }
