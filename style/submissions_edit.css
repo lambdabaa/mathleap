@@ -63,6 +63,7 @@
 .submissions-edit-active {
   align-items: center;
   -webkit-align-items: center;
+  cursor: text;
   display: flex;
   display: -webkit-flex;
 }

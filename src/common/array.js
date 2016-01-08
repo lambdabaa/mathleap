@@ -34,7 +34,9 @@ exports.someValue = (arr, fn) => {
   let result;
   for (let i = 0; i < arr.length; i++) {
     result = fn(arr[i], i);
-    if (result) { return result; }
+    if (result !== false && result != null) {
+      return result;
+    }
   }
 
   return false;
