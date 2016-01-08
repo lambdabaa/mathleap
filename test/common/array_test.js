@@ -27,8 +27,8 @@ suite('array', () => {
 
   test('#someValue', () => {
     array
-      .someValue([4, 2, 3, -1], num => num % 2)
+      .someValue([4, 2, 3, -1], num => num % 2 ? num : false)
       .should
-      .equal(1);
+      .equal(3);
   });
 });

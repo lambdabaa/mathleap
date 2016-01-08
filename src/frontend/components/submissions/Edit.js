@@ -13,6 +13,7 @@ let {firebaseUrl} = require('../../constants');
 let includes = require('lodash/collection/includes');
 let map = require('lodash/collection/map');
 let {mapChar} = require('../../../common/string');
+let {someValue} = require('../../../common/array');
 let submissions = require('../../store/submissions');
 let times = require('lodash/utility/times');
 
@@ -320,7 +321,8 @@ module.exports = React.createClass({
     }
 
     return <div key={JSON.stringify({equation, cursor})}
-                className="submissions-edit-active">
+                className="submissions-edit-active"
+                onClick={this._handleCursorReposition}>
       {times(cursor, renderChar)}
       {isCursorVisible && <div className="submissions-edit-cursor">|</div>}
       {times(equation.length + 2 * append.length - cursor + 1, i => renderChar(cursor + i))}
@@ -807,6 +809,41 @@ module.exports = React.createClass({
     let {aClass, assignment, submission} = this.props;
     await submissions.submit(aClass, assignment, submission);
     location.hash = `#!/classes/${aClass}/assignments/${assignment}/submissions/${submission}`;
+  },
+
+  _handleCursorReposition: function(event) {
+    debug('reposition cursor', event);
+    event.stopPropagation();
+
+    let element = event.target;
+    while (!element.classList.contains('submissions-edit-active')) {
+      element = element.parentNode;
+    }
+
+    let rect = element.getBoundingClientRect();
+    let click = event.clientX - rect.left;
+
+    let children = Array.from(
+      element.getElementsByClassName('submissions-edit-character')
+    );
+
+    let pos = someValue(children, (childNode, index) => {
+      let childRect = childNode.getBoundingClientRect();
+      let childLeft = childRect.left - rect.left;
+      let childRight = childRect.right - rect.left;
+      if (childRight >= click) {
+        // Choose whichever of left side and right side of character
+        // is closer to the click.
+        let leftDist = Math.abs(childLeft - click);
+        let rightDist = Math.abs(childRight - click);
+        return leftDist < rightDist ? index : index + 1;
+      }
+    });
+
+    this.setState({
+      cursor: typeof pos === 'number' ? pos : children.length,
+      isCursorVisible: true
+    });
   },
 
   _showHelpDialog: function() {
