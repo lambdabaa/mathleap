@@ -79,7 +79,13 @@ module.exports = React.createClass({
       undos: [],
 
       // stack for redo actions
-      redos: []
+      redos: [],
+
+      // Whether or not the mouse is pressed for highlighting
+      isMousePressed: false,
+
+      // Dragged highlight end
+      drag: null
     };
   },
 
@@ -289,8 +295,9 @@ module.exports = React.createClass({
       return equation;
     }
 
-    let {highlight, isCursorVisible} = this.state;
+    let {isCursorVisible} = this.state;
     let [left, right] = equation.split('=');
+    let highlight = this._applyDragToHighlight();
 
     function renderChar(index) {
       let style = {};
@@ -314,7 +321,7 @@ module.exports = React.createClass({
       }
 
       return <div key={index}
-                  className="submissions-edit-character"
+                  className="submissions-edit-character unselectable"
                   style={style}>
         {chr}
       </div>;
@@ -322,9 +329,11 @@ module.exports = React.createClass({
 
     return <div key={JSON.stringify({equation, cursor})}
                 className="submissions-edit-active"
-                onClick={this._handleCursorReposition}>
+                onMouseDown={this._handleCursorReposition}
+                onMouseMove={this._stageCursorHighlight}
+                onMouseUp={this._commitCursorHighlight}>
       {times(cursor, renderChar)}
-      {isCursorVisible && <div className="submissions-edit-cursor">|</div>}
+      {isCursorVisible && <div className="submissions-edit-cursor unselectable">|</div>}
       {times(equation.length + 2 * append.length - cursor + 1, i => renderChar(cursor + i))}
     </div>;
   },
@@ -812,37 +821,44 @@ module.exports = React.createClass({
   },
 
   _handleCursorReposition: function(event) {
-    debug('reposition cursor', event);
+    debug('cursor reposition', event);
+    event.stopPropagation();
+    this.setState({
+      cursor: eventToCursorPosition(event),
+      isCursorVisible: true,
+      isMousePressed: true
+    });
+  },
+
+  _stageCursorHighlight: function(event) {
     event.stopPropagation();
 
-    let element = event.target;
-    while (!element.classList.contains('submissions-edit-active')) {
-      element = element.parentNode;
+    let {cursor, isMousePressed} = this.state;
+    if (!isMousePressed) {
+      return;
     }
 
-    let rect = element.getBoundingClientRect();
-    let click = event.clientX - rect.left;
+    this.setState({drag: eventToCursorPosition(event)});
+  },
 
-    let children = Array.from(
-      element.getElementsByClassName('submissions-edit-character')
-    );
-
-    let pos = someValue(children, (childNode, index) => {
-      let childRect = childNode.getBoundingClientRect();
-      let childLeft = childRect.left - rect.left;
-      let childRight = childRect.right - rect.left;
-      if (childRight >= click) {
-        // Choose whichever of left side and right side of character
-        // is closer to the click.
-        let leftDist = Math.abs(childLeft - click);
-        let rightDist = Math.abs(childRight - click);
-        return leftDist < rightDist ? index : index + 1;
-      }
-    });
-
+  _commitCursorHighlight: function(event) {
+    debug('commit cursor highlight', event);
+    event.stopPropagation();
     this.setState({
-      cursor: typeof pos === 'number' ? pos : children.length,
-      isCursorVisible: true
+      highlight: this._applyDragToHighlight(),
+      isMousePressed: false,
+      drag: null
+    });
+  },
+
+  _applyDragToHighlight: function() {
+    let {highlight, cursor, drag} = this.state;
+    return highlight.map((value, index) => {
+      return drag === null ||
+             index > cursor - 1 && index > drag ||
+             index < cursor && index < drag ?
+        value :
+        !value;
     });
   },
 
@@ -860,3 +876,32 @@ module.exports = React.createClass({
     location.hash = `#!/classes/${this.props.aClass}/`;
   }
 });
+
+function eventToCursorPosition(event) {
+  let element = event.target;
+  while (!element.classList.contains('submissions-edit-active')) {
+    element = element.parentNode;
+  }
+
+  let rect = element.getBoundingClientRect();
+  let eventX = event.clientX - rect.left;
+
+  let children = Array.from(
+    element.getElementsByClassName('submissions-edit-character')
+  );
+
+  let pos = someValue(children, (childNode, index) => {
+    let childRect = childNode.getBoundingClientRect();
+    let childLeft = childRect.left - rect.left;
+    let childRight = childRect.right - rect.left;
+    if (childRight >= eventX) {
+      // Choose whichever of left side and right side of character
+      // is closer to the event.
+      let leftDist = Math.abs(childLeft - eventX);
+      let rightDist = Math.abs(childRight - eventX);
+      return leftDist < rightDist ? index : index + 1;
+    }
+  });
+
+  return typeof pos === 'number' ? pos : children.length;
+}
