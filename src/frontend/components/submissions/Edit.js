@@ -227,8 +227,7 @@ module.exports = React.createClass({
                 style.backgroundColor = 'rgba(57, 150, 240, 0.5)';
                 break;
               case 'strikethrough':
-                style.textDecoration = 'line-through';
-                style.color = '#e22517';
+                style.backgroundColor = 'rgba(226, 37, 23, 0.5)';
                 break;
               case 'none':
                 break;
