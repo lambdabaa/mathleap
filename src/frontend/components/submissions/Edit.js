@@ -110,6 +110,7 @@ module.exports = React.createClass({
 
     this.setState({aClass: theClass, assignment: theAssignment});
     document.addEventListener('keydown', this._handleKeyDown, true);
+    document.addEventListener('keypress', preventDefault);
   },
 
   componentDidMount: function() {
@@ -119,6 +120,7 @@ module.exports = React.createClass({
   componentWillUnmount: function() {
     clearInterval(this.interval);
     document.removeEventListener('keydown', this._handleKeyDown, true);
+    document.removeEventListener('keypress', preventDefault);
   },
 
   render: function() {
@@ -640,6 +642,9 @@ module.exports = React.createClass({
    * entered some character.
    */
   _handleFirstChar: async function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
     let operator;
     switch (event.keyCode) {
       case 54:
@@ -687,7 +692,6 @@ module.exports = React.createClass({
       })
     );
 
-    event.preventDefault();
     this._saveState();
     this.setState({append: operator, cursor, leftParens, rightParens});
   },
@@ -998,4 +1002,8 @@ function getOperatorPriority(operator) {
     default:
       throw new Error(`Unexpected operator ${operator}`);
   }
+}
+
+function preventDefault(event) {
+  event.preventDefault();
 }
