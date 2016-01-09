@@ -288,7 +288,6 @@ module.exports = React.createClass({
 
   _handleSignup: async function() {
     debug('signup');
-    this.props.clearModalError();
     await this.props.showModal(
       <div className="choose-user-role">
         <div className="button"
@@ -305,7 +304,6 @@ module.exports = React.createClass({
 
   _handleTeacher: async function() {
     debug('teacher');
-    this.props.clearModalError();
     await this.props.showModal(
       <div className="teacher-form">
         <select className="teacher-title">
@@ -334,7 +332,6 @@ module.exports = React.createClass({
 
   _handleStudent: async function() {
     debug('student');
-    this.props.clearModalError();
     await this.props.showModal(
       <div className="student-form">
         <input type="text" className="student-first" placeholder="First name" />
@@ -355,7 +352,6 @@ module.exports = React.createClass({
 
   _handleLogin: async function() {
     debug('login');
-    this.props.clearModalError();
     await this.props.showModal(
       <div className="login-form">
         <input type="text" className="login-email"

@@ -67,8 +67,7 @@ module.exports = React.createClass({
       route: router.load({
         showModal: this._showModal,
         closeModal: this._closeModal,
-        displayModalError: this._displayModalError,
-        clearModalError: this._clearModalError
+        displayModalError: this._displayModalError
       })
     });
   },
@@ -77,6 +76,7 @@ module.exports = React.createClass({
     let deferred = defer();
     this.setState({
       modal: modal,
+      errorMessage: null,
       onceComponentUpdate: deferred.resolve
     });
 
@@ -89,10 +89,6 @@ module.exports = React.createClass({
 
   _displayModalError: function(errorMessage) {
     this.setState({errorMessage});
-  },
-
-  _clearModalError: function() {
-    this.setState({errorMessage: null});
   },
 
   _handleOverlayClick: function(event) {
