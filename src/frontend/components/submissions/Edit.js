@@ -752,10 +752,19 @@ module.exports = React.createClass({
     debug('handle selection', JSON.stringify(arguments));
     let args;
     if (event.keyCode === 8) {
-      args = [
-        {type: 'cancel', range: [start, end]},
-        start
-      ];
+      // TODO(gaye): Temporary workaround for
+      //     https://github.com/gaye/ml/issues/79
+      if (start === end) {
+        args = [
+          {type: 'cancel', range: [start + 1 , end + 1]},
+          start
+        ];
+      } else {
+        args = [
+          {type: 'cancel', range: [start, end]},
+          start
+        ];
+      }
     } else {
       let chr = charFromKeyEvent(event);
       if (!chr) {
