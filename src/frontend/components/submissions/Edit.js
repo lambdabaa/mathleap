@@ -771,17 +771,10 @@ module.exports = React.createClass({
         return debug('Unable to resolve character from key event');
       }
 
-      if (start === end) {
-        args = [
-          {type: 'replace', range: [start + 1, end + 1], replacement: chr},
-          start + 1
-        ];
-      } else {
-        args = [
-          {type: 'replace', range: [start, end], replacement: chr},
-          start + 1
-        ];
-      }
+      args = [
+        {type: 'replace', range: [start, end], replacement: chr},
+        start + 1
+      ];
     }
 
     event.preventDefault();
