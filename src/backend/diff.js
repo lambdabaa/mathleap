@@ -31,7 +31,7 @@ module.exports = function(statement, deltas) {
           result.push({
             pos: range[0],
             chr: replacement.charCodeAt(0),
-            highlight: range[1] === range[0] ? null : range[1] + 1
+            highlight: range[1] + 1
           });
 
           eachChar(delta.replacement.slice(1), (chr, index) => {

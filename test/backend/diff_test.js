@@ -13,6 +13,17 @@ suite('backend/diff', () => {
     .equal('x^2+9=0');
   });
 
+  test('#applyDiff single character', () => {
+    diff.applyDiff(
+      [
+        {pos: 3, chr: 48, highlight: 4}
+      ],
+      '3w=45'
+    )
+    .should
+    .equal('3w=05');
+  });
+
   test('#applyDiff hard', () => {
     diff.applyDiff(
       [
