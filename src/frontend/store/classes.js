@@ -2,9 +2,11 @@ let Firebase = require('firebase/lib/firebase-web');
 let colors = require('../colors');
 let createCode = require('../code').create;
 let debug = console.log.bind(console, '[store/classes]');
+let findKey = require('lodash/object/findKey');
 let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let session = require('../session');
+let values = require('lodash/object/values');
 
 let classesRef = new Firebase(`${firebaseUrl}/classes`);
 let studentsRef = new Firebase(`${firebaseUrl}/students`);
@@ -79,7 +81,23 @@ exports.update = async function update(id, details) {
 
 exports.remove = async function remove(id) {
   debug('request delete class', id);
+
+  // First find all of the students in the class.
   let ref = classesRef.child(id);
+  let classStudentsRef = ref.child('students');
+  let students = await request(classStudentsRef, 'once', 'value');
+  let studentIds = values(students);
+  await Promise.all(
+    studentIds.map(async (studentId) => {
+      let studentClassesRef = studentsRef
+        .child(studentId)
+        .child('classes');
+      let classes = await request(studentClassesRef, 'once', 'value');
+      let key = findKey(classes, aClass => aClass === id);
+      await request(studentClassesRef.child(key), 'remove');
+    })
+  );
+
   await request(ref, 'remove');
   debug('delete class ok');
 };
