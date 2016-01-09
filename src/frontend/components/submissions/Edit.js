@@ -739,7 +739,7 @@ module.exports = React.createClass({
       let highlight = highlights[i];
       let {start, end} = highlight;
       await this._handleSelection(
-        cursor >= start && cursor <= end ?
+        cursor >= start && cursor <= end + 1 ?
           event :
           {keyCode: 8, preventDefault: () => {}},
         start,
@@ -752,20 +752,36 @@ module.exports = React.createClass({
     debug('handle selection', JSON.stringify(arguments));
     let args;
     if (event.keyCode === 8) {
-      args = [
-        {type: 'cancel', range: [start, end]},
-        start
-      ];
+      // TODO(gaye): Temporary workaround for
+      //     https://github.com/gaye/ml/issues/79
+      if (start === end) {
+        args = [
+          {type: 'cancel', range: [start + 1 , end + 1]},
+          start
+        ];
+      } else {
+        args = [
+          {type: 'cancel', range: [start, end]},
+          start
+        ];
+      }
     } else {
       let chr = charFromKeyEvent(event);
       if (!chr) {
         return debug('Unable to resolve character from key event');
       }
 
-      args = [
-        {type: 'replace', range: [start, end], replacement: chr},
-        start + 1
-      ];
+      if (start === end) {
+        args = [
+          {type: 'replace', range: [start + 1, end + 1], replacement: chr},
+          start + 1
+        ];
+      } else {
+        args = [
+          {type: 'replace', range: [start, end], replacement: chr},
+          start + 1
+        ];
+      }
     }
 
     event.preventDefault();
