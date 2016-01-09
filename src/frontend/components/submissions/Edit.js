@@ -739,7 +739,7 @@ module.exports = React.createClass({
       let highlight = highlights[i];
       let {start, end} = highlight;
       await this._handleSelection(
-        cursor >= start && cursor <= end ?
+        cursor >= start && cursor <= end + 1 ?
           event :
           {keyCode: 8, preventDefault: () => {}},
         start,
@@ -771,10 +771,17 @@ module.exports = React.createClass({
         return debug('Unable to resolve character from key event');
       }
 
-      args = [
-        {type: 'replace', range: [start, end], replacement: chr},
-        start + 1
-      ];
+      if (start === end) {
+        args = [
+          {type: 'replace', range: [start + 1, end + 1], replacement: chr},
+          start + 1
+        ];
+      } else {
+        args = [
+          {type: 'replace', range: [start, end], replacement: chr},
+          start + 1
+        ];
+      }
     }
 
     event.preventDefault();
