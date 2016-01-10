@@ -469,7 +469,7 @@ module.exports = React.createClass({
       return this._handleShiftKey(event);
     }
 
-    if (event.ctrlKey) {
+    if (event.ctrlKey || event.metaKey) {
       return this._handleCtrlKey(event);
     }
 
