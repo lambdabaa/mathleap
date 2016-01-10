@@ -11,7 +11,7 @@ all: frontend.min.js backend.min.js mathleap.min.css
 
 .PHONY: clean
 clean:
-	rm -rf *.css *.js build src/backend/math.js
+	rm -rf mathleap.min.css frontend.js frontend.min.js backend.js backend.min.js build src/backend/math.js
 
 %.min.js: %.js
 	./node_modules/.bin/uglifyjs $< -o $@
