@@ -136,7 +136,7 @@ module.exports = React.createClass({
           {this._renderQuestion()}
           {isHelpDialogShown && this._renderHelpDialog()}
           <img className="submissions-edit-help-button"
-               src="style/images/question-mark.svg"
+               src="style/images/question-mark.png"
                onClick={this._showHelpDialog} />
         </div>
       </div>
