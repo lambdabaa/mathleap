@@ -77,3 +77,7 @@ export type FBQuestionStep = {
   operation: string;
   state: Array<string>;
 };
+
+export type Numeric = string | number;
+
+export type Range = {start: number, end: number};

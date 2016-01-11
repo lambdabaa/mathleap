@@ -60,7 +60,7 @@ suite('random', () => {
     let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
     checkInteger(numerator);
     checkInteger(denominator);
-    numerator.should.be.lte(denominator);
+    Math.abs(numerator).should.be.lte(Math.abs(denominator));
   });
 
   test('#fractionList', () => {
@@ -70,7 +70,7 @@ suite('random', () => {
       let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
       checkInteger(numerator);
       checkInteger(denominator);
-      numerator.should.be.lte(denominator);
+      Math.abs(numerator).should.be.lte(Math.abs(denominator));
     });
   });
 });

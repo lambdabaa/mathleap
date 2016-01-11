@@ -84,7 +84,27 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
-      let actual = mathjs.eval(question);
+      let actual = +mathjs.eval(question);
+      actual.should.be.closeTo(eval(solution), 0.00001);
+    });
+  });
+
+  test('Multiplying fractions', () => {
+    let questions = createQuestion['Multiplying fractions'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      let actual = +mathjs.eval(question);
+      actual.should.be.closeTo(eval(solution), 0.00001);
+    });
+  });
+
+  test('Dividing fractions', () => {
+    let questions = createQuestion['Dividing fractions'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      let actual = +mathjs.eval(question);
       actual.should.be.closeTo(eval(solution), 0.00001);
     });
   });

@@ -8,7 +8,10 @@ let range = require('lodash/utility/range');
 let sample = require('lodash/collection/sample');
 let times = require('lodash/utility/times');
 
-type Numeric = number | string;  // we sometimes express numbers as things like "2/3"
+import type {
+  Numeric,
+  Range
+} from '../common/types';
 
 let composites = exports.composites = [
   -4, -6, -8, -9,
@@ -49,22 +52,47 @@ exports.superCompositeList = randomList.bind(exports, exports.superComposite);
 exports.powerList = randomList.bind(exports, exports.power);
 exports.factorList = randomList.bind(exports, exports.factor);
 exports.fraction = uniqueRandom.bind(exports, randomFraction);
+exports.boundedFraction = boundedFraction;
+exports.compositeFraction = uniqueRandom.bind(exports, compositeFraction);
 exports.fractionList = randomList.bind(exports, exports.fraction);
+exports.compositeFractionList = randomList.bind(exports, exports.compositeFraction);
 exports.boolean = sample.bind(null, [true, false]);
 exports.letter = sample.bind(null, chrs);
 
+
 function randomFraction(): string {
-  let a = exports.integer([0] /* can't divide by 0 */);
-  let b = exports.integer([0] /* can't divide by 0 */);
+  return assignToFraction(exports.integer);
+}
+
+function compositeFraction(): string {
+  return assignToFraction(exports.composite);
+}
+
+function assignToFraction(numberGenerator: Function): string {
+  let a = numberGenerator([0] /* can't divide by 0 */);
+  let b = numberGenerator([0, a, -a] /* can't divide by 0 */);
+  if (a === b || a === -b) {
+    b++;
+  }
   let numerator, denominator;
-  if (a > b) {
+  if (Math.abs(a) > Math.abs(b)) {
     denominator = a;
     numerator = b;
   } else {
     denominator = b;
     numerator = a;
   }
+  return `${numerator}/${denominator}`;
+}
 
+function absBoundedRandomInteger(lower: number, upper: number): number {
+  return Math.floor(Math.random() * (Math.abs(upper) - Math.abs(lower))) + Math.abs(lower);
+}
+
+function boundedFraction(bounds: {numerator: Range; denominator: Range}): string {
+  let numerator = absBoundedRandomInteger(bounds.numerator.start, bounds.numerator.end);
+  bounds.denominator.start = Math.max(numerator, bounds.denominator.start); // To avoid top heavy fractions
+  let denominator = absBoundedRandomInteger(bounds.denominator.start, bounds.denominator.end);
   return `${numerator}/${denominator}`;
 }
 

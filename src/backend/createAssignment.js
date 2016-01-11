@@ -9,21 +9,23 @@ let find = require('lodash/collection/find');
 let groupBy = require('lodash/collection/groupBy');
 let isInteger = require('./isInteger');
 let mapValues = require('lodash/object/mapValues');
+let fraction = require('./fraction');
 let random = require('./random');
 let range = require('lodash/utility/range');
 let round = require('./round');
 
 import type {
   AssignmentQuestion,
-  AssignmentSection
+  AssignmentSection,
+  Numeric
 } from '../common/types';
 
 /**
  * createQuestion functions get called with two arguments:
  * a count which is the number of questions to generate
- * and an options object with the following options:
+ * and an exclude array (Array.<number>)
  *
- *   (Array.<number>) exclude - don't generate solutions in this list.
+ *
  */
 let createQuestion = {};
 createAssignment.createQuestion = createQuestion;
@@ -84,17 +86,45 @@ createQuestion['Adding and subtracting fractions'] = function(): Array<Assignmen
     let operator = random.boolean() ? '+' : '-';
     let c = random.integer();
     let d = operator === '+' ? a - c : c - a;
-    let negate1 = c >= 0 !== b > 0;
-    let negate2 = d >= 0 !== b > 0;
-    let absb = Math.abs(b);
-    c = Math.abs(c);
-    d = Math.abs(d);
-
-    let left = `${negate1 ? '-' : ''}${c}/${absb}`;
-    let right = `${negate2 ? '(-' : ''}${d}/${absb}${negate2 ? ')' : ''}`;
-    return {question: `${left}${operator}${right}`, solution: `${a}/${b}`};
+    return {question: `${simplifySigns(c, b)}${operator}${simplifySigns(d, b)}`,
+      solution: `${a}/${b}`};
   });
 };
+
+function simplifySigns(numerator: number, denominator: number): string {
+  let negative = numerator >= 0 !== denominator > 0;
+  numerator = Math.abs(numerator);
+  denominator = Math.abs(denominator);
+  return `${negative ? '-' : ''}${numerator}/${denominator}`;
+}
+
+createQuestion['Multiplying fractions'] = createFractionMultiplications.bind(null, false);
+
+createQuestion['Dividing fractions'] = createFractionMultiplications.bind(null, true);
+
+function createFractionMultiplications(
+  invert: boolean,
+  count: number,
+  exclude: Array<Numeric> = []): Array<AssignmentQuestion> {
+  console.log(invert, count, exclude);
+  let solutions = random.compositeFractionList(count, exclude);
+  return solutions.map((solution:string): AssignmentQuestion => {
+    let [aNumerator, aDenomenator] = solution.split('/').map(num => parseInt(num));
+    console.log("aNumerator = ", aNumerator, "aDenomenator = ", aDenomenator);
+    let [bNumerator, bDenomenator] = random
+      .boundedFraction({numerator: {start: Math.abs(aNumerator), end: Math.abs(aDenomenator)},
+        denominator: {start: Math.abs(aNumerator), end: Math.abs(aDenomenator)}})
+      .split('/')
+      .map(num => parseInt(num));
+    console.log("bNumerator = ", bNumerator, "bDenomenator = ", bDenomenator);
+    let a = simplifySigns(aNumerator, aDenomenator);
+    let b = simplifySigns(bNumerator, bDenomenator);
+    let {s, n, d} = invert ? fraction.multiply(fraction.fraction(a), fraction.fraction(b)) :
+      fraction.divide(fraction.fraction(a), fraction.fraction(b));
+    let operator = invert ? '/' : '*';
+    return {question: `(${s === -1 ? '-' : ''}${n}/${d})${operator}(${b})`, solution: `${a}`};
+  });
+}
 
 createQuestion['Arithmetic distribution'] = function(): Array<AssignmentQuestion> {
   let solutions = random.compositeList(...arguments);
