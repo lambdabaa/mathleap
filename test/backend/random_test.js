@@ -54,6 +54,25 @@ suite('random', () => {
     power.should.be.gte(-1000);
     power.should.be.lte(1000);
   });
+
+  test('#fraction', () => {
+    let fraction = random.fraction();
+    let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
+    checkInteger(numerator);
+    checkInteger(denominator);
+    numerator.should.be.lte(denominator);
+  });
+
+  test('#fractionList', () => {
+    let result = random.fractionList(10);
+    result.should.have.length(10);
+    result.forEach(fraction => {
+      let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
+      checkInteger(numerator);
+      checkInteger(denominator);
+      numerator.should.be.lte(denominator);
+    });
+  });
 });
 
 function checkInteger(integer) {

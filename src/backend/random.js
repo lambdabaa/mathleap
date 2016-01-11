@@ -2,6 +2,7 @@
  * @fileoverview Utility methods to generate random data.
  */
 
+let isInteger = require('./isInteger');
 let random = require('lodash/number/random');
 let range = require('lodash/utility/range');
 let sample = require('lodash/collection/sample');
@@ -45,8 +46,25 @@ exports.compositeList = randomList.bind(exports, exports.composite);
 exports.superCompositeList = randomList.bind(exports, exports.superComposite);
 exports.powerList = randomList.bind(exports, exports.power);
 exports.factorList = randomList.bind(exports, exports.factor);
+exports.fraction = uniqueRandom.bind(exports, randomFraction);
+exports.fractionList = randomList.bind(exports, exports.fraction);
 exports.boolean = sample.bind(null, [true, false]);
 exports.letter = sample.bind(null, chrs);
+
+function randomFraction() {
+  let a = exports.integer();
+  let b = exports.integer([0] /* can't divide by 0 */);
+  let numerator, denominator;
+  if (a > b) {
+    denominator = a;
+    numerator = b;
+  } else {
+    denominator = b;
+    numerator = a;
+  }
+
+  return `${numerator}/${denominator}`;
+}
 
 exports.nonZero = function() {
   let magnitude = random(1, 25);
@@ -99,7 +117,9 @@ function randomList(next, len, exclude = []) {
     uniq[nextRandom] = true;
   });
 
-  return Object.keys(uniq).map(key => parseInt(key));
+  return Object.keys(uniq).map(key => {
+    return /^-?[0-9]+$/.test(key) ? parseInt(key) : key;
+  });
 }
 
 /**

@@ -72,5 +72,15 @@ module.exports = [
         "example": "x/2 + 1 = x/4 + 6"
       }
     ]
+  },
+
+  {
+    "name": "Fractions",
+    "types": [
+      {
+        "name": "Adding and subtracting fractions",
+        "example": "1 / 4 + 2 / 4"
+      }
+    ]
   }
 ];
