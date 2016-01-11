@@ -79,6 +79,16 @@ suite('service/createAssignment', function() {
     });
   });
 
+  test('Adding and subtracting fractions', () => {
+    let questions = createQuestion['Adding and subtracting fractions'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      let actual = mathjs.eval(question);
+      actual.should.be.closeTo(eval(solution), 0.00001);
+    });
+  });
+
   test('Ax=B', () => {
     let questions = createQuestion['Solving equations of the form Ax = B'](10);
     questions.should.have.length(10);

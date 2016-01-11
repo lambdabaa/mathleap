@@ -72,6 +72,25 @@ createQuestion['Simple exponentiation'] = function() {
   });
 };
 
+createQuestion['Adding and subtracting fractions'] = function() {
+  let solutions = random.fractionList(...arguments);
+  return solutions.map(solution => {
+    let [a, b] = solution.split('/').map(num => parseInt(num));
+    let operator = random.boolean() ? '+' : '-';
+    let c = random.integer();
+    let d;
+    if (operator === '+') {
+      // c / b + ? / b = a / b
+      d = a - c;
+    } else {
+      // c / b - ? / b = a / b
+      d = c - a;
+    }
+
+    return {question: `${c}/${b}${operator}${d}/${b}`, solution: `${a}/${b}`};
+  });
+};
+
 createQuestion['Arithmetic distribution'] = function() {
   let solutions = random.compositeList(...arguments);
   return solutions.map(solution => {
