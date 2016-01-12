@@ -241,7 +241,7 @@ module.exports = React.createClass({
     let {composition} = this.state;
     let color = colors.random();
     composition.push({topic, type, color, count: 1});
-    this.setState({topic: null, preview: null, composition});
+    this.setState({preview: null, composition});
   },
 
   _handleIncrementTopicCount: function(index) {
