@@ -72,13 +72,11 @@ module.exports = React.createClass({
     return responses.map((response, index) => {
       let {question, work} = response;
       let answer = work[work.length - 1].state[0];
-      let [left, right] = answer.split('=');
-      let solution = question.solution.toString();
-      let result = left === solution || right === solution;
       return [
         `${index + 1}.`,
-        question.question, answer,
-        result ?
+        question.question,
+        answer,
+        isCorrect(question, answer) ?
           <div style={{color: '#71ac00'}}>✔</div> :
           <div style={{color: '#e22517'}}>✗</div>
       ];
@@ -104,3 +102,9 @@ module.exports = React.createClass({
     this.setState({user});
   }
 });
+
+function isCorrect(question, answer) {
+  let [left, right] = answer.split('=');
+  let solution = question.solution.toString();
+  return left === solution || right === solution;
+}
