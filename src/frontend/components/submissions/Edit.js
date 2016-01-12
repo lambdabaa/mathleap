@@ -617,7 +617,7 @@ module.exports = React.createClass({
     }
 
     return this._appendDelta(
-      {type: 'replace', range: [cursor, cursor], replacement: chr},
+      {type: 'replace', range: [cursor, null], replacement: chr},
       cursor + 1
     );
   },

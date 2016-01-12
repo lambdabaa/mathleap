@@ -24,6 +24,18 @@ suite('backend/diff', () => {
     .equal('3w=05');
   });
 
+  test('#applyDiff multiple replace single', () => {
+    diff.applyDiff(
+      [
+        {pos: 3, chr: 48, highlight: 4},
+        {pos: 4, chr: 49, highlight: null}
+      ],
+      '3w=45'
+    )
+    .should
+    .equal('3w=015');
+  });
+
   test('#applyDiff hard', () => {
     diff.applyDiff(
       [

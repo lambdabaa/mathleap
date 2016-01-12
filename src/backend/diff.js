@@ -27,12 +27,11 @@ module.exports = function(statement, deltas) {
             highlight: range[1] === range[0] ? null : range[1] + 1
           };
         case 'replace':
-          let result = [];
-          result.push({
+          let result = [{
             pos: range[0],
             chr: replacement.charCodeAt(0),
-            highlight: range[1] === range[0] ? null : range[1] + 1
-          });
+            highlight: range[1] !== null ? range[1] + 1 : null
+          }];
 
           eachChar(delta.replacement.slice(1), (chr, index) => {
             result.push({
