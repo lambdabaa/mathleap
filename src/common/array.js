@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * @fileoverview Array utility methods.
  */
@@ -6,7 +7,8 @@
  * Creates two arrays where the elements of one pass the test
  * and the elements of the other fail the test.
  */
-exports.partition = (arr, fn, pass = [], fail = []) => {
+exports.partition = function(arr: Array<any>, fn: (x: any) => boolean,
+                             pass: Array<any> = [], fail: Array<any> = []): Array<Array<any>> {
   if (arr.length === 0) {
     return [pass, fail];
   }
@@ -20,7 +22,8 @@ exports.partition = (arr, fn, pass = [], fail = []) => {
 /**
  * Like Array.prototype.splice().
  */
-exports.replaceIndex = (arr, index, element) => {
+exports.replaceIndex = function(arr: Array<any>, index: number,
+                                element: Array<any> | any): Array<any> {
   return arr.slice(0, index)
     .concat(element)
     .concat(arr.slice(index + 1));
@@ -30,7 +33,8 @@ exports.replaceIndex = (arr, index, element) => {
  * Similar to Array.prototype.some() except that it returns the result
  * of applying the test function instead of the key.
  */
-exports.someValue = (arr, fn) => {
+exports.someValue = function(arr: Array<any>,
+                             fn: (x: any, i: number) => boolean): any {
   let result;
   for (let i = 0; i < arr.length; i++) {
     result = fn(arr[i], i);

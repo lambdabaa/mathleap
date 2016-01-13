@@ -1,9 +1,17 @@
+/* @flow */
 /**
  * @fileoverview Promise.defer()
  */
 
-module.exports = function() {
-  let resolve, reject;
+type Deferred = {
+  promise: Promise;
+  resolve: (x: ?any) => void;
+  reject: (x: Error) => void;
+};
+
+module.exports = function(): Deferred {
+  let resolve = fail;
+  let reject = fail;
   let promise = new Promise((_resolve, _reject) => {
     resolve = _resolve;
     reject = _reject;
@@ -11,3 +19,7 @@ module.exports = function() {
 
   return {promise, resolve, reject};
 };
+
+function fail() {
+  throw new Error('deferred called synchronously!');
+}

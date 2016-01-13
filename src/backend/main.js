@@ -2,7 +2,7 @@
  * @fileoverview Expose worker methods over api bridge.
  */
 
-importScripts('node_modules/babel-core/browser-polyfill.min.js');
+importScripts('node_modules/babel-polyfill/dist/polyfill.min.js');
 
 let {proxy} = require('proxyworker/lib/proxy');
 

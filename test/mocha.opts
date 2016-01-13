@@ -1,4 +1,4 @@
---compilers js:babel/register
 --recursive
+--require test/setup.js
 --timeout 10s
 --ui tdd

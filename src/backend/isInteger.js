@@ -1,4 +1,6 @@
-module.exports = function(num) {
+/* @flow */
+
+module.exports = function(num: ?number): boolean {
   if (typeof num !== 'number') {
     return false;
   }
