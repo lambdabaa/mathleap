@@ -1,4 +1,7 @@
+/* @flow */
 let parse = require('./parse');
+
+import type Node from './parse';
 
 /**
  * 0: add, subtract
@@ -7,7 +10,7 @@ let parse = require('./parse');
  * 3: fun
  * 4: atom
  */
-module.exports = function getPriority(expression) {
+module.exports = function getPriority(expression: Node | string): number {
   let node;
   try {
     node = typeof expression === 'string' ? parse(expression) : expression;
@@ -34,6 +37,6 @@ module.exports = function getPriority(expression) {
   }
 };
 
-function isDivide(factorlist) {
+function isDivide(factorlist: Node): boolean {
   return factorlist.data.some(factor => factor.invert);
 }

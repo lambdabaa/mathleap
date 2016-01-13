@@ -1,4 +1,7 @@
-exports.once = function(target, eventType, listener, useCapture) {
+/* @flow */
+exports.once = function(target: Object, eventType: string,
+                        listener: (event: Event) => void,
+                        useCapture: boolean): void | Promise<Event> {
   if (typeof listener !== 'function') {
     // promises style
     return new Promise(function(resolve) {
@@ -9,17 +12,23 @@ exports.once = function(target, eventType, listener, useCapture) {
   return nodeStyleOnce.apply(this, arguments);
 };
 
-function nodeStyleOnce(target, eventType, listener, useCapture) {
+function nodeStyleOnce(target: Object, eventType: string,
+                       listener: (event: Event) => void,
+                       useCapture: boolean): void {
   exports.on(target, eventType, function callback() {
     exports.off(target, eventType, callback, useCapture);
     listener.apply(null, arguments);
   }, useCapture);
 }
 
-exports.on = function(target, eventType, listener, useCapture = false) {
+exports.on = function(target: Object, eventType: string,
+                      listener: (event: Event) => void,
+                      useCapture: boolean = false) {
   target.addEventListener(eventType, listener, useCapture);
 };
 
-exports.off = function(target, eventType, listener, useCapture = false) {
+exports.off = function(target: Object, eventType: string,
+                       listener: (event: Event) => void,
+                       useCapture: boolean = false): void {
   target.removeEventListener(eventType, listener, useCapture);
 };
