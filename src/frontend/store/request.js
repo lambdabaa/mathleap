@@ -1,6 +1,4 @@
-let debug = console.log.bind(console, '[store/request]');
 let defer = require('../../common/defer');
-let session = require('../session');
 
 /**
 module.exports = async function(ref, method, ...args) {

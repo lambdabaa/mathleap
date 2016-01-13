@@ -11,7 +11,6 @@ let mapValues = require('lodash/object/mapValues');
 let random = require('./random');
 let range = require('lodash/utility/range');
 let round = require('./round');
-let sample = require('lodash/collection/sample');
 
 /**
  * createQuestion functions get called with two arguments:

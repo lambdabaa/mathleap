@@ -28,7 +28,6 @@
 let debug = console.log.bind(console, '[diff]');
 let {eachChar} = require('../common/string');
 let flatten = require('lodash/array/flatten');
-let map = require('lodash/collection/map');
 let span = require('lodash/utility/range');
 let {replaceIndex} = require('../common/array');
 

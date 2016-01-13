@@ -334,7 +334,7 @@ module.exports = React.createClass({
     }
 
     let {isCursorVisible} = this.state;
-    let [left, right] = equation.split('=');
+    let [left] = equation.split('=');
     let highlight = this._applyDragToHighlight();
 
     function renderChar(index) {
@@ -923,9 +923,7 @@ module.exports = React.createClass({
 
   _stageCursorHighlight: function(event) {
     event.stopPropagation();
-
-    let {cursor, isMousePressed} = this.state;
-    if (!isMousePressed) {
+    if (!this.state.isMousePressed) {
       return;
     }
 

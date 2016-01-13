@@ -97,8 +97,9 @@ function getAssignmentStatus(assignment) {
     return 'Not started';
   }
 
-  let {key, submission} = getStudentSubmission(assignment);
-  return submission.complete ? 'Submitted' : 'In progress';
+  return getStudentSubmission(assignment).complete ?
+    'Submitted' :
+    'In progress';
 }
 
 function containsStudentSubmission(assignment) {
