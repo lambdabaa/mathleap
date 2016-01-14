@@ -336,7 +336,7 @@ module.exports = React.createClass({
     }
 
     let {isCursorVisible} = this.state;
-    let [left] = equation.split('=');
+    let [left, right] = equation.split('=');
     let highlight = this._applyDragToHighlight();
 
     function renderChar(index) {
@@ -378,7 +378,15 @@ module.exports = React.createClass({
         return [
           result,
           rightParens &&
-          <div key="rightp1" className="submissions-edit-character unselectable">)</div>
+          <div key="rightp0" className="submissions-edit-character unselectable">(</div>
+        ];
+      }
+
+      if (index === left.length + append.length + 1 + right.length) {
+        return [
+          rightParens &&
+          <div key="rightp1" className="submissions-edit-character unselectable">)</div>,
+          result
         ];
       }
 
@@ -397,10 +405,6 @@ module.exports = React.createClass({
       {times(cursor, renderChar)}
       {isCursorVisible && <div className="submissions-edit-cursor unselectable">|</div>}
       {times(equation.length + 2 * append.length - cursor + 1, i => renderChar(cursor + i))}
-      {
-        rightParens &&
-        <div key="rightp1" className="submissions-edit-character unselectable">)</div>
-      }
     </div>;
   },
 
