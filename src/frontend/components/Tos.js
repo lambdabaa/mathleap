@@ -156,29 +156,3 @@ module.exports = React.createClass({
     </div>;
   }
 });
-
-/*
-        <p className="emph">
-          Please be aware that your use of and access to our services
-          (defined below) are subject to the following terms;
-          if you do not agree to all of the following, you may not use
-          or access the services in any manner.
-        </p>
-        <br />
-        <p>
-          Welcome to MathLeap, a web-based platform that provides users a fun
-          way to solve math problems and get feedback on their work. We're
-          excited for you to get started, but first we need you to agree to the
-          rules and restrictions that govern your use of our website(s),
-          products, services, and applications (the “Services”). If you have
-          any questions, comments, or concerns regarding these terms or
-          the Services, please contact us at
-          <a href="mailto:support@mathleap.org">support@mathleap.org</a>.
-        </p>
-        <p>
-          These Terms of Use (the “Terms”) are a binding contract between you and NoRedInk Corp. (“NoRedInk,” “we” and “us”). You must agree to and accept all of the Terms, or you don’t have the right to use the Services. Your using the Services in any way means that you agree to all of these Terms, and these Terms will remain in effect while you use the Services. These Terms include the provisions in this document, as well as those in the NoRedInk Privacy Policy, and Copyright Dispute Policy.
-      </div>
-    </div>;
-  }
-});
-*/

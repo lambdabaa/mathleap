@@ -4,8 +4,7 @@ module.exports = React.createClass({
   displayName: 'Tabular',
 
   render: function() {
-    let className = `tabular ${this.props.className || ''}`;
-    return <div className={className}>
+    return <div className={`tabular ${this.props.className || ''}`}>
       <div className="tabular-headers">{this._getHeaders()}</div>
       <div className="tabular-rows">{this._getRows()}</div>
     </div>;

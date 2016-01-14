@@ -4,6 +4,7 @@
 
 let {DOMParser} = require('xmldom');
 let Xhr = require('./xhr');
+let debug = console.log.bind(console, '[wolfram]');
 let identity = require('lodash/utility/identity');
 
 const appId = 'Q3XHGL-AKGL7KJHR3';
@@ -20,6 +21,7 @@ exports.executeQuery = function(query) {
   let input = encodeURIComponent(query);
   let request = new Xhr();
   request.open('GET', `${apiUrl}&input=${input}`);
+  debug('issue query', query);
   return request.send();
 };
 
@@ -27,6 +29,7 @@ exports.executeQuery = function(query) {
  * Parse wolfram's response xml and look for a solution pod.
  */
 exports.findSolution = function(res) {
+  debug('parsing solution from response', res);
   let doc = parser.parseFromString(res, 'text/xml');
   let node = getChildByTagName(
     getChildByTagName(
