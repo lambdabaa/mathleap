@@ -11,13 +11,7 @@ import type Node from './parse';
  * 4: atom
  */
 module.exports = function getPriority(expression: Node | string): number {
-  let node;
-  try {
-    node = typeof expression === 'string' ? parse(expression) : expression;
-  } catch (error) {
-    throw new Error(`Failed to parse expression ${JSON.stringify(expression)}: ${error.message}`);
-  }
-
+  let node = maybeParse(expression);
   let {nodeType, data} = node;
   if (data.length === 1) {
     return getPriority(data[0].value);
@@ -36,6 +30,18 @@ module.exports = function getPriority(expression: Node | string): number {
       throw new Error(`Unexpected nodeType ${node.nodeType}`);
   }
 };
+
+function maybeParse(expression: Node | string): Node {
+  if (typeof expression !== 'string') {
+    return expression;
+  }
+
+  try {
+    return parse(expression);
+  } catch (error) {
+    throw new Error(`Failed to parse ${expression}: ${error.message}`);
+  }
+}
 
 function isDivide(factorlist: Node): boolean {
   return factorlist.data.some(factor => factor.invert);

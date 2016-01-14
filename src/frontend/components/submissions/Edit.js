@@ -213,7 +213,8 @@ module.exports = React.createClass({
                     rows={rows} />;
   },
 
-  _renderChanges: function(equation, changes, append = '', leftParens = false, rightParens = false) {
+  _renderChanges: function(equation, changes, append = '', leftParens = false,
+                           rightParens = false) {
     return <div className="submissions-edit-active">
       {
         (() => {
@@ -366,7 +367,8 @@ module.exports = React.createClass({
 
       if (index === left.length) {
         return [
-          leftParens && <div key="leftp1" className="submissions-edit-character unselectable">)</div>,
+          leftParens &&
+          <div key="leftp1" className="submissions-edit-character unselectable">)</div>,
           result
         ];
       }
@@ -374,7 +376,8 @@ module.exports = React.createClass({
       if (index === left.length + append.length) {
         return [
           result,
-          rightParens && <div key="rightp1" className="submissions-edit-character unselectable">)</div>
+          rightParens &&
+          <div key="rightp1" className="submissions-edit-character unselectable">)</div>
         ];
       }
 
@@ -517,6 +520,8 @@ module.exports = React.createClass({
         if (event.ctrlKey) {
           return this._handleRedo();
         }
+
+        break;
       default:
         this._handleDelta(event);
     }
@@ -886,7 +891,15 @@ module.exports = React.createClass({
     let {work} = responses[num];
     let [left, right] = equation.split('=');
     let result = right ?
-      `${leftParens ? '(' : ''}${left}${leftParens ? ')' : ''}${append}=${rightParens ? '(' : ''}${right}${rightParens ? ')' : ''}${append}` :
+      [
+        {value: left, parens: leftParens},
+        {value: right, parens: rightParens}
+      ]
+      .map(side => {
+        let {value, parens} = side;
+        return `${parens ? '(' : ''}${value}${parens ? ')' : ''}${append}`;
+      })
+      .join('=') :
       left;
 
     await submissions.commitDelta(

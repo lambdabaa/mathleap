@@ -115,7 +115,8 @@ module.exports = React.createClass({
             Math assignments made <span className="emph">easy</span>.
           </div>
           <div className="subline">
-            <span className="emph">Hassle-free</span> practice and feedback opportunities for your students.
+            <span className="emph">Hassle-free</span> practice and feedback
+            opportunities for your students.
           </div>
           <div className="home-signup-button unselectable"
                onClick={this._handleSignup}>
@@ -172,7 +173,8 @@ module.exports = React.createClass({
             <div className="proposition-icon time-icon"></div>
             <div className="proposition-title">Time well spent</div>
             <div className="proposition-description">
-              Teaching is hard! We'll help you understand class performance so you can focus where it matters most.
+              Teaching is hard! We'll help you understand class performance
+              so you can focus where it matters most.
             </div>
           </div>
         </div>
@@ -193,21 +195,26 @@ module.exports = React.createClass({
               <div className="how-it-works-copy how-it-works-copy-0">
                 <div className="how-it-works-copy-header">Generate assignments</div>
                 <div className="how-it-works-copy-body">
-                  Create assignments by selecting question topics. We'll build you an assignment composed of algorithmically generated problems on the topics you choose.
+                  Create assignments by selecting question topics.
+                  We'll build you an assignment composed of algorithmically generated problems
+                  on the topics you choose.
                 </div>
               </div>
               <div className="absimg how-it-works-icon how-it-works-solve"></div>
               <div className="how-it-works-copy how-it-works-copy-1">
                 <div className="how-it-works-copy-header">Students solve problems online</div>
                 <div className="how-it-works-copy-body">
-                  Students show their work using an online problem editor that helps them visualize their steps.
+                  Students show their work using an online problem editor
+                  that helps them visualize their steps.
                 </div>
               </div>
               <div className="absimg how-it-works-icon how-it-works-instant"></div>
               <div className="how-it-works-copy how-it-works-copy-2">
                 <div className="how-it-works-copy-header">Instant, line-by-line feedback</div>
                 <div className="how-it-works-copy-body">
-                  Upon submission, our state of the art grading technology analyzes student responses for correctness and points out where they made mistakes.
+                  Upon submission, our state of the art grading technology
+                  analyzes student responses for correctness and points out
+                  where they made mistakes.
                 </div>
               </div>
             </div>
@@ -236,7 +243,8 @@ module.exports = React.createClass({
           <div className="testimonial-quote">
             <div className="testimonial-quote-quote"></div>
             <div className="testimonial-quote-body">
-              MathLeap helps me visualize my progress through a problem and shows me where I went wrong when I make a mistake.
+              MathLeap helps me visualize my progress through a problem and
+              shows me where I went wrong when I make a mistake.
             </div>
             <div className="testimonial-quote-attribution">
               <span className="emph">WILL LIFFERTH</span>, STUDENT

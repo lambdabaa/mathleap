@@ -96,7 +96,8 @@ module.exports.applyDiff = function applyDiff(deltas: Array<DeltaV1>, stmt: stri
   return applyDiff(tail, applyDeltaToStatement(stmt, head));
 };
 
-module.exports.getChanges = function getChanges(deltas: Array<DeltaV1>, stmt: string): Array<string> {
+module.exports.getChanges = function getChanges(deltas: Array<DeltaV1>,
+                                                stmt: string): Array<string> {
   let {blocks} = deltas.reduce(
     function(data: Object, delta: DeltaV1): BlocksAndCursor {
       let fn = delta.highlight ? handleHighlight : handleChar;
@@ -133,7 +134,8 @@ function applyDeltaToStatement(stmt: string, delta: DeltaV1): string {
     stmt.slice(0, pos) + chr + stmt.slice(pos);
 }
 
-function handleHighlight(blocks: Array<Block>, cursor: number, delta: DeltaV1): Array<Block> | BlocksAndCursor {
+function handleHighlight(blocks: Array<Block>, cursor: number,
+                         delta: DeltaV1): Array<Block> | BlocksAndCursor {
   debug('handleHighlight', JSON.stringify(arguments));
   let {chr, pos, highlight} = delta;
   let selected = typeof highlight === 'number' ? getSelectedBlocks(blocks, pos, highlight) : [];
@@ -168,7 +170,7 @@ function handleHighlight(blocks: Array<Block>, cursor: number, delta: DeltaV1): 
 
     // The highlight didn't reach the left or right bounds so we need
     // three blocks.
-    return handleInnerSelection(blocks, block, index, chr, left, right);
+    return handleInnerSelection(blocks, index, chr, left, right);
   }
 
   // Now we've ruled out the case where there was only one block selected so
@@ -210,7 +212,8 @@ function handleHighlight(blocks: Array<Block>, cursor: number, delta: DeltaV1): 
 /**
  * Handles highlighted block selections instead of untouched blocks.
  */
-function handleHighlightSelection(blocks: Array<Block>, chr: Char, index: number, left: number, right: ?number): Array<Block> {
+function handleHighlightSelection(blocks: Array<Block>, chr: Char, index: number,
+                                  left: number, right: ?number): Array<Block> {
   debug('handleHighlightSelection', JSON.stringify(arguments));
   let block = blocks[index];
   right = typeof right === 'number' ? right : block.len;
@@ -247,7 +250,8 @@ function handleOuterSelection(blocks: Array<Block>, index: number, chr: Char): A
 /**
  * For the case when the left side of a block is selected.
  */
-function handleLeftSelection(blocks: Array<Block>, block: Block, index: number, chr: Char, right: number): BlocksAndCursor {
+function handleLeftSelection(blocks: Array<Block>, block: Block, index: number,
+                             chr: Char, right: number): BlocksAndCursor {
   debug('handleLeftSelection', JSON.stringify(arguments));
   let offspring;
   if (chr === 8) {
@@ -280,7 +284,8 @@ function handleLeftSelection(blocks: Array<Block>, block: Block, index: number, 
 /**
  * For the case when the right side of a block is selected.
  */
-function handleRightSelection(blocks: Array<Block>, block: Block, index: number, chr: Char, left: number): BlocksAndCursor {
+function handleRightSelection(blocks: Array<Block>, block: Block, index: number,
+                              chr: Char, left: number): BlocksAndCursor {
   debug('handleRightSelection', JSON.stringify(arguments));
   let offspring;
   if (chr === 8) {
@@ -313,8 +318,10 @@ function handleRightSelection(blocks: Array<Block>, block: Block, index: number,
 /**
  * For the case when only an inner slice of a block is selected.
  */
-function handleInnerSelection(blocks: Array<Block>, block: Block, index: number, chr: Char, left: number, right: number): BlocksAndCursor {
+function handleInnerSelection(blocks: Array<Block>, index: number, chr: Char,
+                              left: number, right: number): BlocksAndCursor {
   debug('handleInnerSelection', JSON.stringify(arguments));
+  let block = blocks[index];
   let leftSpawn = {
     type: 'none',
     range: [block.range[0], block.range[0] + left],
@@ -349,7 +356,8 @@ function handleInnerSelection(blocks: Array<Block>, block: Block, index: number,
   };
 }
 
-function handleChar(blocks: Array<Block>, cursor: number, delta: DeltaV1): Array<Block> | BlocksAndCursor {
+function handleChar(blocks: Array<Block>, cursor: number,
+                    delta: DeltaV1): Array<Block> | BlocksAndCursor {
   debug('handleChar', JSON.stringify(arguments));
   let block = blocks[cursor];
   let {chr, pos} = delta;
@@ -401,7 +409,8 @@ function handleChar(blocks: Array<Block>, cursor: number, delta: DeltaV1): Array
 /**
  * Find all of the blocks that land between the left and right bounds.
  */
-function getSelectedBlocks(blocks: Array<Block>, left: number, right: number): Array<BlockAndIndex> {
+function getSelectedBlocks(blocks: Array<Block>, left: number,
+                           right: number): Array<BlockAndIndex> {
   let marker = 0;
   let results = [];
   blocks.forEach(function(block: Block, index: number): void {

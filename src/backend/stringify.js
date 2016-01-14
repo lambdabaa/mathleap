@@ -48,7 +48,6 @@ let handleNode = {
       topstring = `(${topstring})`;
     }
 
-
     let bottomstring = stringifyFactors(bottom);
     if (bottom.length > 1) {
       bottomstring = `(${bottomstring})`;
