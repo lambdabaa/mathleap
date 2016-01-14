@@ -155,7 +155,7 @@ module.exports = React.createClass({
   },
 
   _renderAssignmentSummary: function() {
-    let {theAssignment} = this.state.assignment;
+    let {theAssignment} = this.state;
     let {composition, deadline} = theAssignment;
     let count = assignment.getSize(theAssignment);
     let chart = <div className="topic-ratio-chart">

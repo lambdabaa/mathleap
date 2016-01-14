@@ -5,75 +5,24 @@ let debug = console.log.bind(console, '[helpers/assignment]');
 let findKey = require('lodash/object/findKey');
 let moment = require('moment');
 let questions = require('../store/questions');
+let reduce = require('lodash/collection/reduce');
+let session = require('../session');
 let stringify = require('json-stringify-safe');
+let submissions = require('../store/submissions');
 
-type AssignmentQuestion = {
-  question: string;
-  solution: number | string;
-};
-
-type QuestionType = {
-  name: string;
-  example: string;
-  questions: Array<AssignmentQuestion>;
-};
-
-type QuestionTopic = {
-  name: string;
-  types: Array<QuestionType>;
-};
-
-type AssignmentSection = {
-  topic: QuestionTopic;
-  type: QuestionType;
-  color: string;
-  count: number;
-};
-
-type Assignment = {
-  deadline: Object;
-  composition: Array<AssignmentSection>;
-  preview: ?Array<AssignmentQuestion>;
-};
-
-type FBAssignment = {
-  name: string;
-  deadline: string;
-  questions: Object;
-  submissions: Object;
-};
-
-type FBStudent = {
-  email: string;
-  first: string;
-  last: string;
-  role: string;
-  uid: string;
-  username: string;
-};
-
-type FBSubmission = {
-  assignmentId: string;
-  classId: string;
-  studentId: string;
-  complete: boolean;
-  responses: Object;
-};
+import type {
+  QuestionType,
+  QuestionTopic,
+  Assignment,
+  FBAssignment,
+  FBStudent,
+  FBSubmission
+} from './types';
 
 exports.createAssignment = function(): Assignment {
   let deadline = moment();
   deadline.date(deadline.date() + 1);
   return {deadline, composition: [], preview: null};
-};
-
-exports.getSubmission = function(assignment: FBAssignment, student: FBStudent): Object {
-  let submissionList = assignment.submissions;
-  let {uid} = student;
-  let key = findKey(submissionList, function(submission: FBSubmission): boolean {
-    return submission.studentId === uid;
-  });
-
-  return {key, submission: submissionList[key]};
 };
 
 exports.getSize = function(assignment: Assignment): number {
@@ -128,6 +77,80 @@ exports.assign = async function(aClass: Object, assignments: Array<Object>,
     deadline: assignment.deadline.format('MM/DD/YY'),
     questions: assignment.preview
   });
+};
+
+exports.findOrCreateSubmission = async function(classId: string,
+                                                assignment: FBAssignment): Promise<FBSubmission> {
+  debug('findOrCreateStudentSubmission', stringify(arguments));
+  if (!exports.containsStudentSubmission(assignment)) {
+    await exports.createStudentSubmission(classId, assignment);
+    assignment.submissions = await submissions.list(classId, assignment['.key']);
+  }
+
+  return exports.getStudentSubmission(assignment);
+};
+
+/**
+ * Create a new, in-progress, empty submission.
+ */
+exports.createStudentSubmission = function(classId: string,
+                                           assignment: FBAssignment): Promise<FBSubmission> {
+  debug('createStudentSubmission', stringify(arguments));
+  let responses = assignment.questions.map(question => {
+    return {
+      question,
+      work: [{operation: 'noop', state: [question.question]}]
+    };
+  });
+
+  let assignmentId = assignment['.key'];
+  let studentId = session.get('user').uid;
+  return submissions.create({
+    classId,
+    assignmentId,
+    studentId,
+    responses,
+    complete: false
+  });
+};
+
+exports.getSubmission = function(assignment: FBAssignment, student: FBStudent): Object {
+  debug('getSubmission', stringify(arguments));
+  let submissionList = assignment.submissions;
+  let {uid} = student;
+  let key = findKey(submissionList, function(submission: FBSubmission): boolean {
+    return submission.studentId === uid;
+  });
+
+  return key == null ?
+    {key: null, submission: null} :
+    {key, submission: submissionList[key]};
+};
+
+exports.getStudentSubmission = function(assignment: FBAssignment): Object {
+  return exports.getSubmission(assignment, session.get('user'));
+};
+
+exports.containsStudentSubmission = function(assignment: FBAssignment): boolean {
+  debug('containsStudentSubmission', stringify(arguments));
+  let {key, submission} = exports.getSubmission(assignment, session.get('user'));
+  return key != null && submission != null;
+};
+
+exports.getStudentStatus = function(assignment: FBAssignment): string {
+  debug('getAssignmentStatus', stringify(arguments));
+  if (!exports.containsStudentSubmission(assignment)) {
+    return 'Not started';
+  }
+
+  let {submission} = exports.getStudentSubmission(assignment);
+  return submission.complete ? 'Submitted' : 'In progress';
+};
+
+exports.getCompleteSubmissionCount = function(assignment: FBAssignment): number {
+  return reduce(assignment.submissions, function(count: number, submission: FBSubmission) {
+    return count + (submission.complete ? 1 : 0);
+  }, 0);
 };
 
 function changeTopicCount(assignment: Assignment, index: number, delta: number): Assignment {

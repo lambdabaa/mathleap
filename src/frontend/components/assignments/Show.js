@@ -30,7 +30,7 @@ module.exports = React.createClass({
       assignments.get(this.props.aClass, this.props.assignment)
     ]);
 
-    this.setState({aClass: theClass, assignment: theAssignment});
+    this.setState({aClass: theClass, theAssignment});
   },
 
   componentDidMount: function() {
