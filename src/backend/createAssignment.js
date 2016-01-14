@@ -77,16 +77,16 @@ createQuestion['Adding and subtracting fractions'] = function() {
     let [a, b] = solution.split('/').map(num => parseInt(num));
     let operator = random.boolean() ? '+' : '-';
     let c = random.integer();
-    let d;
-    if (operator === '+') {
-      // c / b + ? / b = a / b
-      d = a - c;
-    } else {
-      // c / b - ? / b = a / b
-      d = c - a;
-    }
+    let d = operator === '+' ? a - c : c - a;
+    let negate1 = c >= 0 !== b > 0;
+    let negate2 = d >= 0 !== b > 0;
+    let absb = Math.abs(b);
+    c = Math.abs(c);
+    d = Math.abs(d);
 
-    return {question: `${c}/${b}${operator}${d}/${b}`, solution: `${a}/${b}`};
+    let left = `${negate1 ? '-' : ''}${c}/${absb}`;
+    let right = `${negate2 ? '(-' : ''}${d}/${absb}${negate2 ? ')' : ''}`;
+    return {question: `${left}${operator}${right}`, solution: `${a}/${b}`};
   });
 };
 
