@@ -7,12 +7,9 @@ let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
+let assignment = require('../../helpers/assignment');
 let classes = require('../../store/classes');
-let colors = require('../../colors');
-let debug = console.log.bind(console, '[components/assignments/create]');
 let {firebaseUrl} = require('../../constants');
-let moment = require('moment');
-let questions = require('../../store/questions');
 
 module.exports = React.createClass({
   displayName: 'assignments/Create',
@@ -20,17 +17,12 @@ module.exports = React.createClass({
   mixins: [ReactFire],
 
   getInitialState: function() {
-    let deadline = moment();
-    deadline.date(deadline.date() + 1);
-
     return {
       aClass: {},
       topics: [],
       topic: null,
-      composition: [],
-      deadline,
-      preview: null,
-      assignments: []
+      assignments: [],
+      theAssignment: assignment.createAssignment()
     };
   },
 
@@ -64,9 +56,10 @@ module.exports = React.createClass({
     return <div id="assignments-create">
       <Topbar headerText={headerText} />
       <div className="view">
-        <div className="backlink clickable-text" onClick={this._handleBack}>
+        <a className="backlink clickable-text"
+           href={`#!/classes/${this.props.aClass}/`}>
           &lt; {aClass && aClass.name}
-        </div>
+        </a>
         <div className="assignments-create-level">
           {this._renderTopics()}
           {this._renderQuestionTypes()}
@@ -128,7 +121,7 @@ module.exports = React.createClass({
   },
 
   _renderAssignmentComposition: function() {
-    let {composition} = this.state;
+    let {composition} = this.state.theAssignment;
     let rows = composition.map((part, index) => {
       let increment = this._handleIncrementTopicCount.bind(this, index);
       let decrement = this._handleDecrementTopicCount.bind(this, index);
@@ -162,9 +155,9 @@ module.exports = React.createClass({
   },
 
   _renderAssignmentSummary: function() {
-    let {composition, deadline} = this.state;
-    let count = composition.reduce((sum, part) => sum + part.count, 0);
-
+    let {theAssignment} = this.state.assignment;
+    let {composition, deadline} = theAssignment;
+    let count = assignment.getSize(theAssignment);
     let chart = <div className="topic-ratio-chart">
       {
         composition.map((part, index) => {
@@ -236,59 +229,44 @@ module.exports = React.createClass({
       rows={rows} />;
   },
 
-  _handleAddTopic: function(topic, type) {
-    debug('add topic', JSON.stringify(topic), JSON.stringify(type));
-    let {composition} = this.state;
-    let color = colors.random();
-    composition.push({topic, type, color, count: 1});
-    this.setState({preview: null, composition});
+  _updateAssignment: function(method, args) {
+    args = Array.from(args);
+    args.unshift(this.state.theAssignment);
+    let theAssignment = assignment[method].apply(null, args);
+    this.setState({theAssignment});
   },
 
-  _handleIncrementTopicCount: function(index) {
-    debug('increment topic count', index);
-    let {composition} = this.state;
-    composition[index].count += 1;
-    this.setState({preview: null, composition});
+  _handleAddTopic: function() {
+    this._updateAssignment('addTopic', arguments);
   },
 
-  _handleDecrementTopicCount: function(index) {
-    debug('decrement topic count', index);
-    let {composition} = this.state;
-    composition[index].count -= 1;
-    if (composition[index].count === 0) {
-      composition.splice(index, 1);
-    }
+  _handleIncrementTopicCount: function() {
+    this._updateAssignment('incrementTopicCount', arguments);
+  },
 
-    this.setState({preview: null, composition});
+  _handleDecrementTopicCount: function() {
+    this._updateAssignment('decrementTopicCount', arguments);
   },
 
   _handleIncrementDeadline: function() {
-    debug('increment deadline');
-    let {deadline} = this.state;
-    deadline.date(deadline.date() + 1);
-    this.setState({deadline});
+    this._updateAssignment('incrementDeadline', arguments);
   },
 
   _handleDecrementDeadline: function() {
-    debug('decrement deadline');
-    let {deadline} = this.state;
-    deadline.date(deadline.date() - 1);
-    this.setState({deadline});
+    this._updateAssignment('decrementDeadline', arguments);
   },
 
   _handlePreview: async function() {
-    debug('preview assignment');
-    let {aClass, assignments, composition, deadline, preview} = this.state;
-    if (!preview) {
-      preview = await questions.createAssignment(composition);
-      this.setState({preview});
-    }
+    let {aClass, assignments, theAssignment} = this.state;
+    theAssignment = await assignment.getPreview(theAssignment);
+    this.setState({theAssignment});
 
     let cols = [
       {content: '', width: 100},
       {content: '', width: 460}
     ];
 
+    let {preview, deadline} = theAssignment;
     let rows = preview.map((question, index) => {
       return [`${index + 1}.`, question.question];
     });
@@ -313,22 +291,8 @@ module.exports = React.createClass({
   },
 
   _handleAssign: async function() {
-    debug('create assignment');
-    let {aClass, assignments, composition, deadline, preview} = this.state;
-    if (!preview) {
-      preview = await questions.createAssignment(composition);
-    }
-
-    await classes.createAssignment(aClass, {
-      name: `Assignment ${assignments.length + 1}`,
-      deadline: deadline.format('MM/DD/YY'),
-      questions: preview
-    });
-
-    this._handleBack();
-  },
-
-  _handleBack: function() {
+    let {aClass, assignments, theAssignment} = this.state;
+    await assignment.assign(aClass, assignments, theAssignment);
     location.hash = `#!/classes/${this.props.aClass}/`;
   }
 });
