@@ -3,9 +3,9 @@ let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
+let assignment = require('../../helpers/assignment');
 let assignments = require('../../store/assignments');
 let classes = require('../../store/classes');
-let findKey = require('lodash/object/findKey');
 let {firebaseUrl} = require('../../constants');
 let students = require('../../store/students');
 
@@ -13,7 +13,7 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       aClass: {},
-      assignment: {},
+      theAssignment: {},
       students: [],
       studentIds: []
     };
@@ -22,13 +22,12 @@ module.exports = React.createClass({
   mixins: [ReactFire],
 
   componentWillMount: async function() {
-    let {aClass, assignment} = this.props;
-    let classRef = new Firebase(`${firebaseUrl}/classes/${aClass}`);
+    let classRef = new Firebase(`${firebaseUrl}/classes/${this.props.aClass}`);
     this.bindAsArray(classRef.child('students'), 'studentIds');
 
     let [theClass, theAssignment] = await Promise.all([
-      classes.get(aClass),
-      assignments.get(aClass, assignment)
+      classes.get(this.props.aClass),
+      assignments.get(this.props.aClass, this.props.assignment)
     ]);
 
     this.setState({aClass: theClass, assignment: theAssignment});
@@ -63,9 +62,9 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let {aClass, assignment} = this.state;
+    let {aClass, theAssignment} = this.state;
     return <div id="assignments-show">
-      <Topbar headerText={assignment.name || ''} />
+      <Topbar headerText={theAssignment.name || ''} />
       <div className="view">
         <a className="backlink clickable-text"
            href={`#!/classes/${this.props.aClass}/`}>
@@ -82,14 +81,14 @@ module.exports = React.createClass({
   },
 
   _renderSubmissions: function() {
-    let {aClass, assignment} = this.state;
+    let {aClass, theAssignment} = this.state;
     return this.state.students.map(student => {
-      let {key, submission} = getStudentSubmission(assignment, student);
+      let {key, submission} = assignment.getSubmission(theAssignment, student);
       let status;
       if (key) {
         status = submission.complete ?
           <a className="clickable-text"
-             href={`#!/classes/${aClass}/assignments/${assignment}/submissions/${submission}/`}>
+             href={`#!/classes/${aClass}/assignments/${theAssignment}/submissions/${submission}/`}>
             <div style={{color: '#3996f0'}}>Submitted</div>
           </a> :
           'In progress';
@@ -105,10 +104,3 @@ module.exports = React.createClass({
     });
   }
 });
-
-function getStudentSubmission(assignment, student) {
-  let submissionList = assignment.submissions;
-  let {uid} = student;
-  let key = findKey(submissionList, submission => submission.studentId === uid);
-  return {key, submission: submissionList[key]};
-}
