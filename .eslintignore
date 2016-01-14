@@ -1,5 +1,7 @@
 *.js
 src/backend/math.js
+src/frontend/components/Privacy.js
+src/frontend/components/Tos.js
 
 build/**
 node_modules/**
