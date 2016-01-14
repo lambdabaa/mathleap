@@ -2,6 +2,7 @@
 let classes = require('../store/classes');
 let colors = require('../colors');
 let debug = console.log.bind(console, '[helpers/assignment]');
+let findKey = require('lodash/object/findKey');
 let moment = require('moment');
 let questions = require('../store/questions');
 let stringify = require('json-stringify-safe');
@@ -35,10 +36,44 @@ type Assignment = {
   preview: ?Array<AssignmentQuestion>;
 };
 
+type FBAssignment = {
+  name: string;
+  deadline: string;
+  questions: Object;
+  submissions: Object;
+};
+
+type FBStudent = {
+  email: string;
+  first: string;
+  last: string;
+  role: string;
+  uid: string;
+  username: string;
+};
+
+type FBSubmission = {
+  assignmentId: string;
+  classId: string;
+  studentId: string;
+  complete: boolean;
+  responses: Object;
+};
+
 exports.createAssignment = function(): Assignment {
   let deadline = moment();
   deadline.date(deadline.date() + 1);
   return {deadline, composition: [], preview: null};
+};
+
+exports.getSubmission = function(assignment: FBAssignment, student: FBStudent): Object {
+  let submissionList = assignment.submissions;
+  let {uid} = student;
+  let key = findKey(submissionList, function(submission: FBSubmission): boolean {
+    return submission.studentId === uid;
+  });
+
+  return {key, submission: submissionList[key]};
 };
 
 exports.getSize = function(assignment: Assignment): number {
