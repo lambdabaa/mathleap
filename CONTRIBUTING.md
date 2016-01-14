@@ -1,6 +1,6 @@
 ### Getting started
 
-Make sure you have nodejs (version 4.2) and make installed locally.
+Make sure you have `node` (version 4.2) and `make` installed locally.
 Then, after fetching the repo from GitHub, do
 
 ```bash
