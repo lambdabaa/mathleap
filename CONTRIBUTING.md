@@ -33,6 +33,7 @@ latest stuff. Note that you'll need to install
 ```bash
 npm test      # run the unit tests
 npm run lint  # run the style checker
+npm run flow  # run the type checker
 ```
 
 Note that you currently need to be online in order for all of the unit
