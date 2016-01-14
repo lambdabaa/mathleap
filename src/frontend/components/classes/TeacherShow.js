@@ -4,10 +4,10 @@ let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
+let assignment = require('../../helpers/assignment');
 let classes = require('../../store/classes');
 let debug = console.log.bind(console, '[components/classes/Show]');
 let {firebaseUrl} = require('../../constants');
-let reduce = require('lodash/collection/reduce');
 let students = require('../../store/students');
 
 module.exports = React.createClass({
@@ -75,14 +75,14 @@ module.exports = React.createClass({
       return [`${student.first} ${student.last} (${student.username})`];
     });
 
-    let assignments = this.state.assignments.map(assignment => {
+    let assignments = this.state.assignments.map(anAssignment => {
       return [
         <a className="clickable-text"
-           href={`#!/classes/${this.props.id}/assignments/${assignment['.key']}/`}>
-          {assignment.name}
+           href={`#!/classes/${this.props.id}/assignments/${anAssignment['.key']}/`}>
+          {anAssignment.name}
         </a>,
-        assignment.deadline,
-        `${this._getCompleteSubmissionCount(assignment)} / ${this.state.students.length}`,
+        anAssignment.deadline,
+        `${assignment.getCompleteSubmissionCount(anAssignment)} / ${this.state.students.length}`,
         'n / a'
       ];
     });
@@ -112,12 +112,6 @@ module.exports = React.createClass({
         </div>
       </div>
     </div>;
-  },
-
-  _getCompleteSubmissionCount: function(assignment) {
-    return reduce(assignment.submissions, (count, submission) => {
-      return count + submission.complete ? 1 : 0;
-    }, 0);
   },
 
   _handleCreateAssignment: function() {

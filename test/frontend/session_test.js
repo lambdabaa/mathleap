@@ -1,17 +1,10 @@
 let expect = require('chai').expect;
+let session = require('../../src/frontend/session');
 
 suite('session', () => {
-  let session;
-
-  setup(() => {
-    global.document = {cookie: ''};
-    session = require('../../src/frontend/session');
-  });
-
   teardown(() => {
     session.removeAllListeners('change');
     session.removeAllListeners('foo');
-    delete global.document;
   });
 
   test('set / get', done => {

@@ -1,4 +1,5 @@
 let assignment = require('../../../src/frontend/helpers/assignment');
+let session = require('../../../src/frontend/session');
 
 let topic = {
   name: 'One Variable Linear Equations',
@@ -74,6 +75,81 @@ suite('helpers/assignment', () => {
     subject.deadline.date().should.equal(today());
     assignment.incrementDeadline(subject);
     subject.deadline.date().should.equal(tomorrow());
+  });
+
+  suite('submission', () => {
+    let subject = {
+      submissions: {
+        a: {studentId: '54321', complete: false},
+        b: {studentId: '12345', complete: true},
+        c: {studentId: 'abcde', complete: false},
+        d: {student: 'bob', complete: true}
+      }
+    };
+
+    setup(() => {
+      session.clear();
+    });
+
+    test('#getSubmission', () => {
+      assignment.getSubmission(subject, {uid: '12345'})
+      .should
+      .deep
+      .equal({
+        key: 'b',
+        submission: {
+          studentId: '12345',
+          complete: true
+        }
+      });
+    });
+
+    test('#getStudentSubmission', () => {
+      session.set('user', {uid: '12345'});
+      assignment.getStudentSubmission(subject)
+      .should
+      .deep
+      .equal({
+        key: 'b',
+        submission: {
+          studentId: '12345',
+          complete: true
+        }
+      });
+    });
+
+    test('#containsStudentSubmission true', () => {
+      session.set('user', {uid: '12345'});
+      assignment.containsStudentSubmission(subject)
+      .should
+      .equal(true);
+    });
+
+    test('#containsStudentSubmission true', () => {
+      session.set('user', {uid: 'vwxyz'});
+      assignment.containsStudentSubmission(subject)
+      .should
+      .equal(false);
+    });
+
+    test('#getStudentStatus not started', () => {
+      session.set('user', {uid: 'vwxyz'});
+      assignment.getStudentStatus(subject).should.equal('Not started');
+    });
+
+    test('#getStudentStatus in progress', () => {
+      session.set('user', {uid: '54321'});
+      assignment.getStudentStatus(subject).should.equal('In progress');
+    });
+
+    test('#getStudentStatus submitted', () => {
+      session.set('user', {uid: '12345'});
+      assignment.getStudentStatus(subject).should.equal('Submitted');
+    });
+
+    test('#getCompleteSubmissionCount', () => {
+      assignment.getCompleteSubmissionCount(subject).should.equal(2);
+    });
   });
 });
 
