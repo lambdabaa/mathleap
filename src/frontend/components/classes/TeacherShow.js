@@ -77,10 +77,10 @@ module.exports = React.createClass({
 
     let assignments = this.state.assignments.map(assignment => {
       return [
-        <div className="clickable-text"
-             onClick={this._openAssignment.bind(this, assignment)}>
+        <a className="clickable-text"
+           href={`#!/classes/${this.props.id}/assignments/${assignment['.key']}/`}>
           {assignment.name}
-        </div>,
+        </a>,
         assignment.deadline,
         `${this._getCompleteSubmissionCount(assignment)} / ${this.state.students.length}`,
         'n / a'
@@ -90,10 +90,10 @@ module.exports = React.createClass({
     return <div id="classes-show-teacher">
       <Topbar headerText={headerText} />
       <div className="view">
-        <div className="backlink clickable-text"
-             onClick={() => location.hash = '#!/classes/'}>
+        <a className="backlink clickable-text"
+           href="#!/classes/">
           &lt; Classes
-        </div>
+        </a>
         <div className="classes-show-container">
           <Tabular className="classes-show-students"
                    cols={[{content: 'Students', width: 250}]}
@@ -123,9 +123,5 @@ module.exports = React.createClass({
   _handleCreateAssignment: function() {
     debug('add assignment');
     location.hash = `#!/classes/${this.props.id}/assignments/new/`;
-  },
-
-  _openAssignment: function(assignment) {
-    location.hash = `#!/classes/${this.props.id}/assignments/${assignment['.key']}/`;
   }
 });

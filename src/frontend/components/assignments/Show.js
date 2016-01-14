@@ -67,10 +67,10 @@ module.exports = React.createClass({
     return <div id="assignments-show">
       <Topbar headerText={assignment.name || ''} />
       <div className="view">
-        <div className="backlink clickable-text"
-             onClick={this._handleBack}>
+        <a className="backlink clickable-text"
+           href={`#!/classes/${this.props.aClass}/`}>
           &lt; {aClass && aClass.name}
-        </div>
+        </a>
         <Tabular cols={[
                    {content: 'Student', width: 495},
                    'Status',
@@ -82,16 +82,16 @@ module.exports = React.createClass({
   },
 
   _renderSubmissions: function() {
-    let {assignment} = this.state;
+    let {aClass, assignment} = this.state;
     return this.state.students.map(student => {
       let {key, submission} = getStudentSubmission(assignment, student);
       let status;
       if (key) {
         status = submission.complete ?
-          <div className="clickable-text"
-               onClick={this._openSubmission.bind(this, key)}>
+          <a className="clickable-text"
+             href={`#!/classes/${aClass}/assignments/${assignment}/submissions/${submission}/`}>
             <div style={{color: '#3996f0'}}>Submitted</div>
-          </div> :
+          </a> :
           'In progress';
       } else {
         status = <div style={{color: '#808080'}}>Not started</div>;
@@ -103,15 +103,6 @@ module.exports = React.createClass({
         'n / a'
       ];
     });
-  },
-
-  _handleBack: function() {
-    location.hash = `#!/classes/${this.props.aClass}/`;
-  },
-
-  _openSubmission: function(submission) {
-    let {aClass, assignment} = this.props;
-    location.hash = `#!/classes/${aClass}/assignments/${assignment}/submissions/${submission}`;
   }
 });
 

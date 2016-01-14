@@ -82,10 +82,10 @@ module.exports = React.createClass({
              <div className="class-color"
                   style={{backgroundColor: aClass.color}}>
              </div>
-             <div className="clickable-text"
-                  onClick={this._handleShowClass.bind(this, aClass)}>
+             <a className="clickable-text"
+                href={`#!/classes/${aClass.id}/`}>
                {aClass.name}
-             </div>
+             </a>
            </div>,
           `${aClass.teacher.title} ${aClass.teacher.last}`,
           ''
@@ -128,11 +128,6 @@ module.exports = React.createClass({
     );
 
     $('.join-class-code').focus();
-  },
-
-  _handleShowClass: function(aClass) {
-    debug('show class');
-    location.hash = `#!/classes/${aClass.id}/`;
   },
 
   _handleAddClassSubmit: async function() {
