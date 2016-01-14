@@ -128,9 +128,10 @@ module.exports = React.createClass({
     return <div id="submissions-edit">
       <Topbar headerText={assignment.name || ''} />
       <div className="view">
-        <div className="backlink clickable-text" onClick={this._handleBack}>
+        <a className="backlink clickable-text"
+           href={`#!/classes/${this.props.aClass}/`}>
           &lt; {aClass && aClass.name}
-        </div>
+        </a>
         <div className="submissions-edit-workspace">
           {this._renderQuestionList()}
           {this._renderQuestion()}
@@ -972,10 +973,6 @@ module.exports = React.createClass({
   _hideHelpDialog: function() {
     debug('Hide help dialog');
     this.setState({isHelpDialogShown: false});
-  },
-
-  _handleBack: function() {
-    location.hash = `#!/classes/${this.props.aClass}/`;
   }
 });
 

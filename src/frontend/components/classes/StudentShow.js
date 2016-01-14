@@ -53,10 +53,10 @@ module.exports = React.createClass({
     return <div id="classes-show-student">
       <Topbar headerText={headerText} />
       <div className="view">
-        <div className="backlink clickable-text"
-             onClick={() => location.hash = '#!/classes/'}>
+        <a className="backlink clickable-text"
+           href="#!/classes/">
           &lt; Classes
-        </div>
+        </a>
         <Tabular className="classes-show-student-assignments"
                  cols={[
                    {content: 'Assignment', width: 660},
