@@ -17,7 +17,7 @@ import type {
   FBAssignment,
   FBStudent,
   FBSubmission
-} from './types';
+} from '../../common/types';
 
 exports.createAssignment = function(): Assignment {
   let deadline = moment();
