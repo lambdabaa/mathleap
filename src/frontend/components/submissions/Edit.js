@@ -208,7 +208,7 @@ module.exports = React.createClass({
 
     return <Tabular className="dark"
                     cols={[
-                      {content: 'Action', width: 325},
+                      {content: 'History', width: 325},
                       {content: 'Results (select and edit here)', width: 325}
                     ]}
                     rows={rows} />;
