@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * @fileoverview Generate random sets of questions by question type(s).
  */
@@ -12,6 +13,11 @@ let random = require('./random');
 let range = require('lodash/utility/range');
 let round = require('./round');
 
+import type {
+  AssignmentQuestion,
+  AssignmentSection
+} from '../common/types';
+
 /**
  * createQuestion functions get called with two arguments:
  * a count which is the number of questions to generate
@@ -22,7 +28,7 @@ let round = require('./round');
 let createQuestion = {};
 createAssignment.createQuestion = createQuestion;
 
-createQuestion['Simple addition'] = function() {
+createQuestion['Simple addition'] = function(): Array<AssignmentQuestion> {
   let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
@@ -30,7 +36,7 @@ createQuestion['Simple addition'] = function() {
   });
 };
 
-createQuestion['Simple subtraction'] = function() {
+createQuestion['Simple subtraction'] = function(): Array<AssignmentQuestion> {
   let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
@@ -38,7 +44,7 @@ createQuestion['Simple subtraction'] = function() {
   });
 };
 
-createQuestion['Simple multiplication'] = function() {
+createQuestion['Simple multiplication'] = function(): Array<AssignmentQuestion> {
   let solutions = random.compositeList(...arguments);
   return solutions.map(solution => {
     let a = random.factor(solution);
@@ -46,7 +52,7 @@ createQuestion['Simple multiplication'] = function() {
   });
 };
 
-createQuestion['Simple division'] = function() {
+createQuestion['Simple division'] = function(): Array<AssignmentQuestion> {
   let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let denom = random.integer();
@@ -55,7 +61,7 @@ createQuestion['Simple division'] = function() {
   });
 };
 
-createQuestion['Simple exponentiation'] = function() {
+createQuestion['Simple exponentiation'] = function(): Array<AssignmentQuestion> {
   let solutions = random.powerList(...arguments);
   return solutions.map(solution => {
     let root = find(
@@ -71,7 +77,7 @@ createQuestion['Simple exponentiation'] = function() {
   });
 };
 
-createQuestion['Adding and subtracting fractions'] = function() {
+createQuestion['Adding and subtracting fractions'] = function(): Array<AssignmentQuestion> {
   let solutions = random.fractionList(...arguments);
   return solutions.map(solution => {
     let [a, b] = solution.split('/').map(num => parseInt(num));
@@ -90,7 +96,7 @@ createQuestion['Adding and subtracting fractions'] = function() {
   });
 };
 
-createQuestion['Arithmetic distribution'] = function() {
+createQuestion['Arithmetic distribution'] = function(): Array<AssignmentQuestion> {
   let solutions = random.compositeList(...arguments);
   return solutions.map(solution => {
     let a = random.factor(solution);
@@ -101,7 +107,7 @@ createQuestion['Arithmetic distribution'] = function() {
   });
 };
 
-createQuestion['Solving equations of the form Ax = B'] = function() {
+createQuestion['Solving equations of the form Ax = B'] = function(): Array<AssignmentQuestion> {
   let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
@@ -111,7 +117,7 @@ createQuestion['Solving equations of the form Ax = B'] = function() {
   });
 };
 
-createQuestion['Solving equations of the form x/A = B'] = function() {
+createQuestion['Solving equations of the form x/A = B'] = function(): Array<AssignmentQuestion> {
   let solutions = random.compositeList(...arguments);
   return solutions.map(solution => {
     let a = random.factor(solution);
@@ -121,7 +127,8 @@ createQuestion['Solving equations of the form x/A = B'] = function() {
   });
 };
 
-createQuestion['Solving equations in one step with addition'] = function() {
+createQuestion['Solving equations in one step with addition'] =
+function(): Array<AssignmentQuestion> {
   let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
@@ -131,7 +138,7 @@ createQuestion['Solving equations in one step with addition'] = function() {
   });
 };
 
-createQuestion['Solving equations in two steps'] = function() {
+createQuestion['Solving equations in two steps'] = function(): Array<AssignmentQuestion> {
   let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
@@ -145,7 +152,7 @@ createQuestion['Solving equations in two steps'] = function() {
   });
 };
 
-createQuestion['Equations with variables on both sides'] = function() {
+createQuestion['Equations with variables on both sides'] = function(): Array<AssignmentQuestion> {
   let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
@@ -163,7 +170,7 @@ createQuestion['Equations with variables on both sides'] = function() {
   });
 };
 
-createQuestion['Simple distribution'] = function() {
+createQuestion['Simple distribution'] = function(): Array<AssignmentQuestion> {
   let solutions = random.integerList(...arguments);
   return solutions.map(solution => {
     let a = random.integer();
@@ -177,7 +184,7 @@ createQuestion['Simple distribution'] = function() {
   });
 };
 
-createQuestion['Clever distribution'] = function() {
+createQuestion['Clever distribution'] = function(): Array<AssignmentQuestion> {
   let solutions = random.superCompositeList(...arguments);
   return solutions.map(solution => {
     let c = random.compositeFactor(solution);
@@ -200,7 +207,8 @@ createQuestion['Clever distribution'] = function() {
  *
  *   (Array) exclude list of solutions to avoid.
  */
-function createQuestions(count, type, options = {}) {
+function createQuestions(count: number, type: string,
+                         options: Object = {}): Array<AssignmentQuestion> {
   debug('createQuestions', JSON.stringify(arguments));
   return createQuestion[type](count, options.exclude || []);
 }
@@ -208,7 +216,7 @@ function createQuestions(count, type, options = {}) {
 /**
  * @param {Array} composition spec for assignment.
  */
-function createAssignment(composition) {
+function createAssignment(composition: Array<AssignmentSection>): Array<AssignmentQuestion> {
   debug('composition', JSON.stringify(composition));
   let typeToQuestions = mapValues(
     mapValues(

@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * @fileoverview Utility methods to generate random data.
  */
@@ -6,6 +7,8 @@ let random = require('lodash/number/random');
 let range = require('lodash/utility/range');
 let sample = require('lodash/collection/sample');
 let times = require('lodash/utility/times');
+
+type Numeric = number | string;  // we sometimes express numbers as things like "2/3"
 
 let composites = exports.composites = [
   -4, -6, -8, -9,
@@ -50,7 +53,7 @@ exports.fractionList = randomList.bind(exports, exports.fraction);
 exports.boolean = sample.bind(null, [true, false]);
 exports.letter = sample.bind(null, chrs);
 
-function randomFraction() {
+function randomFraction(): string {
   let a = exports.integer();
   let b = exports.integer([0] /* can't divide by 0 */);
   let numerator, denominator;
@@ -65,7 +68,7 @@ function randomFraction() {
   return `${numerator}/${denominator}`;
 }
 
-exports.nonZero = function() {
+exports.nonZero = function(): number {
   let magnitude = random(1, 25);
   let negative = exports.boolean();
   return negative ? -magnitude : magnitude;
@@ -74,7 +77,7 @@ exports.nonZero = function() {
 /**
  * TODO: There are better ways to do this...
  */
-exports.factor = function(value) {
+function randomFactor(value: number): number {
   let positives = range(2, Math.floor(Math.sqrt(Math.abs(value))) + 1);
   let negatives = positives.map(positive => -positive);
   return sample(
@@ -84,15 +87,20 @@ exports.factor = function(value) {
         return value % candidate === 0 || value % candidate === -0;
       })
   );
+}
+
+exports.factor = function(value: number, exclude: ?Array<Numeric> | Object): number {
+  let gen = randomFactor.bind(null, value);
+  return uniqueRandom(gen, exclude);
 };
 
-exports.compositeFactor = function(value) {
+exports.compositeFactor = function(value: number): number {
   return sample(composites.filter(candidate => {
     return value % candidate === 0 || value % candidate === -0;
   }));
 };
 
-function randomPower() {
+function randomPower(): number {
   let small = range(-10, 10);
   let tiny = range(0, 3);
   let base = sample(small);
@@ -105,7 +113,7 @@ function randomPower() {
  * @param {number} len how many random numbers to generate.
  * @param {Array} exclude list of elements to omit.
  */
-function randomList(next, len, exclude = []) {
+function randomList(next: Function, len: number, exclude: Array<Numeric> = []): Array<any> {
   // Convert exclude array to an object for fast lookups.
   let omit = {};
   exclude.forEach(element => omit[element] = true);
@@ -125,7 +133,7 @@ function randomList(next, len, exclude = []) {
  * @param {Function} next generates next random.
  * @param {Object} exclude keys to skip if they show up.
  */
-function uniqueRandom(next, exclude) {
+function uniqueRandom(next: Function, exclude: ?Array<Numeric> | Object): any {
   let result;
   do {
     result = next();
