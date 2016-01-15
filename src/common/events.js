@@ -1,4 +1,5 @@
 /* @flow */
+
 exports.once = function(target: Object, eventType: string,
                         listener: (event: Event) => void,
                         useCapture: boolean): void | Promise<Event> {

@@ -1,6 +1,7 @@
 /**
  * @fileoverview Assignment generator.
  */
+
 let ClassCode = require('../ClassCode');
 let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');

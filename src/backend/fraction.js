@@ -1,4 +1,5 @@
 /* @flow */
+
 let mathjs = require('mathjs');
 
 mathjs.config({number: 'fraction'});

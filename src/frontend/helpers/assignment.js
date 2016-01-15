@@ -1,4 +1,5 @@
 /* @flow */
+
 let classes = require('../store/classes');
 let colors = require('../colors');
 let debug = console.log.bind(console, '[helpers/assignment]');

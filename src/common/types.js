@@ -1,4 +1,5 @@
 /* @flow */
+
 export type AssignmentQuestion = {
   question: string;
   solution: number | string;

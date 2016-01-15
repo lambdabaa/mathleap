@@ -1,4 +1,5 @@
 /* @flow */
+
 let parse = require('./parse');
 
 import type Node from './parse';
