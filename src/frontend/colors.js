@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * @fileoverview MathLeap color palette.
  */
@@ -31,7 +32,7 @@ exports.colors = [
   '#c0003d'
 ];
 
-exports.getPalette = function(cols) {
+exports.getPalette = function(cols: number): Array<Array<string>> {
   return exports.colors.reduce((result, color, index) => {
     if (index % cols === 0) {
       result.push([]);

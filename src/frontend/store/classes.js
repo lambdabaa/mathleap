@@ -1,3 +1,5 @@
+/* @flow */
+
 let Firebase = require('firebase/lib/firebase-web');
 let colors = require('../colors');
 let createCode = require('../code').create;
@@ -12,7 +14,7 @@ let classesRef = new Firebase(`${firebaseUrl}/classes`);
 let studentsRef = new Firebase(`${firebaseUrl}/students`);
 let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
 
-exports.create = async function create() {
+exports.create = async function create(): Promise<void> {
   debug('request add class');
   let teacher = session.get('user');
   let newClassRef = classesRef.push();
@@ -28,7 +30,7 @@ exports.create = async function create() {
   debug('add class ok');
 };
 
-exports.join = async function join(code) {
+exports.join = async function join(code: string): Promise {
   let studentId = getStudentId();
   let aClass = await exports.get(code, {key: 'code'});
   let id = Object.keys(aClass)[0];
@@ -57,7 +59,7 @@ exports.join = async function join(code) {
  *   (Array) include
  *   (string) key
  */
-exports.get = async function get(id, options = {}) {
+exports.get = async function get(id: string, options: Object = {}): Promise<?Object> {
   debug('classes get', id, JSON.stringify(options));
   let ref = typeof options.key !== 'string' ?
     classesRef.child(id) :
@@ -72,14 +74,14 @@ exports.get = async function get(id, options = {}) {
   return aClass;
 };
 
-exports.update = async function update(id, details) {
+exports.update = async function update(id: string, details: Object): Promise<void> {
   debug('update class', id, details);
   let ref = classesRef.child(id);
   await request(ref, 'update', details);
   debug('update class ok');
 };
 
-exports.remove = async function remove(id) {
+exports.remove = async function remove(id: string): Promise<void> {
   debug('request delete class', id);
 
   // First find all of the students in the class.
@@ -102,7 +104,8 @@ exports.remove = async function remove(id) {
   debug('delete class ok');
 };
 
-exports.createAssignment = async function createAssignment(aClass, details) {
+exports.createAssignment = async function createAssignment(aClass: Object,
+                                                           details: Object): Promise {
   let classId = aClass.id;
   let classRef = classesRef.child(classId);
   let assignmentsRef = classRef.child('assignments');
@@ -110,12 +113,12 @@ exports.createAssignment = async function createAssignment(aClass, details) {
   await request(ref, 'set', details);
 };
 
-function getStudentId() {
+function getStudentId(): string {
   let {email} = session.get('user');
   return btoa(email);
 }
 
-function hydrateClass(aClass, include = []) {
+function hydrateClass(aClass: Object, include: Array<string> = []): Promise {
   return Promise.all(
     include.map(async function(field) {
       switch (field) {

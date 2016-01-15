@@ -1,3 +1,5 @@
+/* @flow */
+
 let Firebase = require('firebase/lib/firebase-web');
 let debug = console.log.bind(console, '[store/assignments]');
 let {firebaseUrl} = require('../constants');
@@ -6,7 +8,7 @@ let request = require('./request');
 
 let classesRef = new Firebase(`${firebaseUrl}/classes`);
 
-exports.create = async function(details) {
+exports.create = async function(details: Object): Promise<string> {
   debug('create submission', JSON.stringify(details));
   let {classId, assignmentId} = details;
   let submissionsRef = classesRef.child(
@@ -19,7 +21,8 @@ exports.create = async function(details) {
   return submissionRef.key();
 };
 
-exports.get = async function(classId, assignmentId, submissionId) {
+exports.get = async function(classId: string, assignmentId: string,
+                             submissionId: string): Promise<Object> {
   debug('get submission', JSON.stringify(arguments));
   let submissionRef = getSubmissionRef(classId, assignmentId, submissionId);
   let result = await request(submissionRef, 'once', 'value');
@@ -28,7 +31,8 @@ exports.get = async function(classId, assignmentId, submissionId) {
   return result;
 };
 
-exports.list = async function(classId, assignmentId) {
+exports.list = async function(classId: string,
+                              assignmentId: string): Promise<Object> {
   debug('list submissions', JSON.stringify(arguments));
   let ref = getSubmissionsRef(classId, assignmentId);
   let result = await request(ref, 'once', 'value');
@@ -36,10 +40,11 @@ exports.list = async function(classId, assignmentId) {
   return result;
 };
 
-exports.commitDelta = async function(classId, assignmentId, submissionId,
-                                     question, work, changes, appends, state) {
+exports.commitDelta = async function(classId: string, assignmentId: string,
+                                     submissionId: string, question: string,
+                                     work: Array<Object>, changes: Array<string>,
+                                     appends: Array<string>, state: Array<string>): Promise<void> {
   debug('commit delta', JSON.stringify(arguments));
-
   let ref = getSubmissionRef(classId, assignmentId, submissionId);
   let curr = ref.child(`/responses/${question}/work/${work.length - 1}`);
   let next = ref.child(`/responses/${question}/work/${work.length}`);
@@ -66,8 +71,9 @@ exports.commitDelta = async function(classId, assignmentId, submissionId,
   debug('commit delta ok');
 };
 
-exports.popDelta = async function(classId, assignmentId, submissionId,
-                                  question, work) {
+exports.popDelta = async function(classId: string, assignmentId: string,
+                                  submissionId: string, question: string,
+                                  work: Array<Object>): Promise<void> {
   if (work.length < 2) {
     return debug('No deltas to pop!');
   }
@@ -84,16 +90,18 @@ exports.popDelta = async function(classId, assignmentId, submissionId,
   debug('pop delta ok');
 };
 
-exports.submit = async function(classId, assignmentId, submissionId) {
+exports.submit = async function(classId: string, assignmentId: string,
+                                submissionId: string): Promise<void> {
   let ref = getSubmissionRef(classId, assignmentId, submissionId);
   await request(ref.child('complete'), 'set', true);
   debug('submission submit ok');
 };
 
-function getSubmissionsRef(classId, assignmentId) {
+function getSubmissionsRef(classId: string, assignmentId: string): Object {
   return classesRef.child(`${classId}/assignments/${assignmentId}/submissions`);
 }
 
-function getSubmissionRef(classId, assignmentId, submissionId) {
+function getSubmissionRef(classId: string, assignmentId: string,
+                          submissionId: string): Object {
   return getSubmissionsRef(classId, assignmentId).child(submissionId);
 }

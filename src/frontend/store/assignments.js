@@ -1,3 +1,5 @@
+/* @flow */
+
 let Firebase = require('firebase/lib/firebase-web');
 let debug = console.log.bind(console, '[store/assignments]');
 let {firebaseUrl} = require('../constants');
@@ -5,7 +7,7 @@ let request = require('./request');
 
 let classesRef = new Firebase(`${firebaseUrl}/classes`);
 
-exports.create = async function create(aClass, details) {
+exports.create = async function create(aClass: Object, details: Object): Promise<void> {
   debug('create assignment', JSON.stringify(aClass), JSON.stringify(details));
   let classId = aClass.id;
   let classRef = classesRef.child(classId);
@@ -15,7 +17,7 @@ exports.create = async function create(aClass, details) {
   debug('create assignment ok');
 };
 
-exports.get = async function get(classId, assignmentId) {
+exports.get = async function get(classId: string, assignmentId: string): Promise<Object> {
   debug('get assignment', classId, assignmentId);
   let assignmentRef = classesRef.child(
     `${classId}/assignments/${assignmentId}`

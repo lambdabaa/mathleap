@@ -1,3 +1,5 @@
+/* @flow */
+
 let Firebase = require('firebase/lib/firebase-web');
 let debug = console.log.bind(console, '[store/teachers]');
 let {firebaseUrl} = require('../constants');
@@ -6,19 +8,17 @@ let users = require('./users');
 
 let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
 
-exports.create = async function(options) {
+exports.create = async function(options: Object): Promise<void> {
+  let uid = await users.create({email: options.email, password: options.password});
+
   let teacher = {
     email: options.email,
     title: options.title,
     first: options.first,
     last: options.last,
-    role: 'teacher'
+    role: 'teacher',
+    uid
   };
-
-  teacher.uid = await users.create({
-    email: options.email,
-    password: options.password
-  });
 
   let ref = teachersRef.child(btoa(teacher.email));
   await request(ref, 'set', teacher);

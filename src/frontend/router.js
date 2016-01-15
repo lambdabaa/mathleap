@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * @fileoverview Tiny client-side router implementation based on hashchange.
  */
@@ -7,9 +8,14 @@ let React = require('react');
 let {inherits} = require('util');
 let {someValue} = require('../common/array');
 
-function Router(options = {}) {
+type Route = {
+  element: Object;
+  params: Object;
+  view: string;
+};
+
+function Router(options: Object = {}) {
   this.routes = [];
-  this.view = null;
   if ('miss' in options) {
     this.route('/404', options.miss);
     this.miss = options.miss;
@@ -18,15 +24,17 @@ function Router(options = {}) {
 
 inherits(Router, EventEmitter);
 
-Router.prototype.start = function() {
+Router.prototype.view = null;
+
+Router.prototype.start = function(): void {
   window.onhashchange = () => this.emit('change');
 };
 
-Router.prototype.route = function(urlFormat, component) {
+Router.prototype.route = function(urlFormat: string, component: Function): void {
   let keys = [];
   let parts = urlFormat
     .split('/')
-    .map(part => {
+    .map(function(part): string {
       if (part.charAt(0) !== ':') {
         return part;
       }
@@ -34,23 +42,28 @@ Router.prototype.route = function(urlFormat, component) {
       keys.push(part.substring(1));
       return '([^\/]+)';
     })
-    .filter(part => !!part.length);
+    .filter(function(part): boolean {
+      return !!part.length;
+    });
 
   let regex = new RegExp(`^#!/${parts.join('\/')}\/?$`);
-  this.routes.push((params = {}) => {
+  this.routes.push(function(params: Object = {}): Route | boolean {
     let match = regex.exec(location.hash);
     if (match === null) {
       return false;
     }
 
-    keys.forEach((key, index) => params[key] = match[index + 1]);
     this.view = urlFormat;
+    keys.forEach(function(key: string, index: number): void {
+      params[key] = match[index + 1];
+    });
+
     return {
       element: React.createElement(component, params),
-      params: params,
+      params,
       view: urlFormat
     };
-  });
+  }.bind(this));
 };
 
 Router.prototype.load = function(options) {

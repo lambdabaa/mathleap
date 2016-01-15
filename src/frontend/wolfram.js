@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * @fileoverview Wolfram alpha api client.
  */
@@ -17,7 +18,7 @@ let parser = new DOMParser();
  * Take some wolfram query like 'x = 2(x + 1)', send it along,
  * and resolve with the http response body.
  */
-exports.executeQuery = function(query) {
+exports.executeQuery = function(query: string): Promise<string> {
   let input = encodeURIComponent(query);
   let request = new Xhr();
   request.open('GET', `${apiUrl}&input=${input}`);
@@ -28,7 +29,7 @@ exports.executeQuery = function(query) {
 /**
  * Parse wolfram's response xml and look for a solution pod.
  */
-exports.findSolution = function(res) {
+exports.findSolution = function(res: string): string {
   debug('parsing solution from response', res);
   let doc = parser.parseFromString(res, 'text/xml');
   let node = getChildByTagName(
@@ -43,15 +44,14 @@ exports.findSolution = function(res) {
     'plaintext'
   );
 
-  return node.textContent
-    .replace('', '=');
+  return node.textContent.replace('', '=');
 };
 
-function getChildByTagName(element, tagName, test) {
-  test = test || identity.bind(null, true);
+function getChildByTagName(element: HTMLElement, tagName: string,
+                           test: Function = identity.bind(null, true)): HTMLElement {
   return getChild(element, child => child.tagName === tagName && test(child));
 }
 
-function getChild(element, test) {
+function getChild(element: HTMLElement, test: Function) {
   return Array.from(element.childNodes).find(test);
 }

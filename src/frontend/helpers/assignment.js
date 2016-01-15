@@ -95,7 +95,7 @@ exports.findOrCreateSubmission = async function(classId: string,
  * Create a new, in-progress, empty submission.
  */
 exports.createStudentSubmission = function(classId: string,
-                                           assignment: FBAssignment): Promise<FBSubmission> {
+                                           assignment: FBAssignment): Promise<string> {
   debug('createStudentSubmission', stringify(arguments));
   let responses = assignment.questions.map(question => {
     return {

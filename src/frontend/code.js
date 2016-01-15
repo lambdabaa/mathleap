@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * @fileoverview Generate pseudo unique class identifiers.
  */
@@ -15,7 +16,7 @@ let alphabet = range(48, 58)  // 10: 0-9
   .map(String.fromCharCode)
   .map(chr => chr.length > 1 ? chr[0] : chr);
 
-exports.create = function() {
+exports.create = function(): string {
   // First create a number from 3 hex digits and the 3-13th timestamp digits.
   return exports.encode(
     random(1, 16) *
@@ -25,7 +26,7 @@ exports.create = function() {
   );
 };
 
-exports.encode = function(input) {
+exports.encode = function(input: number): string {
   return times(8, () => {
     let digit = input % 68;  // 68 is alphabet size.
     input = Math.floor(input / 68);
@@ -35,9 +36,14 @@ exports.encode = function(input) {
   .join('');
 };
 
-exports.decode = function(input) {
-  return mapChar(input, chr => alphabet.indexOf(chr))
-  .reduce((sum, digit, index) => {
+exports.decode = function(input: string): number {
+  return mapChar(
+    input,
+    function(chr: string): number {
+      return alphabet.indexOf(chr);
+    }
+  )
+  .reduce(function(sum: number, digit: number, index: number): number {
     return sum + digit * Math.pow(68, index);
-  }, 0);
+  });
 };

@@ -1,3 +1,5 @@
+/* @flow */
+
 let Firebase = require('firebase/lib/firebase-web');
 let bridge = require('../bridge');
 let debug = console.log.bind(console, '[store/questions]');
@@ -12,12 +14,17 @@ let sample = require('lodash/collection/sample');
 let topics = Array.from(require('./topics'));
 let values = require('lodash/object/values');
 
+import type {
+  AssignmentQuestion,
+  AssignmentSection
+} from '../../common/types';
+
 const topicsRef = new Firebase(`${firebaseUrl}/topics`);
 
 let typeToQuestionsRef = {};
 
-topics.forEach((topic, i) => {
-  topic.types.forEach((questionType, j) => {
+topics.forEach(function(topic: Object, i: number): void {
+  topic.types.forEach(function(questionType: Object, j: number): void {
     typeToQuestionsRef[questionType.name] = topicsRef
       .child('' + i)
       .child('types')
@@ -29,39 +36,52 @@ topics.forEach((topic, i) => {
 /**
  * @param {Array} composition spec for assignment.
  */
-exports.createAssignment = async function(composition) {
+exports.createAssignment = async function(
+    composition: Array<AssignmentSection>): Promise<Array<AssignmentQuestion>> {
   let typeToCount = mapValues(
-    groupBy(composition, part => part.type.name),
-    parts => parts.reduce((total, part) => total + part.count, 0)
+    groupBy(
+      composition,
+      function(part: AssignmentSection): string {
+        return part.type.name;
+      }
+    ),
+    function(parts: Array<AssignmentSection>): number {
+      return parts.reduce(function(total: number, part: AssignmentSection): number {
+        return total + part.count;
+      }, 0);
+    }
   );
 
   let typeToQuestions = {};
   await Promise.all(
-    map(typeToCount, async function(count, type) {
-      let cached = await readQuestionsFromCache(type, count);
-      if (cached.length === count) {
-        debug('We were able to read enough questions from the cache. Yay!');
-        typeToQuestions[type] = cached;
-        return;
+    map(
+      typeToCount,
+      async function(count: number, type: string): Promise<void> {
+        let cached = await readQuestionsFromCache(type, count);
+        if (cached.length === count) {
+          debug('We were able to read enough questions from the cache. Yay!');
+          typeToQuestions[type] = cached;
+          return;
+        }
+
+        debug('We need to generate some additional questions.');
+        let generated = await bridge(
+          'createQuestions',
+          count - cached.length,
+          type,
+          {exclude: pluck(cached, 'solution')}
+        );
+
+        debug('Cache the generated questions.');
+        await addQuestionsToCache(type, generated);
+        debug('Cache OK.');
+        typeToQuestions[type] = cached.concat(generated);
       }
-
-      debug('We need to generate some additional questions.');
-      let generated = await bridge(
-        'createQuestions',
-        count - cached.length,
-        type,
-        {exclude: pluck(cached, 'solution')}
-      );
-
-      debug('Cache the generated questions.');
-      await addQuestionsToCache(type, generated);
-      debug('Cache OK.');
-      typeToQuestions[type] = cached.concat(generated);
-    })
+    )
   );
 
   return flatten(
-    composition.map(part => {
+    composition.map(function(part: AssignmentSection): Array<AssignmentQuestion> {
       let type = part.type.name;
       let count = part.count;
       let questions = typeToQuestions[type];
@@ -76,7 +96,8 @@ exports.createAssignment = async function(composition) {
   );
 };
 
-async function readQuestionsFromCache(type, max) {
+async function readQuestionsFromCache(type: string,
+                                      max: number): Promise<Array<AssignmentQuestion>> {
   debug('readQuestionsFromCache', JSON.stringify(arguments));
   let ref = typeToQuestionsRef[type];
   debug('Cache read ref', ref.toString());
@@ -95,7 +116,7 @@ async function readQuestionsFromCache(type, max) {
   return questions;
 }
 
-function addQuestionsToCache(type, questions) {
+function addQuestionsToCache(type: string, questions: Array<AssignmentQuestion>): Promise {
   debug('addQuestionsToCache', JSON.stringify(arguments));
   let ref = typeToQuestionsRef[type];
   return Promise.all(

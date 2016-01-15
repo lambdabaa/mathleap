@@ -1,3 +1,5 @@
+/* @flow */
+
 let Firebase = require('firebase/lib/firebase-web');
 let debug = console.log.bind(console, '[store/users]');
 let {firebaseUrl} = require('../constants');
@@ -11,13 +13,13 @@ let teachersRef = baseRef.child('teachers');
 
 let subscription;
 
-exports.create = async function(credentials) {
+exports.create = async function(credentials: Object): Promise<string> {
   let user = await request(baseRef, 'createUser', credentials);
   debug('create user ok', JSON.stringify(user));
   return user.uid;
 };
 
-exports.login = async function(credentials) {
+exports.login = async function(credentials: Object): Promise<void> {
   let auth = await request(baseRef, 'authWithPassword', credentials);
   debug('login ok', JSON.stringify(auth));
   let key = btoa(credentials.email);
@@ -30,7 +32,7 @@ exports.login = async function(credentials) {
   subscription.on('val', user => session.set('user', user));
 };
 
-exports.logout = function() {
+exports.logout = function(): void {
   if (subscription) {
     subscription.cancel();
   }

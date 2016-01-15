@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * @fileoverview Main application frontend entrypoint.
  */
@@ -9,19 +10,19 @@ let ReactDOM = require('react-dom');
 let Router = require('./router');
 let session = require('./session');
 
-function main() {
+function main(): void {
   let router = createRouter();
   observeLocation(router);
   ReactDOM.render(<Container router={router} />, $('#container'));
 }
 
-function observeLocation(router) {
+function observeLocation(router: Router): void {
   let hash = location.hash;
   if (hash.length < 2) {
     location.hash = '#!/home/';
   }
 
-  session.on('user', user => {
+  session.on('user', function(user: Object): void {
     if (user) {
       if (router.view === '/home') {
         location.hash = '#!/classes/';
@@ -41,10 +42,9 @@ function observeLocation(router) {
         location.hash = '#!/home/';
     }
   });
-
 }
 
-function createRouter() {
+function createRouter(): Router {
   let router = new Router({miss: require('./components/NotFound')});
   router.route('/home', require('./components/Home'));
   router.route('/tos', require('./components/Tos'));

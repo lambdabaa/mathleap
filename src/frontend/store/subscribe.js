@@ -1,6 +1,8 @@
+/* @flow */
+
 let listeners = {};
 
-module.exports = function(ref, ...args) {
+module.exports = function(ref: Object, ...args: any): Object {
   let result = {};
   let methods = [];
 
@@ -36,6 +38,6 @@ module.exports = function(ref, ...args) {
   return result;
 };
 
-function hash(ref, method) {
+function hash(ref: Object, method: string): string {
   return `${ref.toString()}:${method}`;
 }

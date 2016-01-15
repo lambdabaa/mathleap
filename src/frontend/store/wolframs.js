@@ -1,3 +1,5 @@
+/* @flow */
+
 let Firebase = require('firebase/lib/firebase-web');
 let debug = console.log.bind(console, '[store/wolframs]');
 let {firebaseUrl} = require('../constants');
@@ -6,7 +8,7 @@ let wolfram = require('../wolfram');
 
 let wolframsRef = new Firebase(`${firebaseUrl}/wolframs`);
 
-exports.get = async function(query) {
+exports.get = async function(query: string): Promise<string> {
   debug('get wolfram', query);
   let ref = wolframsRef.child(query);
   let res = await readWolframFromCache(ref);
@@ -17,20 +19,13 @@ exports.get = async function(query) {
   return wolfram.findSolution(res);
 };
 
-async function cacheWolfram(query, ref) {
+async function cacheWolfram(query: string, ref: Object): Promise<string> {
   debug('copy query to cache', query);
   let result = await wolfram.executeQuery(query);
   await request(ref, 'set', result);
   return result;
 }
 
-async function readWolframFromCache(ref) {
-  let result;
-  try {
-    result = await request(ref, 'once', 'value');
-  } catch (error) {
-    debug('error reading wolfram cache', error.toString());
-  }
-
-  return result;
+function readWolframFromCache(ref: Object): Promise<string> {
+  return request(ref, 'once', 'value');
 }

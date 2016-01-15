@@ -1,3 +1,5 @@
+/* @flow */
+
 let defer = require('../../common/defer');
 
 /**
@@ -15,7 +17,7 @@ module.exports = async function(ref, method, ...args) {
 };
 */
 
-module.exports = function request(ref, method, ...args) {
+module.exports = function request(ref: Object, method: string, ...args: any): Promise {
   let deferred = defer();
   switch (method) {
     case 'once':

@@ -1,8 +1,14 @@
+/* @flow */
 /**
  * @fileoverview Translate a keyboard event to a string character.
  */
 
-module.exports = function(event) {
+type KeyboardEvent = {
+  keyCode: number;
+  shiftKey: boolean;
+};
+
+module.exports = function(event: KeyboardEvent): ?string {
   let chr;
   switch (event.keyCode) {
     case 48:

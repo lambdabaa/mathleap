@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * @fileoverview Reactive cookie abstraction.
  */
@@ -6,17 +7,19 @@ let {EventEmitter} = require('events');
 let debug = console.log.bind(console, '[session]');
 let forEach = require('lodash/collection/forEach');
 
+type Primitive = string | number | boolean;
+
 class Session extends EventEmitter {
   constructor() {
     super();
     this._hydrate();
   }
 
-  get(key) {
+  get(key: Primitive): any {
     return key ? this.data[key] : this.data;
   }
 
-  set(key, value) {
+  set(key: Primitive, value: any): void {
     debug(`set ${key}=${JSON.stringify(value)}`);
     this.data[key] = value;
     super.emit('change');
@@ -24,7 +27,7 @@ class Session extends EventEmitter {
     process.nextTick(() => this._persist());
   }
 
-  clear() {
+  clear(): void {
     debug('clear');
     // This will expire all of the cookies.
     this._persist('Thu, 01 Jan 1970 00:00:00 UTC');
@@ -39,7 +42,7 @@ class Session extends EventEmitter {
     super.emit('change');
   }
 
-  _hydrate() {
+  _hydrate(): void {
     this.data = {};
     let cookies = document.cookie.split(';');
     cookies.forEach(cookie => {
@@ -51,7 +54,7 @@ class Session extends EventEmitter {
     });
   }
 
-  _persist(expiration = getExpirationGMTString()) {
+  _persist(expiration: string = getExpirationUTCString()): void {
     forEach(this.data, (value, key) => {
       value = typeof value === 'object' ? JSON.stringify(value) : value;
       document.cookie = `${key}=${value};expires=${expiration}`;
@@ -59,7 +62,7 @@ class Session extends EventEmitter {
   }
 }
 
-function safeParse(value) {
+function safeParse(value: any): any {
   let result;
   try {
     result = JSON.parse(value);
@@ -73,15 +76,15 @@ function safeParse(value) {
 /**
  * Cookie should expire one month from now.
  */
-function getExpirationGMTString() {
+function getExpirationUTCString(): string {
   let expiration = new Date();
   expiration.setMonth(expiration.getMonth() + 1);
-  return expiration.toGMTString();
+  return expiration.toUTCString();
 }
 
 let session = module.exports = new Session();
 
-session.on('newListener', (topic, fn) => {
+session.on('newListener', function(topic: string, fn: Function): void {
   if (topic === 'change') {
     return;
   }
