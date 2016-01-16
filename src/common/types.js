@@ -29,6 +29,15 @@ export type Assignment = {
   preview: ?Array<AssignmentQuestion>;
 };
 
+export type FBClass = {
+  assignments: Object;
+  code: string;
+  color: string;
+  name: string;
+  students: Object;
+  teacher: string;
+};
+
 export type FBAssignment = {
   '.key': string;
   name: string;
@@ -53,6 +62,15 @@ export type FBSubmission = {
   classId: string;
   studentId: string;
   complete: boolean;
-  responses: Object;
+  responses: Array<FBResponse>;
 };
 
+export type FBResponse = {
+  question: AssignmentQuestion;
+  work: Array<FBQuestionStep>;
+};
+
+export type FBQuestionStep = {
+  operation: string;
+  state: Array<string>;
+};

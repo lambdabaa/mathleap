@@ -9,17 +9,13 @@ let charFromKeyEvent = require('../../charFromKeyEvent');
 let classes = require('../../store/classes');
 let clone = require('lodash/lang/cloneDeep');
 let debug = console.log.bind(console, '[components/submissions/Edit]');
+let editor = require('../../helpers/editor');
 let {firebaseUrl} = require('../../constants');
-let includes = require('lodash/collection/includes');
 let map = require('lodash/collection/map');
 let {mapChar} = require('../../../common/string');
-let {someValue} = require('../../../common/array');
+let preventDefault = require('../../preventDefault');
 let submissions = require('../../store/submissions');
 let times = require('lodash/utility/times');
-
-let skipStops = Object.freeze(
-  ['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']
-);
 
 let navigationHotkeys = Object.freeze({
   'ctrl a': 'Move cursor to beginning of active equation',
@@ -335,9 +331,9 @@ module.exports = React.createClass({
       return equation;
     }
 
-    let {isCursorVisible} = this.state;
+    let {drag, isCursorVisible} = this.state;
     let [left, right] = equation.split('=');
-    let highlight = this._applyDragToHighlight();
+    let highlight = editor.applyDragToHighlight(this.state.highlight, cursor, drag);
 
     function renderChar(index) {
       let style = {};
@@ -537,34 +533,16 @@ module.exports = React.createClass({
     switch (event.keyCode) {
       case 37:  // left
         event.preventDefault();
-        if (cursor === 0) {
-          return;
-        }
-
-        do {
-          cursor -= 1;
-          let chr = equation.charAt(cursor);
-          if (includes(skipStops, chr)) {
-            break;
-          }
-        } while (cursor > 0);
-
-        return this.setState({cursor, isCursorVisible: true});
+        return this.setState({
+          cursor: editor.moveCursorLeft(cursor, equation),
+          isCursorVisible: true
+        });
       case 39:  // right
         event.preventDefault();
-        if (cursor === equation.length) {
-          return;
-        }
-
-        do {
-          cursor += 1;
-          let chr = equation.charAt(cursor);
-          if (includes(skipStops, chr)) {
-            break;
-          }
-        } while (cursor < equation.length);
-
-        return this.setState({cursor, isCursorVisible: true});
+        return this.setState({
+          cursor: editor.moveCursorRight(cursor, equation),
+          isCursorVisible: true
+        });
       case 65:  // a
         event.preventDefault();
         return this.setState({cursor: 0});
@@ -655,91 +633,26 @@ module.exports = React.createClass({
     event.preventDefault();
     event.stopPropagation();
 
-    let operator;
-    switch (event.keyCode) {
-      case 54:
-        if (event.shiftKey) { operator = '^'; }
-        break;
-      case 56:
-        if (event.shiftKey) { operator = '*'; }
-        break;
-      case 61:
-      case 187:
-        if (event.shiftKey) { operator = '+'; }
-        break;
-      case 173:
-      case 179:
-      case 189:
-        operator = '-';
-        break;
-      case 191:
-        operator = '/';
-        break;
-      default:
-        break;
-    }
-
-    debug('handle first char', operator);
-
-    if (!operator) {
-      debug('random characters typed...?');
+    let result = await editor.applyFirstChar(event, this.state);
+    if (!result) {
       return;
     }
 
-    let {equation, cursor} = this.state;
-    let split = equation.indexOf('=');
-    if (cursor <= split) {
-      cursor = split + 1;
-    } else {
-      cursor = equation.length + 2;
-    }
-
-    let [leftParens, rightParens] = await Promise.all(
-      equation.split('=').map(async (expression) => {
-        let expressionPriority = await bridge('getPriority', expression);
-        let operatorPriority = getOperatorPriority(operator);
-        return operatorPriority > expressionPriority;
-      })
-    );
-
     this._saveState();
-    this.setState({append: operator, cursor, leftParens, rightParens});
+    this.setState(result);
   },
 
   _handleBothSidesChar: function(event) {
     debug('handle both sides char');
-    let {append, cursor, equation, leftParens, rightParens} = this.state;
-
-    let offset;
-    let split = equation.indexOf('=');
-    if (cursor <= split + append.length) {
-      cursor = split + append.length;
-      offset = 1;
-    } else {
-      cursor = equation.length + 2 * append.length;
-      offset = 2;
-    }
-
-    if (event.keyCode === 8) {
-      append = append.slice(0, append.length - 1);
-      cursor -= offset;
-      if (!append.length) {
-        leftParens = false;
-        rightParens = false;
-      }
-    } else {
-      let chr = charFromKeyEvent(event);
-      if (!chr) {
-        return debug('Unable to resolve character from key event');
-      }
-
-      append += chr;
-      cursor += offset;
-    }
-
     event.preventDefault();
+
+    let result = editor.applyBothSidesChar(event, this.state);
+    if (!result) {
+      return;
+    }
+
     this._saveState();
-    this.setState({append, cursor, leftParens, rightParens});
+    this.setState(result);
   },
 
   _handleSelections: async function(event, highlights) {
@@ -760,45 +673,20 @@ module.exports = React.createClass({
 
   _handleSelection: function(event, start, end) {
     debug('handle selection', JSON.stringify(arguments));
-    let args;
-    if (event.keyCode === 8) {
-      // TODO(gaye): Temporary workaround for
-      //     https://github.com/gaye/ml/issues/79
-      if (start === end) {
-        args = [
-          {type: 'cancel', range: [start + 1 , end + 1]},
-          start
-        ];
-      } else {
-        args = [
-          {type: 'cancel', range: [start, end]},
-          start
-        ];
-      }
-    } else {
-      let chr = charFromKeyEvent(event);
-      if (!chr) {
-        return debug('Unable to resolve character from key event');
-      }
+    event.preventDefault();
 
-      args = [
-        {type: 'replace', range: [start, end], replacement: chr},
-        start + 1
-      ];
+    let args = editor.selectionToDiffArgs(event, start, end);
+    if (!Array.isArray(args)) {
+      return;
     }
 
-    event.preventDefault();
     return this._appendDelta(...args);
   },
 
   _handleUndo: async function() {
     debug('handle undo');
-    let {undos, redos} = this.state;
-    if (undos.length) {
-      let next = undos.pop();
-      redos.push(this.state);
-      next.undos = undos;
-      next.redos = redos;
+    let next = editor.undoChar(this.state.undos, this.state.redos, this.state);
+    if (next) {
       return this.replaceState(next);
     }
 
@@ -812,16 +700,10 @@ module.exports = React.createClass({
 
   _handleRedo: async function() {
     debug('handle redo');
-    let {undos, redos} = this.state;
-    if (!redos.length) {
-      return debug('no undos to redo!');
+    let next = editor.redoChar(this.state.undos, this.state.redos, this.state);
+    if (next) {
+      this.replaceState(next);
     }
-
-    let next = redos.pop();
-    undos.push(this.state);
-    next.undos = undos;
-    next.redos = redos;
-    this.replaceState(next);
   },
 
   _saveState: function() {
@@ -831,33 +713,7 @@ module.exports = React.createClass({
   },
 
   _getHighlights: function() {
-    let result = [];
-    // The goal here is to find the maximal contiguous highlights.
-    let {highlight} = this.state;
-    let start = null;
-    for (let i = 0; i < highlight.length; i++) {
-      if (start === null) {
-        // Possibly block start
-        start = highlight[i] ? i : null;
-        continue;
-      }
-
-      if (!highlight[i]) {
-        // End of block
-        result.push({start, end: i - 1});
-        start = null;
-        continue;
-      }
-
-      // Still in a block...
-    }
-
-    // Check to make sure we didn't end on a highlight.
-    if (start !== null) {
-      result.push({start, end: highlight.length - 1});
-    }
-
-    return result;
+    return editor.getHighlights(this.state.highlight);
   },
 
   _appendDelta: async function(delta, cursor) {
@@ -893,29 +749,17 @@ module.exports = React.createClass({
   _commitDelta: async function() {
     let {aClass, assignment, submission} = this.props;
     let {responses, num, changes, equation, append, leftParens, rightParens} = this.state;
-    let {work} = responses[num];
-    let [left, right] = equation.split('=');
-    let result = right ?
-      [
-        {value: left, parens: leftParens},
-        {value: right, parens: rightParens}
-      ]
-      .map(side => {
-        let {value, parens} = side;
-        return `${parens ? '(' : ''}${value}${parens ? ')' : ''}${append}`;
-      })
-      .join('=') :
-      left;
-
-    await submissions.commitDelta(
+    await editor.commitDelta(
       aClass,
       assignment,
       submission,
+      responses,
       num,
-      work,
-      [changes],
-      [append],
-      [result]
+      changes,
+      equation,
+      append,
+      leftParens,
+      rightParens
     );
 
     // This will reset all of our work on the current state.
@@ -932,8 +776,9 @@ module.exports = React.createClass({
   _handleCursorReposition: function(event) {
     debug('cursor reposition', event);
     event.stopPropagation();
+
     this.setState({
-      cursor: eventToCursorPosition(event),
+      cursor: editor.eventToCursorPosition(event),
       isCursorVisible: true,
       isMousePressed: true
     });
@@ -945,27 +790,18 @@ module.exports = React.createClass({
       return;
     }
 
-    this.setState({drag: eventToCursorPosition(event)});
+    this.setState({drag: editor.eventToCursorPosition(event)});
   },
 
   _commitCursorHighlight: function(event) {
     debug('commit cursor highlight', event);
     event.stopPropagation();
+
+    let {highlight, cursor, drag} = this.state;
     this.setState({
-      highlight: this._applyDragToHighlight(),
+      highlight: editor.applyDragToHighlight(highlight, cursor, drag),
       isMousePressed: false,
       drag: null
-    });
-  },
-
-  _applyDragToHighlight: function() {
-    let {highlight, cursor, drag} = this.state;
-    return highlight.map((value, index) => {
-      return drag === null ||
-             index > cursor - 1 && index > drag ||
-             index < cursor && index < drag ?
-        value :
-        !value;
     });
   },
 
@@ -979,52 +815,3 @@ module.exports = React.createClass({
     this.setState({isHelpDialogShown: false});
   }
 });
-
-function eventToCursorPosition(event) {
-  let element = event.target;
-  while (!element.classList.contains('submissions-edit-active')) {
-    element = element.parentNode;
-  }
-
-  let rect = element.getBoundingClientRect();
-  let eventX = event.clientX - rect.left;
-
-  let children = Array.from(
-    element.getElementsByClassName('submissions-edit-character')
-  );
-
-  let pos = someValue(children, (childNode, index) => {
-    let childRect = childNode.getBoundingClientRect();
-    let childLeft = childRect.left - rect.left;
-    let childRight = childRect.right - rect.left;
-    if (childRight >= eventX) {
-      // Choose whichever of left side and right side of character
-      // is closer to the event.
-      let leftDist = Math.abs(childLeft - eventX);
-      let rightDist = Math.abs(childRight - eventX);
-      return leftDist < rightDist ? index : index + 1;
-    }
-  });
-
-  return typeof pos === 'number' ? pos : children.length;
-}
-
-function getOperatorPriority(operator) {
-  switch (operator) {
-    case '+':
-    case '-':
-      return 0;
-    case '*':
-      return 1;
-    case '/':
-      return 2;
-    case '^':
-      return 3;
-    default:
-      throw new Error(`Unexpected operator ${operator}`);
-  }
-}
-
-function preventDefault(event) {
-  event.preventDefault();
-}
