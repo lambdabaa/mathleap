@@ -6,5 +6,5 @@
 module.exports = function(x: number): number {
   let floor = Math.floor(x);
   let ceil = Math.ceil(x);
-  return [floor, ceil, x].find(p => Math.abs(x - p) < 0.0000000001);
+  return [floor, ceil, x].find((p: number): boolean => Math.abs(x - p) < 0.0000000001);
 };

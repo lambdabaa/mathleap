@@ -47,10 +47,10 @@ Router.prototype.route = function(urlFormat: string, component: Function): void 
     });
 
   let regex = new RegExp(`^#!/${parts.join('\/')}\/?$`);
-  this.routes.push(function(params: Object = {}): Route | boolean {
+  this.routes.push((params: Object): ?Route => {
     let match = regex.exec(location.hash);
     if (match === null) {
-      return false;
+      return null;
     }
 
     this.view = urlFormat;
@@ -63,11 +63,11 @@ Router.prototype.route = function(urlFormat: string, component: Function): void 
       params,
       view: urlFormat
     };
-  }.bind(this));
+  });
 };
 
-Router.prototype.load = function(options) {
-  let result = someValue(this.routes, route => route(options));
+Router.prototype.load = function(options: Object = {}) {
+  let result = someValue(this.routes, (route: Function): ?Route => route(options));
   if (result) {
     return result;
   }

@@ -5,7 +5,10 @@
 
 exports.mapChar = function(str: string, fn: (chr: string, i: number) => any): Array<any> {
   let result = [];
-  exports.eachChar(str, (chr, index) => result.push(fn(chr, index)));
+  exports.eachChar(str, function(chr: string, index: number): void {
+    result.push(fn(chr, index));
+  });
+
   return result;
 };
 

@@ -33,15 +33,18 @@ exports.colors = [
 ];
 
 exports.getPalette = function(cols: number): Array<Array<string>> {
-  return exports.colors.reduce((result, color, index) => {
-    if (index % cols === 0) {
-      result.push([]);
-    }
+  return exports.colors.reduce(
+    function(result: Array<Array<string>>, color: string, index: number): Array<Array<string>> {
+      if (index % cols === 0) {
+        result.push([]);
+      }
 
-    let last = result[result.length - 1];
-    last.push(color);
-    return result;
-  }, []);
+      let last = result[result.length - 1];
+      last.push(color);
+      return result;
+    },
+    []
+  );
 };
 
 exports.random = sample.bind(null, exports.colors);

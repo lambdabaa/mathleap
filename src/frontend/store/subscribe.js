@@ -2,7 +2,9 @@
 
 let listeners = {};
 
-module.exports = function(ref: Object, ...args: any): Object {
+type Subscription = {on: Function, cancel: Function};
+
+module.exports = function(ref: Object, ...args: any): Subscription {
   let result = {};
   let methods = [];
 
@@ -20,17 +22,19 @@ module.exports = function(ref: Object, ...args: any): Object {
 
   result.cancel = () => {
     ref.off(...args);
-    methods.forEach(method => {
+    methods.forEach((method: string): void => {
       let key = hash(ref, method);
       delete listeners[key];
     });
   };
 
   args.push(snapshot => {
-    methods.forEach(method => {
+    methods.forEach((method: string): void => {
       let data = snapshot[method]();
       let key = hash(ref, method);
-      listeners[key].forEach(listener => listener(data));
+      listeners[key].forEach((listener: Function): void => {
+        listener(data);
+      });
     });
   });
 

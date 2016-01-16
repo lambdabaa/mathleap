@@ -45,5 +45,5 @@ function maybeParse(expression: Node | string): Node {
 }
 
 function isDivide(factorlist: Node): boolean {
-  return factorlist.data.some(factor => factor.invert);
+  return factorlist.data.some((factor: Object): boolean => factor.invert);
 }

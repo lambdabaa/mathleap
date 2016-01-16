@@ -45,7 +45,7 @@ class Session extends EventEmitter {
   _hydrate(): void {
     this.data = {};
     let cookies = document.cookie.split(';');
-    cookies.forEach(cookie => {
+    cookies.forEach((cookie: string): void => {
       cookie = cookie.trim();
       let split = cookie.indexOf('=');
       let key = cookie.slice(0, split);
@@ -55,7 +55,7 @@ class Session extends EventEmitter {
   }
 
   _persist(expiration: string = getExpirationUTCString()): void {
-    forEach(this.data, (value, key) => {
+    forEach(this.data, function(value: any, key: Primitive) {
       value = typeof value === 'object' ? JSON.stringify(value) : value;
       document.cookie = `${key}=${value};expires=${expiration}`;
     });
@@ -89,5 +89,7 @@ session.on('newListener', function(topic: string, fn: Function): void {
     return;
   }
 
-  process.nextTick(() => fn(session.get(topic)));
+  process.nextTick((): void => {
+    fn(session.get(topic));
+  });
 });

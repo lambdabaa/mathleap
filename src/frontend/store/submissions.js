@@ -6,6 +6,8 @@ let {firebaseUrl} = require('../constants');
 let includes = require('lodash/collection/includes');
 let request = require('./request');
 
+import type {FBSubmission} from '../../common/types';
+
 let classesRef = new Firebase(`${firebaseUrl}/classes`);
 
 exports.create = async function(details: Object): Promise<string> {
@@ -22,7 +24,7 @@ exports.create = async function(details: Object): Promise<string> {
 };
 
 exports.get = async function(classId: string, assignmentId: string,
-                             submissionId: string): Promise<Object> {
+                             submissionId: string): Promise<FBSubmission> {
   debug('get submission', JSON.stringify(arguments));
   let submissionRef = getSubmissionRef(classId, assignmentId, submissionId);
   let result = await request(submissionRef, 'once', 'value');

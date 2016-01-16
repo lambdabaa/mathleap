@@ -83,7 +83,7 @@ function randomFactor(value: number): number {
   return sample(
     positives
       .concat(negatives)
-      .filter(candidate => {
+      .filter((candidate: number): boolean => {
         return value % candidate === 0 || value % candidate === -0;
       })
   );
@@ -95,9 +95,11 @@ exports.factor = function(value: number, exclude: ?Array<Numeric> | Object): num
 };
 
 exports.compositeFactor = function(value: number): number {
-  return sample(composites.filter(candidate => {
-    return value % candidate === 0 || value % candidate === -0;
-  }));
+  return sample(
+    composites.filter((candidate: number): boolean => {
+      return value % candidate === 0 || value % candidate === -0;
+    })
+  );
 };
 
 function randomPower(): number {
@@ -116,15 +118,17 @@ function randomPower(): number {
 function randomList(next: Function, len: number, exclude: Array<Numeric> = []): Array<any> {
   // Convert exclude array to an object for fast lookups.
   let omit = {};
-  exclude.forEach(element => omit[element] = true);
+  exclude.forEach((element: Numeric): void => {
+    omit[element] = true;
+  });
 
   let uniq = {};
-  times(len, () => {
+  times(len, (): void => {
     let nextRandom = next(Object.assign({}, omit, uniq));
     uniq[nextRandom] = true;
   });
 
-  return Object.keys(uniq).map(key => {
+  return Object.keys(uniq).map((key: string): Numeric => {
     return /^-?[0-9]+$/.test(key) ? parseInt(key) : key;
   });
 }
