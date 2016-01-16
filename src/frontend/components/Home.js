@@ -115,8 +115,7 @@ module.exports = React.createClass({
             Math assignments made <span className="emph">easy</span>.
           </div>
           <div className="subline">
-            <span className="emph">Hassle-free</span> practice and feedback
-            opportunities for your students.
+            Generated, <span className="emph">self-grading</span> math assignments for students to solve online.
           </div>
           <div className="home-signup-button unselectable"
                onClick={this._handleSignup}>
