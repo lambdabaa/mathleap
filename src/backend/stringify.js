@@ -74,7 +74,7 @@ let handleNode = {
   }
 };
 
-function stringify(node: Node, parentPriority: ?number = Infinity): string {
+function stringify(node: Node, parentPriority: number = Infinity): string {
   return handleNode[node.nodeType](node, parentPriority);
 }
 

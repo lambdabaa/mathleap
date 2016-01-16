@@ -5,19 +5,11 @@ let debug = console.log.bind(console, '[store/assignments]');
 let {firebaseUrl} = require('../constants');
 let request = require('./request');
 
+import type {FBAssignment} from '../../common/types';
+
 let classesRef = new Firebase(`${firebaseUrl}/classes`);
 
-exports.create = async function create(aClass: Object, details: Object): Promise<void> {
-  debug('create assignment', JSON.stringify(aClass), JSON.stringify(details));
-  let classId = aClass.id;
-  let classRef = classesRef.child(classId);
-  let assignmentsRef = classRef.child('assignments');
-  let ref = assignmentsRef.push();
-  await request(ref, 'set', details);
-  debug('create assignment ok');
-};
-
-exports.get = async function get(classId: string, assignmentId: string): Promise<Object> {
+exports.get = async function get(classId: string, assignmentId: string): Promise<FBAssignment> {
   debug('get assignment', classId, assignmentId);
   let assignmentRef = classesRef.child(
     `${classId}/assignments/${assignmentId}`

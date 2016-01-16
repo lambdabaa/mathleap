@@ -27,7 +27,7 @@ exports.create = function(): string {
 };
 
 exports.encode = function(input: number): string {
-  return times(8, () => {
+  return times(8, (): number => {
     let digit = input % 68;  // 68 is alphabet size.
     input = Math.floor(input / 68);
     return digit;

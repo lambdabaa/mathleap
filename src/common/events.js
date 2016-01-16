@@ -1,6 +1,6 @@
 /* @flow */
 
-exports.once = function(target: Object, eventType: string,
+exports.once = function(target: EventTarget, eventType: string,
                         listener: (event: Event) => void,
                         useCapture: boolean): void | Promise<Event> {
   if (typeof listener !== 'function') {
@@ -13,7 +13,7 @@ exports.once = function(target: Object, eventType: string,
   return nodeStyleOnce.apply(this, arguments);
 };
 
-function nodeStyleOnce(target: Object, eventType: string,
+function nodeStyleOnce(target: EventTarget, eventType: string,
                        listener: (event: Event) => void,
                        useCapture: boolean): void {
   exports.on(target, eventType, function callback() {
@@ -22,13 +22,13 @@ function nodeStyleOnce(target: Object, eventType: string,
   }, useCapture);
 }
 
-exports.on = function(target: Object, eventType: string,
+exports.on = function(target: EventTarget, eventType: string,
                       listener: (event: Event) => void,
                       useCapture: boolean = false) {
   target.addEventListener(eventType, listener, useCapture);
 };
 
-exports.off = function(target: Object, eventType: string,
+exports.off = function(target: EventTarget, eventType: string,
                        listener: (event: Event) => void,
                        useCapture: boolean = false): void {
   target.removeEventListener(eventType, listener, useCapture);

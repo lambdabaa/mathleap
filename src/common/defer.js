@@ -5,7 +5,7 @@
 
 type Deferred = {
   promise: Promise;
-  resolve: (x: ?any) => void;
+  resolve: (x: any) => void;
   reject: (x: Error) => void;
 };
 

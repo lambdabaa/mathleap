@@ -10,6 +10,8 @@ let request = require('./request');
 let session = require('../session');
 let values = require('lodash/object/values');
 
+import type {FBClass} from '../../common/types';
+
 let classesRef = new Firebase(`${firebaseUrl}/classes`);
 let studentsRef = new Firebase(`${firebaseUrl}/students`);
 let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
@@ -59,7 +61,7 @@ exports.join = async function join(code: string): Promise {
  *   (Array) include
  *   (string) key
  */
-exports.get = async function get(id: string, options: Object = {}): Promise<?Object> {
+exports.get = async function get(id: string, options: Object = {}): Promise<?FBClass> {
   debug('classes get', id, JSON.stringify(options));
   let ref = typeof options.key !== 'string' ?
     classesRef.child(id) :
@@ -90,7 +92,7 @@ exports.remove = async function remove(id: string): Promise<void> {
   let students = await request(classStudentsRef, 'once', 'value');
   let studentIds = values(students);
   await Promise.all(
-    studentIds.map(async (studentId) => {
+    studentIds.map(async (studentId: string): Promise => {
       let studentClassesRef = studentsRef
         .child(studentId)
         .child('classes');
@@ -104,7 +106,7 @@ exports.remove = async function remove(id: string): Promise<void> {
   debug('delete class ok');
 };
 
-exports.createAssignment = async function createAssignment(aClass: Object,
+exports.createAssignment = async function createAssignment(aClass: FBClass,
                                                            details: Object): Promise {
   let classId = aClass.id;
   let classRef = classesRef.child(classId);
@@ -118,7 +120,7 @@ function getStudentId(): string {
   return btoa(email);
 }
 
-function hydrateClass(aClass: Object, include: Array<string> = []): Promise {
+function hydrateClass(aClass: FBClass, include: Array<string> = []): Promise {
   return Promise.all(
     include.map(async function(field) {
       switch (field) {

@@ -30,6 +30,7 @@ export type Assignment = {
 };
 
 export type FBClass = {
+  id: ?string;
   assignments: Object;
   code: string;
   color: string;
@@ -40,6 +41,7 @@ export type FBClass = {
 
 export type FBAssignment = {
   '.key': string;
+  id: ?string;
   name: string;
   deadline: string;
   questions: Object;
@@ -58,6 +60,7 @@ export type FBStudent = {
 
 export type FBSubmission = {
   '.key': string;
+  id: ?string;
   assignmentId: string;
   classId: string;
   studentId: string;

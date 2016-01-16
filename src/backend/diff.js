@@ -35,7 +35,7 @@ type Char = string | number;  // char code or string length 1.
 type DeltaV1 = {chr: Char; pos: number; highlight: ?number};
 type DeltaV2 = {type: string, range: Array<number>, replacement: string};
 type Diff = {result: string, changes: Array<string>};
-type Block = {type: 'string', range: Array<number>, len: number};
+type Block = {type: string, range: Array<number>, len: number};
 type BlockAndIndex = {block: Block, index: number};
 type BlocksAndCursor = {blocks: Array<Block>, cursor: number};
 
@@ -62,7 +62,7 @@ module.exports = function(statement: string, deltas: Array<DeltaV2>): Diff  {
             highlight: range[1] !== null ? range[1] + 1 : null
           }];
 
-          eachChar(delta.replacement.slice(1), (chr: string, index: number) => {
+          eachChar(delta.replacement.slice(1), function(chr: string, index: number): void {
             result.push({
               pos: range[0] + index + 1,
               chr: replacement.charCodeAt(index + 1),
@@ -99,7 +99,7 @@ module.exports.applyDiff = function applyDiff(deltas: Array<DeltaV1>, stmt: stri
 module.exports.getChanges = function getChanges(deltas: Array<DeltaV1>,
                                                 stmt: string): Array<string> {
   let {blocks} = deltas.reduce(
-    function(data: Object, delta: DeltaV1): BlocksAndCursor {
+    function(data: BlocksAndCursor, delta: DeltaV1): BlocksAndCursor {
       let fn = delta.highlight ? handleHighlight : handleChar;
       let result = fn(data.blocks, data.cursor, delta);
       return Array.isArray(result) ?
@@ -175,38 +175,40 @@ function handleHighlight(blocks: Array<Block>, cursor: number,
 
   // Now we've ruled out the case where there was only one block selected so
   // we know that we start in one block and end in another.
-  return selected.map((item, i) => {
-    block = item.block;
-    index = item.index;
-    if (i === 0) {
-      // This could either be a right selection or an outer selection.
-      if (block.type === 'highlight') {
-        return handleHighlightSelection(block, chr, left, block.len);
+  return selected.map(
+    function(item: BlockAndIndex, i: number): Array<Block> | BlocksAndCursor {
+      block = item.block;
+      index = item.index;
+      if (i === 0) {
+        // This could either be a right selection or an outer selection.
+        if (block.type === 'highlight') {
+          return handleHighlightSelection([block], chr, 0, left, block.len);
+        }
+
+        return left === 0 ?
+          handleOuterSelection(blocks, index, chr) :
+          handleRightSelection(blocks, block, index, chr, left);
       }
 
-      return left === 0 ?
-        handleOuterSelection(blocks, index, chr) :
-        handleRightSelection(blocks, block, index, chr, left);
-    }
+      if (i === selected.length - 1) {
+        // This could either be a left selection or an outer selection.
+        if (block.type === 'highlight') {
+          return handleHighlightSelection([block], chr, 0, 0, right);
+        }
 
-    if (i === selected.length - 1) {
-      // This could either be a left selection or an outer selection.
-      if (block.type === 'highlight') {
-        return handleHighlightSelection(block, chr, 0, right);
+        return right === block.len ?
+          handleOuterSelection(blocks, index, chr) :
+          handleRightSelection(blocks, block, index, chr, right);
       }
 
-      return right === block.len ?
-        handleOuterSelection(blocks, index, chr) :
-        handleRightSelection(blocks, block, index, chr, right);
-    }
+      // Now we know that this is an outer selection.
+      if (block.type === 'highlight') {
+        return handleHighlightSelection([block], chr, 0, 0, block.len);
+      }
 
-    // Now we know that this is an outer selection.
-    if (block.type === 'highlight') {
-      return handleHighlightSelection(block, chr, 0, block.len);
+      return handleOuterSelection(blocks, index, chr);
     }
-
-    return handleOuterSelection(blocks, index, chr);
-  })[0];
+  )[0];
 }
 
 /**
