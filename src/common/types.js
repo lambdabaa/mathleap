@@ -48,13 +48,21 @@ export type FBAssignment = {
   submissions: Object;
 };
 
-export type FBStudent = {
-  '.key': string;
+export type FBTeacher = {
+  id: ?string;
   email: string;
   first: string;
   last: string;
   role: string;
-  uid: string;
+  title: string;
+};
+
+export type FBStudent = {
+  id: ?string;
+  email: string;
+  first: string;
+  last: string;
+  role: string;
   username: string;
 };
 

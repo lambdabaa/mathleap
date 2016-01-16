@@ -30,7 +30,7 @@ module.exports = React.createClass({
     session.on('user', this._onUser);
     this.bindAsArray(
       studentsRef
-        .child(btoa(student.email))
+        .child(student.id)
         .child('classes'),
       'classIds'
     );

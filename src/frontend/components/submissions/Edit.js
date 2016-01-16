@@ -378,7 +378,7 @@ module.exports = React.createClass({
         ];
       }
 
-      if (index === left.length + append.length + 1 + right.length) {
+      if (right && index === left.length + append.length + 1 + right.length) {
         return [
           rightParens &&
           <div key="rightp1" className="submissions-edit-character unselectable">)</div>,
@@ -387,6 +387,18 @@ module.exports = React.createClass({
       }
 
       return result;
+    }
+
+    if (!right) {
+      return <div key={JSON.stringify({equation, cursor})}
+                  className="submissions-edit-active"
+                  onMouseDown={this._handleCursorReposition}
+                  onMouseMove={this._stageCursorHighlight}
+                  onMouseUp={this._commitCursorHighlight}>
+        {times(cursor, renderChar)}
+        {isCursorVisible && <div className="submissions-edit-cursor unselectable">|</div>}
+        {times(equation.length - cursor + 1, i => renderChar(cursor + i))}
+      </div>;
     }
 
     return <div key={JSON.stringify({equation, cursor})}
@@ -437,6 +449,7 @@ module.exports = React.createClass({
   },
 
   _selectQuestion: function(num) {
+    debug('select question', num);
     let {responses} = this.state;
     let {work} = responses[num];
     let equation = work[work.length - 1].state[0];

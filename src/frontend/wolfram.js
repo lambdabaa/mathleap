@@ -5,10 +5,10 @@
 
 let {DOMParser} = require('xmldom');
 let Xhr = require('./xhr');
+let appId = require('./constants').wolframAppId;
 let debug = require('../common/debug')('wolfram');
 let identity = require('lodash/utility/identity');
 
-const appId = 'Q3XHGL-AKGL7KJHR3';
 const baseUrl = `http://api.wolframalpha.com/v2/query`;
 const apiUrl = `${baseUrl}?appid=${appId}&format=plaintext`;
 

@@ -88,7 +88,7 @@ module.exports = React.createClass({
       if (key) {
         status = submission.complete ?
           <a className="clickable-text"
-             href={`#!/classes/${aClass}/assignments/${theAssignment}/submissions/${submission}/`}>
+             href={`#!/classes/${aClass.id}/assignments/${theAssignment.id}/submissions/${key}/`}>
             <div style={{color: '#3996f0'}}>Submitted</div>
           </a> :
           'In progress';

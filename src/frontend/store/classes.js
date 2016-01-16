@@ -18,40 +18,50 @@ let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
 
 exports.create = async function create(): Promise<void> {
   debug('request add class');
-  let teacher = session.get('user');
-  let newClassRef = classesRef.push();
-  let color = colors.random();
+  let teacher = session.get('user').id;
   let code = createCode();
-  await request(newClassRef, 'set', {
-    name: 'Untitled Class',
-    teacher: teacher.uid,
-    color,
-    code
-  });
+  let color = colors.random();
+
+  let teacherClassRef = teachersRef
+    .child(teacher)
+    .child('classes')
+    .child(code);
+  let classRef = classesRef.child(code);
+
+  await Promise.all([
+    request(teacherClassRef, 'set', code),
+    request(classRef, 'set', {
+      name: 'Untitled Class',
+      teacher: teacher,
+      color,
+      code
+    })
+  ]);
 
   debug('add class ok');
 };
 
 exports.join = async function join(code: string): Promise {
-  let studentId = getStudentId();
-  let aClass = await exports.get(code, {key: 'code'});
-  let id = Object.keys(aClass)[0];
-
-  let classStudentRef = classesRef
-    .child(id)
-    .child('students')
-    .push();
+  let student = session.get('user').id;
+  let {teacher} = await exports.get(code);
 
   let studentClassRef = studentsRef
-    .child(studentId)
+    .child(student)
     .child('classes')
-    .push();
+    .child(code);
+  let classStudentRef = classesRef
+    .child(code)
+    .child('students')
+    .child(student);
+  let studentTeacherRef = studentsRef
+    .child(student)
+    .child('teachers')
+    .child(teacher);
 
-  // TODO(gaye): We should make this a single request so we don't
-  //     get in a bad state if one but not both requests succeeds.
   await Promise.all([
-    request(classStudentRef, 'set', studentId),   // add to class/:id/students
-    request(studentClassRef, 'set', id)           // add to student/:id/classes
+    request(studentClassRef, 'set', code),
+    request(classStudentRef, 'set', student),
+    request(studentTeacherRef, 'set', teacher)
   ]);
 };
 
@@ -61,7 +71,7 @@ exports.join = async function join(code: string): Promise {
  *   (Array) include
  *   (string) key
  */
-exports.get = async function get(id: string, options: Object = {}): Promise<?FBClass> {
+exports.get = async function get(id: string, options: Object = {}): Promise {
   debug('classes get', id, JSON.stringify(options));
   let ref = typeof options.key !== 'string' ?
     classesRef.child(id) :
@@ -115,21 +125,12 @@ exports.createAssignment = async function createAssignment(aClass: FBClass,
   await request(ref, 'set', details);
 };
 
-function getStudentId(): string {
-  let {email} = session.get('user');
-  return btoa(email);
-}
-
 function hydrateClass(aClass: FBClass, include: Array<string> = []): Promise {
   return Promise.all(
     include.map(async function(field) {
       switch (field) {
         case 'teacher':
-          let ref = teachersRef
-            .orderByChild('uid')
-            .equalTo(aClass.teacher);
-          let teachers = await request(ref, 'once', 'value');
-          aClass.teacher = teachers[Object.keys(teachers)[0]];
+          aClass.teacher = await request(teachersRef.child(aClass.teacher), 'once', 'value');
           break;
         default:
           throw new Error(`Unknown include key ${field}`);

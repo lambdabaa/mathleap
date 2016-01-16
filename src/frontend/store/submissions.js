@@ -12,15 +12,14 @@ let classesRef = new Firebase(`${firebaseUrl}/classes`);
 
 exports.create = async function(details: Object): Promise<string> {
   debug('create submission', JSON.stringify(details));
-  let {classId, assignmentId} = details;
-  let submissionsRef = classesRef.child(
-    `${classId}/assignments/${assignmentId}/submissions`
+  let {classId, assignmentId, studentId} = details;
+  let ref = classesRef.child(
+    `${classId}/assignments/${assignmentId}/submissions/${studentId}`
   );
 
-  let submissionRef = submissionsRef.push();
-  await request(submissionRef, 'set', details);
+  await request(ref, 'set', details);
   debug('create submission ok');
-  return submissionRef.key();
+  return ref.key();
 };
 
 exports.get = async function(classId: string, assignmentId: string,

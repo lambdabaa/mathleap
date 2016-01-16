@@ -1,6 +1,7 @@
 {
   "firebase": "mathleap",
   "public": ".",
+  "rules": "config/security.json",
 
   "headers": [
     {
