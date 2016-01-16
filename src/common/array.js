@@ -34,7 +34,7 @@ exports.replaceIndex = function(arr: Array<any>, index: number,
  * of applying the test function instead of the key.
  */
 exports.someValue = function(arr: Array<any>,
-                             fn: (x: any, i: number) => boolean): any {
+                             fn: (x: any, i: number) => any): any {
   let result;
   for (let i = 0; i < arr.length; i++) {
     result = fn(arr[i], i);

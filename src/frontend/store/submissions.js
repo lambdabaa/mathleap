@@ -41,8 +41,8 @@ exports.list = async function(classId: string,
 };
 
 exports.commitDelta = async function(classId: string, assignmentId: string,
-                                     submissionId: string, question: string,
-                                     work: Array<Object>, changes: Array<string>,
+                                     submissionId: string, question: number,
+                                     work: Array<Object>, changes: Array<Array<string>>,
                                      appends: Array<string>, state: Array<string>): Promise<void> {
   debug('commit delta', JSON.stringify(arguments));
   let ref = getSubmissionRef(classId, assignmentId, submissionId);
