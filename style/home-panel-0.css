@@ -39,7 +39,7 @@
 
 .subline > .emph {
   border-bottom: 1px solid black;
-  margin-right: 5px;
+  margin: 0 5px;
 }
 
 .home-signup-button {
