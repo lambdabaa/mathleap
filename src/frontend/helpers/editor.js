@@ -2,7 +2,7 @@
 
 let bridge = require('../bridge');
 let charFromKeyEvent = require('../charFromKeyEvent');
-let debug = console.log.bind(console, '[helpers/editor]');
+let debug = require('../../common/debug')('helpers/editor');
 let includes = require('lodash/collection/includes');
 let {someValue} = require('../../common/array');
 let submissions = require('../store/submissions');

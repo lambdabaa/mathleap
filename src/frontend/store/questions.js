@@ -2,7 +2,7 @@
 
 let Firebase = require('firebase/lib/firebase-web');
 let bridge = require('../bridge');
-let debug = console.log.bind(console, '[store/questions]');
+let debug = require('../../common/debug')('store/questions');
 let {firebaseUrl} = require('../constants');
 let flatten = require('lodash/array/flatten');
 let groupBy = require('lodash/collection/groupBy');

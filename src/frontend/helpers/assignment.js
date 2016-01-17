@@ -2,7 +2,7 @@
 
 let classes = require('../store/classes');
 let colors = require('../colors');
-let debug = console.log.bind(console, '[helpers/assignment]');
+let debug = require('../../common/debug')('helpers/assignment');
 let findKey = require('lodash/object/findKey');
 let moment = require('moment');
 let questions = require('../store/questions');

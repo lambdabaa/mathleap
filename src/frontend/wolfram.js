@@ -5,7 +5,7 @@
 
 let {DOMParser} = require('xmldom');
 let Xhr = require('./xhr');
-let debug = console.log.bind(console, '[wolfram]');
+let debug = require('../common/debug')('wolfram');
 let identity = require('lodash/utility/identity');
 
 const appId = 'Q3XHGL-AKGL7KJHR3';

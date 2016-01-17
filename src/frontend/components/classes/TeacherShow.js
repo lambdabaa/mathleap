@@ -6,7 +6,7 @@ let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let assignment = require('../../helpers/assignment');
 let classes = require('../../store/classes');
-let debug = console.log.bind(console, '[components/classes/Show]');
+let debug = require('../../../common/debug')('components/classes/TeacherShow');
 let {firebaseUrl} = require('../../constants');
 let students = require('../../store/students');
 

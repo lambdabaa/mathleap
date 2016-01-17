@@ -3,7 +3,7 @@
 let Firebase = require('firebase/lib/firebase-web');
 let colors = require('../colors');
 let createCode = require('../code').create;
-let debug = console.log.bind(console, '[store/classes]');
+let debug = require('../../common/debug')('store/classes');
 let findKey = require('lodash/object/findKey');
 let {firebaseUrl} = require('../constants');
 let request = require('./request');

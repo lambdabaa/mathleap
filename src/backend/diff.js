@@ -25,7 +25,7 @@
  *     to list of deltas to apply.
  */
 
-let debug = console.log.bind(console, '[diff]');
+let debug = require('../common/debug')('diff');
 let {eachChar} = require('../common/string');
 let flatten = require('lodash/array/flatten');
 let span = require('lodash/utility/range');

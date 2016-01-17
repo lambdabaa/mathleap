@@ -1,7 +1,7 @@
 /* @flow */
 
 let Firebase = require('firebase/lib/firebase-web');
-let debug = console.log.bind(console, '[store/wolframs]');
+let debug = require('../../common/debug')('store/wolframs');
 let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let wolfram = require('../wolfram');
