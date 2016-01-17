@@ -32,8 +32,6 @@ module.exports = React.createClass({
         // Clear the transition property while we move the cloud back
         // to offstage left.
         setTransition(cloud, 'none');
-        cloud.classList.remove('right');
-        cloud.style.left = `-${window.getComputedStyle(cloud).width}`;
 
         // Full time-length transition from offstage left to offstage right.
         setTransition(cloud, 1);
@@ -115,8 +113,8 @@ module.exports = React.createClass({
             Math assignments made <span className="emph">easy</span>.
           </div>
           <div className="subline">
-            Generated, <span className="emph">self-grading</span> math assignments
-            for students to solve online.
+            Generated, self-grading math assignments for students to solve online.
+            <span className="emph">Free</span> for teachers!
           </div>
           <div className="home-signup-button unselectable"
                onClick={this._handleSignup}>
