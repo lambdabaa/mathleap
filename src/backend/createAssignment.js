@@ -99,7 +99,7 @@ createQuestion['Adding and subtracting fractions'] = function(): Array<Assignmen
 createQuestion['Arithmetic distribution'] = function(): Array<AssignmentQuestion> {
   let solutions = random.compositeList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.factor(solution, 0);
+    let a = random.factor(solution, [0]);
     let b = solution / a;
     let c = random.integerList(1, [b])[0];
     let d = Math.abs(b - c);
@@ -120,7 +120,7 @@ createQuestion['Solving equations of the form Ax = B'] = function(): Array<Assig
 createQuestion['Solving equations of the form x/A = B'] = function(): Array<AssignmentQuestion> {
   let solutions = random.compositeList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.factor(solution, 0);
+    let a = random.factor(solution, [0]);
     let b = solution / a;
     let x = random.letter();
     return {question: `${x}/${a}=${b}`, solution};
@@ -188,7 +188,7 @@ createQuestion['Clever distribution'] = function(): Array<AssignmentQuestion> {
   let solutions = random.superCompositeList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
     let c = random.compositeFactor(solution);
-    let a = random.factor(c, 0);
+    let a = random.factor(c, [0]);
     let b = random.integer([0]);
     let d = solution / a + b - solution / c;
     let x = random.letter();
