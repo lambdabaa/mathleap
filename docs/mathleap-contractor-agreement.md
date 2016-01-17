@@ -11,7 +11,7 @@ The Contract’s provisions are undersigned by both Client and Contractor, and a
 
 ### 1. Relationship / Overview
 
-Contractor is a QA engineering intern for Client, which includes work required for the development of mathleap.org and the operation of Client's business. Client is not required to provide benefits, insurance, paid vacation, or sick leave to Contractor.
+Contractor is a ____________________ for Client, which includes work required for the development of mathleap.org and the operation of Client's business. Client is not required to provide benefits, insurance, paid vacation, or sick leave to Contractor.
 
 ### 2. Length of Contract
 
