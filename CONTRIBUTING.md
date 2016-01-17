@@ -37,7 +37,9 @@ npm run flow  # run the type checker
 ```
 
 Note that you currently need to be online in order for all of the unit
-tests to pass since we speak to remote apis.
+tests to pass since we speak to remote apis. In addition, the debug logs
+are currently disabled by default while running tests. In order to turn them
+on, set `DEBUG=1` (ie `DEBUG=1 npm test`).
 
 ### Submitting a patch
 
