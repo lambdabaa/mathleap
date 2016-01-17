@@ -19,7 +19,7 @@ This contract begins on the date listed and can be terminated at will by either 
 
 ### 3. Payment
 
-Client agrees to pay Contractor $10/hour for work done for Client.
+Client agrees to pay Contractor ____________________ for work done for Client.
 
 ### 4. Insurance
 
