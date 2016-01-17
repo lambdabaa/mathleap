@@ -94,7 +94,7 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
-      question.should.match(/^(-?[1-9]\d*)[a-z]=(-?[1-9]\d*)$/);
+      question.should.match(/^(-?[1-9]\d*)[a-z]=(-?\d+)$/);
       let b = parseInt(RegExp.$2, 10);
       let a = parseInt(RegExp.$1, 10);
       let remainder = b % a;
@@ -108,7 +108,7 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
-      question.should.match(/^[a-z]\/(-?[1-9]\d*)=(-?[1-9]\d*)$/);
+      question.should.match(/^[a-z]\/(-?[1-9]\d*)=(-?\d+)$/);
       let a = parseInt(RegExp.$1, 10);
       let b = parseInt(RegExp.$2, 10);
       solution.should.equal(a * b);
@@ -121,7 +121,7 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question} = aQuestion;
-      question.should.match(/^[a-z][\+,\-](-?\d+)=(-?[0-9]+)$/);
+      question.should.match(/^[a-z][\+,\-](-?\d+)=(-?\d+)$/);
     });
   });
 

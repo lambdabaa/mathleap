@@ -54,7 +54,7 @@ exports.boolean = sample.bind(null, [true, false]);
 exports.letter = sample.bind(null, chrs);
 
 function randomFraction(): string {
-  let a = exports.integer();
+  let a = exports.integer([0] /* can't divide by 0 */);
   let b = exports.integer([0] /* can't divide by 0 */);
   let numerator, denominator;
   if (a > b) {
