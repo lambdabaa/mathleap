@@ -141,7 +141,7 @@ function uniqueRandom(next: Function, exclude: ?Array<Numeric> | Object): any {
   let result;
   do {
     result = next();
-  } while (!result || exclude && result in exclude);
+  } while (exclude && result in exclude);
 
   return result;
 }
