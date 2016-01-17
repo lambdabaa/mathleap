@@ -3,7 +3,7 @@
  * @fileoverview Load a polyfill iff not available in the platform.
  */
 
-let debug = console.log.bind(console, '[polyfill]');
+let debug = require('./debug')('polyfill');
 
 module.exports = function(api: string, moduleName: string): Function {
   if (typeof self !== 'undefined' && api in self) {

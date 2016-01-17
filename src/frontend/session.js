@@ -4,7 +4,7 @@
  */
 
 let {EventEmitter} = require('events');
-let debug = console.log.bind(console, '[session]');
+let debug = require('../common/debug')('session');
 let forEach = require('lodash/collection/forEach');
 
 type Primitive = string | number | boolean;

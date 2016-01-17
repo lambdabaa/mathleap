@@ -1,7 +1,7 @@
 let $ = document.querySelector.bind(document);
 let React = require('react');
 let Topbar = require('./Topbar');
-let debug = console.log.bind(console, '[components/home]');
+let debug = require('../../common/debug')('components/Home');
 let handleEnter = require('../handleEnter');
 let {on} = require('../../common/events');
 let students = require('../store/students');

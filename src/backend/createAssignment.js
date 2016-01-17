@@ -3,7 +3,7 @@
  * @fileoverview Generate random sets of questions by question type(s).
  */
 
-let debug = console.log.bind(console, '[createAssignment]');
+let debug = require('../common/debug')('createAssignment');
 let flatten = require('lodash/array/flatten');
 let find = require('lodash/collection/find');
 let groupBy = require('lodash/collection/groupBy');

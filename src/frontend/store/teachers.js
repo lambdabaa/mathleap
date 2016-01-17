@@ -1,7 +1,7 @@
 /* @flow */
 
 let Firebase = require('firebase/lib/firebase-web');
-let debug = console.log.bind(console, '[store/teachers]');
+let debug = require('../../common/debug')('store/teachers');
 let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let users = require('./users');
