@@ -8,7 +8,10 @@ let range = require('lodash/utility/range');
 let sample = require('lodash/collection/sample');
 let times = require('lodash/utility/times');
 
-type Numeric = number | string;  // we sometimes express numbers as things like "2/3"
+import type {
+  Numeric,
+  Range
+} from '../common/types';
 
 let composites = exports.composites = [
   -4, -6, -8, -9,
@@ -48,22 +51,46 @@ exports.compositeList = randomList.bind(exports, exports.composite);
 exports.superCompositeList = randomList.bind(exports, exports.superComposite);
 exports.powerList = randomList.bind(exports, exports.power);
 exports.factorList = randomList.bind(exports, exports.factor);
-exports.fraction = uniqueRandom.bind(exports, randomFraction);
-exports.fractionList = randomList.bind(exports, exports.fraction);
+exports.boundedFraction = boundedFraction;
 exports.boolean = sample.bind(null, [true, false]);
 exports.letter = sample.bind(null, chrs);
+let randomFraction = assignToFraction.bind(exports, exports.integer);
+exports.fraction = uniqueRandom.bind(exports, randomFraction);
+exports.fractionList = randomList.bind(exports, exports.fraction);
+let compositeFraction = assignToFraction.bind(exports, exports.composite);
+exports.compositeFraction = uniqueRandom.bind(exports, compositeFraction);
+exports.compositeFractionList = randomList.bind(exports, exports.compositeFraction);
 
-function randomFraction(): string {
-  let a = exports.integer([0] /* can't divide by 0 */);
-  let b = exports.integer([0] /* can't divide by 0 */);
+function assignToFraction(numberGenerator: Function): string {
+  let a = numberGenerator([0] /* can't divide by 0 */);
+  let b = numberGenerator([0, a, -a] /* can't divide by 0 */);
+
   let numerator, denominator;
-  if (a > b) {
+  if (Math.abs(a) > Math.abs(b)) {
     denominator = a;
     numerator = b;
   } else {
     denominator = b;
     numerator = a;
   }
+
+  return `${numerator}/${denominator}`;
+}
+
+function absBoundedRandomInteger(lower: number, upper: number): number {
+  return sample(range(Math.abs(lower), Math.abs(upper)));
+}
+
+function boundedFraction(bounds: {numerator: Range; denominator: Range}): string {
+  let numerator = absBoundedRandomInteger(
+    bounds.numerator.start,
+    bounds.numerator.end
+  );
+
+  let denominator = absBoundedRandomInteger(
+    Math.max(numerator, bounds.denominator.start),  // To avoid improper fractions.
+    bounds.denominator.end
+  );
 
   return `${numerator}/${denominator}`;
 }
@@ -141,7 +168,17 @@ function uniqueRandom(next: Function, exclude: ?Array<Numeric> | Object): any {
   let result;
   do {
     result = next();
-  } while (exclude && result in exclude);
+  } while (isMemberOf(exclude, result));
 
   return result;
+}
+
+function isMemberOf(container: ?Array<Numeric> | Object, element: Numeric): boolean {
+  if (!container || typeof container !== 'object') {
+    return false;
+  }
+
+  return Array.isArray(container) ?
+    container.includes(element) :
+    element in container;
 }

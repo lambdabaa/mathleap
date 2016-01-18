@@ -80,6 +80,14 @@ module.exports = [
       {
         "name": "Adding and subtracting fractions",
         "example": "1 / 4 + 2 / 4"
+      },
+      {
+        "name": "Multiplying fractions",
+        "example": "( 2 / 4 ) * ( 1 / 2 )"
+      },
+      {
+        "name": "Dividing fractions",
+        "example": "( 3 / 8 ) / ( 3 / 4 )"
       }
     ]
   }

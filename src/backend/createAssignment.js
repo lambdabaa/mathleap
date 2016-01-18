@@ -9,21 +9,21 @@ let find = require('lodash/collection/find');
 let groupBy = require('lodash/collection/groupBy');
 let isInteger = require('./isInteger');
 let mapValues = require('lodash/object/mapValues');
+let fraction = require('./fraction');
 let random = require('./random');
 let range = require('lodash/utility/range');
 let round = require('./round');
 
 import type {
   AssignmentQuestion,
-  AssignmentSection
+  AssignmentSection,
+  Numeric
 } from '../common/types';
 
 /**
  * createQuestion functions get called with two arguments:
  * a count which is the number of questions to generate
- * and an options object with the following options:
- *
- *   (Array.<number>) exclude - don't generate solutions in this list.
+ * and an exclude array (Array<number>)
  */
 let createQuestion = {};
 createAssignment.createQuestion = createQuestion;
@@ -84,17 +84,16 @@ createQuestion['Adding and subtracting fractions'] = function(): Array<Assignmen
     let operator = random.boolean() ? '+' : '-';
     let c = random.integer();
     let d = operator === '+' ? a - c : c - a;
-    let negate1 = c >= 0 !== b > 0;
-    let negate2 = d >= 0 !== b > 0;
-    let absb = Math.abs(b);
-    c = Math.abs(c);
-    d = Math.abs(d);
-
-    let left = `${negate1 ? '-' : ''}${c}/${absb}`;
-    let right = `${negate2 ? '(-' : ''}${d}/${absb}${negate2 ? ')' : ''}`;
-    return {question: `${left}${operator}${right}`, solution: `${a}/${b}`};
+    return {
+      question: `${simplifySigns(c, b)}${operator}${simplifySigns(d, b)}`,
+      solution: `${a}/${b}`
+    };
   });
 };
+
+createQuestion['Multiplying fractions'] = createFractionMultiplications.bind(null, false);
+
+createQuestion['Dividing fractions'] = createFractionMultiplications.bind(null, true);
 
 createQuestion['Arithmetic distribution'] = function(): Array<AssignmentQuestion> {
   let solutions = random.compositeList(...arguments);
@@ -201,6 +200,36 @@ createQuestion['Clever distribution'] = function(): Array<AssignmentQuestion> {
     return {question: `${left}=${right}`, solution};
   });
 };
+
+function simplifySigns(numerator: number, denominator: number): string {
+  let negative = numerator >= 0 !== denominator > 0;
+  numerator = Math.abs(numerator);
+  denominator = Math.abs(denominator);
+  return `${negative ? '-' : ''}${numerator}/${denominator}`;
+}
+
+function createFractionMultiplications(invert: boolean, count: number,
+                                       exclude: Array<Numeric> = []): Array<AssignmentQuestion> {
+  let solutions = random.compositeFractionList(count, exclude);
+  return solutions.map((solution: string): AssignmentQuestion => {
+    let [aNumerator, aDenominator] = solution.split('/').map(num => parseInt(num));
+    let [bNumerator, bDenominator] = random
+      .boundedFraction({
+        numerator: {start: Math.abs(aNumerator), end: Math.abs(aDenominator)},
+        denominator: {start: Math.abs(aNumerator), end: Math.abs(aDenominator)}
+      })
+      .split('/')
+      .map(num => parseInt(num));
+
+    let a = simplifySigns(aNumerator, aDenominator);
+    let b = simplifySigns(bNumerator, bDenominator);
+
+    let fn = (invert ? fraction.multiply : fraction.divide).bind(fraction);
+    let {s, n, d} = fn(fraction.fraction(a), fraction.fraction(b));
+    let operator = invert ? '/' : '*';
+    return {question: `(${s === -1 ? '-' : ''}${n}/${d})${operator}(${b})`, solution: `${a}`};
+  });
+}
 
 /**
  * Options:
