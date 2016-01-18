@@ -23,9 +23,7 @@ import type {
 /**
  * createQuestion functions get called with two arguments:
  * a count which is the number of questions to generate
- * and an exclude array (Array.<number>)
- *
- *
+ * and an exclude array (Array<number>)
  */
 let createQuestion = {};
 createAssignment.createQuestion = createQuestion;
@@ -86,45 +84,16 @@ createQuestion['Adding and subtracting fractions'] = function(): Array<Assignmen
     let operator = random.boolean() ? '+' : '-';
     let c = random.integer();
     let d = operator === '+' ? a - c : c - a;
-    return {question: `${simplifySigns(c, b)}${operator}${simplifySigns(d, b)}`,
-      solution: `${a}/${b}`};
+    return {
+      question: `${simplifySigns(c, b)}${operator}${simplifySigns(d, b)}`,
+      solution: `${a}/${b}`
+    };
   });
 };
-
-function simplifySigns(numerator: number, denominator: number): string {
-  let negative = numerator >= 0 !== denominator > 0;
-  numerator = Math.abs(numerator);
-  denominator = Math.abs(denominator);
-  return `${negative ? '-' : ''}${numerator}/${denominator}`;
-}
 
 createQuestion['Multiplying fractions'] = createFractionMultiplications.bind(null, false);
 
 createQuestion['Dividing fractions'] = createFractionMultiplications.bind(null, true);
-
-function createFractionMultiplications(
-  invert: boolean,
-  count: number,
-  exclude: Array<Numeric> = []): Array<AssignmentQuestion> {
-  console.log(invert, count, exclude);
-  let solutions = random.compositeFractionList(count, exclude);
-  return solutions.map((solution:string): AssignmentQuestion => {
-    let [aNumerator, aDenomenator] = solution.split('/').map(num => parseInt(num));
-    console.log("aNumerator = ", aNumerator, "aDenomenator = ", aDenomenator);
-    let [bNumerator, bDenomenator] = random
-      .boundedFraction({numerator: {start: Math.abs(aNumerator), end: Math.abs(aDenomenator)},
-        denominator: {start: Math.abs(aNumerator), end: Math.abs(aDenomenator)}})
-      .split('/')
-      .map(num => parseInt(num));
-    console.log("bNumerator = ", bNumerator, "bDenomenator = ", bDenomenator);
-    let a = simplifySigns(aNumerator, aDenomenator);
-    let b = simplifySigns(bNumerator, bDenomenator);
-    let {s, n, d} = invert ? fraction.multiply(fraction.fraction(a), fraction.fraction(b)) :
-      fraction.divide(fraction.fraction(a), fraction.fraction(b));
-    let operator = invert ? '/' : '*';
-    return {question: `(${s === -1 ? '-' : ''}${n}/${d})${operator}(${b})`, solution: `${a}`};
-  });
-}
 
 createQuestion['Arithmetic distribution'] = function(): Array<AssignmentQuestion> {
   let solutions = random.compositeList(...arguments);
@@ -231,6 +200,36 @@ createQuestion['Clever distribution'] = function(): Array<AssignmentQuestion> {
     return {question: `${left}=${right}`, solution};
   });
 };
+
+function simplifySigns(numerator: number, denominator: number): string {
+  let negative = numerator >= 0 !== denominator > 0;
+  numerator = Math.abs(numerator);
+  denominator = Math.abs(denominator);
+  return `${negative ? '-' : ''}${numerator}/${denominator}`;
+}
+
+function createFractionMultiplications(invert: boolean, count: number,
+                                       exclude: Array<Numeric> = []): Array<AssignmentQuestion> {
+  let solutions = random.compositeFractionList(count, exclude);
+  return solutions.map((solution: string): AssignmentQuestion => {
+    let [aNumerator, aDenominator] = solution.split('/').map(num => parseInt(num));
+    let [bNumerator, bDenominator] = random
+      .boundedFraction({
+        numerator: {start: Math.abs(aNumerator), end: Math.abs(aDenominator)},
+        denominator: {start: Math.abs(aNumerator), end: Math.abs(aDenominator)}
+      })
+      .split('/')
+      .map(num => parseInt(num));
+
+    let a = simplifySigns(aNumerator, aDenominator);
+    let b = simplifySigns(bNumerator, bDenominator);
+
+    let fn = (invert ? fraction.multiply : fraction.divide).bind(fraction);
+    let {s, n, d} = fn(fraction.fraction(a), fraction.fraction(b));
+    let operator = invert ? '/' : '*';
+    return {question: `(${s === -1 ? '-' : ''}${n}/${d})${operator}(${b})`, solution: `${a}`};
+  });
+}
 
 /**
  * Options:

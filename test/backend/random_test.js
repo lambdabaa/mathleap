@@ -73,6 +73,25 @@ suite('random', () => {
       Math.abs(numerator).should.be.lte(Math.abs(denominator));
     });
   });
+
+  test('#compositeFraction', () => {
+    let fraction = random.compositeFraction();
+    let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
+    checkComposite(numerator);
+    checkComposite(denominator);
+    Math.abs(numerator).should.be.lte(Math.abs(denominator));
+  });
+
+  test('#compositeFractionList', () => {
+    let result = random.compositeFractionList(10);
+    result.should.have.length(10);
+    result.forEach(fraction => {
+      let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
+      checkComposite(numerator);
+      checkComposite(denominator);
+      Math.abs(numerator).should.be.lte(Math.abs(denominator));
+    });
+  });
 });
 
 function checkInteger(integer) {
