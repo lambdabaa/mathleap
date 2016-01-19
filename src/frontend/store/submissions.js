@@ -4,9 +4,15 @@ let Firebase = require('firebase/lib/firebase-web');
 let debug = require('../../common/debug')('store/assignments');
 let {firebaseUrl} = require('../constants');
 let includes = require('lodash/collection/includes');
+let {isEqual} = require('../wolfram2');
+let map = require('lodash/collection/map');
 let request = require('./request');
 
-import type {FBSubmission} from '../../common/types';
+import type {
+  FBResponse,
+  FBSubmission,
+  FBQuestionStep
+} from '../../common/types';
 
 let classesRef = new Firebase(`${firebaseUrl}/classes`);
 
@@ -93,8 +99,32 @@ exports.popDelta = async function(classId: string, assignmentId: string,
 
 exports.submit = async function(classId: string, assignmentId: string,
                                 submissionId: string): Promise<void> {
-  let ref = getSubmissionRef(classId, assignmentId, submissionId);
-  await request(ref.child('complete'), 'set', true);
+  let submissionRef = getSubmissionRef(classId, assignmentId, submissionId);
+
+  // First mark the submission complete.
+  await request(submissionRef.child('complete'), 'set', true);
+
+  // Now we're going to check all of the problems.
+  let {responses} = await exports.get(classId, assignmentId, submissionId);
+  await Promise.all(
+    map(responses, async function (response: FBResponse, i: string): Promise {
+      let {question, work} = response;
+      debug(`Grading response to ${question.question}`);
+      await Promise.all(
+        map(work, async function(step: FBQuestionStep, j: string): Promise {
+          let eql = await isEqual(
+            step.state[0].replace('=', '=='),
+            question.solution.toString().replace('=', '==')
+          );
+
+          debug(`Checking step ${j} ${step.state[0]}... `, eql ? '✔' : '✗');
+          let errorRef = submissionRef.child(`/responses/${i}/work/${j}/error`);
+          await request(errorRef, 'set', !eql);
+        })
+      );
+    })
+  );
+
   debug('submission submit ok');
 };
 
