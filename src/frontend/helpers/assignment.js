@@ -3,7 +3,7 @@
 let classes = require('../store/classes');
 let colors = require('../colors');
 let debug = require('../../common/debug')('helpers/assignment');
-let findKey = require('lodash/object/findKey');
+let {isNonNullObject} = require('../../common/object');
 let moment = require('moment');
 let questions = require('../store/questions');
 let reduce = require('lodash/collection/reduce');
@@ -105,7 +105,7 @@ exports.createStudentSubmission = function(classId: string,
   });
 
   let assignmentId = assignment['.key'];
-  let studentId = session.get('user').uid;
+  let studentId = session.get('user').id;
   return submissions.create({
     classId,
     assignmentId,
@@ -118,14 +118,12 @@ exports.createStudentSubmission = function(classId: string,
 exports.getSubmission = function(assignment: FBAssignment, student: FBStudent): Object {
   debug('getSubmission', stringify(arguments));
   let submissionList = assignment.submissions;
-  let {uid} = student;
-  let key = findKey(submissionList, function(submission: FBSubmission): boolean {
-    return submission.studentId === uid;
-  });
+  if (!isNonNullObject(submissionList)) {
+    return {key: null, submission: null};
+  }
 
-  return key == null ?
-    {key: null, submission: null} :
-    {key, submission: submissionList[key]};
+  let submission = submissionList[student.id];
+  return {key: submission == null ? null : student.id, submission};
 };
 
 exports.getStudentSubmission = function(assignment: FBAssignment): Object {

@@ -80,10 +80,10 @@ suite('helpers/assignment', () => {
   suite('submission', () => {
     let subject = {
       submissions: {
-        a: {studentId: '54321', complete: false},
-        b: {studentId: '12345', complete: true},
-        c: {studentId: 'abcde', complete: false},
-        d: {student: 'bob', complete: true}
+        '54321': {studentId: '54321', complete: false},
+        '12345': {studentId: '12345', complete: true},
+        'abcde': {studentId: 'abcde', complete: false},
+        'bob': {student: 'bob', complete: true}
       }
     };
 
@@ -92,11 +92,11 @@ suite('helpers/assignment', () => {
     });
 
     test('#getSubmission', () => {
-      assignment.getSubmission(subject, {uid: '12345'})
+      assignment.getSubmission(subject, {id: '12345'})
       .should
       .deep
       .equal({
-        key: 'b',
+        key: '12345',
         submission: {
           studentId: '12345',
           complete: true
@@ -105,12 +105,12 @@ suite('helpers/assignment', () => {
     });
 
     test('#getStudentSubmission', () => {
-      session.set('user', {uid: '12345'});
+      session.set('user', {id: '12345'});
       assignment.getStudentSubmission(subject)
       .should
       .deep
       .equal({
-        key: 'b',
+        key: '12345',
         submission: {
           studentId: '12345',
           complete: true
@@ -119,31 +119,31 @@ suite('helpers/assignment', () => {
     });
 
     test('#containsStudentSubmission true', () => {
-      session.set('user', {uid: '12345'});
+      session.set('user', {id: '12345'});
       assignment.containsStudentSubmission(subject)
       .should
       .equal(true);
     });
 
     test('#containsStudentSubmission true', () => {
-      session.set('user', {uid: 'vwxyz'});
+      session.set('user', {id: 'vwxyz'});
       assignment.containsStudentSubmission(subject)
       .should
       .equal(false);
     });
 
     test('#getStudentStatus not started', () => {
-      session.set('user', {uid: 'vwxyz'});
+      session.set('user', {id: 'vwxyz'});
       assignment.getStudentStatus(subject).should.equal('Not started');
     });
 
     test('#getStudentStatus in progress', () => {
-      session.set('user', {uid: '54321'});
+      session.set('user', {id: '54321'});
       assignment.getStudentStatus(subject).should.equal('In progress');
     });
 
     test('#getStudentStatus submitted', () => {
-      session.set('user', {uid: '12345'});
+      session.set('user', {id: '12345'});
       assignment.getStudentStatus(subject).should.equal('Submitted');
     });
 

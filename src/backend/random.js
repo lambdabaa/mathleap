@@ -3,6 +3,7 @@
  * @fileoverview Utility methods to generate random data.
  */
 
+let {isNonNullObject} = require('../common/object');
 let random = require('lodash/number/random');
 let range = require('lodash/utility/range');
 let sample = require('lodash/collection/sample');
@@ -174,11 +175,12 @@ function uniqueRandom(next: Function, exclude: ?Array<Numeric> | Object): any {
 }
 
 function isMemberOf(container: ?Array<Numeric> | Object, element: Numeric): boolean {
-  if (!container || typeof container !== 'object') {
+  if (!isNonNullObject(container)) {
     return false;
   }
 
   return Array.isArray(container) ?
     container.includes(element) :
+    // $FlowFixMe: isNonNullObject rules out the possibility that container is null.
     element in container;
 }

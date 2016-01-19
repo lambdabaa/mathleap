@@ -11,7 +11,7 @@ let {getPalette} = require('../../colors');
 let handleEnter = require('../../handleEnter');
 let session = require('../../session');
 
-let classesRef = new Firebase(`${firebaseUrl}/classes`);
+let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
 
 module.exports = React.createClass({
   displayName: 'classes/TeacherList',
@@ -22,6 +22,7 @@ module.exports = React.createClass({
     return {
       user: session.get('user'),
       classes: [],
+      classIds: [],
       editable: null
     };
   },
@@ -29,13 +30,41 @@ module.exports = React.createClass({
   componentWillMount: function() {
     let teacher = this.state.user;
     this.bindAsArray(
-      classesRef
-        .orderByChild('teacher')
-        .equalTo(teacher.uid),
-      'classes'
+      teachersRef
+        .child(teacher.id)
+        .child('classes'),
+      'classIds'
     );
 
     session.on('user', this._onUser);
+  },
+
+  componentDidMount: function() {
+    this._updateClasses(this.state);
+  },
+
+  componentWillUpdate: function(props, state) {
+    let clean =
+      state.classIds.length === state.classes.length &&
+      state.classes.every((aClass, index) => {
+        return aClass ?
+          aClass.id === state.classIds[index]['.value'] :
+          true;
+      });
+
+    if (clean) {
+      return;
+    }
+
+    this._updateClasses(state);
+  },
+
+  _updateClasses: async function(state) {
+    // ReactFire keeps the list of classIds which we're taking up-to-date
+    // but it's our job to turn those into actual classes.
+    let ids = state.classIds.map(obj => obj['.value']);
+    let update = await Promise.all(ids.map(classes.get));
+    this.setState({classes: update});
   },
 
   componentWillUnmount: function() {
@@ -140,23 +169,13 @@ module.exports = React.createClass({
            style={{backgroundColor: aClass.color}}
            onClick={this._handleEditClass.bind(this, index, 'color')}>
       </div>
-      <div className="clickable-text"
-           onClick={this._handleShowClass.bind(this, aClass)}>
+      <a className="clickable-text" href={`#!/classes/${aClass.id}/`}>
         {aClass.name}
-      </div>
+      </a>
       <img className="list-action-btn"
            src="style/images/edit_btn.png"
            onClick={this._handleEditClass.bind(this, index, 'name')} />
     </div>;
-  },
-
-  _handleShowClass: function(aClass) {
-    debug('show class', JSON.stringify(aClass));
-    if (this.state.editable !== null) {
-      this.setState({editable: null});
-    }
-
-    location.hash = `#!/classes/${aClass['.key']}/`;
   },
 
   _handleAddClass: function() {
@@ -184,7 +203,8 @@ module.exports = React.createClass({
 
   _updateClass: async function(aClass, details) {
     debug('update class', JSON.stringify(aClass), JSON.stringify(details));
-    await classes.update(aClass['.key'], details);
+    await classes.update(aClass.id, details);
+    await this._updateClasses(this.state);
     this.setState({editable: null});
   },
 
@@ -198,6 +218,6 @@ module.exports = React.createClass({
       return;
     }
 
-    return classes.remove(aClass['.key']);
+    return classes.remove(aClass.id);
   }
 });
