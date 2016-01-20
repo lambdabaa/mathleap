@@ -110,6 +110,12 @@ exports.submit = async function(classId: string, assignmentId: string,
     map(responses, async function (response: FBResponse, i: string): Promise {
       let {question, work} = response;
       debug(`Grading response to ${question.question}`);
+      let answer = work[work.length - 1].state[0];
+      if (helper.isCorrect(question, answer)) {
+        // No need to find mistake if we're correct.
+        return;
+      }
+
       await Promise.all(
         map(work, async function(step: FBQuestionStep, j: string): Promise {
           let eql = await isEqual(
