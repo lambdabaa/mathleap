@@ -6,6 +6,7 @@ let Topbar = require('../Topbar');
 let assignments = require('../../store/assignments');
 let classes = require('../../store/classes');
 let {firebaseUrl} = require('../../constants');
+let helper = require('../../helpers/submission');
 let session = require('../../session');
 
 module.exports = React.createClass({
@@ -69,6 +70,7 @@ module.exports = React.createClass({
                    {content: '', width: 50},
                    'Question',
                    'Answer',
+                   'Error',
                    {content: 'Result', width: 50}
                  ]}
                  rows={this._renderResults()} />
@@ -81,24 +83,39 @@ module.exports = React.createClass({
     return responses.map((response, index) => {
       let {question, work} = response;
       let answer = work[work.length - 1].state[0];
+      let correct = helper.isCorrect(question, answer);
       return [
         `${index + 1}.`,
         question.question,
         answer,
-        isCorrect(question, answer) ?
+        correct ? <div></div> : this._renderError(response),
+        correct ?
           <div style={{color: '#71ac00'}}>✔</div> :
           <div style={{color: '#e22517'}}>✗</div>
       ];
     });
   },
 
+  _renderError: function(response) {
+    let errorLine = helper.getErrorLine(response);
+    if (errorLine === -1) {
+      return <div>Incomplete: Answer can be simplified</div>;
+    }
+
+    let {work} = response;
+    return <div>
+      <span>Step: </span>
+      <span style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
+        {work[errorLine - 1].state[0]}
+      </span>
+      <span>→</span>
+      <span style={{backgroundColor: 'rgba(226, 37, 23, 0.5)'}}>
+        {work[errorLine].state[0]}
+      </span>
+    </div>;
+  },
+
   _onUser: function(user) {
     this.setState({user});
   }
 });
-
-function isCorrect(question, answer) {
-  let [left, right] = answer.split('=');
-  let solution = question.solution.toString();
-  return left === solution || right === solution;
-}

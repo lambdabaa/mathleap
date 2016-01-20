@@ -84,6 +84,7 @@ export type FBResponse = {
 export type FBQuestionStep = {
   operation: string;
   state: Array<string>;
+  error: boolean;
 };
 
 export type Numeric = string | number;
