@@ -14,19 +14,6 @@ let {wolframCloudUrl} = require('./constants');
  */
 exports.isEqual = async function(a: string, b: string): Promise<boolean> {
   debug('check equivalence', a, b);
-  if (/[a-z]/.test(a) !== /[a-z]/.test(b)) {
-    // We want to handle the case of {a: 'w/4=5', b: '20'}
-    let aVars = exports.extractVariables(a);
-    let bVars = exports.extractVariables(b);
-    if (aVars.length === 1) {
-      b = `${aVars[0]}=${b}`;
-    } else if (bVars.length === 1) {
-      a = `${bVars[0]}=${a}`;
-    } else {
-      return false;
-    }
-  }
-
   let vars = exports.extractVariablesFromMany(a, b);
   vars = `{${vars.length ? vars.join(',') : 'x'}}`;
   let req = new Xhr();

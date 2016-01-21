@@ -5,7 +5,7 @@ let debug = require('../../common/debug')('store/assignments');
 let {firebaseUrl} = require('../constants');
 let helper = require('../helpers/submission');
 let includes = require('lodash/collection/includes');
-let {isEqual} = require('../wolfram2');
+let {isEqual} = require('./wolframs');
 let map = require('lodash/collection/map');
 let request = require('./request');
 
