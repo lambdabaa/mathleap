@@ -47,5 +47,7 @@ function readWolframFromCache(a: string, b: string): Promise<?boolean> {
 }
 
 function hash(a: string, b: string): string {
-  return encodeURIComponent(btoa(JSON.stringify([a, b].sort())));
+  return btoa(JSON.stringify([a, b].sort()))
+    .replace('+', '-')
+    .replace('/', '_');
 }

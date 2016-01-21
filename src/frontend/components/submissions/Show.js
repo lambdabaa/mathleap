@@ -70,8 +70,8 @@ module.exports = React.createClass({
                    {content: '', width: 50},
                    'Question',
                    'Answer',
-                   'Error',
-                   {content: 'Result', width: 50}
+                   {content: 'Error', width: 425},
+                   {content: 'Result', width: 40}
                  ]}
                  rows={this._renderResults()} />
       </div>
@@ -97,12 +97,12 @@ module.exports = React.createClass({
   },
 
   _renderError: function(response) {
+    let {work} = response;
     let errorLine = helper.getErrorLine(response);
-    if (errorLine === -1) {
+    if (errorLine === -1 || work.length < 2) {
       return <div>Incomplete: Answer can be simplified</div>;
     }
 
-    let {work} = response;
     return <div>
       <span>Step: </span>
       <span style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
