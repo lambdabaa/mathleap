@@ -36,9 +36,4 @@ suite('wolfram2', () => {
     let equal = await w2.isEqual('6/3', '2');
     equal.should.equal(true);
   });
-
-  test('#isEqual one input is variable value', async () => {
-    let equal = await w2.isEqual('w/4=5', '20');
-    equal.should.equal(true);
-  });
 });
