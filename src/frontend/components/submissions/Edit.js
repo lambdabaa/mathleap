@@ -782,7 +782,14 @@ module.exports = React.createClass({
   _handleSubmit: async function() {
     debug('submit assignment');
     let {aClass, assignment, submission} = this.props;
-    await submissions.submit(aClass, assignment, submission);
+    try {
+      await submissions.submit(aClass, assignment, submission);
+    } catch (error) {
+      debug(error.toString());
+      alert('Error grading assignment! Please try submitting later.');
+      return;
+    }
+
     location.hash = `#!/classes/${aClass}/assignments/${assignment}/submissions/${submission}`;
   },
 

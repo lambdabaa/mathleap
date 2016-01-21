@@ -102,15 +102,16 @@ exports.submit = async function(classId: string, assignmentId: string,
                                 submissionId: string): Promise<void> {
   let submissionRef = getSubmissionRef(classId, assignmentId, submissionId);
 
-  // First mark the submission complete.
-  await request(submissionRef.child('complete'), 'set', true);
-
-  // Now we're going to check all of the problems.
+  // First check all of the problems.
   let {responses} = await exports.get(classId, assignmentId, submissionId);
   await Promise.all(
     map(responses, async function (response: FBResponse, i: string): Promise {
       let {question, work} = response;
       debug(`Grading response to ${question.question}`);
+      if (work.length < 2) {
+        return;
+      }
+
       let answer = work[work.length - 1].state[0];
       if (helper.isCorrect(question, answer)) {
         // No need to find mistake if we're correct.
@@ -131,6 +132,9 @@ exports.submit = async function(classId: string, assignmentId: string,
       );
     })
   );
+
+  // Then mark the submission complete.
+  await request(submissionRef.child('complete'), 'set', true);
 
   debug('submission submit ok');
 };
