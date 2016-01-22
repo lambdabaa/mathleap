@@ -3,18 +3,22 @@
 let classes = require('../store/classes');
 let colors = require('../colors');
 let debug = require('../../common/debug')('helpers/assignment');
+let groupBy = require('lodash/collection/groupBy');
 let {isNonNullObject} = require('../../common/object');
+let mapValues = require('lodash/object/mapValues');
 let moment = require('moment');
 let questions = require('../store/questions');
 let reduce = require('lodash/collection/reduce');
 let session = require('../session');
 let stringify = require('json-stringify-safe');
 let submissions = require('../store/submissions');
+let sum = require('lodash/math/sum');
 
 import type {
   QuestionType,
   QuestionTopic,
   Assignment,
+  AssignmentSection,
   FBAssignment,
   FBStudent,
   FBSubmission
@@ -27,12 +31,16 @@ exports.createAssignment = function(): Assignment {
 };
 
 exports.getSize = function(assignment: Assignment): number {
-  return assignment.composition.reduce((sum, part) => sum + part.count, 0);
+  return assignment.composition.reduce((acc, part) => acc + part.count, 0);
 };
 
 exports.addTopic = function(assignment: Assignment, topic: QuestionTopic,
                             type: QuestionType): Assignment {
   debug('add topic', stringify(arguments));
+  if (countQuestionsByType(assignment, type) >= 10) {
+    return assignment;
+  }
+
   let color = colors.random();
   assignment.composition.push({topic, type, color, count: 1});
   assignment.preview = null;
@@ -40,6 +48,11 @@ exports.addTopic = function(assignment: Assignment, topic: QuestionTopic,
 };
 
 exports.incrementTopicCount = function(assignment: Assignment, index: number): Assignment {
+  let section = assignment.composition[index];
+  if (countQuestionsByType(assignment, section.type) >= 10) {
+    return assignment;
+  }
+
   return changeTopicCount(assignment, index, 1);
 };
 
@@ -151,6 +164,18 @@ exports.getCompleteSubmissionCount = function(assignment: FBAssignment): number 
     return count + (submission.complete ? 1 : 0);
   }, 0);
 };
+
+function countQuestionsByType(assignment: Assignment, type: QuestionType): number {
+  return mapValues(
+    groupBy(
+      assignment.composition,
+      (section: AssignmentSection): string => section.type.name
+    ),
+    (sections: Array<AssignmentSection>): number => {
+      return sum(sections.map((section: AssignmentSection): number => section.count));
+    }
+  )[type.name];
+}
 
 function changeTopicCount(assignment: Assignment, index: number, delta: number): Assignment {
   debug('update topic count', stringify(arguments));
