@@ -1,5 +1,8 @@
+let assert = require('assert');
 let assignment = require('../../../src/frontend/helpers/assignment');
+let clone = require('lodash/lang/cloneDeep');
 let session = require('../../../src/frontend/session');
+let times = require('lodash/utility/times');
 
 let topic = {
   name: 'One Variable Linear Equations',
@@ -59,6 +62,15 @@ suite('helpers/assignment', () => {
     });
   });
 
+  test('#addTopic max out @10', () => {
+    times(6, () => assignment.incrementTopicCount(subject, 2));
+    // Now type b should have 10 questions.
+    assert.doesNotThrow(
+      () => assignment.addTopic(Object.freeze(subject), topic, typeB),
+      TypeError
+    );
+  });
+
   test('#getSize', () => {
     assignment.getSize(subject).should.equal(6);
   });
@@ -67,6 +79,15 @@ suite('helpers/assignment', () => {
     subject.composition[0].count.should.equal(2);
     subject.composition[1].count.should.equal(3);
     subject.composition[2].count.should.equal(1);
+  });
+
+  test('#incrementTopicCount max out @10', () => {
+    times(6, () => assignment.incrementTopicCount(subject, 2));
+    // Now type b should have 10 questions.
+    assert.doesNotThrow(
+      () => assignment.incrementTopicCount(Object.freeze(subject), 2),
+      TypeError
+    );
   });
 
   test('change deadline', () => {

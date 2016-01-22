@@ -3,11 +3,13 @@
 export type AssignmentQuestion = {
   question: string;
   solution: number | string;
+  instruction?: string;
 };
 
 export type QuestionType = {
   name: string;
   example: string;
+  instruction?: string;
   questions: Array<AssignmentQuestion>;
 };
 
