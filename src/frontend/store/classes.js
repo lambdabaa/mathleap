@@ -98,8 +98,13 @@ exports.remove = async function remove(id: string): Promise<void> {
 
   // First find all of the students in the class.
   let ref = classesRef.child(id);
+  let classTeacherRef = ref.child('teacher');
   let classStudentsRef = ref.child('students');
-  let students = await request(classStudentsRef, 'once', 'value');
+  let [teacher, students] = await Promise.all([
+    request(classTeacherRef, 'once', 'value'),
+    request(classStudentsRef, 'once', 'value')
+  ]);
+
   let studentIds = values(students);
   await Promise.all(
     studentIds.map(async (studentId: string): Promise => {
@@ -112,7 +117,16 @@ exports.remove = async function remove(id: string): Promise<void> {
     })
   );
 
-  await request(ref, 'remove');
+  let teacherClassRef = teachersRef
+    .child(teacher)
+    .child('classes')
+    .child(id);
+
+  await Promise.all([
+    request(ref, 'remove'),
+    request(teacherClassRef, 'remove')
+  ]);
+
   debug('delete class ok');
 };
 
