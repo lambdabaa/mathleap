@@ -1,6 +1,7 @@
 module.exports = [
   {
     "name": "Arithmetic",
+    "instruction": "Simplify the expression.",
     "types": [
       {
         "name": "Simple addition",
@@ -36,6 +37,7 @@ module.exports = [
 
   {
     "name": "One Variable Linear Equations",
+    "instruction": "Solve the equation.",
     "types": [
       {
         "name": "Solving equations of the form Ax = B",
@@ -76,6 +78,7 @@ module.exports = [
 
   {
     "name": "Fractions",
+    "instruction": "Simplify the expression.",
     "types": [
       {
         "name": "Adding and subtracting fractions",
