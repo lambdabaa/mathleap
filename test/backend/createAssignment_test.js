@@ -120,8 +120,12 @@ suite('service/createAssignment', function() {
     let questions = createQuestion['Solving equations of the form Ax = B'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
-      let {question, solution} = aQuestion;
-      question.should.match(/^(-?[1-9]\d*)[a-z]=(-?\d+)$/);
+      let {instruction, question, solution} = aQuestion;
+      let variable = instruction.charAt(instruction.length-2);
+      let instructionForm = new RegExp(`^Solve for ${variable}\.$`);
+      let equationForm = new RegExp(`^(-?[1-9]\\d*)${variable}=(-?\\d+)$`);
+      instruction.should.match(instructionForm);
+      question.should.match(equationForm);
       let b = parseInt(RegExp.$2, 10);
       let a = parseInt(RegExp.$1, 10);
       let remainder = b % a;
@@ -134,8 +138,12 @@ suite('service/createAssignment', function() {
     let questions = createQuestion['Solving equations of the form x/A = B'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
-      let {question, solution} = aQuestion;
-      question.should.match(/^[a-z]\/(-?[1-9]\d*)=(-?\d+)$/);
+      let {instruction, question, solution} = aQuestion;
+      let variable = instruction.charAt(instruction.length-2);
+      let instructionForm = new RegExp(`^Solve for ${variable}\.$`);
+      let equationForm = new RegExp(`^${variable}\\/(-?[1-9]\\d*)=(-?\\d+)$`);
+      instruction.should.match(instructionForm);
+      question.should.match(equationForm);
       let a = parseInt(RegExp.$1, 10);
       let b = parseInt(RegExp.$2, 10);
       solution.should.equal(a * b);
@@ -147,8 +155,12 @@ suite('service/createAssignment', function() {
       createQuestion['Solving equations in one step with addition'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
-      let {question} = aQuestion;
-      question.should.match(/^[a-z][\+,\-](-?\d+)=(-?\d+)$/);
+      let {instruction, question} = aQuestion;
+      let variable = instruction.charAt(instruction.length-2);
+      let instructionForm = new RegExp(`^Solve for ${variable}\.$`);
+      let equationForm = new RegExp(`^${variable}[\\+,\\-](-?\\d+)=(-?\\d+)$`);
+      question.should.match(equationForm);
+      instruction.should.match(instructionForm);
     });
   });
 
@@ -156,8 +168,12 @@ suite('service/createAssignment', function() {
     let questions = createQuestion['Solving equations in two steps'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
-      let {question} = aQuestion;
-      question.should.match(/^(-?[1-9]\d*)[a-z][\+, \-](\d*)=(-?\d*)$/);
+      let {instruction, question} = aQuestion;
+      let variable = instruction.charAt(instruction.length-2);
+      let instructionForm = new RegExp(`^Solve for ${variable}\.$`);
+      let equationForm = new RegExp(`^(-?[1-9]\\d*)${variable}[\\+, \\-](\\d*)=(-?\\d*)$`);
+      question.should.match(equationForm);
+      instruction.should.match(instructionForm);
     });
   });
 
@@ -166,10 +182,14 @@ suite('service/createAssignment', function() {
       createQuestion['Equations with variables on both sides'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
-      let {question} = aQuestion;
-      question.should.match(
-        /^(-?[1-9]\d*)[a-z][\+, \-](\d*)=(-?[1-9]\d*)[a-z][\+, \-](\d*)$/
+      let {instruction, question} = aQuestion;
+      let variable = instruction.charAt(instruction.length-2);
+      let instructionForm = new RegExp(`^Solve for ${variable}\.$`);
+      let equationForm = new RegExp(
+        `^(-?[1-9]\\d*)${variable}[\\+, \\-](\\d*)=(-?[1-9]\\d*)${variable}[\\+, \\-](\\d*)$`
       );
+      question.should.match(equationForm);
+      instruction.should.match(instructionForm);
     });
   });
 
@@ -177,8 +197,12 @@ suite('service/createAssignment', function() {
     let questions = createQuestion['Simple distribution'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
-      let {question} = aQuestion;
-      question.should.match(/^(-?[1-9]\d*)\([a-z][\+, \-](\d*)\)=(-?\d*)$/);
+      let {instruction, question} = aQuestion;
+      let variable = instruction.charAt(instruction.length-2);
+      let instructionForm = new RegExp(`^Solve for ${variable}\.$`);
+      let equationForm = new RegExp(`^(-?[1-9]\\d*)\\(${variable}[\\+, \\-](\\d*)\\)=(-?\\d*)$`);
+      question.should.match(equationForm);
+      instruction.should.match(instructionForm);
     });
   });
 
@@ -186,10 +210,14 @@ suite('service/createAssignment', function() {
     let questions = createQuestion['Clever distribution'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
-      let {question} = aQuestion;
-      question.should.match(
-        /^[a-z]\/-?\d*[\+, \-]\d*=[a-z]\/-?\d*[\+, \-]\d*$/
+      let {instruction, question} = aQuestion;
+      let variable = instruction.charAt(instruction.length-2);
+      let instructionForm = new RegExp(`^Solve for ${variable}\.$`);
+      let equationForm = new RegExp(
+        `^${variable}\\/-?\\d*[\\+, \\-]\\d*=${variable}\\/-?\\d*[\\+, \\-]\\d*$`
       );
+      question.should.match(equationForm);
+      instruction.should.match(instructionForm);
     });
   });
 });

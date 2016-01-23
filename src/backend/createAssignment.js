@@ -113,7 +113,7 @@ createQuestion['Solving equations of the form Ax = B'] = function(): Array<Assig
     let a = generate.integer([0]);
     let b = a * solution;
     let x = generate.letter();
-    return {question: `${a}${x}=${b}`, solution};
+    return {instruction: `Solve for ${x}.`, question: `${a}${x}=${b}`, solution};
   });
 };
 
@@ -123,7 +123,7 @@ createQuestion['Solving equations of the form x/A = B'] = function(): Array<Assi
     let a = generate.factor(solution, [0]);
     let b = solution / a;
     let x = generate.letter();
-    return {question: `${x}/${a}=${b}`, solution};
+    return {instruction: `Solve for ${x}.`, question: `${x}/${a}=${b}`, solution};
   });
 };
 
@@ -134,7 +134,11 @@ function(): Array<AssignmentQuestion> {
     let a = generate.integer([0]);
     let b = solution + a;
     let x = generate.letter();
-    return {question: `${x}${a > 0 ? '+' : '-'}${Math.abs(a)}=${b}`, solution};
+    return {
+      instruction: `Solve for ${x}.`,
+      question: `${x}${a > 0 ? '+' : '-'}${Math.abs(a)}=${b}`,
+      solution
+    };
   });
 };
 
@@ -148,7 +152,7 @@ createQuestion['Solving equations in two steps'] = function(): Array<AssignmentQ
     let question = b > 0 ?
       `${a}${x}+${b}=${c}` :
       `${a}${x}-${Math.abs(b)}=${c}`;
-    return {question, solution};
+    return {instruction: `Solve for ${x}.`, question, solution};
   });
 };
 
@@ -166,7 +170,7 @@ createQuestion['Equations with variables on both sides'] = function(): Array<Ass
     let right = d > 0 ?
       `${c}${x}+${d}` :
       `${c}${x}-${Math.abs(d)}`;
-    return {question: `${left}=${right}`, solution};
+    return {instruction: `Solve for ${x}.`, question: `${left}=${right}`, solution};
   });
 };
 
@@ -180,7 +184,7 @@ createQuestion['Simple distribution'] = function(): Array<AssignmentQuestion> {
     let question = b > 0 ?
       `${a}(${x}+${b})=${c}` :
       `${a}(${x}-${Math.abs(b)})=${c}`;
-    return {question, solution};
+    return {instruction: `Solve for ${x}.`, question, solution};
   });
 };
 
@@ -198,7 +202,7 @@ createQuestion['Clever distribution'] = function(): Array<AssignmentQuestion> {
     let right = d > 0 ?
       `${x}/${c}+${d}` :
       `${x}/${c}-${Math.abs(d)}`;
-    return {question: `${left}=${right}`, solution};
+    return {instruction: `Solve for ${x}.`, question: `${left}=${right}`, solution};
   });
 };
 
