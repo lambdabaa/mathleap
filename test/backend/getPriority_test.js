@@ -21,7 +21,11 @@ suite('getPriority', () => {
     getPriority('(2/4)^3').should.equal(3);
   });
 
+  test('negate', () => {
+    getPriority('-5').should.equal(1);
+  });
+
   test('atom', () => {
-    getPriority('-5').should.equal(4);
+    getPriority('5').should.equal(4);
   });
 });

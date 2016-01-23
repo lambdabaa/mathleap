@@ -15,6 +15,10 @@ math.yy = {
   append(batched: Node, node: Object): Node {
     let {nodeType, data} = batched;
     return math.yy.createNode(nodeType, data.concat(node));
+  },
+
+  abs(node: Object): Node {
+    return math.yy.createNode('fun', ['abs', node]);
   }
 };
 
