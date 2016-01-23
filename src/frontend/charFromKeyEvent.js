@@ -35,6 +35,9 @@ module.exports = function(event: KeyboardEvent): ?string {
     case 191:
       chr = '/';
       break;
+    case 220:
+      if (event.shiftKey) { chr = '|'; }
+      break;
     default:
       break;
   }

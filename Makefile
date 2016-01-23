@@ -27,7 +27,7 @@ build/%.js: src/%.js
 	./node_modules/.bin/babel $< -o $@
 
 src/backend/math.js: src/backend/math.json
-	./node_modules/.bin/jison $< -o $@
+	./node_modules/.bin/jison $< -o $@ -p lalr
 
 mathleap.min.css: $(CSS)
 	cat $^ | ./node_modules/.bin/cssmin > $@
