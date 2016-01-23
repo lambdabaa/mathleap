@@ -120,14 +120,19 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let {aClass, assignment, isHelpDialogShown} = this.state;
+    let {aClass, assignment, num, isHelpDialogShown} = this.state;
     return <div id="submissions-edit">
       <Topbar headerText={assignment.name || ''} />
       <div className="view">
-        <a className="backlink clickable-text"
-           href={`#!/classes/${this.props.aClass}/`}>
-          &lt; {aClass && aClass.name}
-        </a>
+        <div className="subbar">
+          <a className="backlink clickable-text"
+             href={`#!/classes/${this.props.aClass}/`}>
+            &lt; {aClass && aClass.name}
+          </a>
+          <div className="question-instruction">
+            {editor.getInstruction(assignment, num)}
+          </div>
+        </div>
         <div className="submissions-edit-workspace">
           {this._renderQuestionList()}
           {this._renderQuestion()}

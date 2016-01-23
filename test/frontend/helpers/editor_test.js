@@ -1,6 +1,51 @@
 let editor = require('../../../src/frontend/helpers/editor');
 
 suite('helpers/editor', () => {
+  test('#getInstruction specified', () => {
+    editor.getInstruction({
+      questions: [
+        {},
+        {
+          question: 'x=5',
+          instruction: 'Go to dagobah'
+        },
+        {}
+      ]
+    }, 1)
+    .should
+    .equal('Go to dagobah');
+  });
+
+  test('#getInstruction inequality', () => {
+    editor.getInstruction({
+      questions: [
+        {question: 'x>5'}
+      ]
+    }, 0)
+    .should
+    .equal('Solve the inequality.');
+  });
+
+  test('#getInstruction equation', () => {
+    editor.getInstruction({
+      questions: [
+        {question: 'x=5'}
+      ]
+    }, 0)
+    .should
+    .equal('Solve the equation.');
+  });
+
+  test('#getInstruction expression', () => {
+    editor.getInstruction({
+      questions: [
+        {question: 'x'}
+      ]
+    }, 0)
+    .should
+    .equal('Simplify the expression.');
+  });
+
   test('#moveCursorLeft', () => {
     editor.moveCursorLeft(4, 'x+11').should.equal(1);
   });
