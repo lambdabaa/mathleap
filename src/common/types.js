@@ -16,6 +16,7 @@ export type QuestionType = {
 export type QuestionTopic = {
   name: string;
   types: Array<QuestionType>;
+  instruction?: string;
 };
 
 export type AssignmentSection = {
