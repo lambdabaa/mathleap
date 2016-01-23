@@ -1,3 +1,15 @@
+.subbar {
+  align-items: center;
+  -webkit-align-items: center;
+  display: flex;
+  display: -webkit-flex;
+}
+
+.question-instruction {
+  font-weight: bold;
+  margin: 0 0 15px 172px;
+}
+
 .submissions-edit-workspace {
   display: flex;
   display: -webkit-flex;

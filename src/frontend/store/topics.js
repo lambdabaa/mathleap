@@ -31,6 +31,21 @@ module.exports = [
       {
         "name": "Simple exponentiation",
         "example": "5 ^ 3"
+      },
+
+      {
+        "name": "Compound exponents",
+        "example": "(2 ^ 3 + 4 ^ 2) ^ 2"
+      },
+
+      {
+        "name": "Simple absolute value",
+        "example": "|6 - 9|"
+      },
+
+      {
+        "name": "Complex absolute value",
+        "example": "|6 - 9| + 2 * |4 + 1|"
       }
     ]
   },
@@ -86,11 +101,19 @@ module.exports = [
       },
       {
         "name": "Multiplying fractions",
-        "example": "( 2 / 4 ) * ( 1 / 2 )"
+        "example": "(2 / 4) * (1 / 2)"
       },
       {
         "name": "Dividing fractions",
-        "example": "( 3 / 8 ) / ( 3 / 4 )"
+        "example": "(3 / 8) / (3 / 4)"
+      },
+      {
+        "name": "Adding and subtracting fractions, different denominators",
+        "example": "(5 / 6) - (2 / 5)"
+      },
+      {
+        "name": "Simplifying complex fractions",
+        "example": "((3 / 5) - (1 / 2)) / (1 / 2)"
       }
     ]
   }

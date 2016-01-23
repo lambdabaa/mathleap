@@ -7,14 +7,42 @@ let includes = require('lodash/collection/includes');
 let {someValue} = require('../../common/array');
 let submissions = require('../store/submissions');
 
-import type {FBResponse} from '../../common/types';
+import type {
+  FBAssignment,
+  FBResponse
+} from '../../common/types';
 
 type Highlight = Array<boolean>;
 type Range = {start: ?number, end: ?number};
 
-let skipStops = Object.freeze(
-  ['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']
-);
+let inequalities = Object.freeze(['>', '≥', '<', '≤']);
+let skipStops = Object.freeze(['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']);
+
+exports.getInstruction = function(assignment: FBAssignment, index: number): string {
+  if (!Array.isArray(assignment.questions) || typeof index !== 'number') {
+    return '';
+  }
+
+  let {question, instruction} = assignment.questions[index];
+
+  if (instruction) {
+    return instruction;
+  }
+
+  let isInequality = inequalities.some((symbol: string): boolean => {
+    return question.indexOf(symbol) !== -1;
+  });
+
+  if (isInequality) {
+    return 'Solve the inequality.';
+  }
+
+  if (question.indexOf('=') !== -1) {
+    return 'Solve the equation.';
+  }
+
+  return 'Simplify the expression.';
+};
 
 exports.moveCursorLeft = function(cursor: number, equation: string): number {
   if (cursor === 0) {

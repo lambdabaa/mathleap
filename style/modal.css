@@ -15,7 +15,7 @@
 .modal-body {
   background-color: white;
   min-height: 200px;
-  max-height: 350px;
+  max-height: 250px;
   overflow-y: scroll;
   padding: 20px;
 }
