@@ -1,7 +1,6 @@
 module.exports = [
   {
     "name": "Arithmetic",
-    "instruction": "Simplify the expression.",
     "types": [
       {
         "name": "Simple addition",
@@ -52,7 +51,6 @@ module.exports = [
 
   {
     "name": "One Variable Linear Equations",
-    "instruction": "Solve the equation.",
     "types": [
       {
         "name": "Solving equations of the form Ax = B",
@@ -93,7 +91,6 @@ module.exports = [
 
   {
     "name": "Fractions",
-    "instruction": "Simplify the expression.",
     "types": [
       {
         "name": "Adding and subtracting fractions",
@@ -114,6 +111,40 @@ module.exports = [
       {
         "name": "Simplifying complex fractions",
         "example": "((3 / 5) - (1 / 2)) / (1 / 2)"
+      }
+    ]
+  },
+
+  {
+    "name": "Two variable manipulation",
+    "types": [
+      {
+        "name": "Point slope to slope intercept form",
+        "instruction": "Express the equation in slope intercept form.",
+        "example": "y + 2 = 3(x - 2)"
+      },
+      {
+        "name": "Solving for one variable in terms of another variable",
+        "example": "2y - 2 = -x + 3y"
+      }
+    ]
+  },
+
+  {
+    "name": "Polynomials",
+    "types": [
+      {
+        "name": "Adding and subtracting polynomials",
+        "example": "(2x + y) - (4 - x - 2y)"
+      },
+      {
+        "name": "Differing polynomial coefficients",
+        "example": "2(3x - 4y) + 3(-x + 3y - 2)"
+      },
+      {
+        "name": "Factoring the difference of squares",
+        "example": "4x^2 - 9",
+        "instruction": "Factor."
       }
     ]
   }
