@@ -6,11 +6,12 @@
 let debug = require('../common/debug')('createAssignment');
 let flatten = require('lodash/array/flatten');
 let find = require('lodash/collection/find');
+let generate = require('./generate');
 let groupBy = require('lodash/collection/groupBy');
 let isInteger = require('./isInteger');
 let mapValues = require('lodash/object/mapValues');
+let normalizeFraction = require('./normalizeFraction');
 let fraction = require('./fraction');
-let random = require('./random');
 let range = require('lodash/utility/range');
 let round = require('./round');
 
@@ -29,40 +30,40 @@ let createQuestion = {};
 createAssignment.createQuestion = createQuestion;
 
 createQuestion['Simple addition'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.integerList(...arguments);
+  let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.integer();
+    let a = generate.integer();
     return {question: `${a}+${solution - a}`, solution};
   });
 };
 
 createQuestion['Simple subtraction'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.integerList(...arguments);
+  let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.integer();
+    let a = generate.integer();
     return {question: `${a}-${a - solution}`, solution};
   });
 };
 
 createQuestion['Simple multiplication'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.compositeList(...arguments);
+  let solutions = generate.compositeList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.factor(solution);
+    let a = generate.factor(solution);
     return {question: `${a}*${solution / a}`, solution};
   });
 };
 
 createQuestion['Simple division'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.integerList(...arguments);
+  let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let denom = random.integer([0]);
+    let denom = generate.integer([0]);
     let num = solution * denom;
     return {question: `${num}/${denom}`, solution};
   });
 };
 
 createQuestion['Simple exponentiation'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.powerList(...arguments);
+  let solutions = generate.powerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
     let root = find(
       range(0, 4).reverse(),
@@ -78,14 +79,14 @@ createQuestion['Simple exponentiation'] = function(): Array<AssignmentQuestion> 
 };
 
 createQuestion['Adding and subtracting fractions'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.fractionList(...arguments);
+  let solutions = generate.fractionList(...arguments);
   return solutions.map((solution: string): AssignmentQuestion => {
     let [a, b] = solution.split('/').map(num => parseInt(num));
-    let operator = random.boolean() ? '+' : '-';
-    let c = random.integer();
+    let operator = generate.boolean() ? '+' : '-';
+    let c = generate.integer();
     let d = operator === '+' ? a - c : c - a;
     return {
-      question: `${simplifySigns(c, b)}${operator}${simplifySigns(d, b)}`,
+      question: `${normalizeFraction(c, b)}${operator}${normalizeFraction(d, b)}`,
       solution: `${a}/${b}`
     };
   });
@@ -96,54 +97,54 @@ createQuestion['Multiplying fractions'] = createFractionMultiplications.bind(nul
 createQuestion['Dividing fractions'] = createFractionMultiplications.bind(null, true);
 
 createQuestion['Arithmetic distribution'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.compositeList(...arguments);
+  let solutions = generate.compositeList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.factor(solution, [0]);
+    let a = generate.factor(solution, [0]);
     let b = solution / a;
-    let c = random.integerList(1, [b])[0];
+    let c = generate.integerList(1, [b])[0];
     let d = Math.abs(b - c);
     return {question: `${a}(${c}${b > c ? '+' : '-'}${d})`, solution};
   });
 };
 
 createQuestion['Solving equations of the form Ax = B'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.integerList(...arguments);
+  let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.integer([0]);
+    let a = generate.integer([0]);
     let b = a * solution;
-    let x = random.letter();
+    let x = generate.letter();
     return {question: `${a}${x}=${b}`, solution};
   });
 };
 
 createQuestion['Solving equations of the form x/A = B'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.compositeList(...arguments);
+  let solutions = generate.compositeList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.factor(solution, [0]);
+    let a = generate.factor(solution, [0]);
     let b = solution / a;
-    let x = random.letter();
+    let x = generate.letter();
     return {question: `${x}/${a}=${b}`, solution};
   });
 };
 
 createQuestion['Solving equations in one step with addition'] =
 function(): Array<AssignmentQuestion> {
-  let solutions = random.integerList(...arguments);
+  let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.integer([0]);
+    let a = generate.integer([0]);
     let b = solution + a;
-    let x = random.letter();
+    let x = generate.letter();
     return {question: `${x}${a > 0 ? '+' : '-'}${Math.abs(a)}=${b}`, solution};
   });
 };
 
 createQuestion['Solving equations in two steps'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.integerList(...arguments);
+  let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.integer([0]);
-    let b = random.integer([0]);
+    let a = generate.integer([0]);
+    let b = generate.integer([0]);
     let c = a * solution + b;
-    let x = random.letter();
+    let x = generate.letter();
     let question = b > 0 ?
       `${a}${x}+${b}=${c}` :
       `${a}${x}-${Math.abs(b)}=${c}`;
@@ -152,13 +153,13 @@ createQuestion['Solving equations in two steps'] = function(): Array<AssignmentQ
 };
 
 createQuestion['Equations with variables on both sides'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.integerList(...arguments);
+  let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.integer([0]);
-    let b = random.integer([0]);
-    let c = random.integer([0]);
+    let a = generate.integer([0]);
+    let b = generate.integer([0]);
+    let c = generate.integer([0]);
     let d = a * solution + b - c * solution;
-    let x = random.letter();
+    let x = generate.letter();
     let left = b > 0 ?
       `${a}${x}+${b}` :
       `${a}${x}-${Math.abs(b)}`;
@@ -170,12 +171,12 @@ createQuestion['Equations with variables on both sides'] = function(): Array<Ass
 };
 
 createQuestion['Simple distribution'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.integerList(...arguments);
+  let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let a = random.integer([0]);
-    let b = random.integer([0]);
+    let a = generate.integer([0]);
+    let b = generate.integer([0]);
     let c = a * (solution + b);
-    let x = random.letter();
+    let x = generate.letter();
     let question = b > 0 ?
       `${a}(${x}+${b})=${c}` :
       `${a}(${x}-${Math.abs(b)})=${c}`;
@@ -184,13 +185,13 @@ createQuestion['Simple distribution'] = function(): Array<AssignmentQuestion> {
 };
 
 createQuestion['Clever distribution'] = function(): Array<AssignmentQuestion> {
-  let solutions = random.superCompositeList(...arguments);
+  let solutions = generate.superCompositeList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
-    let c = random.compositeFactor(solution);
-    let a = random.factor(c, [0]);
-    let b = random.integer([0]);
+    let c = generate.compositeFactor(solution);
+    let a = generate.factor(c, [0]);
+    let b = generate.integer([0]);
     let d = solution / a + b - solution / c;
-    let x = random.letter();
+    let x = generate.letter();
     let left = b > 0 ?
       `${x}/${a}+${b}` :
       `${x}/${a}-${Math.abs(b)}`;
@@ -201,19 +202,12 @@ createQuestion['Clever distribution'] = function(): Array<AssignmentQuestion> {
   });
 };
 
-function simplifySigns(numerator: number, denominator: number): string {
-  let negative = numerator >= 0 !== denominator > 0;
-  numerator = Math.abs(numerator);
-  denominator = Math.abs(denominator);
-  return `${negative ? '-' : ''}${numerator}/${denominator}`;
-}
-
 function createFractionMultiplications(invert: boolean, count: number,
                                        exclude: Array<Numeric> = []): Array<AssignmentQuestion> {
-  let solutions = random.compositeFractionList(count, exclude);
+  let solutions = generate.compositeFractionList(count, exclude);
   return solutions.map((solution: string): AssignmentQuestion => {
     let [aNumerator, aDenominator] = solution.split('/').map(num => parseInt(num));
-    let [bNumerator, bDenominator] = random
+    let [bNumerator, bDenominator] = generate
       .boundedFraction({
         numerator: {start: Math.abs(aNumerator), end: Math.abs(aDenominator)},
         denominator: {start: Math.abs(aNumerator), end: Math.abs(aDenominator)}
@@ -221,8 +215,8 @@ function createFractionMultiplications(invert: boolean, count: number,
       .split('/')
       .map(num => parseInt(num));
 
-    let a = simplifySigns(aNumerator, aDenominator);
-    let b = simplifySigns(bNumerator, bDenominator);
+    let a = normalizeFraction(aNumerator, aDenominator);
+    let b = normalizeFraction(bNumerator, bDenominator);
 
     let fn = (invert ? fraction.multiply : fraction.divide).bind(fraction);
     let {s, n, d} = fn(fraction.fraction(a), fraction.fraction(b));

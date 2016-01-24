@@ -84,6 +84,9 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
+      let [numerator, denominator] = solution.split('/');
+      // This checks that the fraction is in simplest form.
+      mathjs.gcd(numerator, denominator).should.equal(1);
       let actual = +mathjs.eval(question);
       actual.should.be.closeTo(eval(solution), 0.00001);
     });
@@ -94,6 +97,8 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
+      let [numerator, denominator] = solution.split('/');
+      mathjs.gcd(numerator, denominator).should.equal(1);
       let actual = +mathjs.eval(question);
       actual.should.be.closeTo(eval(solution), 0.00001);
     });
@@ -104,6 +109,8 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
+      let [numerator, denominator] = solution.split('/');
+      mathjs.gcd(numerator, denominator).should.equal(1);
       let actual = +mathjs.eval(question);
       actual.should.be.closeTo(eval(solution), 0.00001);
     });
