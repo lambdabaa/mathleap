@@ -5,9 +5,15 @@
   display: -webkit-flex;
 }
 
+.subbar .backlink {
+  display: block;
+  margin-right: 30px;
+  width: 250px;
+}
+
 .question-instruction {
   font-weight: bold;
-  margin: 0 0 15px 172px;
+  margin: 0 0 15px 30px;
 }
 
 .submissions-edit-workspace {
