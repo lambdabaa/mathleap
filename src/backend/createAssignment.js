@@ -6,12 +6,13 @@
 let debug = require('../common/debug')('createAssignment');
 let flatten = require('lodash/array/flatten');
 let find = require('lodash/collection/find');
+let fraction = require('./fraction');
 let generate = require('./generate');
 let groupBy = require('lodash/collection/groupBy');
 let isInteger = require('./isInteger');
 let mapValues = require('lodash/object/mapValues');
+let min = require('lodash/math/min');
 let normalizeFraction = require('./normalizeFraction');
-let fraction = require('./fraction');
 let range = require('lodash/utility/range');
 let round = require('./round');
 
@@ -215,25 +216,54 @@ createQuestion['Clever distribution'] = function(): Array<AssignmentQuestion> {
 
 function createFractionMultiplications(invert: boolean, count: number,
                                        exclude: Array<Numeric> = []): Array<AssignmentQuestion> {
-  let solutions = generate.compositeFractionList(count, exclude);
-  return solutions.map((solution: string): AssignmentQuestion => {
-    let [aNumerator, aDenominator] = solution.split('/').map(num => parseInt(num));
-    let [bNumerator, bDenominator] = generate
-      .boundedFraction({
-        numerator: {start: Math.abs(aNumerator), end: Math.abs(aDenominator)},
-        denominator: {start: Math.abs(aNumerator), end: Math.abs(aDenominator)}
-      })
-      .split('/')
-      .map(num => parseInt(num));
+  // TODO(gaye): There are better ways to do this, but for now
+  //     we're going to pretend this is a search problem.
+  //
+  // {(a, b, c, d) in Z | a < b, c < d, (a / b) * (c / d) = solution
+  //
+  // Find the tuple in that set that minimizes the max of {a, b, c, d}
+  function solutionToProblem(solution: string): ?AssignmentQuestion {
+    let possible = [];
+    for (let i = 1; i < 25; i++) {
+      for (let j = i + 1; j < 25; j++) {
+        for (let k = 1; k < 25; k++) {
+          for (let l = k + 1; l < 25; l++) {
+            possible.push({a: i, b: j, c: k, d: l});
+          }
+        }
+      }
+    }
 
-    let a = normalizeFraction(aNumerator, aDenominator);
-    let b = normalizeFraction(bNumerator, bDenominator);
+    let magnitude = Math.abs(fraction.toDecimal(solution));
+    possible = possible.filter(candidate => {
+      let {a, b, c, d} = candidate;
+      let actual = a / b * c / d;
+      return Math.abs(actual) - Math.abs(magnitude) === 0;
+    });
 
-    let fn = (invert ? fraction.multiply : fraction.divide).bind(fraction);
-    let {s, n, d} = fn(fraction.fraction(a), fraction.fraction(b));
-    let operator = invert ? '/' : '*';
-    return {question: `(${s === -1 ? '-' : ''}${n}/${d})${operator}(${b})`, solution: `${a}`};
-  });
+    if (!possible.length) {
+      // uhh
+      return null;
+    }
+
+    let {a, b, c, d} = min(possible, x => Math.max(x.a, x.b, x.c, x.d));
+    let sign = solution.startsWith('-') ? '-' : '';
+    return invert ?
+      {question: `${sign}(${a}/${b})/(${d}/${c})`, solution} :
+      {question: `${sign}(${a}/${b})*(${c}/${d})`, solution};
+  }
+
+  let problems = [];
+  while (problems.length < count) {
+    let solution = generate.compositeFraction(exclude);
+    let problem = solutionToProblem(solution);
+    if (problem) {
+      exclude.push(solution);
+      problems.push(problem);
+    }
+  }
+
+  return problems;
 }
 
 /**

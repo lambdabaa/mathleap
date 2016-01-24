@@ -102,9 +102,33 @@ suite('service/createAssignment', function() {
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
       let [numerator, denominator] = solution.split('/');
+
+      // Check solution
       mathjs.gcd(numerator, denominator).should.equal(1);
+
+      // Check operands
+      question.split('*').forEach(operand => {
+        let [numerator, denominator] = operand
+          .split('/')
+          .map(value => {
+            return parseInt(
+              value
+                .replace('(', '')
+                .replace(')', '')
+            );
+          });
+        numerator.should.not.equal(denominator, `Operand ${operand} reduces to 1`);
+        Math.abs(numerator).should.be.lte(25, `Operand ${operand} too hard`);
+        Math.abs(denominator).should.be.lte(25, `Operand ${operand} too hard`);
+      });
+
+      // Check equality
       let actual = +mathjs.eval(question);
-      actual.should.be.closeTo(eval(solution), 0.00001);
+      actual.should.be.closeTo(
+        eval(solution),
+        0.00001,
+        JSON.stringify({actual: question, expected: solution})
+      );
     });
   });
 
@@ -116,7 +140,11 @@ suite('service/createAssignment', function() {
       let [numerator, denominator] = solution.split('/');
       mathjs.gcd(numerator, denominator).should.equal(1);
       let actual = +mathjs.eval(question);
-      actual.should.be.closeTo(eval(solution), 0.00001);
+      actual.should.be.closeTo(
+        eval(solution),
+        0.00001,
+        JSON.stringify({actual: question, expected: solution})
+      );
     });
   });
 
