@@ -88,7 +88,6 @@ function assignToFraction(numberGenerator: Function): string {
   }
 
   let result = normalizeFraction(numerator, denominator);
-  console.log('result', result);
   try {
     return fraction.format(fraction.fraction(result));
   } catch (error) {
