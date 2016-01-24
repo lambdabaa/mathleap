@@ -90,7 +90,7 @@ createQuestion['Adding and subtracting fractions'] = function(): Array<Assignmen
       question = `${normalizeFraction(c, b)}+${normalizeFraction(d, b)}`;
     } else {
       c = generate.absBoundedInteger(1, b);
-      if (c > a) {
+      if (c > a && a > 0) {
         d = c - a;
         question = `${normalizeFraction(c, b)}-${normalizeFraction(d, b)}`;
       } else {
