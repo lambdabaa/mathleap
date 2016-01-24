@@ -1,62 +1,57 @@
+let generate = require('../../src/backend/generate');
 let isInteger = require('../../src/backend/isInteger');
-let random = require('../../src/backend/random');
 
-suite('random', () => {
+suite('generate', () => {
   test('#integerList', () => {
-    let result = random.integerList(10);
+    let result = generate.integerList(10);
     result.forEach(checkInteger);
     result.should.have.length(10);
   });
 
   test('#compositeList', () => {
-    let result = random.compositeList(10);
+    let result = generate.compositeList(10);
     result.forEach(checkComposite);
     result.should.have.length(10);
   });
 
   test('#superCompositeList', () => {
-    let result = random.superCompositeList(10);
+    let result = generate.superCompositeList(10);
     result.forEach(checkSuperComposite);
     result.should.have.length(10);
   });
 
   test('#integer', () => {
-    checkInteger(random.integer());
+    checkInteger(generate.integer());
   });
 
   test('#composite', () => {
-    checkComposite(random.composite());
+    checkComposite(generate.composite());
   });
 
   test('#superComposite', () => {
-    checkSuperComposite(random.superComposite());
+    checkSuperComposite(generate.superComposite());
   });
 
   test('#factor', () => {
-    let factor = random.factor(24);
+    let factor = generate.factor(24);
     checkInteger(factor);
     (24 / factor).should.equal(Math.floor(24 / factor));
   });
 
   test('#letter', () => {
-    random.chrs.should.include(random.letter());
-  });
-
-  test('#nonZero', () => {
-    let result = random.nonZero();
-    checkInteger(result);
-    result.should.not.equal(0);
+    generate.chrs.should.include(generate.letter());
   });
 
   test('#power', () => {
-    let power = random.power();
+    let power = generate.power();
     isInteger(power).should.equal(true);
     power.should.be.gte(-1000);
     power.should.be.lte(1000);
   });
 
   test('#fraction', () => {
-    let fraction = random.fraction();
+    let fraction = generate.fraction();
+    fraction.should.match(/^-?\d+\/\d+$/);
     let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
     checkInteger(numerator);
     checkInteger(denominator);
@@ -64,9 +59,10 @@ suite('random', () => {
   });
 
   test('#fractionList', () => {
-    let result = random.fractionList(10);
+    let result = generate.fractionList(10);
     result.should.have.length(10);
     result.forEach(fraction => {
+      fraction.should.match(/^-?\d+\/\d+$/);
       let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
       checkInteger(numerator);
       checkInteger(denominator);
@@ -75,35 +71,35 @@ suite('random', () => {
   });
 
   test('#compositeFraction', () => {
-    let fraction = random.compositeFraction();
+    let fraction = generate.compositeFraction();
+    fraction.should.match(/^-?\d+\/\d+$/);
     let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
-    checkComposite(numerator);
-    checkComposite(denominator);
+    checkInteger(numerator);
+    checkInteger(denominator);
     Math.abs(numerator).should.be.lte(Math.abs(denominator));
   });
 
   test('#compositeFractionList', () => {
-    let result = random.compositeFractionList(10);
+    let result = generate.compositeFractionList(10);
     result.should.have.length(10);
     result.forEach(fraction => {
+      fraction.should.match(/^-?\d+\/\d+$/);
       let [numerator, denominator] = fraction.split('/').map(num => parseInt(num));
-      checkComposite(numerator);
-      checkComposite(denominator);
+      checkInteger(numerator);
+      checkInteger(denominator);
       Math.abs(numerator).should.be.lte(Math.abs(denominator));
     });
   });
 });
 
 function checkInteger(integer) {
-  integer.should.be.gt(-26);
-  integer.should.be.lt(26);
   integer.toString().should.match(/^-?\d+$/);
 }
 
 function checkComposite(composite) {
-  random.composites.should.include(composite);
+  generate.composites.should.include(composite);
 }
 
 function checkSuperComposite(superComposite) {
-  random.superComposites.should.include(superComposite);
+  generate.superComposites.should.include(superComposite);
 }
