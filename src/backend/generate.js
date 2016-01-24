@@ -117,6 +117,7 @@ function boundedFraction(bounds: {numerator: Range; denominator: Range}): string
 let composite = rand.get.bind(rand, sample.bind(null, composites));
 let integer = rand.get.bind(rand, random.bind(null, -25, 25, false /* floating */));
 
+exports.absBoundedInteger = absBoundedInteger;
 exports.boolean = sample.bind(null, [true, false]);
 exports.boundedFraction = boundedFraction;
 exports.chrs = chrs;

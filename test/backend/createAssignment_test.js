@@ -88,7 +88,11 @@ suite('service/createAssignment', function() {
       // This checks that the fraction is in simplest form.
       mathjs.gcd(numerator, denominator).should.equal(1);
       let actual = +mathjs.eval(question);
-      actual.should.be.closeTo(eval(solution), 0.00001);
+      actual.should.be.closeTo(
+        eval(solution),
+        0.00001,
+        JSON.stringify({actual: question, expected: solution})
+      );
     });
   });
 

@@ -83,12 +83,23 @@ createQuestion['Adding and subtracting fractions'] = function(): Array<Assignmen
   return solutions.map((solution: string): AssignmentQuestion => {
     let [a, b] = solution.split('/').map(num => parseInt(num));
     let operator = generate.boolean() ? '+' : '-';
-    let c = generate.integer();
-    let d = operator === '+' ? a - c : c - a;
-    return {
-      question: `${normalizeFraction(c, b)}${operator}${normalizeFraction(d, b)}`,
-      solution: `${a}/${b}`
-    };
+    let c, d, question;
+    if (operator === '+') {
+      c = generate.absBoundedInteger(1, Math.abs(a) + 1);
+      d = a - c;
+      question = `${normalizeFraction(c, b)}+${normalizeFraction(d, b)}`;
+    } else {
+      c = generate.absBoundedInteger(1, b);
+      if (c > a) {
+        d = c - a;
+        question = `${normalizeFraction(c, b)}-${normalizeFraction(d, b)}`;
+      } else {
+        d = c + a;
+        question = `${normalizeFraction(d, b)}-${normalizeFraction(c, b)}`;
+      }
+    }
+
+    return {question, solution: `${a}/${b}`};
   });
 };
 
