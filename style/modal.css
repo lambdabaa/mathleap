@@ -1,6 +1,6 @@
 .modal {
   cursor: default;
-  margin: 150px auto;
+  margin: 130px auto;
   position: relative;
   width: 600px;
 }
@@ -15,7 +15,7 @@
 .modal-body {
   background-color: white;
   min-height: 200px;
-  max-height: 250px;
+  max-height: 350px;
   overflow-y: scroll;
   padding: 20px;
 }

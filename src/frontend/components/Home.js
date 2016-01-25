@@ -65,6 +65,11 @@ module.exports = React.createClass({
 
   render: function() {
     let actions = [
+      <div key="demo"
+           className="topbar-action clickable-text"
+           onClick={this._handleVideoPlay}>
+        DEMO
+      </div>,
       <div key="student"
            className="topbar-action clickable-text"
            onClick={this._handleStudent}>
@@ -290,6 +295,17 @@ module.exports = React.createClass({
         </div>
       </div>
     </div>;
+  },
+
+  _handleVideoPlay: async function() {
+    debug('play video');
+    await this.props.showModal(
+      <video className="demo"
+             src="style/videos/demo.mp4"
+             preload="auto"
+             controls>
+      </video>
+    );
   },
 
   _handleSignup: async function() {

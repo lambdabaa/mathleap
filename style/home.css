@@ -14,3 +14,7 @@
 .panel {
   position: relative;
 }
+
+.demo {
+  width: 100%;
+}
