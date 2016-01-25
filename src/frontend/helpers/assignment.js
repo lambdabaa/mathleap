@@ -9,10 +9,13 @@ let mapValues = require('lodash/object/mapValues');
 let moment = require('moment');
 let questions = require('../store/questions');
 let reduce = require('lodash/collection/reduce');
+let round = require('../round');
 let session = require('../session');
 let stringify = require('json-stringify-safe');
 let submissions = require('../store/submissions');
+let submissionHelper = require('./submission');
 let sum = require('lodash/math/sum');
+let values = require('lodash/object/values');
 
 import type {
   QuestionType,
@@ -163,6 +166,27 @@ exports.getCompleteSubmissionCount = function(assignment: FBAssignment): number 
   return reduce(assignment.submissions, function(count: number, submission: FBSubmission) {
     return count + (submission.complete ? 1 : 0);
   }, 0);
+};
+
+exports.getAverage = function(assignment: FBAssignment): string {
+  let {total, possible} = values(assignment.submissions)
+    .filter((submission: FBSubmission): boolean => submission.complete)
+    .map((submission: FBSubmission): string => {
+      return submissionHelper.getSubmissionGrade(submission.responses);
+    })
+    .reduce(function(counts: Object, grade: string): Object {
+      let [aTotal, aPossible] = grade.split('/').map(x => parseInt(x));
+      return {
+        total: counts.total + aTotal,
+        possible: counts.possible + aPossible
+      };
+    }, {total: 0, possible: 0});
+
+  if (possible === 0) {
+    return 'n / a';
+  }
+
+  return `${round(100 * total / possible)}%`;
 };
 
 function countQuestionsByType(assignment: Assignment, type: QuestionType): number {

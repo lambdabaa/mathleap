@@ -1,6 +1,10 @@
 let submission = require('../../../src/frontend/helpers/submission');
 
 suite('helpers/submission', () => {
+  test.skip('#getHeaderText', () => {
+    // TODO
+  });
+
   test('#isCorrect expression', () => {
     submission.isCorrect(
       {solution: 13},
@@ -39,5 +43,8 @@ suite('helpers/submission', () => {
     })
     .should
     .equal(2);
+  });
+
+  test.skip('#getSubmissionGrade', () => {
   });
 });

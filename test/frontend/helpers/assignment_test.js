@@ -171,6 +171,10 @@ suite('helpers/assignment', () => {
     test('#getCompleteSubmissionCount', () => {
       assignment.getCompleteSubmissionCount(subject).should.equal(2);
     });
+
+    test.skip('#getAverage', () => {
+      // TODO
+    });
   });
 });
 

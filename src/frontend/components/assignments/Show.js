@@ -8,6 +8,7 @@ let assignments = require('../../store/assignments');
 let classes = require('../../store/classes');
 let {firebaseUrl} = require('../../constants');
 let students = require('../../store/students');
+let submissionHelper = require('../../helpers/submission');
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -99,7 +100,9 @@ module.exports = React.createClass({
       return [
         `${student.first} ${student.last} (${student.username})`,
         status,
-        'n / a'
+        submission.complete ?
+          submissionHelper.getSubmissionGrade(submission.responses) :
+          'n / a'
       ];
     });
   }

@@ -44,9 +44,9 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let {user, aClass, assignment} = this.state;
+    let {user, aClass, assignment, responses} = this.state;
     return <div id="submissions-show">
-      <Topbar headerText={`${user.first} ${user.last}${assignment.name ? ', ' + assignment.name : ''}`} />
+      <Topbar headerText={helper.getHeaderText(user, assignment, responses)} />
       <div className="view">
         {
           (() => {
