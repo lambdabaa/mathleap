@@ -20,7 +20,8 @@ module.exports = React.createClass({
       aClass: {},
       studentIds: [],
       students: [],
-      assignments: []
+      assignments: [],
+      averages: []
     };
   },
 
@@ -38,6 +39,11 @@ module.exports = React.createClass({
   },
 
   componentWillUpdate: function(props, state) {
+    this._updateStudents(state);
+    this._updateAverages(state);
+  },
+
+  _updateStudents: async function(state) {
     let clean =
       state.studentIds.length === state.students.length &&
       state.students.every((student, index) => {
@@ -50,10 +56,6 @@ module.exports = React.createClass({
       return;
     }
 
-    this._updateStudents(state);
-  },
-
-  _updateStudents: async function(state) {
     // ReactFire keeps the list of studentIds who are in this class up-to-date
     // but it's our job to turn those into actual students.
     let ids = state.studentIds.map(obj => obj['.value']);
@@ -61,8 +63,17 @@ module.exports = React.createClass({
     this.setState({students: update});
   },
 
+  _updateAverages: async function(state) {
+    if (state.assignments.length === state.averages.length) {
+      return;
+    }
+
+    let averages = await Promise.all(state.assignments.map(assignment.getAverage));
+    this.setState({averages});
+  },
+
   render: function() {
-    let aClass = this.state.aClass;
+    let {aClass, averages} = this.state;
     let headerText = <div className="classes-show-header">
       <div className="classes-show-header-title"
            style={{color: aClass.color}}>
@@ -75,7 +86,7 @@ module.exports = React.createClass({
       return [`${student.first} ${student.last} (${student.username})`];
     });
 
-    let assignments = this.state.assignments.map(anAssignment => {
+    let assignments = this.state.assignments.map((anAssignment, index) => {
       let completeSubmissionCount = assignment.getCompleteSubmissionCount(anAssignment);
       return [
         <a className="clickable-text"
@@ -84,9 +95,7 @@ module.exports = React.createClass({
         </a>,
         anAssignment.deadline,
         `${completeSubmissionCount} / ${this.state.students.length}`,
-        completeSubmissionCount > 0 ?
-          assignment.getAverage(anAssignment) :
-          'n / a'
+        completeSubmissionCount > 0 ? averages[index] : 'n / a'
       ];
     });
 

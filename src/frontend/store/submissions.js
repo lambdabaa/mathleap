@@ -113,7 +113,8 @@ exports.submit = async function(classId: string, assignmentId: string,
       }
 
       let answer = work[work.length - 1].state[0];
-      if (helper.isCorrect(question, answer)) {
+      let correct = await helper.isCorrect(question, answer);
+      if (correct) {
         // No need to find mistake if we're correct.
         return;
       }

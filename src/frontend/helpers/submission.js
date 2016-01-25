@@ -7,18 +7,20 @@ import {
   FBStudent
 } from '../../common/types';
 
-exports.getHeaderText = function(student: FBStudent, assignment: FBAssignment,
-                                 responses: Array<FBResponse>): string {
+exports.getHeaderText = async function(student: FBStudent, assignment: FBAssignment,
+                                       responses: Array<FBResponse>): Promise<string> {
+  let grade = await exports.getSubmissionGrade(responses);
   return [
     student && `${student.first} ${student.last}`,
     assignment.name,
-    exports.getSubmissionGrade(responses)
+    grade
   ]
   .filter((x: ?string) => typeof x === 'string')
   .join(', ');
 };
 
-exports.isCorrect = function(question: AssignmentQuestion, answer: string): boolean {
+exports.isCorrect = async function(question: AssignmentQuestion,
+                                   answer: string): Promise<boolean> {
   let [left, right] = answer.split('=');
   let solution = question.solution.toString();
   return left === solution || right === solution;
@@ -41,14 +43,16 @@ exports.getErrorLine = function(res: FBResponse): number {
   return -1;
 };
 
-exports.getSubmissionGrade = function(responses: Array<FBResponse>): string {
-  let correct = responses
-    .filter((response: FBResponse) => {
-      let {question, work} = response;
-      let answer = work[work.length - 1].state[0];
-      return exports.isCorrect(question, answer);
-    })
-    .length;
+exports.getSubmissionGrade = async function(responses: Array<FBResponse>): Promise<string> {
+  let correct = 0;
+  for (let i = 0; i < responses.length; i++) {
+    let {question, work} = responses[i];
+    let answer = work[work.length - 1].state[0];
+    let isCorrect = await exports.isCorrect(question, answer);
+    if (isCorrect) {
+      correct++;
+    }
+  }
 
   return `${correct} / ${responses.length}`;
 };

@@ -17,10 +17,12 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
+      headerText: '',
       aClass: {},
       assignment: {},
       student: {},
       responses: [],
+      marks: [],
       user: session.get('user')
     };
   },
@@ -45,14 +47,54 @@ module.exports = React.createClass({
     this.setState({aClass: theClass, assignment: theAssignment, student});
   },
 
+  componentWillUpdate: async function(props, state) {
+    await Promise.all([
+      this._updateHeaderText(state),
+      this._updateMarks(state)
+    ]);
+  },
+
+  _updateHeaderText: async function(state) {
+    if (state.headerText.length) {
+      console.log('nonempty headerText');
+      return;
+    }
+
+    let {student, assignment, responses} = state;
+    if (typeof student.id !== 'string' ||
+        typeof assignment.name !== 'string' ||
+        !responses.length) {
+      return;
+    }
+
+    let headerText = await helper.getHeaderText(student, assignment, responses);
+    this.setState({headerText});
+  },
+
+  _updateMarks: async function(state) {
+    if (state.marks.length === state.responses.length) {
+      return;
+    }
+
+    let marks = await Promise.all(
+      state.responses.map(response => {
+        let {question, work} = response;
+        let answer = work[work.length - 1].state[0];
+        return helper.isCorrect(question, answer);
+      })
+    );
+
+    this.setState({marks});
+  },
+
   componentWillUnmount: function() {
     session.removeListener('user', this._onUser);
   },
 
   render: function() {
-    let {user, aClass, student, assignment, responses} = this.state;
+    let {headerText, user, aClass, assignment} = this.state;
     return <div id="submissions-show">
-      <Topbar headerText={helper.getHeaderText(student, assignment, responses)} />
+      <Topbar headerText={headerText} />
       <div className="view">
         {
           (() => {
@@ -86,11 +128,11 @@ module.exports = React.createClass({
   },
 
   _renderResults: function() {
-    let {responses} = this.state;
+    let {responses, marks} = this.state;
     return responses.map((response, index) => {
       let {question, work} = response;
       let answer = work[work.length - 1].state[0];
-      let correct = helper.isCorrect(question, answer);
+      let correct = marks[index];
       return [
         `${index + 1}.`,
         question.question,

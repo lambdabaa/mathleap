@@ -169,19 +169,25 @@ exports.getCompleteSubmissionCount = function(assignment: FBAssignment): number 
   }, 0);
 };
 
-exports.getAverage = function(assignment: FBAssignment): string {
-  let {total, possible} = values(assignment.submissions)
-    .filter((submission: FBSubmission): boolean => submission.complete)
-    .map((submission: FBSubmission): string => {
-      return submissionHelper.getSubmissionGrade(submission.responses);
-    })
-    .reduce(function(counts: Object, grade: string): Object {
+exports.getAverage = async function(assignment: FBAssignment): Promise<string> {
+  let grades = await Promise.all(
+    values(assignment.submissions)
+      .filter((submission: FBSubmission): boolean => submission.complete)
+      .map((submission: FBSubmission): Promise<string> => {
+        return submissionHelper.getSubmissionGrade(submission.responses);
+      })
+  );
+
+  let {total, possible} = grades.reduce(
+    function(counts: Object, grade: string): Object {
       let [aTotal, aPossible] = grade.split('/').map(x => parseInt(x));
       return {
         total: counts.total + aTotal,
         possible: counts.possible + aPossible
       };
-    }, {total: 0, possible: 0});
+    },
+    {total: 0, possible: 0}
+  );
 
   if (possible === 0) {
     return 'n / a';
