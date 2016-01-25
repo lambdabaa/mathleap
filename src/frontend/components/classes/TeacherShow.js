@@ -76,14 +76,17 @@ module.exports = React.createClass({
     });
 
     let assignments = this.state.assignments.map(anAssignment => {
+      let completeSubmissionCount = assignment.getCompleteSubmissionCount(anAssignment);
       return [
         <a className="clickable-text"
            href={`#!/classes/${this.props.id}/assignments/${anAssignment['.key']}/`}>
           {anAssignment.name}
         </a>,
         anAssignment.deadline,
-        `${assignment.getCompleteSubmissionCount(anAssignment)} / ${this.state.students.length}`,
-        'n / a'
+        `${completeSubmissionCount} / ${this.state.students.length}`,
+        completeSubmissionCount > 0 ?
+          assignment.getAverage(anAssignment) :
+          'n / a'
       ];
     });
 
