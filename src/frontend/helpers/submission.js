@@ -7,10 +7,10 @@ import {
   FBStudent
 } from '../../common/types';
 
-exports.getHeaderText = function(user: FBStudent, assignment: FBAssignment,
-                                responses: Array<FBResponse>): string {
+exports.getHeaderText = function(student: FBStudent, assignment: FBAssignment,
+                                 responses: Array<FBResponse>): string {
   return [
-    `${user.first} ${user.last}`,
+    student && `${student.first} ${student.last}`,
     assignment.name,
     exports.getSubmissionGrade(responses)
   ]

@@ -142,8 +142,9 @@ exports.getSubmission = function(assignment: FBAssignment, student: FBStudent): 
   return {key: submission == null ? null : student.id, submission};
 };
 
-exports.getStudentSubmission = function(assignment: FBAssignment): Object {
-  return exports.getSubmission(assignment, session.get('user'));
+exports.getStudentSubmission = function(assignment: FBAssignment,
+                                        student: ?FBStudent): Object {
+  return exports.getSubmission(assignment, student || session.get('user'));
 };
 
 exports.containsStudentSubmission = function(assignment: FBAssignment): boolean {

@@ -8,6 +8,7 @@ let classes = require('../../store/classes');
 let {firebaseUrl} = require('../../constants');
 let helper = require('../../helpers/submission');
 let session = require('../../session');
+let students = require('../../store/students');
 
 module.exports = React.createClass({
   displayName: 'submissions/Show',
@@ -18,6 +19,7 @@ module.exports = React.createClass({
     return {
       aClass: {},
       assignment: {},
+      student: {},
       responses: [],
       user: session.get('user')
     };
@@ -36,7 +38,11 @@ module.exports = React.createClass({
       assignments.get(aClass, assignment)
     ]);
 
-    this.setState({aClass: theClass, assignment: theAssignment});
+    let student = await students.get(
+      theAssignment.submissions[submission].studentId
+    );
+
+    this.setState({aClass: theClass, assignment: theAssignment, student});
   },
 
   componentWillUnmount: function() {
@@ -44,9 +50,9 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let {user, aClass, assignment, responses} = this.state;
+    let {user, aClass, student, assignment, responses} = this.state;
     return <div id="submissions-show">
-      <Topbar headerText={helper.getHeaderText(user, assignment, responses)} />
+      <Topbar headerText={helper.getHeaderText(student, assignment, responses)} />
       <div className="view">
         {
           (() => {
@@ -67,10 +73,11 @@ module.exports = React.createClass({
           })()
         }
         <Tabular cols={[
-                   {content: '', width: 50},
-                   'Question',
-                   'Answer',
-                   {content: 'Error', width: 425},
+                   {content: '', width: 40},
+                   {content: 'Question', width: 300},
+                   'Response',
+                   'Answer Key',
+                   {content: 'Error', width: 325},
                    {content: 'Result', width: 40}
                  ]}
                  rows={this._renderResults()} />
@@ -88,6 +95,7 @@ module.exports = React.createClass({
         `${index + 1}.`,
         question.question,
         answer,
+        question.solution,
         correct ? <div></div> : this._renderError(response),
         correct ?
           <div style={{color: '#71ac00'}}>✔</div> :
