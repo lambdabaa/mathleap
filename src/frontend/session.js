@@ -27,6 +27,14 @@ class Session extends EventEmitter {
     process.nextTick(() => this._persist());
   }
 
+  remove(key: Primitive): void {
+    debug(`remove ${key}`);
+    delete this.data[key];
+    document.cookie = `${key}=null;expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    super.emit(key, null);
+    super.emit('change');
+  }
+
   clear(): void {
     debug('clear');
     // This will expire all of the cookies.

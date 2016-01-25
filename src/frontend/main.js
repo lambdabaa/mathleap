@@ -14,6 +14,8 @@ function main(): void {
   let router = createRouter();
   observeLocation(router);
   ReactDOM.render(<Container router={router} />, $('#container'));
+  session.remove('__svid');
+  session.remove('__svee');
 }
 
 function observeLocation(router: Router): void {

@@ -16,6 +16,17 @@ suite('session', () => {
     session.set('foo', 'bar');
   });
 
+  test('remove', done => {
+    session.once('change', () => {
+      expect(session.get('foo')).to.equal('bar');
+      session.remove('foo');
+      expect(session.get('foo')).to.equal(undefined);
+      done();
+    });
+
+    session.set('foo', 'bar');
+  });
+
   test('clear', () => {
     session.set('foo', 'bar');
     session.clear();
