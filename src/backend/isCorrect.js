@@ -1,8 +1,8 @@
 /* @flow */
 
 let deepEqual = require('lodash/lang/isEqual');
+let getVariables = require('./getVariables');
 let parse = require('./parse');
-let {reduceChar} = require('../common/string');
 let stringify = require('./stringify');
 
 import type {AssignmentQuestion} from '../common/types';
@@ -82,19 +82,6 @@ function getAnswerType(solution: string): string {
 
   let count = getVariables(solution).length;
   return `${count} variable ${isEquation ? 'equation' : 'expression'}`;
-}
-
-function getVariables(expr: string): Array<string> {
-  return Object.keys(
-    reduceChar(expr, function(acc: Object, chr: string): Object {
-      if (/[a-z]/.test(chr)) {
-        acc[chr] = true;
-      }
-
-      return acc;
-    }, {})
-  )
-  .sort();
 }
 
 function isDifferenceOfSquares(expr: string) {

@@ -11,6 +11,7 @@ proxy({
     createQuestions: require('./createAssignment').createQuestions,
     diff: require('./diff'),
     getPriority: require('./getPriority'),
+    getVariables: require('./getVariables'),
     isCorrect: require('./isCorrect'),
     parse: require('./parse'),
     ping: async function() {},

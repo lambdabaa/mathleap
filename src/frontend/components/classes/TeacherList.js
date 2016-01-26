@@ -44,6 +44,21 @@ module.exports = React.createClass({
   },
 
   componentWillUpdate: function(props, state) {
+    this._updateClasses(state);
+  },
+
+  componentDidUpdate(props, state) {
+    if (state.editable != null ||
+        this.state.editable == null ||
+        this.state.editable.field !== 'name') {
+      return;
+    }
+
+    // We just started editing the name, so focus.
+    $('.classes-list-edit-class-name').focus();
+  },
+
+  _updateClasses: async function(state) {
     let clean =
       state.classIds.length === state.classes.length &&
       state.classes.every((aClass, index) => {
@@ -56,10 +71,6 @@ module.exports = React.createClass({
       return;
     }
 
-    this._updateClasses(state);
-  },
-
-  _updateClasses: async function(state) {
     // ReactFire keeps the list of classIds which we're taking up-to-date
     // but it's our job to turn those into actual classes.
     let ids = state.classIds.map(obj => obj['.value']);
