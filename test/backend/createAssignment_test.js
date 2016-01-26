@@ -7,7 +7,7 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
-      question.should.match(/^(-?\d+)\+(-?\d+)$/);
+      question.should.match(/^(-?\d+)\+\(?(-?\d+)\)?$/);
       let a = parseInt(RegExp.$1, 10);
       let b = parseInt(RegExp.$2, 10);
       let sum = a + b;
@@ -20,7 +20,7 @@ suite('service/createAssignment', function() {
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
-      question.should.match(/^(-?\d+)\-(-?\d+)$/);
+      question.should.match(/^(-?\d+)\-\(?(-?\d+)\)?$/);
       let a = parseInt(RegExp.$1, 10);
       let b = parseInt(RegExp.$2, 10);
       let diff = a - b;

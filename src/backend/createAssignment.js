@@ -34,7 +34,12 @@ createQuestion['Simple addition'] = function(): Array<AssignmentQuestion> {
   let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
     let a = generate.integer();
-    return {question: `${a}+${solution - a}`, solution};
+    let b = solution - a;
+    if (b < 0) {
+      b = `(${b})`;
+    }
+
+    return {question: `${a}+${b}`, solution};
   });
 };
 
@@ -42,7 +47,12 @@ createQuestion['Simple subtraction'] = function(): Array<AssignmentQuestion> {
   let solutions = generate.integerList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {
     let a = generate.integer();
-    return {question: `${a}-${a - solution}`, solution};
+    let b = a - solution;
+    if (b < 0) {
+      b = `(${b})`;
+    }
+
+    return {question: `${a}-${b}`, solution};
   });
 };
 
