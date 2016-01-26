@@ -1,4 +1,4 @@
-let {eachChar, mapChar} = require('../../src/common/string');
+let {eachChar, mapChar, reduceChar} = require('../../src/common/string');
 
 suite('string', () => {
   test('#mapChar', () => {
@@ -27,5 +27,16 @@ suite('string', () => {
         'l',
         'o'
       ]);
+  });
+
+  test('#reduceChar', () => {
+    let result = [];
+    reduceChar('foobar', (acc, next) => {
+      acc.push(next);
+      return acc;
+    }, result)
+    .should
+    .deep
+    .equal(['f', 'o', 'o', 'b', 'a', 'r']);
   });
 });
