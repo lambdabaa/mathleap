@@ -18,3 +18,15 @@ exports.eachChar = function(str: string, fn: (chr: string, i: number) => any): v
     fn(chr, i);
   }
 };
+
+exports.reduceChar = function(
+    str: string,
+    fn: (acc: any, chr: string, i: number) => any,
+    seed: any): any {
+  let acc = seed != null ? seed : 0;
+  exports.eachChar(str, function(chr: string, i: number): void {
+    acc = fn(acc, chr, i);
+  });
+
+  return acc;
+};

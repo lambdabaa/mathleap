@@ -1,5 +1,7 @@
 /* @flow */
 
+let bridge = require('../bridge');
+
 import {
   AssignmentQuestion,
   FBAssignment,
@@ -19,11 +21,8 @@ exports.getHeaderText = async function(student: FBStudent, assignment: FBAssignm
   .join(', ');
 };
 
-exports.isCorrect = async function(question: AssignmentQuestion,
-                                   answer: string): Promise<boolean> {
-  let [left, right] = answer.split('=');
-  let solution = question.solution.toString();
-  return left === solution || right === solution;
+exports.isCorrect = function(question: AssignmentQuestion, answer: string): Promise<boolean> {
+  return bridge('isCorrect', question, answer);
 };
 
 // TODO(gaye): This should be quite a bit simpler. Why in some cases do we see
