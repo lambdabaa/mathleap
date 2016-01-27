@@ -21,73 +21,8 @@
     },
 
     "v2": {
-      "classes": {
-        "$aClass": {
-          // Anyone who knows the secret class code can read.
-          ".read": "auth.uid !== null",
-
-          // Only the teacher can modify a class.
-          ".write": "!data.exists() || data.child('teacher').val() === auth.uid",
-
-          "students": {
-            // So that students can join classes.
-            ".write": "auth.uid !== null && !data.exists()"
-          },
-
-          "assignments": {
-            "$assignment": {
-              "submissions": {
-                "$submission": {
-                  ".write": "auth.uid === $submission"
-                }
-              }
-            }
-          }
-        }
-      },
-
-      "students": {
-        "$uid": {
-          // You can read student data as the student or one of the student's teachers.
-          ".read": "$uid === auth.uid || data.child('teachers').child(auth.uid).val() === auth.uid",
-
-          // Anyone can create a student account, but no one aside from
-          // the student can modify their data.
-          ".write": "$uid === auth.uid || !data.exists()"
-        }
-      },
-
-      "teachers": {
-        "$uid": {
-          // Anyone can read teacher profiles.
-          ".read": "auth.uid !== null",
-
-          // Anyone can create a teacher account, but no one aside from
-          // the teacher can modify their data.
-          ".write": "$uid === auth.uid || !data.exists()"
-        }
-      },
-
-      "topics": {
-        ".read": "auth.uid !== null",
-        ".write": "auth.uid !== null",
-
-        "$topic": {
-          "types": {
-            "$type": {
-              "questions": {
-                // Anyone can write new questions but no one can modify existing ones.
-                ".write": "!data.exists()"
-              }
-            }
-          }
-        }
-      },
-
-      "wolframs": {
-        ".read": true,
-        ".write": true
-      }
+      ".read": true,
+      ".write": true
     }
   }
 }
