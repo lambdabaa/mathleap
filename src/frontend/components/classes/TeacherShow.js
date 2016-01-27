@@ -123,7 +123,7 @@ module.exports = React.createClass({
                onClick={this._handleCreateAssignment} />
         </div>
         {
-          (studentList.length || assignments.length) ?
+          studentList.length || assignments.length ?
             '' :
             <div className="classes-list-ftu">
               Great. Now share the class code <span className="emph">{aClass.code}</span>
