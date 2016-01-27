@@ -107,6 +107,13 @@ module.exports = React.createClass({
     return <div id="classes-teacher-list">
       <Topbar headerText={headerText} />
       <Tabular className="view" cols={cols} rows={rows} />
+      {
+        rows.length ||
+        <div className="view classes-list-ftu">
+          Welcome to MathLeap! To create a class, click
+          the plus sign in the upper right corner.
+        </div>
+      }
     </div>;
   },
 

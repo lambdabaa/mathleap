@@ -107,6 +107,13 @@ module.exports = React.createClass({
                  }
                ]}
                rows={classList} />
+      {
+        classList.length ||
+        <div className="view classes-list-ftu">
+          Welcome to MathLeap! To join a class with a student code, click
+          the plus sign in the upper right corner.
+        </div>
+      }
     </div>;
   },
 
