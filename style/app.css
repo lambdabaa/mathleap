@@ -152,3 +152,25 @@ select {
   background-size: 100%;
   position: absolute;
 }
+
+.service-outage {
+  align-items: center;
+  -webkit-align-items: center;
+  background-color: rgba(255, 128, 51, 0.6);
+  border-bottom: 1px solid #ff8033;
+  display: flex;
+  display: -webkit-flex;
+  font-size: 18px;
+  height: 50px;
+  justify-content: center;
+  -webkit-justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.service-outage > a {
+  margin-left: 5px;
+}
