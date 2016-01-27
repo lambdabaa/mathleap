@@ -256,24 +256,12 @@ module.exports = React.createClass({
         </div>
       </div>
       <div className="panel panel-5">
-        <div className="absimg cloud cloud-5"></div>
-        <div className="absimg cloud cloud-6"></div>
-        <div className="absimg cloud cloud-7"></div>
-        <div className="absimg cloud cloud-8"></div>
         <div className="home-container">
-          <div className="call-to-action">READY TO TAKE THE LEAP?</div>
           <div className="home-signup-button unselectable"
                onClick={this._handleSignup}>
             GET STARTED
           </div>
-          <div className="absimg hill"></div>
-          <div className="absimg tree-bottom"></div>
-          <div className="absimg pencil-can-shadow"></div>
-          <div className="absimg pencil-can"></div>
-          <div className="absimg laptop-bottom"></div>
-          <div className="absimg bush-bottom"></div>
-          <div className="absimg lightbulb-turtle-shadow"></div>
-          <div className="absimg lightbulb-turtle"></div>
+          <img className="more-math" src="style/images/more_math.svg" />
         </div>
         <div className="water-top"></div>
         <div className="water">
