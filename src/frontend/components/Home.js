@@ -65,20 +65,16 @@ module.exports = React.createClass({
 
   render: function() {
     let actions = [
+      <a key="learn-more"
+         className="topbar-action clickable-text"
+         href="/LearnMore.pdf"
+         target="_blank">
+        LEARN MORE
+      </a>,
       <div key="demo"
            className="topbar-action clickable-text"
            onClick={this._handleVideoPlay}>
         DEMO
-      </div>,
-      <div key="student"
-           className="topbar-action clickable-text"
-           onClick={this._handleStudent}>
-        STUDENT
-      </div>,
-      <div key="teacher"
-           className="topbar-action clickable-text"
-           onClick={this._handleTeacher}>
-        TEACHER
       </div>,
       <div key="login"
            className="topbar-action clickable-text"
