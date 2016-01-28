@@ -34,6 +34,7 @@ module.exports = React.createClass({
     let screen = screens[carousel];
 
     return <div className="submissions-edit-tutorial">
+      <div className="modal-exit" onClick={this.props.dismiss}>x</div>
       <div className="submissions-edit-tutorial-text">
         {screen}
       </div>

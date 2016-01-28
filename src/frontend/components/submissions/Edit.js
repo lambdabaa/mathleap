@@ -88,7 +88,10 @@ module.exports = React.createClass({
       isMousePressed: false,
 
       // Dragged highlight end
-      drag: null
+      drag: null,
+
+      // Whether user dismissed tutorial
+      isTutorialDismissed: false
     };
   },
 
@@ -121,7 +124,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let {aClass, assignment, num, isHelpDialogShown} = this.state;
+    let {aClass, assignment, num, isHelpDialogShown, isTutorialDismissed} = this.state;
     return <div id="submissions-edit">
       <Topbar headerText={assignment.name || ''} />
       <div className="view">
@@ -143,7 +146,11 @@ module.exports = React.createClass({
                onClick={this._showHelpDialog} />
         </div>
       </div>
-      <Tutorial />
+      {
+        isTutorialDismissed ?
+          '' :
+          <Tutorial dismiss={this._dismissTutorial} />
+      }
     </div>;
   },
 
@@ -840,5 +847,9 @@ module.exports = React.createClass({
   _hideHelpDialog: function() {
     debug('Hide help dialog');
     this.setState({isHelpDialogShown: false});
+  },
+
+  _dismissTutorial: function() {
+    this.setState({isTutorialDismissed: true});
   }
 });
