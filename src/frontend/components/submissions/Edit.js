@@ -3,6 +3,7 @@ let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
+let Tutorial = require('./Tutorial');
 let assignments = require('../../store/assignments');
 let bridge = require('../../bridge');
 let charFromKeyEvent = require('../../charFromKeyEvent');
@@ -142,6 +143,7 @@ module.exports = React.createClass({
                onClick={this._showHelpDialog} />
         </div>
       </div>
+      <Tutorial />
     </div>;
   },
 

@@ -42,6 +42,65 @@
   z-index: 1;
 }
 
+.submissions-edit-tutorial {
+  background-color: #f2f2f2;
+  border-top: 1px solid #ccc;
+  bottom: 0;
+  height: 80px;
+  padding: 0 30px;
+  position: absolute;
+  width: 990px;
+}
+
+.submissions-edit-tutorial {
+  align-items: center;
+  -webkit-align-items: center;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  height: 120px;
+  justify-content: center;
+  -webkit-justify-content: center;
+}
+
+.submissions-edit-tutorial > .carousel {
+  padding: 0 30px;
+}
+
+.submissions-edit-tutorial span {
+  margin: 0 1px;
+}
+
+.submissions-edit-tutorial-text {
+  align-items: center;
+  -webkit-align-items: center;
+  display: flex;
+  display: -webkit-flex;
+  height: 60px;
+  justify-content: center;
+  -webkit-justify-content: center;
+}
+
+.submissions-edit-tutorial-dots {
+  align-items: center;
+  -webkit-align-items: center;
+  display: flex;
+  display: -webkit-flex;
+  height: 60px;
+  justify-content: center;
+  -webkit-justify-content: center;
+}
+
+.carousel-dot {
+  cursor: pointer;
+  font-size: 60px;
+}
+
+.carousel-dot.active {
+  color: #3996f0;
+}
+
 .submissions-edit-help-dialog > .tabular-header {
   margin-bottom: 10px;
 }
