@@ -1,28 +1,28 @@
 {
   "rules": {
     "classes": {
-      ".read": true,
-      ".write": true
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null"
     },
 
     "students": {
-      ".read": true,
-      ".write": true
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null"
     },
 
     "teachers": {
-      ".read": true,
-      ".write": true
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null"
     },
 
     "topics": {
-      ".read": true,
-      ".write": true
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null"
     },
 
     "v2": {
-      ".read": true,
-      ".write": true
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null"
     }
   }
 }
