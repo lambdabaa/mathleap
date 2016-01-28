@@ -67,6 +67,21 @@ module.exports = React.createClass({
     this.setState({classes: update});
   },
 
+  componentDidUpdate: function(props, state) {
+    let prev = state.editable;
+    let curr = this.state.editable;
+    if (prev != null || curr == null || curr.field !== 'name') {
+      // We should only focus if
+      //
+      // 1. we just started editing
+      // 2. we are editing
+      // 3. we're editing the nam
+      return;
+    }
+
+    $('.classes-list-edit-class-name').focus();
+  },
+
   componentWillUnmount: function() {
     session.removeListener('user', this._onUser);
   },
