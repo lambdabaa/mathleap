@@ -326,7 +326,7 @@ module.exports = React.createClass({
         <input type="email" className="teacher-email" placeholder="Email" />
         <input type="password" className="teacher-password"
                placeholder="Password"
-               onKeyDown={handleEnter(this._onSignupTeacherSubmit)} />
+               onKeyDown={handleEnter(this._onTeacherSubmit)} />
         <div className="teacher-submit button-inverse"
              onClick={this._onTeacherSubmit}>
           Sign up
@@ -346,7 +346,7 @@ module.exports = React.createClass({
         <input type="text" className="student-username"
                placeholder="Username" />
         <input type="text" className="student-password" placeholder="Password"
-               onKeyDown={handleEnter(this._onSignupStudentSubmit)} />
+               onKeyDown={handleEnter(this._onStudentSubmit)} />
         <div className="student-submit button-inverse"
              onClick={this._onStudentSubmit}>
           Sign up
