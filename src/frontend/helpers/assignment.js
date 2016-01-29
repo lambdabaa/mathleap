@@ -16,7 +16,6 @@ let stringify = require('json-stringify-safe');
 let submissions = require('../store/submissions');
 let submissionHelper = require('./submission');
 let sum = require('lodash/math/sum');
-let values = require('lodash/object/values');
 
 import type {
   QuestionType,
