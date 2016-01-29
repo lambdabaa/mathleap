@@ -68,7 +68,7 @@ module.exports = React.createClass({
     let actions = [
       <a key="learn-more"
          className="topbar-action clickable-text"
-         href="/LearnMore.pdf"
+         href="/public/LearnMore.pdf"
          target="_blank">
         LEARN MORE
       </a>,
