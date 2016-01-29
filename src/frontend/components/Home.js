@@ -1,6 +1,7 @@
 let $ = document.querySelector.bind(document);
 let React = require('react');
 let Topbar = require('./Topbar');
+let bowser = require('bowser');
 let debug = require('../../common/debug')('components/Home');
 let handleEnter = require('../handleEnter');
 let {on} = require('../../common/events');
@@ -90,11 +91,15 @@ module.exports = React.createClass({
 
     return <div id="home">
       <div className="panel panel-0">
-        <a className="chrome-web-store"
-           href="https://chrome.google.com/webstore/detail/mathleap/kdabnkopinpedfheiacocpbfabmbflfc"
-           target="_blank">
-          <img src="style/images/chrome-web-store.png" />
-        </a>
+        {
+          bowser.chrome || bowser.chromeos ?
+            <a className="chrome-web-store"
+               href="https://chrome.google.com/webstore/detail/mathleap/kdabnkopinpedfheiacocpbfabmbflfc"
+               target="_blank">
+              <img src="style/images/chrome-web-store.png" />
+            </a> :
+            ''
+        }
         <div className="home-container">
           <Topbar actions={actions} />
         </div>
