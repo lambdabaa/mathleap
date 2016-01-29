@@ -6,6 +6,7 @@ import {
   AssignmentQuestion,
   FBAssignment,
   FBResponse,
+  FBQuestionStep,
   FBStudent
 } from '../../common/types';
 
@@ -21,7 +22,13 @@ exports.getHeaderText = async function(student: FBStudent, assignment: FBAssignm
   .join(', ');
 };
 
-exports.isCorrect = function(question: AssignmentQuestion, answer: string): Promise<boolean> {
+exports.isCorrect = function(question: AssignmentQuestion, answer: string,
+                             work: Array<FBQuestionStep>): Promise<boolean> {
+  let errorLine = exports.getErrorLine({question, work});
+  if (errorLine !== -1) {
+    return Promise.resolve(false);
+  }
+
   return bridge('isCorrect', question, answer);
 };
 
@@ -47,7 +54,7 @@ exports.getSubmissionGrade = async function(responses: Array<FBResponse>): Promi
   for (let i = 0; i < responses.length; i++) {
     let {question, work} = responses[i];
     let answer = work[work.length - 1].state[0];
-    let isCorrect = await exports.isCorrect(question, answer);
+    let isCorrect = await exports.isCorrect(question, answer, work);
     if (isCorrect) {
       correct++;
     }

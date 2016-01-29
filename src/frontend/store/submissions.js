@@ -3,7 +3,6 @@
 let Firebase = require('firebase/lib/firebase-web');
 let debug = require('../../common/debug')('store/assignments');
 let {firebaseUrl} = require('../constants');
-let helper = require('../helpers/submission');
 let includes = require('lodash/collection/includes');
 let {isEqual} = require('./wolframs');
 let map = require('lodash/collection/map');
@@ -109,13 +108,6 @@ exports.submit = async function(classId: string, assignmentId: string,
       let {question, work} = response;
       debug(`Grading response to ${question.question}`);
       if (work.length < 2) {
-        return;
-      }
-
-      let answer = work[work.length - 1].state[0];
-      let correct = await helper.isCorrect(question, answer);
-      if (correct) {
-        // No need to find mistake if we're correct.
         return;
       }
 

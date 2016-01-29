@@ -94,7 +94,7 @@ module.exports = React.createClass({
       state.responses.map(response => {
         let {question, work} = response;
         let answer = work[work.length - 1].state[0];
-        return helper.isCorrect(question, answer);
+        return helper.isCorrect(question, answer, work);
       })
     );
 
