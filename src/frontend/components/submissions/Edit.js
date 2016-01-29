@@ -45,6 +45,8 @@ module.exports = React.createClass({
       aClass: {},
       assignment: {},
       responses: [],
+
+      // Whether the keyboard shortcuts are shown.
       isHelpDialogShown: false,
 
       // index of active equation
@@ -115,6 +117,7 @@ module.exports = React.createClass({
 
   componentDidMount: function() {
     this.interval = setInterval(this._tick, 1500);
+    this.isBusy = false;
   },
 
   componentWillUnmount: function() {
@@ -483,16 +486,21 @@ module.exports = React.createClass({
   },
 
   _handleKeyDown: function(event) {
+    if (this.isBusy) {
+      debug('Busy... will ignore key event');
+    }
+
+    this.isBusy = true;
     if (event.keyCode === 8) {
       event.preventDefault();
     }
 
     let {num} = this.state;
-    if (typeof num !== 'number') {
-      return;
+    if (typeof num === 'number') {
+      this._handleKeyEvent(event);
     }
 
-    return this._handleKeyEvent(event);
+    this.isBusy = false;
   },
 
   _handleKeyEvent: function(event) {
