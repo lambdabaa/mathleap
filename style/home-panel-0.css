@@ -13,6 +13,13 @@
   overflow: hidden;
 }
 
+.chrome-web-store {
+  bottom: 50%;
+  left: -10px;
+  position: absolute;
+  z-index: 100;
+}
+
 .tagline {
   color: white;
   display: flex;

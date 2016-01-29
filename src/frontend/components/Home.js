@@ -90,6 +90,11 @@ module.exports = React.createClass({
 
     return <div id="home">
       <div className="panel panel-0">
+        <a className="chrome-web-store"
+           href="https://chrome.google.com/webstore/detail/mathleap/kdabnkopinpedfheiacocpbfabmbflfc"
+           target="_blank">
+          <img src="style/images/chrome-web-store.png" />
+        </a>
         <div className="home-container">
           <Topbar actions={actions} />
         </div>
