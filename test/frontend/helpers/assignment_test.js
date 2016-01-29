@@ -169,7 +169,8 @@ suite('helpers/assignment', () => {
     });
 
     test('#getCompleteSubmissionCount', () => {
-      assignment.getCompleteSubmissionCount(subject).should.equal(2);
+      session.set('user', {id: 'bob'});
+      assignment.getCompleteSubmissionCount(subject).should.equal(1);
     });
 
     test.skip('#getAverage', () => {

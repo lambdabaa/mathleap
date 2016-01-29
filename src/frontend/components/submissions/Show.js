@@ -40,6 +40,11 @@ module.exports = React.createClass({
       assignments.get(aClass, assignment)
     ]);
 
+    let {user} = this.state;
+    if (user.role === 'teacher') {
+      return this.setState({aClass: theClass, assignment: theAssignment});
+    }
+
     let student = await students.get(
       theAssignment.submissions[submission].studentId
     );
@@ -56,11 +61,20 @@ module.exports = React.createClass({
 
   _updateHeaderText: async function(state) {
     if (state.headerText.length) {
-      console.log('nonempty headerText');
       return;
     }
 
-    let {student, assignment, responses} = state;
+    let {user, student, assignment, responses} = state;
+    if (user.role === 'teacher') {
+      if (typeof assignment.name !== 'string' ||
+          !responses.length) {
+        return;
+      }
+
+      let headerText = await helper.getHeaderText(user, assignment, responses);
+      return this.setState({headerText});
+    }
+
     if (typeof student.id !== 'string' ||
         typeof assignment.name !== 'string' ||
         !responses.length) {

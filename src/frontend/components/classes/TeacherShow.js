@@ -95,7 +95,12 @@ module.exports = React.createClass({
         </a>,
         anAssignment.deadline,
         `${completeSubmissionCount} / ${this.state.students.length}`,
-        completeSubmissionCount > 0 ? averages[index] : 'n / a'
+        completeSubmissionCount > 0 ? averages[index] : 'n / a',
+        <div className="clickable-text emph"
+             style={{color: '#eb241d' }}
+             onClick={this._handleTryAssignment.bind(this, anAssignment)}>
+          Try it!
+        </div>
       ];
     });
 
@@ -114,13 +119,16 @@ module.exports = React.createClass({
                    cols={[
                      {content: 'Assignment', width: 200},
                      {content: 'Deadline', width: 130},
-                     {content: 'Submissions', width: 130},
-                     {content: 'Average', width: 130}
-                   ]}
+                     {content: 'Submissions', width: 100},
+                     {content: 'Avg.', width: 100},
+                     {
+                       content: <img className="list-action-btn"
+                        src="style/images/add_btn.png"
+                        onClick={this._handleCreateAssignment} />,
+                       width: 60
+                     }
+                    ]}
                    rows={assignments} />
-          <img className="classes-show-create-assignment list-action-btn"
-               src="style/images/add_btn.png"
-               onClick={this._handleCreateAssignment} />
         </div>
         {
           studentList.length || assignments.length ?
@@ -138,5 +146,14 @@ module.exports = React.createClass({
   _handleCreateAssignment: function() {
     debug('add assignment');
     location.hash = `#!/classes/${this.props.id}/assignments/new/`;
+  },
+
+  _handleTryAssignment: async function(anAssignment) {
+    let classId = this.props.id;
+    let assignmentId = anAssignment['.key'];
+    let {key, submission} = await assignment.findOrCreateSubmission(classId, anAssignment);
+    location.hash = submission.complete ?
+      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}` :
+      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}/edit`;
   }
 });

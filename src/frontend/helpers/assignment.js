@@ -3,6 +3,7 @@
 let classes = require('../store/classes');
 let colors = require('../colors');
 let debug = require('../../common/debug')('helpers/assignment');
+let filter = require('lodash/collection/filter');
 let groupBy = require('lodash/collection/groupBy');
 let {isNonNullObject} = require('../../common/object');
 let mapValues = require('lodash/object/mapValues');
@@ -164,18 +165,29 @@ exports.getStudentStatus = function(assignment: FBAssignment): string {
 };
 
 exports.getCompleteSubmissionCount = function(assignment: FBAssignment): number {
-  return reduce(assignment.submissions, function(count: number, submission: FBSubmission) {
-    return count + (submission.complete ? 1 : 0);
-  }, 0);
+  let {id} = session.get('user');
+  return reduce(
+    filter(assignment.submissions, function(submission: FBSubmission, key: string): boolean {
+      // Don't count any possible test / teacher submissions.
+      return key !== id;
+    }),
+    function(count: number, submission: FBSubmission) {
+      return count + (submission.complete ? 1 : 0);
+    },
+    0
+  );
 };
 
 exports.getAverage = async function(assignment: FBAssignment): Promise<string> {
+  let {id} = session.get('user');
   let grades = await Promise.all(
-    values(assignment.submissions)
-      .filter((submission: FBSubmission): boolean => submission.complete)
-      .map((submission: FBSubmission): Promise<string> => {
-        return submissionHelper.getSubmissionGrade(submission.responses);
-      })
+    filter(assignment.submissions, function(submission: FBSubmission, key: string): boolean {
+      // Don't count any possible test / teacher submissions.
+      return submission.complete && key !== id;
+    })
+    .map((submission: FBSubmission): Promise<string> => {
+      return submissionHelper.getSubmissionGrade(submission.responses);
+    })
   );
 
   let {total, possible} = grades.reduce(

@@ -62,7 +62,7 @@ function createRouter(): Router {
     require('./components/assignments/Show')
   );
   router.route(
-    'classes/:aClass/assignments/:assignment/submissions/:submission',
+    '/classes/:aClass/assignments/:assignment/submissions/:submission',
     require('./components/submissions/Show')
   );
   router.route(
