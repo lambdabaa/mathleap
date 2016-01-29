@@ -1,8 +1,8 @@
-(* Checks whether two mathematical equations are equal. *)
+(* Checks whether two mathematical expressions are equal. *)
 CloudDeploy[
   APIFunction[
     {"a" -> "MathExpression", "b" -> "MathExpression", "vars" -> "MathExpression"},
-    Reduce[#a, #vars] === Reduce[#b, #vars]&,
+    Expand[#a, #vars] === Expand[#b, #vars]&,
   ],
   "equal",
   Permissions -> "Public"

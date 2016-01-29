@@ -14,12 +14,13 @@ let {wolframCloudUrl} = require('./constants');
  */
 exports.isEqual = async function(a: string, b: string): Promise<boolean> {
   debug('check equivalence', a, b);
+  let url = wolframCloudUrl + (a.indexOf('==') !== -1 ? '/equal' : '/exprEqual');
   let vars = exports.extractVariablesFromMany(a, b);
   vars = `{${vars.length ? vars.join(',') : 'x'}}`;
   let req = new Xhr();
   req.open(
     'GET',
-    `${wolframCloudUrl}?${querystring.stringify({a, b, vars})}`,
+    `${url}?${querystring.stringify({a, b, vars})}`,
     true /* async */
   );
 
