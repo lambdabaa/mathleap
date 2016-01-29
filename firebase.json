@@ -21,6 +21,7 @@
   "ignore": [
     "**/.*",
     "build/**",
+    "chrome/**",
     "data/**",
     "docs/**",
     "src/**",
