@@ -50,6 +50,32 @@ module.exports = [
   },
 
   {
+    "name": "Fractions",
+    "types": [
+      {
+        "name": "Adding and subtracting fractions",
+        "example": "1 / 4 + 2 / 4"
+      },
+      {
+        "name": "Multiplying fractions",
+        "example": "(2 / 4) * (1 / 2)"
+      },
+      {
+        "name": "Dividing fractions",
+        "example": "(3 / 8) / (3 / 4)"
+      },
+      {
+        "name": "Adding and subtracting fractions, different denominators",
+        "example": "(5 / 6) - (2 / 5)"
+      },
+      {
+        "name": "Simplifying complex fractions",
+        "example": "((3 / 5) - (1 / 2)) / (1 / 2)"
+      }
+    ]
+  },
+
+  {
     "name": "One Variable Linear Equations",
     "types": [
       {
@@ -89,31 +115,6 @@ module.exports = [
     ]
   },
 
-  {
-    "name": "Fractions",
-    "types": [
-      {
-        "name": "Adding and subtracting fractions",
-        "example": "1 / 4 + 2 / 4"
-      },
-      {
-        "name": "Multiplying fractions",
-        "example": "(2 / 4) * (1 / 2)"
-      },
-      {
-        "name": "Dividing fractions",
-        "example": "(3 / 8) / (3 / 4)"
-      },
-      {
-        "name": "Adding and subtracting fractions, different denominators",
-        "example": "(5 / 6) - (2 / 5)"
-      },
-      {
-        "name": "Simplifying complex fractions",
-        "example": "((3 / 5) - (1 / 2)) / (1 / 2)"
-      }
-    ]
-  },
 
   {
     "name": "Two variable manipulation",
