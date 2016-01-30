@@ -22,34 +22,48 @@ module.exports = React.createClass({
       assignment: {},
       student: {},
       responses: [],
-      marks: [],
-      user: session.get('user')
+      marks: []
     };
   },
 
   componentWillMount: async function() {
-    session.on('user', this._onUser);
-    let {aClass, assignment, submission} = this.props;
-    this.bindAsArray(
-      new Firebase(`${firebaseUrl}/classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
-      'responses'
-    );
+    let {aClass, assignment, submission, id} = this.props;
+    let user = session.get('user');
 
-    let [theClass, theAssignment] = await Promise.all([
-      classes.get(aClass),
-      assignments.get(aClass, assignment)
-    ]);
+    if (aClass) {
+      this.isPracticeMode = false;
+      this.bindAsArray(
+        new Firebase(`${firebaseUrl}/classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
+        'responses'
+      );
 
-    let {user} = this.state;
-    if (user.role === 'teacher') {
-      return this.setState({aClass: theClass, assignment: theAssignment});
+      let [theClass, theAssignment] = await Promise.all([
+        classes.get(aClass),
+        assignments.get(aClass, assignment)
+      ]);
+
+      if (user.role === 'teacher') {
+        return this.setState({aClass: theClass, assignment: theAssignment});
+      }
+
+      let student = await students.get(
+        theAssignment.submissions[submission].studentId
+      );
+
+      this.setState({aClass: theClass, assignment: theAssignment, student});
+    } else if (id) {
+      this.isPracticeMode = true;
+      this.bindAsArray(
+        new Firebase(`${firebaseUrl}/students/${user.id}/assignments/${id}/submission/responses`),
+        'responses'
+      );
+
+      let theAssignment = await assignments.getPractice(id);
+      let student = await students.get(user.id);
+      this.setState({assignment: theAssignment, student});
+    } else {
+      throw new Error('Nowhere to find responses!');
     }
-
-    let student = await students.get(
-      theAssignment.submissions[submission].studentId
-    );
-
-    this.setState({aClass: theClass, assignment: theAssignment, student});
   },
 
   componentWillUpdate: async function(props, state) {
@@ -64,7 +78,8 @@ module.exports = React.createClass({
       return;
     }
 
-    let {user, student, assignment, responses} = state;
+    let {student, assignment, responses} = state;
+    let user = session.get('user');
     if (user.role === 'teacher') {
       if (typeof assignment.name !== 'string' ||
           !responses.length) {
@@ -75,9 +90,7 @@ module.exports = React.createClass({
       return this.setState({headerText});
     }
 
-    if (typeof student.id !== 'string' ||
-        typeof assignment.name !== 'string' ||
-        !responses.length) {
+    if (typeof student.id !== 'string' || !responses.length) {
       return;
     }
 
@@ -101,12 +114,9 @@ module.exports = React.createClass({
     this.setState({marks});
   },
 
-  componentWillUnmount: function() {
-    session.removeListener('user', this._onUser);
-  },
-
   render: function() {
-    let {headerText, user, aClass, assignment} = this.state;
+    let {headerText, aClass, assignment} = this.state;
+    let user = session.get('user');
     return <div id="submissions-show">
       <Topbar headerText={headerText} />
       <div className="view">
@@ -114,10 +124,16 @@ module.exports = React.createClass({
           (() => {
             switch (user.role) {
               case 'student':
-                return <a className="backlink clickable-text"
-                          href={`#!/classes/${this.props.aClass}`}>
-                  &lt; {aClass && aClass.name}
-                </a>;
+                let backlink, backlinkText;
+                if (this.isPracticeMode) {
+                  backlink = `#!/practice/`;
+                  backlinkText = <span>&lt; Practice sessions</span>;
+                } else {
+                  backlink = `#!/classes/${this.props.aClass}/`;
+                  backlinkText = <span>&lt; {aClass && aClass.name}</span>;
+                }
+
+                return <a className="backlink clickable-text" href={backlink}>{backlinkText}</a>;
               case 'teacher':
                 return <a className="backlink clickable-text"
                           href={`#!/classes/${this.props.aClass}/assignments/${assignment.id}/`}>
@@ -177,9 +193,5 @@ module.exports = React.createClass({
         {work[errorLine].state[0]}
       </span>
     </div>;
-  },
-
-  _onUser: function(user) {
-    this.setState({user});
   }
 });

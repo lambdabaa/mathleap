@@ -51,6 +51,10 @@ function createRouter(): Router {
   router.route('/home', require('./components/Home'));
   router.route('/tos', require('./components/Tos'));
   router.route('/privacy', require('./components/Privacy'));
+  router.route('/practice', require('./components/Practice'));
+  router.route('/practice/new', require('./components/assignments/Create'));
+  router.route('/practice/:id', require('./components/submissions/Show'));
+  router.route('/practice/:id/edit', require('./components/submissions/Edit'));
   router.route('/classes', require('./components/classes/List'));
   router.route('/classes/:id', require('./components/classes/Show'));
   router.route(

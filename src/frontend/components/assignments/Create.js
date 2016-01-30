@@ -11,6 +11,7 @@ let Topbar = require('../Topbar');
 let assignment = require('../../helpers/assignment');
 let classes = require('../../store/classes');
 let {firebaseUrl} = require('../../constants');
+let session = require('../../session');
 
 module.exports = React.createClass({
   displayName: 'assignments/Create',
@@ -18,8 +19,12 @@ module.exports = React.createClass({
   mixins: [ReactFire],
 
   getInitialState: function() {
+    let user = session.get('user');
+
     return {
+      user,
       aClass: {},
+      isPracticeMode: user.role === 'student',
       topics: [],
       topic: null,
       assignments: [],
@@ -28,12 +33,20 @@ module.exports = React.createClass({
   },
 
   componentWillMount: async function() {
-    let id = this.props.aClass;
     this.bindAsArray(
       new Firebase(`${firebaseUrl}/topics`),
       'topics'
     );
 
+    let {user, isPracticeMode} = this.state;
+    if (isPracticeMode) {
+      return this.bindAsArray(
+        new Firebase(`${firebaseUrl}/students/${user.id}/assignments`),
+        'assignments'
+      );
+    }
+
+    let id = this.props.aClass;
     this.bindAsArray(
       new Firebase(`${firebaseUrl}/classes/${id}/assignments`),
       'assignments'
@@ -44,23 +57,31 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let {aClass} = this.state;
+    let {aClass, isPracticeMode} = this.state;
 
-    let headerText = <div className="classes-show-header">
-      <div className="classes-show-header-title"
-           style={{color: aClass.color}}>
-        {aClass.name}
-      </div>
-      <ClassCode code={aClass.code} />
-    </div>;
+    let headerText = isPracticeMode ?
+      'Practice Mode' :
+      <div className="classes-show-header">
+        <div className="classes-show-header-title"
+             style={{color: aClass.color}}>
+          {aClass.name}
+        </div>
+        <ClassCode code={aClass.code} />
+      </div>;
+
+    let backlink, backlinkText;
+    if (isPracticeMode) {
+      backlink = '#!/practice/';
+      backlinkText = <span>&lt; Practice</span>;
+    } else {
+      backlink = `#!/classes/${this.props.aClass}/`;
+      backlinkText = <span>&lt; {aClass && aClass.name}</span>;
+    }
 
     return <div id="assignments-create">
       <Topbar headerText={headerText} />
       <div className="view">
-        <a className="backlink clickable-text"
-           href={`#!/classes/${this.props.aClass}/`}>
-          &lt; {aClass && aClass.name}
-        </a>
+        <a className="backlink clickable-text" href={backlink}>{backlinkText}</a>
         <div className="assignments-create-level">
           {this._renderTopics()}
           {this._renderQuestionTypes()}
@@ -156,12 +177,16 @@ module.exports = React.createClass({
   },
 
   _renderAssignmentSummary: function() {
-    let {theAssignment} = this.state;
-    let {composition, deadline} = theAssignment;
-    let count = assignment.getSize(theAssignment);
-    let chart = <div className="topic-ratio-chart">
+    return this.state.isPracticeMode ?
+      this._renderPracticeSummary() :
+      this._renderRealSummary();
+  },
+
+  _generateChart: function() {
+    let count = this._questionCount();
+    return <div className="topic-ratio-chart">
       {
-        composition.map((part, index) => {
+        this.state.theAssignment.composition.map((part, index) => {
           let decimal = part.count / count;
           let percent = `${(100 * decimal).toString().substring(0, 5)}%`;
           let fontSize = `${Math.min(16, 160 * decimal)}px`;
@@ -176,6 +201,58 @@ module.exports = React.createClass({
         })
       }
     </div>;
+  },
+
+  _questionCount: function() {
+    return assignment.getSize(this.state.theAssignment);
+  },
+
+  _getDeadline: function() {
+    return this.state.theAssignment.deadline.format('MM/DD/YY');
+  },
+
+  _renderPracticeSummary: function() {
+    let chart = this._generateChart();
+    let count = this._questionCount();
+    let rows = [
+      {
+        content: [
+          <div className="assignments-create-summary">
+            <div className="assignments-create-label">Topic ratio</div>
+            <div className="assignments-create-value">{chart}</div>
+          </div>
+        ],
+        height: 279
+      },
+      [
+        <div className="assignments-create-summary">
+          <div className="assignments-create-label"># Questions</div>
+          <div className="assignments-create-value">{count}</div>
+        </div>
+      ],
+      [
+        <div className="assignments-create-summary">
+          <div className="assignments-create-label clickable-text"
+               onClick={this._handlePreview}>
+            Preview
+          </div>
+          <div className="assignments-create-value clickable-text"
+               onClick={this._handleStart}>
+            Start
+          </div>
+        </div>
+      ]
+    ];
+
+    return <Tabular className="dark"
+      cols={[{content: 'Practice Summary', width: 250}]}
+      rows={rows} />;
+  },
+
+  _renderRealSummary: function() {
+    let chart = this._generateChart();
+    let count = this._questionCount();
+    let deadline = this._getDeadline();
 
     let rows = [
       {
@@ -258,7 +335,7 @@ module.exports = React.createClass({
   },
 
   _handlePreview: async function() {
-    let {aClass, assignments, theAssignment} = this.state;
+    let {aClass, assignments, theAssignment, isPracticeMode} = this.state;
     theAssignment = await assignment.getPreview(theAssignment);
     this.setState({theAssignment});
 
@@ -267,7 +344,7 @@ module.exports = React.createClass({
       {content: '', width: 460}
     ];
 
-    let {preview, deadline} = theAssignment;
+    let {preview, created, deadline} = theAssignment;
     let rows = preview.map((question, index) => {
       return [`${index + 1}.`, question.question];
     });
@@ -276,15 +353,24 @@ module.exports = React.createClass({
       <div className="assignment-preview">
         <div className="assignment-details">
           <div className="assignment-name"
-               style={{color: aClass.color}}>
-            {`Assignment ${assignments.length + 1}`}
+               style={{color: isPracticeMode ? '#3996f0' : aClass.color}}>
+            {isPracticeMode ? 'Summary' : `Assignment ${assignments.length + 1}`}
           </div>
-          <div className="class-code">
-            <div className="class-code-key">Deadline</div>
-            <div className="class-code-value">
-              {deadline.format('dddd, MMM Do YYYY')}
-            </div>
-          </div>
+          {
+            isPracticeMode ?
+              <div className="class-code">
+                <div className="class-code-key">Created on</div>
+                <div className="class-code-value">
+                  {created.format('dddd, MMM Do YYYY')}
+                </div>
+              </div> :
+              <div className="class-code">
+                <div className="class-code-key">Deadline</div>
+                <div className="class-code-value">
+                  {deadline.format('dddd, MMM Do YYYY')}
+                </div>
+              </div>
+          }
         </div>
         <Tabular cols={cols} rows={rows} />
       </div>
@@ -295,5 +381,11 @@ module.exports = React.createClass({
     let {aClass, assignments, theAssignment} = this.state;
     await assignment.assign(aClass, assignments, theAssignment);
     location.hash = `#!/classes/${this.props.aClass}/`;
+  },
+
+  _handleStart: async function() {
+    let {assignments, theAssignment} = this.state;
+    let practiceId = await assignment.practice(assignments, theAssignment);
+    location.hash = `#!/practice/${practiceId}/edit/`;
   }
 });

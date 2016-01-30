@@ -27,6 +27,7 @@ export type AssignmentSection = {
 };
 
 export type Assignment = {
+  created: Object;
   deadline: Object;
   composition: Array<AssignmentSection>;
   preview: ?Array<AssignmentQuestion>;
@@ -46,9 +47,20 @@ export type FBAssignment = {
   '.key': string;
   id: ?string;
   name: string;
+  created?: string;
+  composition?: Array<Object> | string;
   deadline: string;
   questions: Object;
   submissions: Object;
+};
+
+export type FBPractice = {
+  '.key': string;
+  id: ?string;
+  created: string;
+  composition: Array<Object> | string;
+  questions: Object;
+  submission: Object;
 };
 
 export type FBTeacher = {

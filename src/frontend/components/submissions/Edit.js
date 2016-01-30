@@ -15,6 +15,7 @@ let {firebaseUrl} = require('../../constants');
 let map = require('lodash/collection/map');
 let {mapChar} = require('../../../common/string');
 let preventDefault = require('../../preventDefault');
+let session = require('../../session');
 let submissions = require('../../store/submissions');
 let times = require('lodash/utility/times');
 
@@ -98,19 +99,35 @@ module.exports = React.createClass({
   },
 
   componentWillMount: async function() {
-    let {aClass, assignment, submission} = this.props;
+    let {aClass, assignment, submission, id} = this.props;
 
-    this.bindAsArray(
-      new Firebase(`${firebaseUrl}/classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
-      'responses'
-    );
+    if (aClass) {
+      this.isPracticeMode = false;
+      this.bindAsArray(
+        new Firebase(`${firebaseUrl}/classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
+        'responses'
+      );
 
-    let [theClass, theAssignment] = await Promise.all([
-      classes.get(aClass),
-      assignments.get(aClass, assignment)
-    ]);
+      let [theClass, theAssignment] = await Promise.all([
+        classes.get(aClass),
+        assignments.get(aClass, assignment)
+      ]);
 
-    this.setState({aClass: theClass, assignment: theAssignment});
+      this.setState({aClass: theClass, assignment: theAssignment});
+    } else if (id) {
+      this.isPracticeMode = true;
+      let user = session.get('user');
+      this.bindAsArray(
+        new Firebase(`${firebaseUrl}/students/${user.id}/assignments/${id}/submission/responses`),
+        'responses'
+      );
+
+      let theAssignment = await assignments.getPractice(id);
+      this.setState({assignment: theAssignment});
+    } else {
+      throw new Error('Nowhere to find responses!');
+    }
+
     document.addEventListener('keydown', this._handleKeyDown, true);
     document.addEventListener('keypress', preventDefault);
   },
@@ -128,14 +145,22 @@ module.exports = React.createClass({
 
   render: function() {
     let {aClass, assignment, num, isHelpDialogShown, isTutorialDismissed} = this.state;
+    let headerText, backlink, backlinkText;
+    if (this.isPracticeMode) {
+      headerText = 'Practice Mode';
+      backlink = '#!/practice/';
+      backlinkText = <span>&lt; Practice sessions</span>;
+    } else {
+      headerText = assignment.name || '';
+      backlink = `#!/classes/${this.props.aClass}/`;
+      backlinkText = <span>&lt; {aClass && aClass.name}</span>;
+    }
+
     return <div id="submissions-edit">
-      <Topbar headerText={assignment.name || ''} />
+      <Topbar headerText={headerText} />
       <div className="view">
         <div className="subbar">
-          <a className="backlink clickable-text"
-             href={`#!/classes/${this.props.aClass}/`}>
-            &lt; {aClass && aClass.name}
-          </a>
+          <a className="backlink clickable-text" href={backlink}>{backlinkText}</a>
           <div className="question-instruction">
             {editor.getInstruction(assignment, num)}
           </div>
@@ -488,6 +513,7 @@ module.exports = React.createClass({
   _handleKeyDown: function(event) {
     if (this.isBusy) {
       debug('Busy... will ignore key event');
+      return;
     }
 
     this.isBusy = true;
@@ -782,11 +808,11 @@ module.exports = React.createClass({
   },
 
   _commitDelta: async function() {
-    let {aClass, assignment, submission} = this.props;
+    let {aClass, assignment, submission, id} = this.props;
     let {responses, num, changes, equation, append, leftParens, rightParens} = this.state;
     await editor.commitDelta(
       aClass,
-      assignment,
+      assignment || id,
       submission,
       responses,
       num,
@@ -803,16 +829,18 @@ module.exports = React.createClass({
 
   _handleSubmit: async function() {
     debug('submit assignment');
-    let {aClass, assignment, submission} = this.props;
+    let {aClass, assignment, submission, id} = this.props;
     try {
-      await submissions.submit(aClass, assignment, submission);
+      await submissions.submit(aClass, assignment || id, submission);
     } catch (error) {
       debug(error.toString());
       alert('Error grading assignment! Please try submitting later.');
       return;
     }
 
-    location.hash = `#!/classes/${aClass}/assignments/${assignment}/submissions/${submission}`;
+    location.hash = this.isPracticeMode ?
+      `#!/practice/${id}/` :
+      `#!/classes/${aClass}/assignments/${assignment}/submissions/${submission}/`;
   },
 
   _handleCursorReposition: function(event) {

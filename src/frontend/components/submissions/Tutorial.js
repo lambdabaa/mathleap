@@ -46,7 +46,8 @@ module.exports = React.createClass({
               className += ' active';
             }
 
-            return <span className={className}
+            return <span key={index}
+                         className={className}
                          onClick={this._setCarousel.bind(this, index)}>
               &#8729;
             </span>;
