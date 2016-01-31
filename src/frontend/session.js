@@ -48,6 +48,11 @@ class Session extends EventEmitter {
     });
 
     super.emit('change');
+
+    // Somehow we're not always deleting all of the session data.
+    // We should investigate more thoroughly, but for now just nuke
+    // everything.
+    deleteAllCookies();
   }
 
   _hydrate(): void {
@@ -90,6 +95,16 @@ function getExpirationUTCString(): string {
   return expiration.toUTCString();
 }
 
+function deleteAllCookies(): void {
+  document.cookie.split(';').forEach((cookie: string): void => {
+    let equalPos = cookie.indexOf('=');
+    let key = equalPos !== -1 ?
+      cookie.substr(0, equalPos) :
+      cookie;
+    document.cookie = `${key}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  });
+}
+
 let session = module.exports = new Session();
 
 session.on('newListener', function(topic: string, fn: Function): void {
@@ -97,7 +112,5 @@ session.on('newListener', function(topic: string, fn: Function): void {
     return;
   }
 
-  process.nextTick((): void => {
-    fn(session.get(topic));
-  });
+  process.nextTick((): void => fn(session.get(topic)));
 });

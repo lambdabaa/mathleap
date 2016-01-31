@@ -94,7 +94,10 @@ module.exports = React.createClass({
       drag: null,
 
       // Whether user dismissed tutorial
-      isTutorialDismissed: false
+      isTutorialDismissed: false,
+
+      // Whether we're waiting for a submit action
+      isSubmissionPending: false
     };
   },
 
@@ -187,7 +190,7 @@ module.exports = React.createClass({
   },
 
   _renderQuestionList: function() {
-    let {responses, num} = this.state;
+    let {responses, num, isSubmissionPending} = this.state;
     let questions = responses.map((aResponse, index) => {
       return [
         <div key={`number-${index}`}
@@ -212,7 +215,11 @@ module.exports = React.createClass({
                 ]}
                 rows={questions}
                 selected={num} />
-      <div className="button-inverse" onClick={this._handleSubmit}>Submit</div>
+      {
+        isSubmissionPending ?
+          <div className="button-inverse">Submit</div> :
+          <div className="button-inverse button-disabled" onClick={this._handleSubmit}>Submit</div>
+      }
     </div>;
   },
 
@@ -830,11 +837,13 @@ module.exports = React.createClass({
   _handleSubmit: async function() {
     debug('submit assignment');
     let {aClass, assignment, submission, id} = this.props;
+    this.setState({isSubmissionPending: true});
     try {
       await submissions.submit(aClass, assignment || id, submission);
     } catch (error) {
       debug(error.toString());
       alert('Error grading assignment! Please try submitting later.');
+      this.setState({isSubmissionPending: false});
       return;
     }
 

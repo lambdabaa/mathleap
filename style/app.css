@@ -96,6 +96,10 @@ select {
   background-color: #6ab0f4;
 }
 
+.button-disabled {
+  opacity: 0.6;
+}
+
 .list-action-btn {
   cursor: pointer;
 }
