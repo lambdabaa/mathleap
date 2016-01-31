@@ -7,6 +7,7 @@ let includes = require('lodash/collection/includes');
 let {isEqual} = require('./wolframs');
 let map = require('lodash/collection/map');
 let request = require('./request');
+let session = require('../session');
 
 import type {
   FBResponse,
@@ -15,6 +16,7 @@ import type {
 } from '../../common/types';
 
 let classesRef = new Firebase(`${firebaseUrl}/classes`);
+let studentsRef = new Firebase(`${firebaseUrl}/students`);
 
 exports.create = async function(details: Object): Promise<string> {
   debug('create submission', JSON.stringify(details));
@@ -138,5 +140,11 @@ function getSubmissionsRef(classId: string, assignmentId: string): Object {
 
 function getSubmissionRef(classId: string, assignmentId: string,
                           submissionId: string): Object {
+  if (!classId) {
+    debug('practice mode');
+    let user = session.get('user');
+    return studentsRef.child(`${user.id}/assignments/${assignmentId}/submission`);
+  }
+
   return getSubmissionsRef(classId, assignmentId).child(submissionId);
 }

@@ -4,6 +4,7 @@ let Firebase = require('firebase/lib/firebase-web');
 let debug = require('../../common/debug')('store/students');
 let {firebaseUrl} = require('../constants');
 let request = require('./request');
+let session = require('../session');
 let users = require('./users');
 
 import type {FBStudent} from '../../common/types';
@@ -32,4 +33,14 @@ exports.get = async function get(id: string): Promise<FBStudent> {
   student.id = id;
   debug('get student ok', JSON.stringify(student));
   return student;
+};
+
+exports.createPractice = async function(details: Object): Promise<string> {
+  let {id} = session.get('user');
+  let studentRef = studentsRef.child(id);
+  let assignmentsRef = studentRef.child('assignments');
+  let ref = assignmentsRef.push();
+  await request(ref, 'set', details);
+  let refparts = ref.toString().split('/');
+  return refparts[refparts.length - 1];
 };

@@ -7,6 +7,7 @@ let Topbar = require('../Topbar');
 let assignment = require('../../helpers/assignment');
 let classes = require('../../store/classes');
 let {firebaseUrl} = require('../../constants');
+let users = require('../../store/users');
 
 module.exports = React.createClass({
   displayName: 'classes/StudentShow',
@@ -48,7 +49,14 @@ module.exports = React.createClass({
     });
 
     return <div id="classes-show-student">
-      <Topbar headerText={headerText} />
+      <Topbar headerText={headerText}
+              actions={[
+                <a className="topbar-action clickable-text" href="#!/practice/">Practice Mode</a>,
+                <div className="topbar-action clickable-text"
+                     onClick={users.logout}>
+                  Log out
+                </div>
+              ]} />
       <div className="view">
         <a className="backlink clickable-text" href="#!/classes/">
           &lt; Classes
@@ -69,7 +77,7 @@ module.exports = React.createClass({
     let assignmentId = anAssignment['.key'];
     let {key, submission} = await assignment.findOrCreateSubmission(classId, anAssignment);
     location.hash = submission.complete ?
-      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}` :
-      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}/edit`;
+      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}/` :
+      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}/edit/`;
   }
 });

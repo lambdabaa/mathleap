@@ -9,6 +9,7 @@ let session = require('../../session');
 let classes = require('../../store/classes');
 let {firebaseUrl} = require('../../constants');
 let handleEnter = require('../../handleEnter');
+let users = require('../../store/users');
 
 let studentsRef = new Firebase(`${firebaseUrl}/students`);
 
@@ -19,15 +20,13 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      user: session.get('user'),
       classes: [],
       classIds: []
     };
   },
 
   componentWillMount: function() {
-    let student = this.state.user;
-    session.on('user', this._onUser);
+    let student = session.get('user');
     this.bindAsArray(
       studentsRef
         .child(student.id)
@@ -56,10 +55,6 @@ module.exports = React.createClass({
     this._updateClasses(state);
   },
 
-  componentWillUnmount: function() {
-    session.removeListener('user', this._onUser);
-  },
-
   _updateClasses: async function(state) {
     // ReactFire keeps the list of classIds which we're taking up-to-date
     // but it's our job to turn those into actual classes.
@@ -72,7 +67,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let student = this.state.user;
+    let student = session.get('user');
     let headerText = `${student.first}'s Classes`;
     let classList = this.state.classes
       .filter(aClass => !!aClass)
@@ -93,7 +88,14 @@ module.exports = React.createClass({
       });
 
     return <div id="classes-student-list">
-      <Topbar headerText={headerText} />
+      <Topbar headerText={headerText}
+              actions={[
+                <a className="topbar-action clickable-text" href="#!/practice/">Practice Mode</a>,
+                <div className="topbar-action clickable-text"
+                     onClick={users.logout}>
+                  Log out
+                </div>
+              ]} />
       <Tabular className="view"
                cols={[
                  {content: 'Class', width: 660},
@@ -112,14 +114,11 @@ module.exports = React.createClass({
           '' :
           <div className="view classes-list-ftu">
             Welcome to MathLeap! To join a class with a student code, click
-            the plus sign in the upper right corner.
+            the plus sign in the upper right corner. If you just want to practice,
+            click Practice Mode on the navigation bar.
           </div>
       }
     </div>;
-  },
-
-  _onUser: function(user) {
-    this.setState({user});
   },
 
   _handleAddClass: async function() {

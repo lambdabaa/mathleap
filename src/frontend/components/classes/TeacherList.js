@@ -20,7 +20,6 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      user: session.get('user'),
       classes: [],
       classIds: [],
       editable: null
@@ -28,15 +27,13 @@ module.exports = React.createClass({
   },
 
   componentWillMount: function() {
-    let teacher = this.state.user;
+    let teacher = session.get('user');
     this.bindAsArray(
       teachersRef
         .child(teacher.id)
         .child('classes'),
       'classIds'
     );
-
-    session.on('user', this._onUser);
   },
 
   componentDidMount: function() {
@@ -82,12 +79,8 @@ module.exports = React.createClass({
     $('.classes-list-edit-class-name').focus();
   },
 
-  componentWillUnmount: function() {
-    session.removeListener('user', this._onUser);
-  },
-
   render: function() {
-    let teacher = this.state.user;
+    let teacher = session.get('user');
     let headerText = `${teacher.title} ${teacher.last}'s Classes`;
 
     let cols = [
@@ -131,10 +124,6 @@ module.exports = React.createClass({
           </div>
       }
     </div>;
-  },
-
-  _onUser: function(user) {
-    this.setState({user});
   },
 
   _renderMutableClass: function(aClass, index) {

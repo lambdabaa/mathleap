@@ -6,6 +6,7 @@ let debug = require('../../common/debug')('helpers/assignment');
 let filter = require('lodash/collection/filter');
 let groupBy = require('lodash/collection/groupBy');
 let {isNonNullObject} = require('../../common/object');
+let map = require('lodash/collection/map');
 let mapValues = require('lodash/object/mapValues');
 let moment = require('moment');
 let questions = require('../store/questions');
@@ -13,9 +14,11 @@ let reduce = require('lodash/collection/reduce');
 let round = require('../round');
 let session = require('../session');
 let stringify = require('json-stringify-safe');
+let students = require('../store/students');
 let submissions = require('../store/submissions');
 let submissionHelper = require('./submission');
 let sum = require('lodash/math/sum');
+let uniq = require('lodash/array/uniq');
 
 import type {
   QuestionType,
@@ -28,9 +31,10 @@ import type {
 } from '../../common/types';
 
 exports.createAssignment = function(): Assignment {
+  let created = moment();
   let deadline = moment();
   deadline.date(deadline.date() + 1);
-  return {deadline, composition: [], preview: null};
+  return {created, deadline, composition: [], preview: null};
 };
 
 exports.getSize = function(assignment: Assignment): number {
@@ -91,8 +95,32 @@ exports.assign = async function(aClass: Object, assignments: Array<Object>,
 
   await classes.createAssignment(aClass, {
     name: `Assignment ${assignments.length + 1}`,
+    created: assignment.created.format('MM/DD/YY'),
     deadline: assignment.deadline.format('MM/DD/YY'),
-    questions: assignment.preview
+    questions: assignment.preview,
+    composition: JSON.stringify(assignment.composition)
+  });
+};
+
+exports.practice = async function(assignments: Array<Object>,
+                                  assignment: Assignment): Promise<string> {
+  debug('create practice');
+  if (!Array.isArray(assignment.preview)) {
+    assignment.preview = await questions.createAssignment(assignment.composition);
+  }
+
+  let responses = assignment.preview.map(question => {
+    return {
+      question,
+      work: [{operation: 'noop', state: [question.question]}]
+    };
+  });
+
+  return students.createPractice({
+    created: assignment.created.format('MM/DD/YY'),
+    questions: assignment.preview,
+    submission: {responses, complete: false},
+    composition: JSON.stringify(assignment.composition)
   });
 };
 
@@ -205,6 +233,15 @@ exports.getAverage = async function(assignment: FBAssignment): Promise<string> {
   }
 
   return `${round(100 * total / possible)}%`;
+};
+
+exports.getTopics = function(assignment: FBAssignment): Array<string> {
+  return uniq(
+    map(
+      assignment.composition,
+      (section: AssignmentSection): string => section.topic.name
+    )
+  ).sort();
 };
 
 function countQuestionsByType(assignment: Assignment, type: QuestionType): number {
