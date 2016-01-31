@@ -1,7 +1,7 @@
 {
   "name": "ml",
   "description": "MathLeap automates assessments for math classes",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "author": "Gareth Aye [:gaye] <gareth.aye@gmail.com>",
 
   "dependencies": {
