@@ -208,7 +208,7 @@ module.exports = React.createClass({
   },
 
   _getDeadline: function() {
-    return this.state.theAssignment.deadline.format('MM/DD/YY');
+    return this.state.theAssignment.deadline;
   },
 
   _renderPracticeSummary: function() {
