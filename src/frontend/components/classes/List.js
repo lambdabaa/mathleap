@@ -1,8 +1,6 @@
 /* @flow */
 
 let React = require('react');
-let StudentList = require('./StudentList');
-let TeacherList = require('./TeacherList');
 let session = require('../../session');
 
 module.exports = function(props: Object): React.Element {
@@ -13,9 +11,9 @@ module.exports = function(props: Object): React.Element {
 
   switch (user.role) {
     case 'student':
-      return <StudentList props={props} />;
+      return React.createElement(require('./StudentList'), props);
     case 'teacher':
-      return <TeacherList props={props} />;
+      return React.createElement(require('./TeacherList'), props);
     default:
       throw new Error(`Unexpected user role ${user.role}`);
   }
