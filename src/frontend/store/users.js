@@ -33,6 +33,12 @@ exports.login = async function(credentials: Credentials): Promise<void> {
   let userRef = ref.child(id);
   subscription = subscribe(userRef, 'value');
   subscription.on('val', (user: FBTeacher | FBStudent): void => {
+    if (user == null) {
+      alert('User details missing from database. ' +
+            'Please email support@mathleap.org or create a new account.');
+      throw new Error(`User details for ${id} missing from database!`);
+    }
+
     user.id = id;
     session.set('user', user);
   });
