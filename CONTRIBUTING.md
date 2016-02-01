@@ -48,9 +48,3 @@ on, set `DEBUG=1` (ie `DEBUG=1 npm test`).
 3. Open a pull request.
 4. Make sure your tests are passing on continuous integration by
    checking the CircleCI link in your pull request.
-
-### Deploying to production
-
-First install `firebase` globally with `npm install -g firebase-tools`.
-`npm run deploy` builds and deploys MathLeap to Firebase. You'll need
-to be authenticated with our MathLeap Firebase account.
