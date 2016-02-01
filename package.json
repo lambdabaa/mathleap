@@ -41,7 +41,7 @@
   },
 
   "scripts": {
-    "deploy": "make clean && npm install && rm -rf node_modules && npm install --production && firebase deploy && npm install",
+    "deploy": "make clean && npm install && rm -rf node_modules && npm install --production && firebase deploy",
     "flow": "flow",
     "lint": "eslint src",
     "prepublish": "make -j8",

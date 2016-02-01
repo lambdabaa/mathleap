@@ -8,6 +8,7 @@ let {someValue} = require('../../common/array');
 let submissions = require('../store/submissions');
 
 import type {
+  AssignmentSection,
   FBAssignment,
   FBResponse
 } from '../../common/types';
@@ -27,6 +28,17 @@ exports.getInstruction = function(assignment: FBAssignment, index: number): stri
 
   if (instruction) {
     return instruction;
+  }
+
+  let section = getAssignmentSection(assignment, index);
+  if (section) {
+    if (typeof section.type.instruction === 'string') {
+      return section.type.instruction;
+    }
+
+    if (typeof section.topic.instruction === 'string') {
+      return section.topic.instruction;
+    }
   }
 
   let isInequality = inequalities.some((symbol: string): boolean => {
@@ -320,6 +332,19 @@ exports.applyDragToHighlight = function(highlight: Highlight, cursor: number,
       !value;
   });
 };
+
+function getAssignmentSection(assignment: FBAssignment, index: number): ?AssignmentSection {
+  let {composition} = assignment;
+  if (!Array.isArray(composition)) {
+    return null;
+  }
+
+  let count = 0;
+  return composition.find((section: AssignmentSection): boolean => {
+    count += section.count;
+    return count > index;
+  });
+}
 
 function getOperatorPriority(operator: string): number {
   switch (operator) {
