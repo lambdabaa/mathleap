@@ -20,7 +20,7 @@
 
 .topbar-header-text {
   align-items: center;
-  -wekbit-align-items: center;
+  -webkit-align-items: center;
   display: flex;
   display: -webkit-flex;
   height: 120px;
