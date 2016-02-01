@@ -217,8 +217,8 @@ module.exports = React.createClass({
                 selected={num} />
       {
         isSubmissionPending ?
-          <div className="button-inverse">Submit</div> :
-          <div className="button-inverse button-disabled" onClick={this._handleSubmit}>Submit</div>
+          <div className="button-inverse button-disabled">Submit</div> :
+          <div className="button-inverse" onClick={this._handleSubmit}>Submit</div>
       }
     </div>;
   },
