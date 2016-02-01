@@ -22,7 +22,7 @@
 
     "v2": {
       ".read": "auth.uid !== null",
-      ".write": "auth.uid !== null"
+      ".write": true
     }
   }
 }
