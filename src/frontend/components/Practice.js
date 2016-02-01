@@ -76,7 +76,7 @@ module.exports = React.createClass({
           rows.length ?
             '' :
             <div className="view classes-list-ftu">
-              Click the plus sign in the upper right coner to choose
+              Click the plus sign in the upper right corner to choose
               problems to practice.
             </div>
         }
