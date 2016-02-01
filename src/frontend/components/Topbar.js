@@ -1,36 +1,28 @@
+/* @flow */
+
 let React = require('react');
 let session = require('../session');
 let users = require('../store/users');
 
-module.exports = React.createClass({
-  displayName: 'Topbar',
-
-  render: function() {
-    return <div className="topbar">
-      <div className="topbar-logo" onClick={this._handleLogoClick} />
+module.exports = function(props: Object): React.Element {
+  let user = session.get('user');
+  return <div className="topbar">
+    <a className="topbar-logo" href={`#!${user ? 'classes' : 'home'}/`} />
+    {
+      props.headerText != null ?
+        <div className="topbar-header-text">{props.headerText}</div> :
+        <div className="topbar-text-logo">
+          <div className="topbar-text-logo-math">Math</div>
+          <div className="topbar-text-logo-leap">Leap</div>
+        </div>
+    }
+    <div className="topbar-actions">
       {
-        this.props.headerText != null ?
-          <div className="topbar-header-text">
-            {this.props.headerText}
-          </div> :
-          <div className="topbar-text-logo">
-            <div className="topbar-text-logo-math">Math</div>
-            <div className="topbar-text-logo-leap">Leap</div>
-          </div>
+        props.actions ||
+        <div className="topbar-action clickable-text" onClick={users.logout}>
+          Log out
+        </div>
       }
-      <div className="topbar-actions">
-        {
-          this.props.actions ||
-          <div className="topbar-action clickable-text" onClick={users.logout}>
-            Log out
-          </div>
-        }
-      </div>
-    </div>;
-  },
-
-  _handleLogoClick: function() {
-    let user = session.get('user');
-    location.hash = `#!/${user ? 'classes' : 'home'}/`;
-  }
-});
+    </div>
+  </div>;
+};

@@ -65,7 +65,8 @@ module.exports = React.createClass({
       </div>,
       <div className="carousel">
         Open a problem by selecting it from the question list on the left.
-        There are two columns: <span className="emph">History</span> and <span className="emph">Results</span>.
+        There are two columns: <span className="emph">History</span>
+        and <span className="emph">Results</span>.
       </div>,
       <div className="carousel">
         The <span className="emph">History</span> column shows the operations
@@ -101,7 +102,8 @@ module.exports = React.createClass({
         and then hit the backspace or delete character on your keyboard.
       </div>,
       <div className="carousel">
-        You can move around the <span style={{color: '#3996f0', fontSize: '24px', fontWeight: 'bold'}}>|</span>
+        You can move around the
+        <span style={{color: '#3996f0', fontSize: '24px', fontWeight: 'bold'}}>|</span>
         cursor by clicking within the equation or using the ← and → keys.
       </div>,
       <div className="carousel">
