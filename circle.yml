@@ -7,9 +7,3 @@ test:
   pre:
     - npm run lint
     - npm run flow
-deployment:
-  production:
-    branch: master
-    commands:
-      - npm install -g firebase-tools
-      - firebase deploy --token=$FIREBASE_TOKEN --non-interactive
