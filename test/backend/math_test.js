@@ -17,7 +17,8 @@ suite('backend/math', () => {
 
   [
     ['|-2|', '|-1 * 2|'],
-    ['3x ^ 2', '3 * x ^ 2']
+    ['3x ^ 2', '3 * x ^ 2'],
+    ['|7*-2|-5*|5-7|', '|7 * -1 * 2| - 5 * |5 - 7|']
   ].forEach(testCase => {
     test(testCase[0], () => assert.equal(stringify(parse(testCase[0])), testCase[1]));
   });
