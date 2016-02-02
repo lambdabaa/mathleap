@@ -4,8 +4,10 @@
  */
 
 let {EventEmitter} = require('events');
+let clone = require('lodash/lang/cloneDeep');
 let debug = require('../common/debug')('session');
 let forEach = require('lodash/collection/forEach');
+let stringify = require('json-stringify-safe');
 
 type Primitive = string | number | boolean;
 
@@ -20,7 +22,7 @@ class Session extends EventEmitter {
   }
 
   set(key: Primitive, value: any): void {
-    debug(`set ${key}=${JSON.stringify(value)}`);
+    debug(`set ${key}=${stringify(value)}`);
     this.data[key] = value;
     super.emit('change');
     super.emit(key, value);
@@ -69,7 +71,18 @@ class Session extends EventEmitter {
 
   _persist(expiration: string = getExpirationUTCString()): void {
     forEach(this.data, function(value: any, key: Primitive) {
-      value = typeof value === 'object' ? JSON.stringify(value) : value;
+      debug('persist', stringify({value, key, expiration}));
+      // TODO: Hack!
+      if (typeof value === 'object') {
+        if ('assignments' in value) {
+          debug('Found assignments!');
+          value = clone(value);
+          delete value.assignments;
+        }
+
+        value = stringify(value);
+      }
+
       document.cookie = `${key}=${value};expires=${expiration}`;
     });
   }
