@@ -47,6 +47,7 @@
       ["expression ADD ABS expression ABS", "$$ = yy.append($1, {value: yy.abs($4), negate: false});"],
       ["expression SUBTRACT term", "$$ = yy.append($1, {value: $3, negate: true});"],
       ["expression SUBTRACT ABS expression ABS", "$$ = yy.append($1, {value: yy.abs($4), negate: true});"],
+      ["ABS term ABS", "$$ = yy.createNode('termlist', [{value: yy.abs($2), negate: false}]);"],
       ["term", "$$ = yy.createNode('termlist', [{value: $1, negate: false}]);"]
     ],
 
@@ -56,6 +57,7 @@
       ["term nonnegatefactor", "$$ = yy.append($1, {value: $2, invert: false});"],
       ["term DIVIDE factor", "$$ = yy.append($1, {value: $3, invert: true});"],
       ["term DIVIDE ABS expression ABS", "$$ = yy.append($1, {value: yy.abs($4), invert: true});"],
+      ["ABS factor ABS", "$$ = yy.createNode('factorlist', [{value: yy.abs($2), invert: false}]);"],
       ["factor", "$$ = yy.createNode('factorlist', [{value: $1, invert: false}]);"]
     ],
 
