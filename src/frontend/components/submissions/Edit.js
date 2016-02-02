@@ -176,6 +176,7 @@ module.exports = React.createClass({
                src="style/images/question-mark.png"
                onClick={this._showHelpDialog} />
         </div>
+        <div className="tutorial-buffer"></div>
       </div>
       {
         isTutorialDismissed ?
