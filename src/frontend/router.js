@@ -11,7 +11,7 @@ let {someValue} = require('../common/array');
 type Route = {
   element: Object;
   params: Object;
-  view: string;
+  view: RegExp | string;
 };
 
 function Router(options: Object = {}) {
@@ -30,23 +30,30 @@ Router.prototype.start = function(): void {
   window.onhashchange = () => this.emit('change');
 };
 
-Router.prototype.route = function(urlFormat: string, component: Function): void {
+Router.prototype.route = function(urlFormat: RegExp|string,
+                                  component: Function): void {
   let keys = [];
-  let parts = urlFormat
-    .split('/')
-    .map(function(part): string {
-      if (part.charAt(0) !== ':') {
-        return part;
-      }
+  let regex;
+  if (urlFormat instanceof RegExp) {
+    regex = urlFormat;
+  } else {
+    let parts = urlFormat
+      .split('/')
+      .map(function(part): string {
+        if (part.charAt(0) !== ':') {
+          return part;
+        }
 
-      keys.push(part.substring(1));
-      return '([^\/]+)';
-    })
-    .filter(function(part): boolean {
-      return !!part.length;
-    });
+        keys.push(part.substring(1));
+        return '([^\/]+)';
+      })
+      .filter(function(part): boolean {
+        return !!part.length;
+      });
 
-  let regex = new RegExp(`^#!/${parts.join('\/')}\/?$`);
+    regex = new RegExp(`^#!/${parts.join('\/')}\/?$`);
+  }
+
   this.routes.push((params: Object): ?Route => {
     let match = regex.exec(location.hash);
     if (match === null) {

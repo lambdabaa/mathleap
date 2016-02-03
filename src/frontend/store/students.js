@@ -11,16 +11,20 @@ import type {FBStudent} from '../../common/types';
 
 let studentsRef = new Firebase(`${firebaseUrl}/students`);
 
-exports.create = async function(options: Object): Promise<void> {
+exports.create = async function(options: Object, uid: number | string): Promise<void> {
   let student = {
     email: options.email,
     first: options.first,
     last: options.last,
     username: options.username,
-    role: 'student'
+    role: 'student',
+    misc: options.misc || {}
   };
 
-  let uid = await users.create({email: options.email, password: options.password});
+  if (uid == null) {
+    uid = await users.create({email: options.email, password: options.password});
+  }
+
   let ref = studentsRef.child(uid);
   await request(ref, 'set', student);
   debug('create student ok', JSON.stringify(student));

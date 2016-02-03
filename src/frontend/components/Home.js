@@ -3,9 +3,11 @@ let React = require('react');
 let Topbar = require('./Topbar');
 let bowser = require('bowser');
 let debug = require('../../common/debug')('components/Home');
+let {edmodoId} = require('../constants');
 let handleEnter = require('../handleEnter');
 let isBrowserSupported = require('../isBrowserSupported');
 let {on} = require('../../common/events');
+let querystring = require('querystring');
 let students = require('../store/students');
 let teachers = require('../store/teachers');
 let users = require('../store/users');
@@ -96,7 +98,8 @@ module.exports = React.createClass({
           '' :
           <div className="service-outage">
             MathLeap is not supported for your browser. Please install an
-            up-to-date version of a modern browser like <a href="https://mozilla.org/firefox/">Firefox</a>
+            up-to-date version of a modern browser like
+            <a href="https://mozilla.org/firefox/">Firefox</a>
             or <a href="https://google.com/chrome/">Google Chrome</a>.
           </div>
       }
@@ -137,9 +140,17 @@ module.exports = React.createClass({
             Generated, self-grading math assignments for students to solve online.
             <span className="emph">Free</span> for teachers!
           </div>
-          <div className="home-signup-button unselectable"
-               onClick={this._handleSignup}>
-            GET STARTED
+          <div className="start-buttons">
+            <div className="home-signup-button unselectable"
+                 onClick={this._handleSignup}>
+              GET STARTED
+            </div>
+            <div className="emph button-separator">OR</div>
+            <button className="login-edmodo-button" onClick={this._handleEdmodo}>
+              <img id="edmodo-logo" src="style/images/edmodo-icon.png" />
+              <div id="vertical-divider"></div>
+              <p>Log in with <span id="edmodo">Edmodo</span></p>
+            </button>
           </div>
         </div>
         <div className="island-features">
@@ -393,6 +404,19 @@ module.exports = React.createClass({
     );
 
     $('.login-email').focus();
+  },
+
+  _handleEdmodo: function() {
+    /* eslint-disable camelcase */
+    let urlparams = querystring.stringify({
+      client_id: edmodoId,
+      redirect_uri: 'https://mathleap.org/',
+      scope: 'basic read_groups read_user_email',
+      response_type: 'token'
+    });
+    /* eslint-enable camelcase */
+
+    location.replace(`https://api.edmodo.com/oauth/authorize/?${urlparams}`);
   },
 
   _onTeacherSubmit: async function() {

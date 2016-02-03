@@ -33,6 +33,12 @@ function observeLocation(router: Router): void {
       return;
     }
 
+    // Hack to get around edmodo callback url fake view
+    // redirecting to homepage.
+    if (router.view instanceof RegExp) {
+      return;
+    }
+
     switch (router.view) {
       case '/home':
       case '/privacy':
@@ -72,6 +78,11 @@ function createRouter(): Router {
   router.route(
     '/classes/:aClass/assignments/:assignment/submissions/:submission/edit',
     require('./components/submissions/Edit')
+  );
+
+  router.route(
+    /^#[^\/]*access_token=[^\/]*$/,
+    require('./components/EdmodoHandler')
   );
 
   router.start();
