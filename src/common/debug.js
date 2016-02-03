@@ -9,10 +9,8 @@ module.exports = function debug(moduleName: string): Function {
       if (!('secretDebugMode' in params)) {
         return;
       }
-    } else {
-      if (!process.env.DEBUG) {
-        return;
-      }
+    } else if (!process.env.DEBUG) {
+      return;
     }
 
     let args = Array.from(arguments);
