@@ -160,11 +160,13 @@ select {
 .service-outage {
   align-items: center;
   -webkit-align-items: center;
-  background-color: rgba(255, 128, 51, 0.6);
+  background-color: #ff0051;
   border-bottom: 1px solid #ff8033;
+  color: white;
   display: flex;
   display: -webkit-flex;
   font-size: 18px;
+  font-weight: bold;
   height: 50px;
   justify-content: center;
   -webkit-justify-content: center;
@@ -176,5 +178,5 @@ select {
 }
 
 .service-outage > a {
-  margin-left: 5px;
+  margin: 0 5px;
 }

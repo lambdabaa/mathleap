@@ -4,6 +4,7 @@ let Topbar = require('./Topbar');
 let bowser = require('bowser');
 let debug = require('../../common/debug')('components/Home');
 let handleEnter = require('../handleEnter');
+let isBrowserSupported = require('../isBrowserSupported');
 let {on} = require('../../common/events');
 let students = require('../store/students');
 let teachers = require('../store/teachers');
@@ -90,6 +91,15 @@ module.exports = React.createClass({
     ];
 
     return <div id="home">
+      {
+        isBrowserSupported() ?
+          '' :
+          <div className="service-outage">
+            MathLeap is not supported for your browser. Please install an
+            up-to-date version of a modern browser like <a href="https://mozilla.org/firefox/">Firefox</a>
+            or <a href="https://google.com/chrome/">Google Chrome</a>.
+          </div>
+      }
       <div className="panel panel-0">
         {
           bowser.chrome || bowser.chromeos ?
