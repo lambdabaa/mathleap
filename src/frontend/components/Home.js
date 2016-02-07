@@ -245,7 +245,7 @@ module.exports = React.createClass({
         <div className="watch-the-video">WATCH THE VIDEO</div>
         <div className="home-container">
           <video className="explainer"
-                 src="style/videos/mathleap.mp4"
+                 src="public/videos/mathleap.mp4"
                  preload="auto"
                  width="1050"
                  controls>
@@ -306,7 +306,7 @@ module.exports = React.createClass({
     debug('play video');
     await this.props.showModal(
       <video className="demo"
-             src="style/videos/demo.mp4"
+             src="public/videos/demo.mp4"
              preload="auto"
              controls>
       </video>
