@@ -60,6 +60,12 @@ exports.edmodo = async function(auth: AccessToken): Promise<void> {
   // Stringify edmodo user id.
   user.id = '' + user.id;
   let result = await findOrCreateEdmodoUser(user);
+  if (!result) {
+    debug('Failed to find or create edmodo user', JSON.stringify(user));
+    location.hash = '#!/home/';
+    return;
+  }
+
   result.id = user.id;
   session.set('auth', auth);
   session.set('user', result);
@@ -79,12 +85,12 @@ function isStudent(user: Object): boolean {
     user.email.endsWith('@mathleap.org');        // mathleap account
 }
 
-function findOrCreateEdmodoUser(user: Object): Promise<FBTeacher | FBStudent> {
+function findOrCreateEdmodoUser(user: Object): Promise<?FBTeacher | ?FBStudent> {
   let fn = isStudent(user) ? findOrCreateEdmodoStudent : findOrCreateEdmodoTeacher;
   return fn(user);
 }
 
-async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
+async function findOrCreateEdmodoTeacher(user: Object): Promise<?FBTeacher> {
   let teacher = await teachers.get(user.id);
   if (teacher) {
     return teacher;
@@ -106,7 +112,7 @@ async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
   return teachers.get(user.id);
 }
 
-async function findOrCreateEdmodoStudent(user: Object): Promise<FBStudent> {
+async function findOrCreateEdmodoStudent(user: Object): Promise<?FBStudent> {
   let student = await students.get(user.id);
   if (student) {
     return student;
