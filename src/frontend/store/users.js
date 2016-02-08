@@ -125,10 +125,12 @@ async function findOrCreateEdmodoStudent(user: Object): Promise<?FBStudent> {
       username: user.username,
       first: user.first_name,
       last: user.last_name,
-      misc: user
+      misc: user,
+      email: `${user.username}+edmodo@mathleap.org`
     },
     user.id
   );
+  /* eslint-enable camelcase */
 
   return students.get(user.id);
 }
