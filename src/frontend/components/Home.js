@@ -284,9 +284,11 @@ module.exports = React.createClass({
       </div>
       <div className="panel panel-5">
         <div className="home-container">
-          <div className="home-signup-button unselectable"
-               onClick={this._handleSignup}>
-            GET STARTED
+          <div className="start-buttons">
+            <div className="home-signup-button unselectable"
+                 onClick={this._handleSignup}>
+              GET STARTED
+            </div>
           </div>
           <img className="more-math" src="style/images/more_math.svg" />
         </div>
