@@ -1,5 +1,11 @@
 /* @flow */
 
+export type AccessToken = {
+  access_token: string;
+  token_type: string;
+  expires_in: string;
+};
+
 export type AssignmentQuestion = {
   question: string;
   solution: number | string;

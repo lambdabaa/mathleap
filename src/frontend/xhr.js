@@ -42,7 +42,8 @@ function Xhr(options) {
   'getAllResponseHeaders',
   'getResponseHeader',
   'open',
-  'overrideMimeType'
+  'overrideMimeType',
+  'setRequestHeader'
 ].forEach(method => {
   Xhr.prototype[method] = function() {
     return this.transport[method].apply(this.transport, arguments);

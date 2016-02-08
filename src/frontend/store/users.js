@@ -1,15 +1,25 @@
 /* @flow */
 
+let Edmodo = require('../edmodo');
 let Firebase = require('firebase/lib/firebase-web');
 let debug = require('../../common/debug')('store/users');
 let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let session = require('../session');
+let students = require('./students');
 let subscribe = require('./subscribe');
+let teachers = require('./teachers');
 
-import type {FBStudent, FBTeacher} from '../../common/types';
+import type {
+  AccessToken,
+  FBStudent,
+  FBTeacher
+} from '../../common/types';
 
-type Credentials = {email: string, password: string};
+type Credentials = {
+  email: string;
+  password: string;
+};
 
 let baseRef = new Firebase(firebaseUrl);
 let studentsRef = baseRef.child('students');
@@ -25,7 +35,6 @@ exports.create = async function(credentials: Credentials): Promise<string> {
 
 exports.login = async function(credentials: Credentials): Promise<void> {
   let auth = await request(baseRef, 'authWithPassword', credentials);
-  debug('login ok', JSON.stringify(auth));
   session.set('auth', auth);
 
   let id = auth.uid;
@@ -34,6 +43,7 @@ exports.login = async function(credentials: Credentials): Promise<void> {
   subscription = subscribe(userRef, 'value');
   subscription.on('val', (user: FBTeacher | FBStudent): void => {
     if (user == null) {
+      subscription.cancel();
       alert('User details missing from database. ' +
             'Please email support@mathleap.org or create a new account.');
       throw new Error(`User details for ${id} missing from database!`);
@@ -44,6 +54,15 @@ exports.login = async function(credentials: Credentials): Promise<void> {
   });
 };
 
+exports.edmodo = async function(auth: AccessToken): Promise<void> {
+  let client = new Edmodo(auth);
+  let user = await client.getUser();
+  let result = await findOrCreateEdmodoUser(user);
+  result.id = user.id;
+  session.set('auth', auth);
+  session.set('user', user);
+};
+
 exports.logout = function(): void {
   if (subscription) {
     subscription.cancel();
@@ -52,7 +71,55 @@ exports.logout = function(): void {
   session.clear();
 };
 
-function isStudent(credentials: Credentials): boolean {
-  let {email} = credentials;
-  return email.endsWith('@mathleap.org');
+function isStudent(user: Object): boolean {
+  return 'type' in user ?
+    user.type === 'student' :                    // edmodo account
+    user.email.endsWith('@mathleap.org');        // mathleap account
+}
+
+function findOrCreateEdmodoUser(user: Object): Promise<FBTeacher | FBStudent> {
+  let fn = isStudent(user) ? findOrCreateEdmodoStudent : findOrCreateEdmodoTeacher;
+  return fn(user);
+}
+
+async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
+  let teacher = await teachers.get(user.id);
+  if (teacher) {
+    return teacher;
+  }
+
+  /* eslint-disable camelcase */
+  teachers.create(
+    {
+      email: user.email,
+      title: user.title,
+      first: user.first_name,
+      last: user.last_name,
+      misc: user
+    },
+    user.id
+  );
+  /* eslint-enable camelcase */
+
+  return teachers.get(user.id);
+}
+
+async function findOrCreateEdmodoStudent(user: Object): Promise<FBStudent> {
+  let student = await students.get(user.id);
+  if (student) {
+    return student;
+  }
+
+  /* eslint-disable camelcase */
+  students.create(
+    {
+      username: user.username,
+      first: user.first_name,
+      last: user.last_name,
+      misc: user
+    },
+    user.id
+  );
+
+  return students.get(user.id);
 }
