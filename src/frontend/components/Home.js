@@ -376,7 +376,7 @@ module.exports = React.createClass({
         <input type="text" className="student-last" placeholder="Last name" />
         <input type="text" className="student-username"
                placeholder="Username" />
-        <input type="text" className="student-password" placeholder="Password"
+        <input type="password" className="student-password" placeholder="Password"
                onKeyDown={handleEnter(this._onStudentSubmit)} />
         <div className="student-submit button-inverse"
              onClick={this._onStudentSubmit}>
