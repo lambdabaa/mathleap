@@ -97,10 +97,9 @@ module.exports = React.createClass({
         isBrowserSupported() ?
           '' :
           <div className="service-outage">
-            MathLeap is not supported for your browser. Please install an
-            up-to-date version of a modern browser like
-            <a href="https://mozilla.org/firefox/">Firefox</a>
-            or <a href="https://google.com/chrome/">Google Chrome</a>.
+            Browser not supported. Please use an
+            up-to-date version of a desktop browser like
+            <a href="https://mozilla.org/firefox/">Firefox</a>.
           </div>
       }
       <div className="panel panel-0">

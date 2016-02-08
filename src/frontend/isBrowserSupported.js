@@ -11,6 +11,10 @@ const supportedVersion = Object.freeze({
 });
 
 module.exports = function(): boolean {
+  if (bowser.mobile) {
+    return false;
+  }
+
   for (let name in supportedVersion) {
     if (!bowser[name]) {
       continue;
