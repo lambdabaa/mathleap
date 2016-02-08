@@ -9,7 +9,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    this.interval = setInterval(this._tick, 6000);
+    this.interval = setInterval(this._tick, 10000);
   },
 
   componentWillUnmount: function() {
@@ -60,15 +60,9 @@ module.exports = React.createClass({
   _screens: function() {
     return [
       <div className="carousel">
-        Welcome to the MathLeap problem editor: a text editor designed
-        to help you show the steps you take through a math problem.
-      </div>,
-      <div className="carousel">
         Open a problem by selecting it from the question list on the left.
         There are two columns: <span className="emph">History</span>
         and <span className="emph">Results</span>.
-      </div>,
-      <div className="carousel">
         The <span className="emph">History</span> column shows the operations
         you performed at a given step.
         The <span className="emph">Results</span> column shows your progress
@@ -105,8 +99,6 @@ module.exports = React.createClass({
         You can move around the
         <span style={{color: '#3996f0', fontSize: '24px', fontWeight: 'bold'}}>|</span>
         cursor by clicking within the equation or using the ← and → keys.
-      </div>,
-      <div className="carousel">
         Highlight expressions by clicking and dragging your mouse or with shift ←  and shift → .
       </div>,
       <div className="carousel">
