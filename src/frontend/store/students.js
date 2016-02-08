@@ -34,6 +34,10 @@ exports.get = async function get(id: string): Promise<FBStudent> {
   debug('get student', id);
   let ref = studentsRef.child(id);
   let student = await request(ref, 'once', 'value');
+  if (!student) {
+    return null;
+  }
+
   student.id = id;
   debug('get student ok', JSON.stringify(student));
   return student;
