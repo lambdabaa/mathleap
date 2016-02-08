@@ -7,7 +7,7 @@ let users = require('../store/users');
 module.exports = function(props: Object): React.Element {
   let user = session.get('user');
   return <div className="topbar">
-    <a className="topbar-logo" href={`#!${user ? 'classes' : 'home'}/`} />
+    <a className="topbar-logo" href={`#!/${user ? 'classes' : 'home'}/`} />
     {
       props.headerText != null ?
         <div className="topbar-header-text">{props.headerText}</div> :
