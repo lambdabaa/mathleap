@@ -1,6 +1,7 @@
 let w2 = require('../../src/frontend/wolfram2');
 
-suite('wolfram2', () => {
+// Skip suite since talking to Wolfram costs money.
+suite.skip('wolfram2', () => {
   test('#extractVariables', () => {
     w2.extractVariables('x=2-y')
     .should
