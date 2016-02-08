@@ -57,6 +57,7 @@ exports.login = async function(credentials: Credentials): Promise<void> {
 exports.edmodo = async function(auth: AccessToken): Promise<void> {
   let client = new Edmodo(auth);
   let user = await client.getUser();
+  debug('Got edmodo user', JSON.stringify(user));
   // Stringify edmodo user id.
   user.id = '' + user.id;
   let result = await findOrCreateEdmodoUser(user);
