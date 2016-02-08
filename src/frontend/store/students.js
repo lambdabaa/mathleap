@@ -30,7 +30,7 @@ exports.create = async function(options: Object, uid: number | string): Promise<
   debug('create student ok', JSON.stringify(student));
 };
 
-exports.get = async function get(id: string): Promise<FBStudent> {
+exports.get = async function get(id: string): Promise<?FBStudent> {
   debug('get student', id);
   let ref = studentsRef.child(id);
   let student = await request(ref, 'once', 'value');

@@ -29,7 +29,7 @@ exports.create = async function(options: Object, uid: number|string): Promise<vo
   debug('create teacher ok', JSON.stringify(teacher));
 };
 
-exports.get = async function(id: string): Promise<FBTeacher> {
+exports.get = async function(id: string): Promise<?FBTeacher> {
   debug('get teacher', id);
   let ref = teachersRef.child(id);
   let teacher = await request(ref, 'once', 'value');
