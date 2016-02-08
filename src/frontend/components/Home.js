@@ -411,7 +411,7 @@ module.exports = React.createClass({
     /* eslint-disable camelcase */
     let urlparams = querystring.stringify({
       client_id: edmodoId,
-      redirect_uri: 'https://mathleap.org/',
+      redirect_uri: `${location.protocol}//${location.host}/`,
       scope: 'basic read_groups read_user_email',
       response_type: 'token'
     });
