@@ -60,7 +60,7 @@ exports.edmodo = async function(auth: AccessToken): Promise<void> {
   let result = await findOrCreateEdmodoUser(user);
   result.id = user.id;
   session.set('auth', auth);
-  session.set('user', user);
+  session.set('user', result);
 };
 
 exports.logout = function(): void {
