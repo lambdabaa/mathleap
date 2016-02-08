@@ -14,7 +14,7 @@ clean:
 	rm -rf mathleap.min.css frontend.js frontend.min.js backend.js backend.min.js build src/backend/math.js
 
 %.min.js: %.js
-	./node_modules/.bin/uglifyjs $< -o $@
+	./node_modules/.bin/uglifyjs --screw-ie8 $< -o $@
 
 frontend.js: $(FRONTEND_BUILT) $(COMMON_BUILT)
 	./node_modules/.bin/browserify build/frontend/main.js -o $@
