@@ -13,7 +13,7 @@ let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
 exports.create = async function(options: Object, uid: string): Promise<void> {
   let teacher = {
     email: options.email,
-    title: options.title,
+    title: options.title || 'Prof',
     first: options.first,
     last: options.last,
     role: 'teacher',
