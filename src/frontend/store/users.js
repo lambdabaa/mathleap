@@ -97,7 +97,7 @@ async function findOrCreateEdmodoTeacher(user: Object): Promise<?FBTeacher> {
   }
 
   /* eslint-disable camelcase */
-  teachers.create(
+  await teachers.create(
     {
       email: user.email,
       title: user.title,
@@ -119,7 +119,7 @@ async function findOrCreateEdmodoStudent(user: Object): Promise<?FBStudent> {
   }
 
   /* eslint-disable camelcase */
-  students.create(
+  await students.create(
     {
       username: user.username,
       first: user.first_name,

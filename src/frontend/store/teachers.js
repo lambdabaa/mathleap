@@ -10,7 +10,7 @@ import type {FBTeacher} from '../../common/types';
 
 let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
 
-exports.create = async function(options: Object, uid: number|string): Promise<void> {
+exports.create = async function(options: Object, uid: string): Promise<void> {
   let teacher = {
     email: options.email,
     title: options.title,
