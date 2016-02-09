@@ -1,5 +1,4 @@
 let $ = document.querySelector.bind(document);
-let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
@@ -10,9 +9,9 @@ let bridge = require('../../bridge');
 let charFromKeyEvent = require('../../charFromKeyEvent');
 let classes = require('../../store/classes');
 let clone = require('lodash/lang/cloneDeep');
+let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let debug = require('../../../common/debug')('components/submissions/Edit');
 let editor = require('../../helpers/editor');
-let {firebaseUrl} = require('../../constants');
 let map = require('lodash/collection/map');
 let {mapChar} = require('../../../common/string');
 let preventDefault = require('../../preventDefault');
@@ -108,7 +107,7 @@ module.exports = React.createClass({
     if (aClass) {
       this.isPracticeMode = false;
       this.bindAsArray(
-        new Firebase(`${firebaseUrl}/classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
+        createSafeFirebaseRef(`classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
         'responses'
       );
 
@@ -122,7 +121,7 @@ module.exports = React.createClass({
       this.isPracticeMode = true;
       let user = session.get('user');
       this.bindAsArray(
-        new Firebase(`${firebaseUrl}/students/${user.id}/assignments/${id}/submission/responses`),
+        createSafeFirebaseRef(`students/${user.id}/assignments/${id}/submission/responses`),
         'responses'
       );
 

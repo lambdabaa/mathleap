@@ -1,14 +1,13 @@
-let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('./Tabular');
 let Topbar = require('./Topbar');
 let assignment = require('../helpers/assignment');
-let {firebaseUrl} = require('../constants');
+let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let session = require('../session');
 let users = require('../store/users');
 
-let studentsRef = new Firebase(`${firebaseUrl}/students`);
+let studentsRef = createSafeFirebaseRef('students');
 
 module.exports = React.createClass({
   displayName: 'Practice',

@@ -3,14 +3,13 @@
  */
 
 let ClassCode = require('../ClassCode');
-let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let assignment = require('../../helpers/assignment');
 let classes = require('../../store/classes');
-let {firebaseUrl} = require('../../constants');
+let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let session = require('../../session');
 
 module.exports = React.createClass({
@@ -34,21 +33,21 @@ module.exports = React.createClass({
 
   componentWillMount: async function() {
     this.bindAsArray(
-      new Firebase(`${firebaseUrl}/topics`),
+      createSafeFirebaseRef('topics'),
       'topics'
     );
 
     let {user, isPracticeMode} = this.state;
     if (isPracticeMode) {
       return this.bindAsArray(
-        new Firebase(`${firebaseUrl}/students/${user.id}/assignments`),
+        createSafeFirebaseRef(`students/${user.id}/assignments`),
         'assignments'
       );
     }
 
     let id = this.props.aClass;
     this.bindAsArray(
-      new Firebase(`${firebaseUrl}/classes/${id}/assignments`),
+      createSafeFirebaseRef(`classes/${id}/assignments`),
       'assignments'
     );
 

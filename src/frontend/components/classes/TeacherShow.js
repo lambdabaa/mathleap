@@ -1,13 +1,12 @@
 let ClassCode = require('../ClassCode');
-let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let assignment = require('../../helpers/assignment');
 let classes = require('../../store/classes');
+let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let debug = require('../../../common/debug')('components/classes/TeacherShow');
-let {firebaseUrl} = require('../../constants');
 let students = require('../../store/students');
 
 module.exports = React.createClass({
@@ -27,7 +26,7 @@ module.exports = React.createClass({
 
   componentWillMount: async function() {
     let {id} = this.props;
-    let classRef = new Firebase(`${firebaseUrl}/classes/${id}`);
+    let classRef = createSafeFirebaseRef(`classes/${id}`);
     this.bindAsArray(classRef.child('students'), 'studentIds');
     this.bindAsArray(classRef.child('assignments'), 'assignments');
     let aClass = await classes.get(id);

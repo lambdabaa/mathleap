@@ -1,8 +1,7 @@
 /* @flow */
 
-let Firebase = require('firebase/lib/firebase-web');
+let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/assignments');
-let {firebaseUrl} = require('../constants');
 let includes = require('lodash/collection/includes');
 let {isEqual} = require('./wolframs');
 let map = require('lodash/collection/map');
@@ -15,8 +14,8 @@ import type {
   FBQuestionStep
 } from '../../common/types';
 
-let classesRef = new Firebase(`${firebaseUrl}/classes`);
-let studentsRef = new Firebase(`${firebaseUrl}/students`);
+let classesRef = createSafeFirebaseRef('classes');
+let studentsRef = createSafeFirebaseRef('students');
 
 exports.create = async function(details: Object): Promise<string> {
   debug('create submission', JSON.stringify(details));
