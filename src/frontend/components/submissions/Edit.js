@@ -1,3 +1,4 @@
+let $ = document.querySelector.bind(document);
 let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
@@ -138,6 +139,12 @@ module.exports = React.createClass({
   componentDidMount: function() {
     this.interval = setInterval(this._tick, 1500);
     this.isBusy = false;
+
+    // Scroll the tutorial into view
+    let tutorial = $('.submissions-edit-tutorial');
+    if (tutorial) {
+      tutorial.scrollIntoView();
+    }
   },
 
   componentWillUnmount: function() {

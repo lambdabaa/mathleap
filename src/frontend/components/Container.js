@@ -59,7 +59,11 @@ module.exports = React.createClass({
     let router = this.props.router;
     // Make sure to scroll to the top of the embedded view once we load it.
     this.componentDidUpdate = () => {
-      $('.topbar').scrollIntoView();
+      let topbar = $('.topbar');
+      if (topbar) {
+        topbar.scrollIntoView();
+      }
+
       delete this.componentDidUpdate;
     };
 
