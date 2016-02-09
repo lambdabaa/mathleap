@@ -1,17 +1,16 @@
 let $ = document.querySelector.bind(document);
-let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let classes = require('../../store/classes');
+let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let debug = require('../../../common/debug')('components/classes/TeacherList');
-let {firebaseUrl} = require('../../constants');
 let {getPalette} = require('../../colors');
 let handleEnter = require('../../handleEnter');
 let session = require('../../session');
 
-let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
+let teachersRef = createSafeFirebaseRef('teachers');
 
 module.exports = React.createClass({
   displayName: 'classes/TeacherList',

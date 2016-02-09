@@ -1,15 +1,14 @@
 /* @flow */
 
-let Firebase = require('firebase/lib/firebase-web');
+let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/assignments');
-let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let session = require('../session');
 
 import type {FBAssignment} from '../../common/types';
 
-let classesRef = new Firebase(`${firebaseUrl}/classes`);
-let studentsRef = new Firebase(`${firebaseUrl}/students`);
+let classesRef = createSafeFirebaseRef('classes');
+let studentsRef = createSafeFirebaseRef('students');
 
 exports.get = async function get(classId: string, assignmentId: string): Promise<FBAssignment> {
   return doGet(
@@ -32,7 +31,7 @@ exports.getPractice = function(assignmentId: string): Promise<FBAssignment> {
   );
 };
 
-async function doGet(id: string, ref: Firebase): Promise<FBAssignment> {
+async function doGet(id: string, ref: createSafeFirebaseRef.SafeFirebase): Promise<FBAssignment> {
   debug('get assignment', ref.toString());
   let result = await request(ref, 'once', 'value');
   result.id = id;

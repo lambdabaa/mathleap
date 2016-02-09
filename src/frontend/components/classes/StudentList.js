@@ -1,5 +1,4 @@
 let $ = document.querySelector.bind(document);
-let Firebase = require('firebase/lib/firebase-web');
 let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
@@ -7,11 +6,11 @@ let Topbar = require('../Topbar');
 let debug = require('../../../common/debug')('components/classes/StudentList');
 let session = require('../../session');
 let classes = require('../../store/classes');
-let {firebaseUrl} = require('../../constants');
+let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let handleEnter = require('../../handleEnter');
 let users = require('../../store/users');
 
-let studentsRef = new Firebase(`${firebaseUrl}/students`);
+let studentsRef = createSafeFirebaseRef('students');
 
 module.exports = React.createClass({
   displayName: 'classes/StudentList',

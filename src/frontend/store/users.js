@@ -1,9 +1,8 @@
 /* @flow */
 
 let Edmodo = require('../edmodo');
-let Firebase = require('firebase/lib/firebase-web');
+let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/users');
-let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let session = require('../session');
 let students = require('./students');
@@ -21,7 +20,7 @@ type Credentials = {
   password: string;
 };
 
-let baseRef = new Firebase(firebaseUrl);
+let baseRef = createSafeFirebaseRef();
 let studentsRef = baseRef.child('students');
 let teachersRef = baseRef.child('teachers');
 

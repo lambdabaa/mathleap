@@ -1,14 +1,13 @@
 /* @flow */
 
-let Firebase = require('firebase/lib/firebase-web');
+let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/teachers');
-let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let users = require('./users');
 
 import type {FBTeacher} from '../../common/types';
 
-let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
+let teachersRef = createSafeFirebaseRef('teachers');
 
 exports.create = async function(options: Object, uid: string): Promise<void> {
   let teacher = {

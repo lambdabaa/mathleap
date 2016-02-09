@@ -1,9 +1,8 @@
 /* @flow */
 
-let Firebase = require('firebase/lib/firebase-web');
 let bridge = require('../bridge');
+let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/questions');
-let {firebaseUrl} = require('../constants');
 let flatten = require('lodash/array/flatten');
 let groupBy = require('lodash/collection/groupBy');
 let map = require('lodash/collection/map');
@@ -19,7 +18,7 @@ import type {
   AssignmentSection
 } from '../../common/types';
 
-const topicsRef = new Firebase(`${firebaseUrl}/topics`);
+const topicsRef = createSafeFirebaseRef('topics');
 
 let typeToQuestionsRef = {};
 

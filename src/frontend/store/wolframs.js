@@ -1,12 +1,11 @@
 /* @flow */
 
-let Firebase = require('firebase/lib/firebase-web');
+let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/wolframs');
-let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let w2 = require('../wolfram2');
 
-let wolframsRef = new Firebase(`${firebaseUrl}/wolframs`);
+let wolframsRef = createSafeFirebaseRef('wolframs');
 
 exports.isEqual = async function(a: string, b: string): Promise<boolean> {
   if (/[a-z]/.test(a) !== /[a-z]/.test(b)) {

@@ -1,20 +1,19 @@
 /* @flow */
 
-let Firebase = require('firebase/lib/firebase-web');
 let colors = require('../colors');
 let createCode = require('../code').create;
+let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/classes');
 let findKey = require('lodash/object/findKey');
-let {firebaseUrl} = require('../constants');
 let request = require('./request');
 let session = require('../session');
 let values = require('lodash/object/values');
 
 import type {FBClass} from '../../common/types';
 
-let classesRef = new Firebase(`${firebaseUrl}/classes`);
-let studentsRef = new Firebase(`${firebaseUrl}/students`);
-let teachersRef = new Firebase(`${firebaseUrl}/teachers`);
+let classesRef = createSafeFirebaseRef('classes');
+let studentsRef = createSafeFirebaseRef('students');
+let teachersRef = createSafeFirebaseRef('teachers');
 
 exports.create = async function create(): Promise<void> {
   debug('request add class');
@@ -82,6 +81,7 @@ exports.get = async function get(id: string, options: Object = {}): Promise {
   }
 
   aClass.id = id;
+  debug(`Will hydrate class ${id} with ${JSON.stringify(options.include)}.`);
   await hydrateClass(aClass, options.include);
   return aClass;
 };
