@@ -148,6 +148,60 @@ suite('service/createAssignment', function() {
     });
   });
 
+  test('Expressions with one variable', () => {
+    let questions = createQuestion['Evaluating expressions with one variable'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, instruction, solution} = aQuestion;
+      instruction.should.match(/^Evaluate when ([a-z]) is (-?\d+)\.$/);
+      eval(question.replace(RegExp.$1, `*${RegExp.$2}`)).should.equal(
+        solution,
+        JSON.stringify(aQuestion)
+      );
+    });
+  });
+
+  test('Expressions with two variables', () => {
+    let questions = createQuestion['Evaluating expressions with two variables'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, instruction, solution} = aQuestion;
+      instruction.should.match(/^Evaluate when ([a-z]) is (-?\d+) and ([a-z]) is (-?\d+)\.$/);
+      RegExp.$1.should.not.equal(RegExp.$2);  // 2 variables
+      eval(
+        question
+          .replace(RegExp.$1, `*${RegExp.$2}`)
+          .replace(RegExp.$3, `*${RegExp.$4}`)
+      )
+      .should
+      .equal(
+        solution,
+        JSON.stringify(aQuestion)
+      );
+    });
+  });
+
+  test('Evaluating fractional expressions with two variables', () => {
+    let questions = createQuestion['Evaluating fractional expressions with two variables'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, instruction, solution} = aQuestion;
+      question.should.match(/^[a-z]\/[a-z]$/);
+      instruction.should.match(/^Evaluate when ([a-z]) is (-?\d+) and ([a-z]) is (-?\d+)\.$/);
+      RegExp.$1.should.not.equal(RegExp.$2);  // 2 variables
+      eval(
+        question
+          .replace(RegExp.$1, RegExp.$2)
+          .replace(RegExp.$3, RegExp.$4)
+      )
+      .should
+      .equal(
+        solution,
+        JSON.stringify(aQuestion)
+      );
+    });
+  });
+
   test('Ax=B', () => {
     let questions = createQuestion['Solving equations of the form Ax = B'](10);
     questions.should.have.length(10);
