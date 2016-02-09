@@ -14,9 +14,9 @@ exports.isEqual = async function(a: string, b: string): Promise<boolean> {
     let aVars = w2.extractVariables(a);
     let bVars = w2.extractVariables(b);
     if (aVars.length === 1) {
-      b = `${aVars[0]}=${b}`;
+      b = `${aVars[0]}==${b}`;
     } else if (bVars.length === 1) {
-      a = `${bVars[0]}=${a}`;
+      a = `${bVars[0]}==${a}`;
     } else {
       return false;
     }
