@@ -2,7 +2,7 @@
 CloudDeploy[
   APIFunction[
     {"a" -> "Expression", "b" -> "Expression", "vars" -> "MathExpression"},
-    Expand[#a, #vars] === Expand[#b, #vars]&,
+    Simplify[#a, #vars] === Simplify[#b, #vars]&,
   ],
   "equal",
   Permissions -> "Public"

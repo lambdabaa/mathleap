@@ -6,28 +6,31 @@
 let fraction = require('./fraction');
 let normalizeFraction = require('./normalizeFraction');
 let rand = require('./rand');
-let random = require('lodash/number/random');
 let range = require('lodash/utility/range');
 let sample = require('lodash/collection/sample');
 
 import type {Numeric, Range} from '../common/types';
 
+const integers = Object.freeze([
+  -5, -4, -3, -2, -1,
+  1, 2, 3, 4, 5,
+  6, 7, 8, 9, 10,
+  11, 12
+]);
+
 const composites = Object.freeze([
   -4, -6, -8, -9,
   -10, -12, -14, -15, -16, -18,
-  -20, -21, -22, -24, -25, -26, -27, -28,
-  -30, -32, -33, -34, -35, -36, -38, -39,
+  -20, -21, -22, -24, -25,
   4, 6, 8, 9,
   10, 12, 14, 15, 16, 18,
-  20, 21, 22, 24, 25, 26, 27, 28,
-  30, 32, 33, 34, 35, 36, 38, 39
+  20, 21, 22, 24, 25
 ]);
 
 const superComposites = Object.freeze([
-  -12, -16, -18, -20, -24, -28,
+  -12, -16, -18, -20, -24,
   -30, -32, -36,
-  12, 16, 18, 20, 24, 28,
-  30, 32, 36
+  12, 16, 18, 20, 24
 ]);
 
 const chrs = Object.freeze([
@@ -114,7 +117,7 @@ function boundedFraction(bounds: {numerator: Range; denominator: Range}): string
 }
 
 let composite = rand.get.bind(rand, sample.bind(null, composites));
-let integer = rand.get.bind(rand, random.bind(null, -25, 25, false /* floating */));
+let integer = rand.get.bind(rand, sample.bind(null, integers));
 
 exports.absBoundedInteger = absBoundedInteger;
 exports.boolean = sample.bind(null, [true, false]);
@@ -132,7 +135,7 @@ exports.fraction = rand.get.bind(rand, assignToFraction.bind(exports, integer));
 exports.fractionList = rand.list.bind(rand, exports.fraction);
 exports.integer = integer;
 exports.integerList = rand.list.bind(rand, exports.integer);
-exports.letter = sample.bind(null, chrs);
+exports.letter = rand.get.bind(rand, sample.bind(null, chrs));
 exports.power = rand.get.bind(rand, randomPower);
 exports.powerList = rand.list.bind(rand, exports.power);
 exports.superComposite = rand.get.bind(rand, sample.bind(null, superComposites));

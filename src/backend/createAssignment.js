@@ -118,6 +118,110 @@ createQuestion['Multiplying fractions'] = createFractionMultiplications.bind(nul
 
 createQuestion['Dividing fractions'] = createFractionMultiplications.bind(null, true);
 
+createQuestion['Evaluating expressions with one variable'] = function(): Array<AssignmentQuestion> {
+  let solutions = generate.integerList(...arguments);
+  return solutions.map((solution: number): AssignmentQuestion => {
+    let variableFirst = generate.boolean();
+    let a = generate.integer();
+    let b = generate.integer();
+    let x = generate.letter();
+    let c;
+    if (generate.boolean()) {
+      // addition
+      c = solution - a * b;
+      return variableFirst ?
+        {
+          question: `${a}${x}+${c >= 0 ? c : '(' + c + ')'}`,
+          instruction: `Evaluate when ${x} is ${b}.`,
+          solution: a * b + c
+        } :
+        {
+          question: `${c}+${a >= 0 ? a + x : '(' + a + x + ')'}`,
+          instruction: `Evaluate when ${x} is ${b}.`,
+          solution
+        };
+    }
+
+    // subtraction
+    c = solution + a * b;
+    return variableFirst ?
+      {
+        question: `${a}${x}-${c >= 0 ? c : '(' + c + ')'}`,
+        instruction: `Evaluate when ${x} is ${b}.`,
+        solution: a * b - c
+      } :
+      {
+        question: `${c}-${a >= 0 ? a + x : '(' + a + x + ')'}`,
+        instruction: `Evaluate when ${x} is ${b}.`,
+        solution: c - a * b
+      };
+  });
+};
+
+createQuestion['Evaluating expressions with two variables'] =
+    function(): Array<AssignmentQuestion> {
+  let solutions = generate.integerList(...arguments);
+  return solutions.map((solution: number): AssignmentQuestion => {
+    let a = generate.integer();
+    let b = generate.integer();
+    let c = generate.integer();
+    let d = generate.integer();
+    let x = generate.letter();
+    let y = generate.letter([x]);
+    let e, question;
+    if (generate.boolean()) {
+      // addition
+      e = solution - a * b - c * d;
+      if (e === 0) {
+        question = `${a}${x}+${c}${y}`;
+      } else if (e > 0) {
+        question = `${a}${x}+${c}${y}+${e}`;
+      } else {
+        question = `${a}${x}+${c}${y}-${Math.abs(e)}`;
+      }
+
+    } else {
+      // subtraction
+      e = solution - a * b + c * d;
+      if (e === 0) {
+        question = c < 0 ?
+          `${a}${x}-(${c}${y})` :
+          `${a}${x}-${c}${y}`;
+      } else if (e > 0) {
+        question = c < 0 ?
+          `${a}${x}-(${c}${y})+${e}` :
+          `${a}${x}-${c}${y}+${e}`;
+      } else {
+        question = c < 0 ?
+          `${a}${x}-(${c}${y})+${e}` :
+          `${a}${x}-${c}${y}-${Math.abs(e)}`;
+      }
+    }
+
+      return {
+        question,
+        instruction: `Evaluate when ${x} is ${b} and ${y} is ${d}.`,
+        solution
+      };
+  });
+};
+
+createQuestion['Evaluating fractional expressions with two variables'] =
+    function(): Array<AssignmentQuestion> {
+  let solutions = generate.compositeList(...arguments);
+  return solutions.map((solution: number): AssignmentQuestion => {
+    let factor = generate.factor(solution);
+    let other = solution * factor;
+    let x = generate.letter();
+    let y = generate.letter([x]);
+    return {
+      question: `${x}/${y}`,
+      instruction: `Evaluate when ${x} is ${other} and ${y} is ${factor}.`,
+      solution
+    };
+  });
+};
+
 createQuestion['Arithmetic distribution'] = function(): Array<AssignmentQuestion> {
   let solutions = generate.compositeList(...arguments);
   return solutions.map((solution: number): AssignmentQuestion => {

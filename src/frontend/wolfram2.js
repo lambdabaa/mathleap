@@ -12,12 +12,13 @@ let {wolframCloudUrl} = require('./constants');
  * a and b are math expressions and we'll figure out
  * whether they're equivalent.
  */
-exports.isEqual = async function(a: string, b: string): Promise<boolean> {
+exports.isEqual = async function(a: string, b: string,
+                                 instruction: string = ''): Promise<boolean> {
   debug('check equivalence', a, b);
-  let checkType = a.indexOf('==') !== -1 ? 'Equation' : 'Expression';
+  let checkType = a.indexOf('==') !== -1 ? 'Equation' : 'Expr';
   let url = `${wolframCloudUrl}/check${checkType}Equivalence`;
-  let vars = exports.extractVariablesFromMany(a, b);
-  vars = `{${vars.length ? vars.join(',') : 'x'}}`;
+  let vars = exports.getVariables(a, b, instruction);
+  debug('vars', JSON.stringify(vars));
   let req = new Xhr();
   req.open(
     'GET',
@@ -35,6 +36,22 @@ exports.isEqual = async function(a: string, b: string): Promise<boolean> {
     default:
       throw new Error(`Unable to parse response from wolfram ${res}`);
   }
+};
+
+exports.getVariables = function(a: string, b: string, instruction: string): string {
+  let re = /^Evaluate when [a-z] is -?\d+( and [a-z] is -?\d+)*\.$/;
+  if (!re.test(instruction)) {
+    let vars = exports.extractVariablesFromMany(a, b);
+    return `{${vars.length ? vars.join(',') : 'x'}}`;
+  }
+
+  let matches = instruction.match(/[a-z] is -?\d+/g);
+  if (!Array.isArray(matches)) {
+    return '{}';
+  }
+
+  matches = matches.map((aMatch: string): string => aMatch.replace(' is ', '=='));
+  return `{${matches.join(',')}}`;
 };
 
 exports.extractVariablesFromMany = function(...arr: Array<string>): Array<string> {
