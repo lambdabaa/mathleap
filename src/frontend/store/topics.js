@@ -76,6 +76,24 @@ module.exports = [
   },
 
   {
+    "name": "Expressions with variables",
+    "types": [
+      {
+        "name": "Evaluating expressions with one variable",
+        "example": "5t + 3, t = 2"
+      },
+      {
+        "name": "Evaluating expressions with two variables",
+        "example": "xy - y + 3x, x = 3, y = 2"
+      },
+      {
+        "name": "Evaluating fractional expressions with two variables",
+        "example": "m - 12n + 8, m = 30, n = 1 / 4"
+      }
+    ]
+  },
+
+  {
     "name": "One Variable Linear Equations",
     "types": [
       {
@@ -146,24 +164,6 @@ module.exports = [
         "name": "Factoring the difference of squares",
         "example": "4x^2 - 9",
         "instruction": "Factor."
-      }
-    ]
-  },
-
-  {
-    "name": "Expressions with variables",
-    "types": [
-      {
-        "name": "Evaluating expressions with one variable",
-        "example": "5t + 3, t = 2"
-      },
-      {
-        "name": "Evaluating expressions with two variables",
-        "example": "xy - y + 3x, x = 3, y = 2"
-      },
-      {
-        "name": "Evaluating fractional expressions with two variables",
-        "example": "m - 12n + 8, m = 30, n = 1 / 4"
       }
     ]
   }
