@@ -12,6 +12,7 @@ let clone = require('lodash/lang/cloneDeep');
 let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let debug = require('../../../common/debug')('components/submissions/Edit');
 let editor = require('../../helpers/editor');
+let {isEditorSupported} = require('../../isBrowserSupported');
 let map = require('lodash/collection/map');
 let {mapChar} = require('../../../common/string');
 let preventDefault = require('../../preventDefault');
@@ -166,6 +167,15 @@ module.exports = React.createClass({
     }
 
     return <div id="submissions-edit">
+      {
+        isEditorSupported() ?
+          '' :
+          <div className="service-outage">
+            Solving problems in this browser not supported. Please use an
+            up-to-date version of a desktop browser like
+            <a href="https://mozilla.org/firefox/">Firefox</a>.
+          </div>
+      }
       <Topbar headerText={headerText} />
       <div className="view">
         <div className="subbar">

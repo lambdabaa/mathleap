@@ -10,11 +10,17 @@ const supportedVersion = Object.freeze({
   safari: 6.1
 });
 
-module.exports = function(): boolean {
-  if (bowser.mobile) {
-    return false;
-  }
+function isBrowserSupported(): boolean {
+  return bowser.mobile ? false : isDesktopBrowserSupported();
+}
 
+function isEditorSupported(): boolean {
+  return bowser.mobile || bowser.tablet ?
+    false :
+    isDesktopBrowserSupported();
+}
+
+function isDesktopBrowserSupported(): boolean {
   for (let name in supportedVersion) {
     if (!bowser[name]) {
       continue;
@@ -25,6 +31,8 @@ module.exports = function(): boolean {
   }
 
   return true;
-};
+}
 
+module.exports = isBrowserSupported;
+module.exports.isEditorSupported = isEditorSupported;
 module.exports.bowser = bowser;
