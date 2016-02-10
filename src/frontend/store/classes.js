@@ -35,7 +35,8 @@ exports.create = async function create(options: Object = {},
     name: options.title || 'Untitled Class',
     teacher,
     color,
-    code
+    code,
+    misc: options.misc || {}
   };
 
   await Promise.all([

@@ -119,7 +119,7 @@ async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
     groups.map(async (group: Object) => {
       // $FlowFixMe: Flow doesn't know about Promise.all.
       let [aClass, members] = await Promise.all([
-        classes.create({title: group.title}, user.id),
+        classes.create({title: group.title, misc: group}, user.id),
         client.getGroupMemberships(group.id)
       ]);
 
