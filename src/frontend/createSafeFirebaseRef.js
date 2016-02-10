@@ -9,6 +9,7 @@ class SafeFirebase extends Firebase {
   }
 
   child(path) {
+    path = '' + path;  // coerce to string
     return new SafeFirebase(
       this.uri +
       '/' +

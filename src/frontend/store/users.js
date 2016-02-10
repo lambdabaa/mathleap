@@ -1,6 +1,7 @@
 /* @flow */
 
 let Edmodo = require('../edmodo');
+let classes = require('./classes');
 let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/users');
 let request = require('./request');
@@ -24,6 +25,7 @@ let baseRef = createSafeFirebaseRef();
 let studentsRef = baseRef.child('students');
 let teachersRef = baseRef.child('teachers');
 
+let client;
 let subscription;
 
 exports.create = async function(credentials: Credentials): Promise<string> {
@@ -54,7 +56,7 @@ exports.login = async function(credentials: Credentials): Promise<void> {
 };
 
 exports.edmodo = async function(auth: AccessToken): Promise<void> {
-  let client = new Edmodo(auth);
+  client = new Edmodo(auth);
   let user = await client.getUser();
   debug('Got edmodo user', JSON.stringify(user));
   // Stringify edmodo user id.
@@ -90,35 +92,64 @@ function findOrCreateEdmodoUser(user: Object): Promise<?FBTeacher | ?FBStudent> 
   return fn(user);
 }
 
-async function findOrCreateEdmodoTeacher(user: Object): Promise<?FBTeacher> {
+/* eslint-disable camelcase */
+async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
   let teacher = await teachers.get(user.id);
   if (teacher) {
     return teacher;
   }
 
-  /* eslint-disable camelcase */
-  await teachers.create(
-    {
-      email: user.email,
-      title: user.title,
-      first: user.first_name,
-      last: user.last_name,
-      misc: user
-    },
-    user.id
-  );
-  /* eslint-enable camelcase */
+  // $FlowFixMe: Flow doesn't know about Promise.all.
+  let [groups] = await Promise.all([
+    client.getGroups(),
+    teachers.create(
+      {
+        email: user.email,
+        title: user.title,
+        first: user.first_name,
+        last: user.last_name,
+        misc: user
+      },
+      user.id
+    )
+  ]);
 
-  return teachers.get(user.id);
+  // We also want to import the teacher's classes.
+  await Promise.all(
+    groups.map(async (group: Object) => {
+      // $FlowFixMe: Flow doesn't know about Promise.all.
+      let [aClass, members] = await Promise.all([
+        classes.create({title: group.title}, user.id),
+        client.getGroupMemberships(group.id)
+      ]);
+
+      await Promise.all(
+        members.map(async (member: Object): Promise => {
+          if (member.user.type !== 'student') {
+            return;
+          }
+
+          let student = await findOrCreateEdmodoStudent(member.user);
+          await classes.join(aClass.code, student.id);
+        })
+      );
+    })
+  );
+
+  let result = await teachers.get(user.id);
+  if (!result) {
+    throw new Error(`Failed to create edmodo teacher ${JSON.stringify(user)}`);
+  }
+
+  return result;
 }
 
-async function findOrCreateEdmodoStudent(user: Object): Promise<?FBStudent> {
+async function findOrCreateEdmodoStudent(user: Object): Promise<FBStudent> {
   let student = await students.get(user.id);
   if (student) {
     return student;
   }
 
-  /* eslint-disable camelcase */
   await students.create(
     {
       username: user.username,
@@ -129,7 +160,12 @@ async function findOrCreateEdmodoStudent(user: Object): Promise<?FBStudent> {
     },
     user.id
   );
-  /* eslint-enable camelcase */
 
-  return students.get(user.id);
+  let result = await students.get(user.id);
+  if (!result) {
+    throw new Error(`Failed to create edmodo student ${JSON.stringify(user)}`);
+  }
+
+  return result;
 }
+/* eslint-enable camelcase */

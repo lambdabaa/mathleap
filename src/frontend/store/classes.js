@@ -15,9 +15,13 @@ let classesRef = createSafeFirebaseRef('classes');
 let studentsRef = createSafeFirebaseRef('students');
 let teachersRef = createSafeFirebaseRef('teachers');
 
-exports.create = async function create(): Promise<void> {
+exports.create = async function create(options: Object = {},
+                                       teacher: string): Promise<Object> {
   debug('request add class');
-  let teacher = session.get('user').id;
+  if (!teacher) {
+    teacher = session.get('user').id;
+  }
+
   let code = createCode();
   let color = colors.random();
 
@@ -27,21 +31,27 @@ exports.create = async function create(): Promise<void> {
     .child(code);
   let classRef = classesRef.child(code);
 
+  let aClass = {
+    name: options.title || 'Untitled Class',
+    teacher,
+    color,
+    code
+  };
+
   await Promise.all([
     request(teacherClassRef, 'set', code),
-    request(classRef, 'set', {
-      name: 'Untitled Class',
-      teacher: teacher,
-      color,
-      code
-    })
+    request(classRef, 'set', aClass)
   ]);
 
   debug('add class ok');
+  return aClass;
 };
 
-exports.join = async function join(code: string): Promise {
-  let student = session.get('user').id;
+exports.join = async function join(code: string, student: ?string): Promise {
+  if (!student) {
+    student = session.get('user').id;
+  }
+
   let {teacher} = await exports.get(code);
 
   let studentClassRef = studentsRef
