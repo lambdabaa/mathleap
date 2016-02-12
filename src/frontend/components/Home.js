@@ -16,7 +16,7 @@ module.exports = React.createClass({
   displayName: 'Home',
 
   getInitialState: function() {
-    return {errorMessage: null};
+    return {screenshot: 0, errorMessage: null};
   },
 
   componentDidMount: function() {
@@ -65,6 +65,16 @@ module.exports = React.createClass({
         setTransition(aFish, -1);
       });
     });
+
+    this.interval = setInterval(this._tick, 5000);
+  },
+
+  componentWillUnmount: function() {
+    clearInterval(this.interval);
+  },
+
+  _tick: function() {
+    this.setState({screenshot: (this.state.screenshot + 1) % 3});
   },
 
   render: function() {
@@ -215,13 +225,19 @@ module.exports = React.createClass({
         <div className="home-container">
           <div className="how-it-works-container">
             <div className="how-it-works-steps">
-              <div className="absimg dotted-circle dotted-circle-0"></div>
-              <div className="absimg dotted-line dotted-line-0"></div>
-              <div className="absimg dotted-circle dotted-circle-1"></div>
-              <div className="absimg dotted-line dotted-line-1"></div>
-              <div className="absimg dotted-circle dotted-circle-2"></div>
+              <div className="absimg dotted-circle dotted-circle-0"
+                   style={this.state.screenshot !== 0 ? {opacity: '0.5'} : {}}></div>
+              <div className="absimg dotted-line dotted-line-0"
+                   style={this.state.screenshot !== 0 ? {opacity: '0.5'} : {}}></div>
+              <div className="absimg dotted-circle dotted-circle-1"
+                   style={this.state.screenshot !== 1 ? {opacity: '0.5'} : {}}></div>
+              <div className="absimg dotted-line dotted-line-1"
+                   style={this.state.screenshot !== 1 ? {opacity: '0.5'} : {}}></div>
+              <div className="absimg dotted-circle dotted-circle-2"
+                   style={this.state.screenshot !== 2 ? {opacity: '0.5'} : {}}></div>
               <div className="absimg how-it-works-icon how-it-works-generate"></div>
-              <div className="how-it-works-copy how-it-works-copy-0">
+              <div className="how-it-works-copy how-it-works-copy-0"
+                   style={this.state.screenshot !== 0 ? {opacity: '0.5'} : {}}>
                 <div className="how-it-works-copy-header">Generate assignments</div>
                 <div className="how-it-works-copy-body">
                   Create assignments by selecting question topics.
@@ -230,7 +246,8 @@ module.exports = React.createClass({
                 </div>
               </div>
               <div className="absimg how-it-works-icon how-it-works-solve"></div>
-              <div className="how-it-works-copy how-it-works-copy-1">
+              <div className="how-it-works-copy how-it-works-copy-1"
+                   style={this.state.screenshot !== 1 ? {opacity: '0.5'} : {}}>
                 <div className="how-it-works-copy-header">Students solve problems online</div>
                 <div className="how-it-works-copy-body">
                   Students show their work using an online problem editor
@@ -238,7 +255,8 @@ module.exports = React.createClass({
                 </div>
               </div>
               <div className="absimg how-it-works-icon how-it-works-instant"></div>
-              <div className="how-it-works-copy how-it-works-copy-2">
+              <div className="how-it-works-copy how-it-works-copy-2"
+                   style={this.state.screenshot !== 2 ? {opacity: '0.5'} : {}}>
                 <div className="how-it-works-copy-header">Instant, line-by-line feedback</div>
                 <div className="how-it-works-copy-body">
                   Upon submission, our state of the art grading technology
@@ -247,7 +265,8 @@ module.exports = React.createClass({
                 </div>
               </div>
             </div>
-            <div className="how-it-works-image"></div>
+            <img className="how-it-works-image"
+                 src={`style/images/screenshot-${this.state.screenshot + 1}.png`} />
           </div>
         </div>
       </div>
