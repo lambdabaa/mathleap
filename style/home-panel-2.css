@@ -85,12 +85,12 @@
 }
 
 .how-it-works-solve {
-  background-image: url("style/images/solve-icon.svg");
+  background-image: url("style/images/instant-icon.svg");
   bottom: 249.723px;
 }
 
 .how-it-works-instant {
-  background-image: url("style/images/instant-icon.svg");
+  background-image: url("style/images/solve-icon.svg");
   bottom: 92px;
 }
 
