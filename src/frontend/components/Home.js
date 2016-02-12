@@ -7,6 +7,7 @@ let {edmodoId} = require('../constants');
 let handleEnter = require('../handleEnter');
 let isBrowserSupported = require('../isBrowserSupported');
 let {on} = require('../../common/events');
+let preloadImage = require('../preloadImage');
 let querystring = require('querystring');
 let students = require('../store/students');
 let teachers = require('../store/teachers');
@@ -67,6 +68,11 @@ module.exports = React.createClass({
     });
 
     this.interval = setInterval(this._tick, 6000);
+
+    [
+      'style/images/screenshot-2.png',
+      'style/images/screenshot-3.png'
+    ].forEach(preloadImage);
   },
 
   componentWillUnmount: function() {
