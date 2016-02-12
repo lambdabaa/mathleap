@@ -21,12 +21,14 @@ class Session extends EventEmitter {
     return key ? this.data[key] : this.data;
   }
 
-  set(key: Primitive, value: any): void {
+  async set(key: Primitive, value: any): Promise<void> {
     debug(`set ${key}=${stringify(value)}`);
     this.data[key] = value;
     super.emit('change');
     super.emit(key, value);
-    process.nextTick(() => this._persist());
+
+    await Promise.resolve();
+    this._persist();
   }
 
   remove(key: Primitive): void {
@@ -120,10 +122,11 @@ function deleteAllCookies(): void {
 
 let session = module.exports = new Session();
 
-session.on('newListener', function(topic: string, fn: Function): void {
+session.on('newListener', async function(topic: string, fn: Function): Promise<void> {
   if (topic === 'change') {
     return;
   }
 
-  process.nextTick((): void => fn(session.get(topic)));
+  await Promise.resolve();
+  fn(session.get(topic));
 });
