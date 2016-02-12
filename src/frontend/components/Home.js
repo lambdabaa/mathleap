@@ -66,7 +66,7 @@ module.exports = React.createClass({
       });
     });
 
-    this.interval = setInterval(this._tick, 5000);
+    this.interval = setInterval(this._tick, 6000);
   },
 
   componentWillUnmount: function() {
@@ -236,9 +236,11 @@ module.exports = React.createClass({
               <div className="absimg dotted-circle dotted-circle-2"
                    style={this.state.screenshot !== 2 ? {opacity: '0.25'} : {}}></div>
               <div className="absimg how-it-works-icon how-it-works-generate"
-                   style={this.state.screenshot !== 0 ? {opacity: '0.25'} : {}}></div>
+                   style={this.state.screenshot !== 0 ? {opacity: '0.25'} : {}}
+                   onClick={this._handleHowItWorks.bind(this, 0)}></div>
               <div className="how-it-works-copy how-it-works-copy-0"
-                   style={this.state.screenshot !== 0 ? {opacity: '0.25'} : {}}>
+                   style={this.state.screenshot !== 0 ? {opacity: '0.25'} : {}}
+                   onClick={this._handleHowItWorks.bind(this, 0)}>
                 <div className="how-it-works-copy-header">Generate assignments</div>
                 <div className="how-it-works-copy-body">
                   Create assignments by selecting question topics.
@@ -247,9 +249,11 @@ module.exports = React.createClass({
                 </div>
               </div>
               <div className="absimg how-it-works-icon how-it-works-solve"
-                   style={this.state.screenshot !== 1 ? {opacity: '0.25'} : {}}></div>
+                   style={this.state.screenshot !== 1 ? {opacity: '0.25'} : {}}
+                   onClick={this._handleHowItWorks.bind(this, 1)}></div>
               <div className="how-it-works-copy how-it-works-copy-1"
-                   style={this.state.screenshot !== 1 ? {opacity: '0.25'} : {}}>
+                   style={this.state.screenshot !== 1 ? {opacity: '0.25'} : {}}
+                   onClick={this._handleHowItWorks.bind(this, 1)}>
                 <div className="how-it-works-copy-header">Students solve problems online</div>
                 <div className="how-it-works-copy-body">
                   Students show their work using an online problem editor
@@ -257,9 +261,11 @@ module.exports = React.createClass({
                 </div>
               </div>
               <div className="absimg how-it-works-icon how-it-works-instant"
-                   style={this.state.screenshot !== 2 ? {opacity: '0.25'} : {}}></div>
+                   style={this.state.screenshot !== 2 ? {opacity: '0.25'} : {}}
+                   onClick={this._handleHowItWorks.bind(this, 2)}></div>
               <div className="how-it-works-copy how-it-works-copy-2"
-                   style={this.state.screenshot !== 2 ? {opacity: '0.25'} : {}}>
+                   style={this.state.screenshot !== 2 ? {opacity: '0.25'} : {}}
+                   onClick={this._handleHowItWorks.bind(this, 2)}>
                 <div className="how-it-works-copy-header">Instant, line-by-line feedback</div>
                 <div className="how-it-works-copy-body">
                   Upon submission, our state of the art grading technology
@@ -480,6 +486,11 @@ module.exports = React.createClass({
     }
 
     this.props.closeModal();
+  },
+
+  _handleHowItWorks: function(screenshot) {
+    clearInterval(this.interval);
+    this.setState({screenshot});
   }
 });
 

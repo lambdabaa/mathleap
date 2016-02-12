@@ -28,6 +28,7 @@
 }
 
 .how-it-works-steps {
+  cursor: pointer;
   position: relative;
   width: 500px;
 }
