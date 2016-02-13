@@ -1,0 +1,11 @@
+/*.css
+/*.log
+
+/build
+/client/backend/math.js
+/node_modules
+/public/backend.js
+/public/backend.min.js
+/public/frontend.js
+/public/frontend.min.js
+/public/mathleap.min.css

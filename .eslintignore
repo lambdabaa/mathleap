@@ -1,0 +1,7 @@
+*.js
+client/backend/math.js
+client/frontend/components/Privacy.js
+client/frontend/components/Tos.js
+
+build/**
+node_modules/**
