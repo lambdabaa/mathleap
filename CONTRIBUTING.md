@@ -4,7 +4,7 @@ Make sure you have `node` (version 4.2) and `make` installed locally.
 Then, after fetching the repo from GitHub, do
 
 ```bash
-cd ml
+cd mathleap
 npm install
 python -m SimpleHTTPServer 8080  # Any other web server is fine.
 ```
