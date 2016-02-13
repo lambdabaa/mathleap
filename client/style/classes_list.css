@@ -1,0 +1,40 @@
+.class-details {
+  align-items: center;
+  -webkit-align-items: center;
+  display: flex;
+  display: -webkit-flex;
+}
+
+.class-color-picker {
+  display: flex;
+  display: -webkit-flex;
+  left: 27.5px;
+  position: absolute;
+  top: -12.5px;
+  z-index: 1;
+}
+
+.class-color-picker-expand {
+  height: 75px;
+}
+
+.class-color-picker-row {
+  display: flex;
+  display: -webkit-flex;
+}
+
+.class-color-picker-choice {
+  cursor: pointer;
+  height: 25px;
+  width: 25px;
+}
+
+.classes-list-ftu {
+  font-size: 24px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.classes-list-ftu > .emph {
+  margin-right: 5px;
+}

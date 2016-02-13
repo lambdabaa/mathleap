@@ -1,0 +1,39 @@
+{
+  "firebase": "mathleap",
+  "public": ".",
+  "rules": "config/security.json",
+
+  "headers": [
+    {
+      "source": "**/*.@(mp4|otf|png|svg)",
+      "headers": [
+        {"key": "Cache-Control", "value": "max-age=86400"}
+      ]
+    },
+    {
+      "source": "**/*.@(css|html|js)",
+      "headers": [
+        {"key": "Cache-Control", "value": "max-age=600"}
+      ]
+    }
+  ],
+
+  "ignore": [
+    "**/.*",
+    "build/**",
+    "chrome/**",
+    "data/**",
+    "docs/**",
+    "src/**",
+    "test/**",
+    "CONTRIBUTING.md",
+    "Makefile",
+    "README.md",
+    "backend.js",
+    "circle.yml",
+    "firebase.json",
+    "frontend.js",
+    "package.json",
+    "watchman.json"
+  ]
+}

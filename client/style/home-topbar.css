@@ -1,0 +1,22 @@
+/* Landing page topbar modifications */
+
+.home-container > .topbar {
+  border: none;
+  color: white;
+}
+
+.home-container .topbar-actions {
+  font-weight: bold;
+}
+
+.home-container .signup-button {
+  background-color: #31a4cb;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.home-container .topbar-text-logo-math,
+.home-container .topbar-text-logo-leap {
+  color: white;
+}

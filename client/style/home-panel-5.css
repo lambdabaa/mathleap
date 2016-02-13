@@ -1,0 +1,11 @@
+.panel-5 {
+  height: 850px;
+  max-height: 850px;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 60px 0 0 0;
+}
+
+.panel-5 > .home-container {
+  height: 100%;
+}

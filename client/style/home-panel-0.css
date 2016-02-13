@@ -1,0 +1,340 @@
+.panel-0,
+.panel-5 {
+  background: linear-gradient(#63d2ef, white);
+  background: -moz-linear-gradient(#63d2ef, white);
+  background: -o-linear-gradient(#63d2ef, white);
+  background: -webkit-linear-gradient(#63d2ef, white);
+}
+
+.panel-0 {
+  height: 800px;
+  max-height: 800px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.chrome-web-store {
+  bottom: 50%;
+  left: -10px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tagline {
+  color: white;
+  display: flex;
+  display: -webkit-flex;
+  font-size: 66px;
+  justify-content: center;
+  -webkit-justify-content: center;
+  margin-top: 30px;
+}
+
+.tagline > .emph {
+  margin-left: 10px;
+}
+
+.subline {
+  color: black;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  font-size: 24px;
+  margin-top: 15px;
+}
+
+.subline > .emph {
+  border-bottom: 1px solid black;
+  margin: 0 5px;
+}
+
+.start-buttons {
+  align-items: center;
+  -webkit-align-items: center;
+  display: flex;
+  display: -webkit-flex;
+  height: 126px;
+  justify-content: center;
+  -webkit-justify-content: center;
+}
+
+.home-signup-button {
+  background-color: #ffc20e;
+  border: 3px solid white;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 15px;
+  width: 200px;
+}
+
+.button-separator {
+  text-align: center;
+  width: 60px;
+}
+
+.sun {
+  position: absolute;
+  top: 90px;
+  width: 100%;
+}
+
+.sun-ring {
+  border-radius: 50%;
+  position: absolute;
+  right: 25px;
+  top: 25px;
+}
+
+.outer-sun {
+  background-color: rgba(255, 255, 255, 0.15);
+  height: 200px;
+  right: -75px;
+  top: 15px;
+  width: 200px;
+}
+
+.middle-sun {
+  background-color: #fffabf;
+  height: 150px;
+  width: 150px;
+}
+
+.inner-sun {
+  background-color: #ffc20e;
+  height: 100px;
+  width: 100px;
+}
+
+.cloud {
+  /* see https://davidwalsh.name/translate3d */
+  transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
+.cloud-0 {
+  background-image: url("style/images/cloud0.svg");
+  height: 75.9765625px;
+  left: calc(100vw - 235px);
+  top: 235px;
+  width: 184.6875px;
+}
+
+.cloud-1 {
+  background-image: url("style/images/cloud1.svg");
+  height: 83.9765625px;
+  left: 50px;
+  width: 175.21875px;
+  top: 500px;
+}
+
+.cloud-2 {
+  background-image: url("style/images/cloud2.svg");
+  height: 84px;
+  left: 475px;
+  width: 194px;
+  top: 340px;
+}
+
+.cloud-3 {
+  background-image: url("style/images/cloud3.svg");
+  height: 62px;
+  left: 200px;
+  top: 100px;
+  width: 106px;
+}
+
+.cloud-4 {
+  background-image: url("style/images/cloud4.svg");
+  height: 60px;
+  left: calc(100vw - 350px);
+  top: 525px;
+  width: 126px;
+}
+
+.island {
+  bottom: 135px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+.island > .home-container {
+  display: flex;
+  display: -webkit-flex;
+  width: 737.5px;
+}
+
+.island > .home-container > * {
+  background-color: #09700c;
+  height: 30px;
+}
+
+.island-left,
+.island-right {
+  width: 25px;
+}
+
+.island-left {
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+
+.island-right {
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
+
+.island-center {
+  width: 1000px;
+}
+
+.island-hump {
+  bottom: calc(115px - 700px / 2);
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+}
+
+.island-hump > .home-container {
+  background-color: #13911a;
+  border-radius: 50%;
+  height: 500px;
+  width: 737.5px;
+}
+
+.island-features {
+  bottom: 150px;
+  position: absolute;
+  width: 100%;
+}
+
+.island-features > .home-container {
+  height: 350px;
+}
+
+.island-tree {
+  background-image: url("style/images/tree.svg");
+  height: 124px;
+  width: 102px;
+  bottom: 15px;
+  z-index: 1;
+}
+
+.island-tree-left {
+  left: 190px;
+}
+
+.island-tree-right {
+  right: 135px;
+}
+
+.island-bush {
+  bottom: 15px;
+  height: 32px;
+  width: 90px;
+  z-index: 2;
+}
+
+.island-bush-left {
+  background-image: url("style/images/grass-1.svg");
+  left: 170px;
+}
+
+.island-bush-right {
+  background-image: url("style/images/grass-1.svg");
+  left: 250px;
+}
+
+.island-turtle {
+  background-image: url("style/images/turtle.svg");
+  bottom: 0;
+  left: 305px;
+  height: 206.018px;
+  width: 281.986px;
+  z-index: 2;
+}
+
+.turtle-shadow {
+  background-image: url("style/images/turtle-shadow.svg");
+  bottom: -5px;
+  height: 14.261px;
+  left: 310px;
+  width: 172.09px;
+  z-index: 2;
+}
+
+.laptop {
+  background-image: url("style/images/laptop.svg");
+  bottom: 15px;
+  left: 545px;
+  height: 146px;
+  width: 272px;
+  z-index: 2;
+}
+
+.math-symbols {
+  background-image: url("style/images/math_icons.svg");
+  height: 212px;
+  right: 140px;
+  top: 0;
+  width: 276px;
+}
+
+.fish {
+  background-image: url("style/images/fish.svg");
+  height: 26.621px;
+  position: absolute;
+  /* see https://davidwalsh.name/translate3d */
+  transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  width: 27.078px;
+}
+
+.fish-0 {
+  left: calc((100vw / 2) - 150px);
+  top: 25px;
+}
+
+.fish-1 {
+  left: calc(100vw / 2);
+  top: 100px;
+}
+
+.fish-2 {
+  /* TODO: Hack around FF bug with css calc */
+  left: calc((100vw / 2) - -300px);
+  top: 50px;
+}
+
+.water {
+  background-color: #1193cd;
+  bottom: 0;
+  height: 138px;
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+}
+
+.water-top {
+  background-image: url("style/images/wave-top.svg");
+  background-repeat: repeat-x;
+  background-size: 36px;
+  bottom: 135px;
+  height: 15px;
+  position: absolute;
+  width: 100%;
+}

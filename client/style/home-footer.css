@@ -1,0 +1,71 @@
+.panel-5 > .water > .home-container {
+  color: white;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  margin: 12.5px auto;
+}
+
+.footer-logo {
+  background: url("style/images/white-logo.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 120px;
+  width: 120px;
+}
+
+.legal-jargon {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  justify-content: center;
+  -webkit-justify-content: center;
+}
+
+.legal-bottom {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  width: 215px;
+}
+
+.legal-link {
+  color: white;
+  cursor: pointer;
+}
+
+.fish-and-wave {
+  background-image: url("style/images/fish-and-wave.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 97.5px;
+  width: 500px;
+}
+
+.social-media-container {
+  align-items: center;
+  -webkit-align-items: center;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  height: 120px;
+  width: 100px;
+}
+
+.facebook-logo {
+  background-image: url("style/images/social-facebook.svg");
+  height: 42px;
+  width: 42px;
+}
+
+.twitter-logo {
+  background-image: url("style/images/social-twitter.svg");
+  height: 42px;
+  width: 42px;
+}

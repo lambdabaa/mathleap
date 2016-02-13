@@ -1,0 +1,28 @@
+{
+  "rules": {
+    "classes": {
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null"
+    },
+
+    "students": {
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null"
+    },
+
+    "teachers": {
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null"
+    },
+
+    "topics": {
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null"
+    },
+
+    "v2": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}

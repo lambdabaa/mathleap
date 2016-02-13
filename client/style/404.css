@@ -1,0 +1,60 @@
+#not-found {
+  background-color: #00c3f1;
+  left: 0;
+  overflow-x: hidden;
+  min-height: 100vw;
+  min-width: 100vw;
+  position: fixed;
+}
+
+#not-found .container {
+  display: flex;
+  display: -webkit-flex;
+  margin: 200px auto;
+  width: 1050px;
+}
+
+#not-found .text {
+  color: white;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  height: 400px;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  width: 650px;
+}
+
+#not-found .text-header {
+  font-size: 128px;
+}
+
+#not-found .text-tagline {
+  font-size: 42px;
+}
+
+#not-found .text-body {
+  font-size: 18px;
+  color: black;
+}
+
+#not-found .not-found-button {
+  background-color: #00709b;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  width: 150px;
+}
+
+#not-found .mascot {
+  background-image: url("style/images/turtle-lost.svg");
+  background-repeat: none;
+  background-size: 400px;
+  height: 400px;
+  width: 400px;
+}

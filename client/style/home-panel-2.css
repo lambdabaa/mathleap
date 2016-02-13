@@ -1,0 +1,124 @@
+.panel-2 {
+  background-color: #0076a8;
+  background-image: url("style/images/mountain.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 566px;
+  padding: 60px 0 0 0;
+}
+
+.how-it-works {
+  color: white;
+  display: flex;
+  display: -webkit-flex;
+  font-weight: bold;
+  justify-content: center;
+  -webkit-justify-content: center;
+  font-size: 36px;
+  margin-bottom: 60px;
+}
+
+.how-it-works-container {
+  bottom: 0;
+  display: flex;
+  display: -webkit-flex;
+  width: 100%;
+  height: 500px;
+}
+
+.how-it-works-steps {
+  cursor: pointer;
+  position: relative;
+  width: 500px;
+}
+
+.how-it-works-image {
+  border: 8px solid #f2f2f2;
+  position: relative;
+  width: 600px;
+}
+
+.dotted-circle {
+  background-image: url("style/images/dotted-circle.svg");
+  height: 102px;
+  left: 0;
+  width: 102px;
+}
+
+.dotted-circle-0 {
+  bottom: 390.446px;
+}
+
+.dotted-circle-1 {
+  bottom: 232.723px;
+}
+
+.dotted-circle-2 {
+  bottom: 75px;
+}
+
+.dotted-line {
+  background-image: url("style/images/dotted-line.svg");
+  height: 55.723px;
+  width: 2px;
+  left: 51px;
+}
+
+.dotted-line-0 {
+  bottom: 334.723px;
+}
+
+.dotted-line-1 {
+  bottom: 177px;
+}
+
+.how-it-works-icon {
+  height: 68px;
+  left: 17px;
+  width: 68px;
+}
+
+.how-it-works-generate {
+  background-image: url("style/images/generate-icon.svg");
+  bottom: 409.446px;
+}
+
+.how-it-works-solve {
+  background-image: url("style/images/instant-icon.svg");
+  bottom: 249.723px;
+}
+
+.how-it-works-instant {
+  background-image: url("style/images/solve-icon.svg");
+  bottom: 92px;
+}
+
+.how-it-works-copy {
+  color: white;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  left: 135px;
+  position: absolute;
+  width: 250px;
+}
+
+.how-it-works-copy-header {
+  font-weight: bold;
+}
+
+.how-it-works-copy-0 {
+  top: 0;
+}
+
+.how-it-works-copy-1 {
+  bottom: 245px;
+}
+
+.how-it-works-copy-2 {
+  bottom: 70px;
+}

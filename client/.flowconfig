@@ -1,0 +1,13 @@
+[ignore]
+.*/build/*
+.*/node_modules/babel-*
+.*/node_modules/fbjs/*
+
+[include]
+.*/src/*
+
+[libs]
+
+[options]
+module.system=haste
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe

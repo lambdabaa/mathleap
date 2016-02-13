@@ -1,0 +1,15 @@
+machine:
+  environment:
+    FIREBASE_TOKEN: -J2V1T9-kU9EDXsq_N0S|b8d0ef7451decb6844663262c9dfe80b
+  node:
+    version: 4.2.2
+test:
+  pre:
+    - npm run lint
+    - npm run flow
+deployment:
+  production:
+    branch: master
+    commands:
+      - npm install -g firebase-tools@2.2.1
+      - npm run deploy

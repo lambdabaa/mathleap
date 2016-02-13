@@ -1,0 +1,18 @@
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 100;
+  src: local("Lato Hairline"), local("Lato-Hairline"), url(https://fonts.gstatic.com/s/lato/v11/vhtyQldbm6hR1oTZdtDAeQ.woff2) format("woff2"), url(https://fonts.gstatic.com/s/lato/v11/mxYHCe9h99dgbtHWLb15UQ.woff) format("woff");
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 300;
+  src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v11/puqvkRcb0KEzqeLRHcd-Lw.woff2) format("woff2"), url(https://fonts.gstatic.com/s/lato/v11/SrH4OiQlr11FDKIskY9CXQ.woff) format("woff");
+}
+
+@font-face {
+  font-family: "Coop";
+  src: url("style/fonts/cooplight.otf");
+}

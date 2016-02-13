@@ -1,0 +1,17 @@
+{
+  "name": "MathLeap",
+  "short_name": "MathLeap",
+  "description": "Free online practice problems for math classes! Our smart grading technology analyzes student work to give feedback and aid learning",
+  "version": "0.0.1",
+  "manifest_version": 2,
+
+  "app": {
+    "launch": {
+      "web_url": "https://mathleap.org/"
+    }
+  },
+
+  "icons": {
+    "128": "images/icon.png"
+  }
+}
