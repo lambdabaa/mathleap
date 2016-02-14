@@ -13,8 +13,11 @@
     "babel-preset-react": "6.3.13",
     "babel-preset-stage-0": "6.3.13",
     "bowser": "1.0.0",
+    "browserify": "11.1.0",
+    "cssmin": "0.4.3",
     "express": "4.13.4",
     "firebase": "2.3.1",
+    "jison": "0.4.13",
     "json-stringify-safe": "5.0.1",
     "lodash": "3.10.1",
     "mathjs": "2.4.1",
@@ -23,20 +26,17 @@
     "react": "0.14.7",
     "react-dom": "0.14.7",
     "reactfire": "0.5.1",
-    "throng": "2.0.1"
+    "throng": "2.0.1",
+    "uglify-js": "2.4.24"
   },
 
   "devDependencies": {
-    "browserify": "11.1.0",
     "chai": "3.2.0",
-    "cssmin": "0.4.3",
     "eslint": "1.5.1",
     "eslint-plugin-react": "3.8.0",
     "flow-bin": "0.20.1",
-    "jison": "0.4.13",
     "jsdom": "7.2.2",
     "mocha": "2.3.2",
-    "uglify-js": "2.4.24",
     "xmlhttprequest": "1.8.0"
   },
 
