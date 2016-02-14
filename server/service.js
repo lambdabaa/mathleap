@@ -5,6 +5,7 @@ let http = require('http');
 
 function start(port: number): void {
   let app = express();
+  app.use(require('./cors'));
   app.get('/equal', require('./equal'));
   let server = http.createServer(app);
   server.listen(port);
