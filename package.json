@@ -44,7 +44,7 @@
     "deploy": "rm -rf node_modules && npm install --production && firebase deploy --token=\"-J2V1T9-kU9EDXsq_N0S|b8d0ef7451decb6844663262c9dfe80b\" --non-interactive",
     "flow": "flow",
     "lint": "eslint client",
-    "prepublish": "make -j4",
+    "postinstall": "make -j4",
     "test": "make -j4 && mocha",
     "watch": "watchman-make -p '**/*' -t all"
   },
