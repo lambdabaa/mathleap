@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 443;
 const workers = process.env.WEB_CONCURRENCY || 1;
 
 if (require.main === module) {
