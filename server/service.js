@@ -1,13 +1,12 @@
 /* @flow */
 
 let express = require('express');
-let https = require('https');
+let http = require('http');
 
 function start(port: number): void {
   let app = express();
   app.get('/equal', require('./equal'));
-  // $FlowFixMe: Flow doesn't think https.createServer exists?
-  let server = https.createServer(app);
+  let server = http.createServer(app);
   server.listen(port);
   process.on('SIGTERM', (): void => {
     server.close();
