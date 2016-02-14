@@ -1,12 +1,12 @@
 /* @flow */
 
 let Xhr = require('./xhr');
+let {apiUrl} = require('./constants');
 let debug = require('../common/debug')('wolfram2');
 let flatten = require('lodash/array/flatten');
 let {mapChar} = require('../common/string');
 let querystring = require('querystring');
 let uniq = require('lodash/array/uniq');
-let {wolframCloudUrl} = require('./constants');
 
 /**
  * a and b are math expressions and we'll figure out
@@ -15,14 +15,14 @@ let {wolframCloudUrl} = require('./constants');
 exports.isEqual = async function(a: string, b: string,
                                  instruction: string = ''): Promise<boolean> {
   debug('check equivalence', a, b);
-  let checkType = a.indexOf('==') !== -1 ? 'Equation' : 'Expr';
-  let url = `${wolframCloudUrl}/check${checkType}Equivalence`;
+  let check = a.indexOf('==') !== -1 ? 'Equation' : 'Expr';
+  let url = `${apiUrl}/equal/`;
   let vars = exports.getVariables(a, b, instruction);
   debug('vars', JSON.stringify(vars));
   let req = new Xhr();
   req.open(
     'GET',
-    `${url}?${querystring.stringify({a, b, vars})}`,
+    `${url}?${querystring.stringify({check, a, b, vars})}`,
     true /* async */
   );
 
