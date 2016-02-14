@@ -12,4 +12,4 @@ exports.edmodoApiUrl = 'https://api.edmodo.com';
 exports.firebaseUrl = 'https://mathleap.firebaseio.com/v2';
 
 // Heroku
-exports.apiUrl = 'http://api.mathleap.org';
+exports.apiUrl = 'https://mathleap.herokuapp.com';
