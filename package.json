@@ -41,7 +41,7 @@
   },
 
   "scripts": {
-    "deploy": "rm -rf node_modules && npm install --production && firebase deploy --token=\"-J2V1T9-kU9EDXsq_N0S|b8d0ef7451decb6844663262c9dfe80b\" --non-interactive",
+    "deploy": "rm -rf node_modules && npm install babel-polyfill@6.3.14 && firebase deploy --token=\"-J2V1T9-kU9EDXsq_N0S|b8d0ef7451decb6844663262c9dfe80b\" --non-interactive",
     "flow": "flow",
     "lint": "eslint client",
     "postinstall": "make -j4",
