@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+const port = process.env.PORT || 80;
+const workers = process.env.WEB_CONCURRENCY || 1;
+
+if (require.main === module) {
+  require('throng')(
+    require('../build/server/service').start.bind(null, port),
+    {workers, lifetime: Infinity}
+  );
+}
