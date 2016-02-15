@@ -541,7 +541,7 @@ module.exports = React.createClass({
     }
 
     this.isBusy = true;
-    if (event.keyCode === 8) {
+    if (event.key === 'Backspace') {
       event.preventDefault();
     }
 
@@ -567,12 +567,12 @@ module.exports = React.createClass({
 
   _handleNoModifierKey: function(event) {
     let {equation, cursor} = this.state;
-    switch (event.keyCode) {
-      case 37:
+    switch (event.key) {
+      case 'ArrowLeft':
         event.preventDefault();
         cursor = Math.max(0, cursor - 1);
         return this.setState({cursor, isCursorVisible: true});
-      case 39:
+      case 'ArrowRight':
         event.preventDefault();
         cursor = Math.min(equation.length, cursor + 1);
         return this.setState({cursor, isCursorVisible: true});
@@ -583,8 +583,8 @@ module.exports = React.createClass({
 
   _handleShiftKey: function(event) {
     let {cursor, equation, highlight} = this.state;
-    switch (event.keyCode) {
-      case 37:
+    switch (event.key) {
+      case 'ArrowLeft':
         event.preventDefault();
         if (cursor === 0) {
           return;
@@ -593,7 +593,7 @@ module.exports = React.createClass({
         cursor = Math.max(cursor - 1);
         highlight[cursor] = !highlight[cursor];
         return this.setState({cursor, highlight, isCursorVisible: true});
-      case 39:
+      case 'ArrowRight':
         event.preventDefault();
         if (cursor === equation.length) {
           return;
@@ -602,7 +602,7 @@ module.exports = React.createClass({
         highlight[cursor] = !highlight[cursor];
         cursor = Math.max(cursor + 1);
         return this.setState({cursor, highlight, isCursorVisible: true});
-      case 90:
+      case 'R':
         if (event.ctrlKey) {
           return this._handleRedo();
         }
@@ -615,47 +615,47 @@ module.exports = React.createClass({
 
   _handleCtrlKey: function(event) {
     let {responses, num, cursor, equation} = this.state;
-    switch (event.keyCode) {
-      case 37:  // left
+    switch (event.key) {
+      case 'ArrowLeft':
         event.preventDefault();
         return this.setState({
           cursor: editor.moveCursorLeft(cursor, equation),
           isCursorVisible: true
         });
-      case 39:  // right
+      case 'ArrowRight':
         event.preventDefault();
         return this.setState({
           cursor: editor.moveCursorRight(cursor, equation),
           isCursorVisible: true
         });
-      case 65:  // a
+      case 'a':
         event.preventDefault();
         return this.setState({cursor: 0});
-      case 68:  // d
+      case 'd':
         event.preventDefault();
         return this._selectQuestion((num + 1) % responses.length);
-      case 69:  // e
+      case 'e':
         event.preventDefault();
         return this.setState({cursor: equation.length});
-      case 85:  // u
+      case 'u':
         event.preventDefault();
         return this._selectQuestion(num === 0 ? responses.length - 1 : num - 1);
-      case 90:  // z
+      case 'z':
         event.preventDefault();
         return this._handleUndo();
       default:
-        debug(`Unknown control sequence ${event.keyCode}`);
+        debug(`Unknown control sequence ${event.key}`);
     }
   },
 
   _handleDelta: function(event) {
     debug('delta', event);
-    if (event.keyCode === 13) {
+    if (event.key === 'Enter') {
       return this._commitDelta();
     }
 
     let chr = charFromKeyEvent(event);
-    if (event.keyCode !== 8 && !chr) {
+    if (event.key !== 'Backspace' && !chr) {
       return debug('Did not process delta on key event', event);
     }
 
@@ -672,13 +672,13 @@ module.exports = React.createClass({
     }
 
     if (!deltas.length) {
-      return event.keyCode === 8 ?
+      return event.key === 'Backspace' ?
         this._handleBackspace(event) :
         this._handleFirstChar(event);
     }
 
     // In this case the previous delta was a cancel or replace.
-    if (event.keyCode === 8) {
+    if (event.key === 'Backspace') {
       return this._handleBackspace(event);
     }
 
@@ -749,7 +749,7 @@ module.exports = React.createClass({
       await this._handleSelection(
         cursor >= start && cursor <= end + 1 ?
           event :
-          {keyCode: 8, preventDefault: () => {}},
+          {key: 'Backspace', preventDefault: () => {}},
         start,
         end
       );

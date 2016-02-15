@@ -4,5 +4,5 @@
  */
 
 module.exports = function(fn: Function): any {
-  return event => event.keyCode === 13 ? fn() : true;
+  return event => event.key === 'Enter' ? fn() : true;
 };

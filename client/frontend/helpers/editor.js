@@ -90,24 +90,13 @@ exports.moveCursorRight = function(cursor: number, equation: string): number {
 
 exports.applyFirstChar = async function(event: Object, state: Object): Promise<Object> {
   let operator;
-  switch (event.keyCode) {
-    case 54:
-      if (event.shiftKey) { operator = '^'; }
-      break;
-    case 56:
-      if (event.shiftKey) { operator = '*'; }
-      break;
-    case 61:
-    case 187:
-      if (event.shiftKey) { operator = '+'; }
-      break;
-    case 173:
-    case 179:
-    case 189:
-      operator = '-';
-      break;
-    case 191:
-      operator = '/';
+  switch (event.key) {
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+    case '^':
+      operator = event.key;
       break;
     default:
       break;
@@ -151,7 +140,7 @@ exports.applyBothSidesChar = function(event: Object, state: Object): ?Object {
     offset = 2;
   }
 
-  if (event.keyCode === 8) {
+  if (event.key === 'Backspace') {
     append = append.slice(0, append.length - 1);
     cursor -= offset;
     if (!append.length) {
@@ -174,7 +163,7 @@ exports.applyBothSidesChar = function(event: Object, state: Object): ?Object {
 
 exports.selectionToDiffArgs = function(event: Object, start: number,
                                        end: number): ?Array<any> {
-  if (event.keyCode === 8) {
+  if (event.key === 'Backspace') {
     // TODO(gaye): Temporary workaround for
     //     https://github.com/gaye/ml/issues/79
     if (start === end) {

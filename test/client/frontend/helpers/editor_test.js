@@ -73,7 +73,7 @@ suite('helpers/editor', () => {
   test('#applyBothSidesChar', () => {
     // x+5-=0-
     editor.applyBothSidesChar(
-      {keyCode: 53},
+      {key: '5', keyCode: 53},
       {
         append: '-',
         cursor: 7,
@@ -95,7 +95,7 @@ suite('helpers/editor', () => {
   test('#applyBothSidesChar cursor on left', () => {
     // x+5-=0-
     editor.applyBothSidesChar(
-      {keyCode: 53},
+      {key: '5', keyCode: 53},
       {
         append: '-',
         cursor: 4,
@@ -115,7 +115,7 @@ suite('helpers/editor', () => {
   });
 
   test('#selectionToDiffArgs single delete', () => {
-    editor.selectionToDiffArgs({keyCode: 8}, 4, 4)
+    editor.selectionToDiffArgs({key: 'Backspace'}, 4, 4)
     .should
     .deep
     .equal([
@@ -125,7 +125,7 @@ suite('helpers/editor', () => {
   });
 
   test('#selectionToDiffArgs multiple delete', () => {
-    editor.selectionToDiffArgs({keyCode: 8}, 4, 6)
+    editor.selectionToDiffArgs({key: 'Backspace'}, 4, 6)
     .should
     .deep
     .equal([
@@ -135,7 +135,7 @@ suite('helpers/editor', () => {
   });
 
   test('#selectionToDiffArgs replace', () => {
-    editor.selectionToDiffArgs({keyCode: 53}, 4, 5)
+    editor.selectionToDiffArgs({key: '5', keyCode: 53}, 4, 5)
     .should
     .deep
     .equal([
