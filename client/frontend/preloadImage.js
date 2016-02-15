@@ -5,6 +5,6 @@ module.exports = async function preloadImage(url: string): Promise<void> {
   // $FlowFixMe: Why does flow not like this?
   let image = document.createElement('img');
   image.src = url;
-  image.zIndex = '-100';
+  image.style.zIndex = '-100';
   document.body.appendChild(image);
 };
