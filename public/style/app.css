@@ -180,3 +180,10 @@ select {
 .service-outage > a {
   margin: 0 5px;
 }
+
+.preload-image {
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: -100;
+}
