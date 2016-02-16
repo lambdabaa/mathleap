@@ -1,4 +1,5 @@
 /* @flow */
+
 let Firebase = require('firebase/lib/firebase-web');
 let {firebaseUrl} = require('./constants');
 
