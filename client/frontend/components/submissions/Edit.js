@@ -534,7 +534,7 @@ module.exports = React.createClass({
     });
   },
 
-  _handleKeyDown: function(event) {
+  _handleKeyDown: async function(event) {
     if (this.isBusy) {
       debug('Busy... will ignore key event');
       return;
@@ -547,7 +547,10 @@ module.exports = React.createClass({
 
     let {num} = this.state;
     if (typeof num === 'number') {
-      this._handleKeyEvent(event);
+      let action = this._handleKeyEvent(event);
+      if (action instanceof Promise) {
+        await action;
+      }
     }
 
     this.isBusy = false;
