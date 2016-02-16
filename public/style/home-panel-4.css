@@ -5,8 +5,9 @@
 }
 
 .panel-4 > .home-container {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
 }
 
 .testimonial-headshot {
@@ -44,10 +45,12 @@
 }
 
 .testimonial-quote {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
-  flex-direction: column;
+  display: flex;
+  -ms-flex-direction: column;
   -webkit-flex-direction: column;
+  flex-direction: column;
   padding: 50px;
   position: relative;
   width: 425px;

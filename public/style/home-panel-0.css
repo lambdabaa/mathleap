@@ -22,11 +22,13 @@
 
 .tagline {
   color: white;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   font-size: 66px;
-  justify-content: center;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
   margin-top: 30px;
 }
 
@@ -36,10 +38,12 @@
 
 .subline {
   color: black;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
-  justify-content: center;
+  display: flex;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
   font-size: 24px;
   margin-top: 15px;
 }
@@ -52,11 +56,13 @@
 .start-buttons {
   align-items: center;
   -webkit-align-items: center;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   height: 126px;
-  justify-content: center;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
 }
 
 .home-signup-button {
@@ -65,10 +71,12 @@
   border-radius: 30px;
   color: white;
   cursor: pointer;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
-  justify-content: center;
+  display: flex;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
   font-size: 24px;
   font-weight: bold;
   padding: 15px;
@@ -170,8 +178,9 @@
 }
 
 .island > .home-container {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   width: 737.5px;
 }
 

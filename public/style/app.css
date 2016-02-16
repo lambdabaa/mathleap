@@ -113,10 +113,12 @@ select {
 }
 
 .class-code {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
-  flex-direction: column;
+  display: flex;
+  -ms-flex-direction: column;
   -webkit-flex-direction: column;
+  flex-direction: column;
   font-weight: bold;
 }
 
@@ -163,13 +165,15 @@ select {
   background-color: #ff0051;
   border-bottom: 1px solid #ff8033;
   color: white;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   font-size: 18px;
   font-weight: bold;
   height: 50px;
-  justify-content: center;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
   left: 0;
   position: fixed;
   top: 0;

@@ -10,19 +10,22 @@
 
 .how-it-works {
   color: white;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   font-weight: bold;
-  justify-content: center;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
   font-size: 36px;
   margin-bottom: 60px;
 }
 
 .how-it-works-container {
   bottom: 0;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   width: 100%;
   height: 500px;
 }
@@ -96,12 +99,15 @@
 
 .how-it-works-copy {
   color: white;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
-  flex-direction: column;
+  display: flex;
+  -ms-flex-direction: column;
   -webkit-flex-direction: column;
-  justify-content: space-between;
+  flex-direction: column;
+  -ms-flex-pack: justify;
   -webkit-justify-content: space-between;
+  justify-content: space-between;
   left: 135px;
   position: absolute;
   width: 250px;
