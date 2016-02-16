@@ -233,12 +233,10 @@ module.exports = React.createClass({
             <div className="how-it-works-steps">
               <div className="absimg dotted-circle dotted-circle-0"
                    style={this.state.screenshot !== 0 ? {opacity: '0.25'} : {}}></div>
-              <div className="absimg dotted-line dotted-line-0"
-                   style={this.state.screenshot !== 0 ? {opacity: '0.25'} : {}}></div>
+              <div className="absimg dotted-line dotted-line-0"></div>
               <div className="absimg dotted-circle dotted-circle-1"
                    style={this.state.screenshot !== 1 ? {opacity: '0.25'} : {}}></div>
-              <div className="absimg dotted-line dotted-line-1"
-                   style={this.state.screenshot !== 1 ? {opacity: '0.25'} : {}}></div>
+              <div className="absimg dotted-line dotted-line-1"></div>
               <div className="absimg dotted-circle dotted-circle-2"
                    style={this.state.screenshot !== 2 ? {opacity: '0.25'} : {}}></div>
               <div className="absimg how-it-works-icon how-it-works-generate"
