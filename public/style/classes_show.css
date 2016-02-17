@@ -1,6 +1,7 @@
 .classes-show-header {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
 }
 
 .classes-show-header-title {
@@ -8,10 +9,12 @@
 }
 
 .classes-show-container {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
-  justify-content: space-between;
+  display: flex;
+  -ms-flex-pack: justify;
   -webkit-justify-content: space-between;
+  justify-content: space-between;
   position: relative;
 }
 

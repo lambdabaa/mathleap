@@ -2,10 +2,12 @@
 .tabular-row {
   align-items: center;
   -webkit-align-items: center;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
-  justify-content: space-between;
+  display: flex;
+  -ms-flex-pack: justify;
   -webkit-justify-content: space-between;
+  justify-content: space-between;
   padding: 0 15px;
 }
 

@@ -1,8 +1,9 @@
 .subbar {
   align-items: center;
   -webkit-align-items: center;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
 }
 
 .subbar .backlink {
@@ -17,11 +18,13 @@
 }
 
 .submissions-edit-workspace {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   height: 400px;
-  justify-content: space-between;
+  -ms-flex-pack: justify;
   -webkit-justify-content: space-between;
+  justify-content: space-between;
   overflow-x: hidden;
   overflow-y: scroll;
   position: relative;
@@ -57,13 +60,16 @@
   bottom: 0;
   align-items: center;
   -webkit-align-items: center;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
-  flex-direction: column;
+  display: flex;
+  -ms-flex-direction: column;
   -webkit-flex-direction: column;
+  flex-direction: column;
   height: 100px;
-  justify-content: center;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
   padding: 0 30px;
   position: absolute;
   width: 990px;
@@ -81,21 +87,25 @@
 .submissions-edit-tutorial-text {
   align-items: center;
   -webkit-align-items: center;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   height: 50px;
-  justify-content: center;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
 }
 
 .submissions-edit-tutorial-dots {
   align-items: center;
   -webkit-align-items: center;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   height: 50px;
-  justify-content: center;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
 }
 
 .carousel-dot {
@@ -112,8 +122,9 @@
 }
 
 .submissions-edit-help-dialog-contents {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
 }
 
 .submissions-edit-help-dialog-col {
@@ -126,13 +137,15 @@
 
 .submissions-edit-help-dialog-shortcut {
   margin-top: 5px;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
 }
 
 .submissions-edit-help-dialog-keycode-container {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   width: 75px;
 }
 
@@ -147,8 +160,9 @@
   align-items: center;
   -webkit-align-items: center;
   cursor: text;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
 }
 
 .submissions-edit-character {
@@ -160,13 +174,15 @@
 }
 
 .submissions-edit-cursor {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   color: #3996f0;
   font-size: 24px;
   font-weight: bold;
-  justify-content: center;
+  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  justify-content: center;
   width: 1px;
 }
 

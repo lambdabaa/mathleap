@@ -1,13 +1,15 @@
 .class-details {
   align-items: center;
   -webkit-align-items: center;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
 }
 
 .class-color-picker {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   left: 27.5px;
   position: absolute;
   top: -12.5px;
@@ -19,8 +21,9 @@
 }
 
 .class-color-picker-row {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
 }
 
 .class-color-picker-choice {

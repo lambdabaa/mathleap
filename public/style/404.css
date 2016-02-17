@@ -8,21 +8,25 @@
 }
 
 #not-found .container {
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
   margin: 200px auto;
   width: 1050px;
 }
 
 #not-found .text {
   color: white;
-  display: flex;
+  display: -ms-flexbox;
   display: -webkit-flex;
-  flex-direction: column;
+  display: flex;
+  -ms-flex-direction: column;
   -webkit-flex-direction: column;
+  flex-direction: column;
   height: 400px;
-  justify-content: space-between;
+  -ms-flex-pack: justify;
   -webkit-justify-content: space-between;
+  justify-content: space-between;
   width: 650px;
 }
 
