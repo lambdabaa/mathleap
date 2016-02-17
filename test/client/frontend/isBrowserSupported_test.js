@@ -2,8 +2,8 @@ let isBrowserSupported = require('../../../client/frontend/isBrowserSupported');
 
 suite('isBrowserSupported', () => {
   [
-    {test: 'ie 9', name: 'msie', version: 9, expect: false},
-    {test: 'ie 10', name: 'msie', version: 10, expect: true},
+    {test: 'ie 10', name: 'msie', version: 10, expect: false},
+    {test: 'ie 11', name: 'msie', version: 11, expect: true},
     {test: 'ff 4', name: 'firefox', version: 4, expect: false},
     {test: 'ff 43', name: 'firefox', version: 43, expect: true}
   ].forEach(testCase => {

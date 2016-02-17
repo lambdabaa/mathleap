@@ -6,7 +6,7 @@ const supportedVersion = Object.freeze({
   chrome: 23,
   firefox: 28,
   opera: 12.1,
-  msie: 10,
+  msie: 11,
   safari: 6.1
 });
 
