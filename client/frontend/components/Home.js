@@ -6,7 +6,6 @@ let debug = require('../../common/debug')('components/Home');
 let {edmodoId} = require('../constants');
 let handleEnter = require('../handleEnter');
 let isBrowserSupported = require('../isBrowserSupported');
-let {on} = require('../../common/events');
 let preloadImage = require('../preloadImage');
 let querystring = require('querystring');
 let students = require('../store/students');
