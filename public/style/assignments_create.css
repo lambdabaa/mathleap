@@ -14,8 +14,9 @@
 }
 
 .composition-incrementable {
-  align-items: center;
+  -ms-flex-align: center;
   -webkit-align-items: center;
+  align-items: center;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -42,8 +43,9 @@
 
 .assignments-create-label,
 .assignments-create-value {
-  align-items: center;
+  -ms-flex-align: center;
   -webkit-align-items: center;
+  align-items: center;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -79,8 +81,9 @@
 }
 
 .assignment-details {
-  align-items: center;
+  -ms-flex-align: center;
   -webkit-align-items: center;
+  align-items: center;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;

@@ -20,8 +20,9 @@
 }
 
 .topbar-header-text {
-  align-items: center;
+  -ms-flex-align: center;
   -webkit-align-items: center;
+  align-items: center;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -32,8 +33,9 @@
 }
 
 .topbar-text-logo {
-  align-items: center;
+  -ms-flex-align: center;
   -webkit-align-items: center;
+  align-items: center;
   cursor: pointer;
   display: -ms-flexbox;
   display: -webkit-flex;
@@ -53,8 +55,9 @@
 }
 
 .topbar-actions {
-  align-items: center;
+  -ms-flex-align: center;
   -webkit-align-items: center;
+  align-items: center;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
