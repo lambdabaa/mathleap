@@ -32,15 +32,6 @@ module.exports = React.createClass({
         (document.body.clientWidth - +window.getComputedStyle(cloud).left.slice(0, -2)) /
         document.body.clientWidth
       );
-
-      on(cloud, 'transitionend', () => {
-        // Clear the transition property while we move the cloud back
-        // to offstage left.
-        setTransition(cloud, 'none');
-
-        // Full time-length transition from offstage left to offstage right.
-        setTransition(cloud, 1);
-      });
     });
 
     let fish = Array.from(document.getElementsByClassName('fish'));
@@ -54,17 +45,6 @@ module.exports = React.createClass({
         -window.getComputedStyle(aFish).left.slice(0, -2) /
         document.body.clientWidth
       );
-
-      on(aFish, 'transitionend', () => {
-        // Clear the transition property while we move the fish back
-        // to offstage right.
-        setTransition(aFish, 'none');
-        aFish.classList.remove('left');
-        aFish.style.left = '100%';
-
-        // Full time-length transition from offstage right to offstage left.
-        setTransition(aFish, -1);
-      });
     });
 
     this.interval = setInterval(this._tick, 6000);
@@ -522,14 +502,19 @@ function getLoginData() {
 }
 
 function setTransition(element, percent) {
-  let {width} = window.getComputedStyle(element);
+  let elementWidth = +window.getComputedStyle(element).width.slice(0, -2);
+  let bodyWidth = document.body.clientWidth;
+  let translation = percent * bodyWidth;
+  if (percent > 0) {
+    translation += elementWidth;
+  } else {
+    translation -= elementWidth;
+  }
 
   [
-    'transition',
     'mozTransition',
-    'msTransition',
-    'oTransition',
-    'webkitTransition'
+    'webkitTransition',
+    'transition'
   ].forEach(transition => {
     element.style[transition] = typeof percent === 'number' ?
       `${60 * Math.abs(percent)}s linear` :
@@ -537,14 +522,13 @@ function setTransition(element, percent) {
   });
 
   [
-    'transform',
     'mozTransform',
     'msTransform',
-    'oTransition',
-    'webkitTransition'
+    'webkitTransform',
+    'transform'
   ].forEach(transform => {
     element.style[transform] = typeof percent === 'number' ?
-      `translateX(calc(${percent} * 100vw + ${width}))` :
+      `translateX(${translation}px)` :
       'translateX(0)';
   });
 }
