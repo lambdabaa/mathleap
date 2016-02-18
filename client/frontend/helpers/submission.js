@@ -1,6 +1,7 @@
 /* @flow */
 
 let bridge = require('../bridge');
+let format = require('./format');
 
 import {
   AssignmentQuestion,
@@ -14,7 +15,7 @@ exports.getHeaderText = async function(student: FBStudent, assignment: FBAssignm
                                        responses: Array<FBResponse>): Promise<string> {
   let grade = await exports.getSubmissionGrade(responses);
   return [
-    student && `${student.first} ${student.last}`,
+    format.studentName(student),
     assignment.name,
     grade
   ]

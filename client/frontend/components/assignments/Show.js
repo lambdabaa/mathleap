@@ -6,6 +6,7 @@ let assignment = require('../../helpers/assignment');
 let assignments = require('../../store/assignments');
 let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let classes = require('../../store/classes');
+let format = require('../../helpers/format');
 let students = require('../../store/students');
 let submissionHelper = require('../../helpers/submission');
 
@@ -110,7 +111,7 @@ module.exports = React.createClass({
       }
 
       return [
-        `${student.first} ${student.last} (${student.username})`,
+        format.student(student),
         status,
         submission.complete ? grades[key] : 'n / a'
       ];

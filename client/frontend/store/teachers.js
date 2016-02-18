@@ -12,10 +12,10 @@ let teachersRef = createSafeFirebaseRef('teachers');
 
 exports.create = async function(options: Object, uid: string): Promise<void> {
   let teacher = {
-    email: options.email,
+    email: options.email || 'unknown-teacher@mathleap.org',
     title: options.title || 'Prof',
-    first: options.first,
-    last: options.last,
+    first: options.first || '',
+    last: options.last || '',
     role: 'teacher',
     misc: options.misc || {}
   };

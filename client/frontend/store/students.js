@@ -13,10 +13,13 @@ let studentsRef = createSafeFirebaseRef('students');
 
 exports.create = async function(options: Object, uid: string): Promise<void> {
   let student = {
-    email: options.email,
-    first: options.first,
-    last: options.last,
-    username: options.username,
+    email: options.email ||
+           (options.username ?
+              `${options.username}@mathleap.org` :
+              'unknown-student@mathleap.org'),
+    first: options.first || '',
+    last: options.last || '',
+    username: options.username || 'student',
     role: 'student',
     misc: options.misc || {}
   };
