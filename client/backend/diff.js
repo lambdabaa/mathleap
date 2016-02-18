@@ -30,6 +30,7 @@ let {eachChar} = require('../common/string');
 let flatten = require('lodash/array/flatten');
 let span = require('lodash/utility/range');
 let {replaceIndex} = require('../common/array');
+let stringify = require('../common/stringify');
 
 type Char = string | number;  // char code or string length 1.
 type DeltaV1 = {chr: Char; pos: number; highlight: ?number};
@@ -44,7 +45,7 @@ type BlocksAndCursor = {blocks: Array<Block>, cursor: number};
  * existing backend thing.
  */
 module.exports = function(statement: string, deltas: Array<DeltaV2>): Diff  {
-  debug('diff', statement, JSON.stringify(deltas));
+  debug('diff', statement, stringify(deltas));
   let adapted = flatten(
     deltas.map((delta: DeltaV2): Array<DeltaV1> => {
       let {type, range, replacement} = delta;
@@ -77,7 +78,7 @@ module.exports = function(statement: string, deltas: Array<DeltaV2>): Diff  {
     })
   );
 
-  debug('adapted to old api', JSON.stringify(adapted));
+  debug('adapted to old api', stringify(adapted));
 
   return {
     result: module.exports.applyDiff(adapted, statement),
@@ -91,7 +92,7 @@ module.exports.applyDiff = function applyDiff(deltas: Array<DeltaV1>, stmt: stri
     return stmt;
   }
 
-  debug('applyDiff', JSON.stringify(arguments));
+  debug('applyDiff', stringify(arguments));
   let [head, ...tail] = deltas;
   return applyDiff(tail, applyDeltaToStatement(stmt, head));
 };
@@ -136,7 +137,7 @@ function applyDeltaToStatement(stmt: string, delta: DeltaV1): string {
 
 function handleHighlight(blocks: Array<Block>, cursor: number,
                          delta: DeltaV1): Array<Block> | BlocksAndCursor {
-  debug('handleHighlight', JSON.stringify(arguments));
+  debug('handleHighlight', stringify(arguments));
   let {chr, pos, highlight} = delta;
   let selected = typeof highlight === 'number' ? getSelectedBlocks(blocks, pos, highlight) : [];
   let {block, index} = selected[0];
@@ -216,7 +217,7 @@ function handleHighlight(blocks: Array<Block>, cursor: number,
  */
 function handleHighlightSelection(blocks: Array<Block>, chr: Char, index: number,
                                   left: number, right: ?number): Array<Block> {
-  debug('handleHighlightSelection', JSON.stringify(arguments));
+  debug('handleHighlightSelection', stringify(arguments));
   let block = blocks[index];
   right = typeof right === 'number' ? right : block.len;
 
@@ -238,7 +239,7 @@ function handleHighlightSelection(blocks: Array<Block>, chr: Char, index: number
  * For the case when an entire block is selected.
  */
 function handleOuterSelection(blocks: Array<Block>, index: number, chr: Char): Array<Block> {
-  debug('handleOuterSelection', JSON.stringify(arguments));
+  debug('handleOuterSelection', stringify(arguments));
   let block = blocks[index];
   return replaceIndex(
     blocks,
@@ -254,7 +255,7 @@ function handleOuterSelection(blocks: Array<Block>, index: number, chr: Char): A
  */
 function handleLeftSelection(blocks: Array<Block>, block: Block, index: number,
                              chr: Char, right: number): BlocksAndCursor {
-  debug('handleLeftSelection', JSON.stringify(arguments));
+  debug('handleLeftSelection', stringify(arguments));
   let offspring;
   if (chr === 8) {
     offspring = {
@@ -288,7 +289,7 @@ function handleLeftSelection(blocks: Array<Block>, block: Block, index: number,
  */
 function handleRightSelection(blocks: Array<Block>, block: Block, index: number,
                               chr: Char, left: number): BlocksAndCursor {
-  debug('handleRightSelection', JSON.stringify(arguments));
+  debug('handleRightSelection', stringify(arguments));
   let offspring;
   if (chr === 8) {
     offspring = {
@@ -322,7 +323,7 @@ function handleRightSelection(blocks: Array<Block>, block: Block, index: number,
  */
 function handleInnerSelection(blocks: Array<Block>, index: number, chr: Char,
                               left: number, right: number): BlocksAndCursor {
-  debug('handleInnerSelection', JSON.stringify(arguments));
+  debug('handleInnerSelection', stringify(arguments));
   let block = blocks[index];
   let leftSpawn = {
     type: 'none',
@@ -360,7 +361,7 @@ function handleInnerSelection(blocks: Array<Block>, index: number, chr: Char,
 
 function handleChar(blocks: Array<Block>, cursor: number,
                     delta: DeltaV1): Array<Block> | BlocksAndCursor {
-  debug('handleChar', JSON.stringify(arguments));
+  debug('handleChar', stringify(arguments));
   let block = blocks[cursor];
   let {chr, pos} = delta;
   if (chr === 8) {

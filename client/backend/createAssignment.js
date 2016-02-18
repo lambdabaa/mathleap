@@ -15,6 +15,7 @@ let min = require('lodash/math/min');
 let normalizeFraction = require('./normalizeFraction');
 let range = require('lodash/utility/range');
 let round = require('./round');
+let stringify = require('../common/stringify');
 
 import type {
   AssignmentQuestion,
@@ -391,7 +392,7 @@ function createFractionMultiplications(invert: boolean, count: number,
  */
 function createQuestions(count: number, type: string,
                          options: Object = {}): Array<AssignmentQuestion> {
-  debug('createQuestions', JSON.stringify(arguments));
+  debug('createQuestions', stringify(arguments));
   return createQuestion[type](count, options.exclude || []);
 }
 
@@ -399,7 +400,7 @@ function createQuestions(count: number, type: string,
  * @param {Array} composition spec for assignment.
  */
 function createAssignment(composition: Array<AssignmentSection>): Array<AssignmentQuestion> {
-  debug('composition', JSON.stringify(composition));
+  debug('composition', stringify(composition));
   let typeToQuestions = mapValues(
     mapValues(
       groupBy(
@@ -417,7 +418,7 @@ function createAssignment(composition: Array<AssignmentSection>): Array<Assignme
     createQuestions
   );
 
-  debug('type to questions', JSON.stringify(typeToQuestions));
+  debug('type to questions', stringify(typeToQuestions));
   let result = flatten(
     composition.map(function(section: AssignmentSection): Array<AssignmentQuestion> {
       let type = section.type.name;
@@ -433,7 +434,7 @@ function createAssignment(composition: Array<AssignmentSection>): Array<Assignme
     })
   );
 
-  debug('assignment', JSON.stringify(result));
+  debug('assignment', stringify(result));
   return result;
 }
 

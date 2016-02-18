@@ -4,6 +4,7 @@ let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/assignments');
 let request = require('./request');
 let session = require('../session');
+let stringify = require('../../common/stringify');
 
 import type {FBAssignment} from '../../common/types';
 
@@ -41,6 +42,6 @@ async function doGet(id: string, ref: createSafeFirebaseRef.SafeFirebase): Promi
     result.composition = eval(result.composition);
   }
 
-  debug('get assignment ok', JSON.stringify(result));
+  debug('get assignment ok', stringify(result));
   return result;
 }

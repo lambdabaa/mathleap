@@ -9,6 +9,7 @@ let debug = require('../../../common/debug')('components/classes/TeacherList');
 let {getPalette} = require('../../colors');
 let handleEnter = require('../../handleEnter');
 let session = require('../../session');
+let stringify = require('../../../common/stringify');
 
 let teachersRef = createSafeFirebaseRef('teachers');
 
@@ -213,14 +214,14 @@ module.exports = React.createClass({
   },
 
   _updateClass: async function(aClass, details) {
-    debug('update class', JSON.stringify(aClass), JSON.stringify(details));
+    debug('update class', stringify(aClass), stringify(details));
     await classes.update(aClass.id, details);
     await this._updateClasses(this.state);
     this.setState({editable: null});
   },
 
   _handleDeleteClass: function(aClass) {
-    debug('delete class', JSON.stringify(aClass));
+    debug('delete class', stringify(aClass));
     if (this.state.editable !== null) {
       this.setState({editable: null});
     }

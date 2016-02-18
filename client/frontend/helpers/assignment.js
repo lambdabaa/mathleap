@@ -13,7 +13,7 @@ let questions = require('../store/questions');
 let reduce = require('lodash/collection/reduce');
 let round = require('../round');
 let session = require('../session');
-let stringify = require('json-stringify-safe');
+let stringify = require('../../common/stringify');
 let students = require('../store/students');
 let submissions = require('../store/submissions');
 let submissionHelper = require('./submission');
@@ -98,7 +98,7 @@ exports.assign = async function(aClass: Object, assignments: Array<Object>,
     created: assignment.created.format('MM/DD/YY'),
     deadline: assignment.deadline.format('MM/DD/YY'),
     questions: assignment.preview,
-    composition: JSON.stringify(assignment.composition)
+    composition: stringify(assignment.composition)
   });
 };
 
@@ -120,7 +120,7 @@ exports.practice = async function(assignments: Array<Object>,
     created: assignment.created.format('MM/DD/YY'),
     questions: assignment.preview,
     submission: {responses, complete: false},
-    composition: JSON.stringify(assignment.composition)
+    composition: stringify(assignment.composition)
   });
 };
 

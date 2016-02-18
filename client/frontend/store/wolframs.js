@@ -3,6 +3,7 @@
 let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/wolframs');
 let request = require('./request');
+let stringify = require('../../common/stringify');
 let w2 = require('../wolfram2');
 
 let wolframsRef = createSafeFirebaseRef('wolframs');
@@ -46,7 +47,7 @@ function readWolframFromCache(a: string, b: string): Promise<?boolean> {
 }
 
 function hash(a: string, b: string): string {
-  return btoa(JSON.stringify([a, b].sort()))
+  return btoa(stringify([a, b].sort()))
     .replace('+', '-')
     .replace('/', '_');
 }

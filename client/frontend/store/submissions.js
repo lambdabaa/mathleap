@@ -7,6 +7,7 @@ let {isEqual} = require('./wolframs');
 let map = require('lodash/collection/map');
 let request = require('./request');
 let session = require('../session');
+let stringify = require('../../common/stringify');
 
 import type {
   FBResponse,
@@ -18,7 +19,7 @@ let classesRef = createSafeFirebaseRef('classes');
 let studentsRef = createSafeFirebaseRef('students');
 
 exports.create = async function(details: Object): Promise<string> {
-  debug('create submission', JSON.stringify(details));
+  debug('create submission', stringify(details));
   let {classId, assignmentId, studentId} = details;
   let ref = classesRef.child(
     `${classId}/assignments/${assignmentId}/submissions/${studentId}`
@@ -31,20 +32,20 @@ exports.create = async function(details: Object): Promise<string> {
 
 exports.get = async function(classId: string, assignmentId: string,
                              submissionId: string): Promise<FBSubmission> {
-  debug('get submission', JSON.stringify(arguments));
+  debug('get submission', stringify(arguments));
   let submissionRef = getSubmissionRef(classId, assignmentId, submissionId);
   let result = await request(submissionRef, 'once', 'value');
   result.id = submissionId;
-  debug('get submission ok', JSON.stringify(result));
+  debug('get submission ok', stringify(result));
   return result;
 };
 
 exports.list = async function(classId: string,
                               assignmentId: string): Promise<Object> {
-  debug('list submissions', JSON.stringify(arguments));
+  debug('list submissions', stringify(arguments));
   let ref = getSubmissionsRef(classId, assignmentId);
   let result = await request(ref, 'once', 'value');
-  debug('list submissions ok', JSON.stringify(result));
+  debug('list submissions ok', stringify(result));
   return result;
 };
 
@@ -52,7 +53,7 @@ exports.commitDelta = async function(classId: string, assignmentId: string,
                                      submissionId: string, question: number,
                                      work: Array<Object>, changes: Array<Array<string>>,
                                      appends: Array<string>, state: Array<string>): Promise<void> {
-  debug('commit delta', JSON.stringify(arguments));
+  debug('commit delta', stringify(arguments));
   let ref = getSubmissionRef(classId, assignmentId, submissionId);
   let curr = ref.child(`/responses/${question}/work/${work.length - 1}`);
   let next = ref.child(`/responses/${question}/work/${work.length}`);

@@ -18,7 +18,7 @@ exports.isEqual = async function(a: string, b: string,
   let check = a.indexOf('==') !== -1 ? 'Equation' : 'Expr';
   let url = `${apiUrl}/equal/`;
   let vars = exports.getVariables(a, b, instruction);
-  debug('vars', JSON.stringify(vars));
+  debug('vars', vars);
   let req = new Xhr();
   req.open(
     'GET',

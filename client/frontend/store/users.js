@@ -6,6 +6,7 @@ let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/users');
 let request = require('./request');
 let session = require('../session');
+let stringify = require('../../common/stringify');
 let students = require('./students');
 let subscribe = require('./subscribe');
 let teachers = require('./teachers');
@@ -30,7 +31,7 @@ let subscription;
 
 exports.create = async function(credentials: Credentials): Promise<string> {
   let user = await request(baseRef, 'createUser', credentials);
-  debug('create user ok', JSON.stringify(user));
+  debug('create user ok', stringify(user));
   return user.uid;
 };
 
@@ -58,12 +59,12 @@ exports.login = async function(credentials: Credentials): Promise<void> {
 exports.edmodo = async function(auth: AccessToken): Promise<void> {
   client = new Edmodo(auth);
   let user = await client.getUser();
-  debug('Got edmodo user', JSON.stringify(user));
+  debug('Got edmodo user', stringify(user));
   // Stringify edmodo user id.
   user.id = '' + user.id;
   let result = await findOrCreateEdmodoUser(user);
   if (!result) {
-    debug('Failed to find or create edmodo user', JSON.stringify(user));
+    debug('Failed to find or create edmodo user', stringify(user));
     location.hash = '#!/home/';
     return;
   }
@@ -138,7 +139,7 @@ async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
 
   let result = await teachers.get(user.id);
   if (!result) {
-    throw new Error(`Failed to create edmodo teacher ${JSON.stringify(user)}`);
+    throw new Error(`Failed to create edmodo teacher ${stringify(user)}`);
   }
 
   return result;
@@ -163,7 +164,7 @@ async function findOrCreateEdmodoStudent(user: Object): Promise<FBStudent> {
 
   let result = await students.get(user.id);
   if (!result) {
-    throw new Error(`Failed to create edmodo student ${JSON.stringify(user)}`);
+    throw new Error(`Failed to create edmodo student ${stringify(user)}`);
   }
 
   return result;
