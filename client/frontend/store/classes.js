@@ -7,6 +7,7 @@ let debug = require('../../common/debug')('store/classes');
 let findKey = require('lodash/object/findKey');
 let request = require('./request');
 let session = require('../session');
+let stringify = require('../../common/stringify');
 let values = require('lodash/object/values');
 
 import type {FBClass} from '../../common/types';
@@ -82,7 +83,7 @@ exports.join = async function join(code: string, student: ?string): Promise {
  *   (string) key
  */
 exports.get = async function get(id: string, options: Object = {}): Promise {
-  debug('classes get', id, JSON.stringify(options));
+  debug('classes get', id, stringify(options));
   let ref = typeof options.key !== 'string' ?
     classesRef.child(id) :
     classesRef.orderByChild(options.key).equalTo(id);
@@ -92,7 +93,7 @@ exports.get = async function get(id: string, options: Object = {}): Promise {
   }
 
   aClass.id = id;
-  debug(`Will hydrate class ${id} with ${JSON.stringify(options.include)}.`);
+  debug(`Will hydrate class ${id} with ${stringify(options.include)}.`);
   await hydrateClass(aClass, options.include);
   return aClass;
 };

@@ -4,6 +4,7 @@ let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/students');
 let request = require('./request');
 let session = require('../session');
+let stringify = require('../../common/stringify');
 let users = require('./users');
 
 import type {FBStudent} from '../../common/types';
@@ -26,7 +27,7 @@ exports.create = async function(options: Object, uid: string): Promise<void> {
 
   let ref = studentsRef.child(uid);
   await request(ref, 'set', student);
-  debug('create student ok', JSON.stringify(student));
+  debug('create student ok', stringify(student));
 };
 
 exports.get = async function get(id: string): Promise<?FBStudent> {
@@ -38,7 +39,7 @@ exports.get = async function get(id: string): Promise<?FBStudent> {
   }
 
   student.id = id;
-  debug('get student ok', JSON.stringify(student));
+  debug('get student ok', stringify(student));
   return student;
 };
 

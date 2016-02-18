@@ -10,6 +10,7 @@ let mapValues = require('lodash/object/mapValues');
 let pluck = require('lodash/collection/pluck');
 let request = require('./request');
 let sample = require('lodash/collection/sample');
+let stringify = require('../../common/stringify');
 let topics = Array.from(require('./topics'));
 let values = require('lodash/object/values');
 
@@ -97,7 +98,7 @@ exports.createAssignment = async function(
 
 async function readQuestionsFromCache(type: string,
                                       max: number): Promise<Array<AssignmentQuestion>> {
-  debug('readQuestionsFromCache', JSON.stringify(arguments));
+  debug('readQuestionsFromCache', stringify(arguments));
   let ref = typeToQuestionsRef[type];
   debug('Cache read ref', ref.toString());
   let questions = await request(ref, 'once', 'value');
@@ -116,7 +117,7 @@ async function readQuestionsFromCache(type: string,
 }
 
 function addQuestionsToCache(type: string, questions: Array<AssignmentQuestion>): Promise {
-  debug('addQuestionsToCache', JSON.stringify(arguments));
+  debug('addQuestionsToCache', stringify(arguments));
   let ref = typeToQuestionsRef[type];
   return Promise.all(
     questions.map(question => {

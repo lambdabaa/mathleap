@@ -17,6 +17,7 @@ let map = require('lodash/collection/map');
 let {mapChar} = require('../../../common/string');
 let preventDefault = require('../../preventDefault');
 let session = require('../../session');
+let stringify = require('../../../common/stringify');
 let submissions = require('../../store/submissions');
 let times = require('lodash/utility/times');
 
@@ -456,7 +457,7 @@ module.exports = React.createClass({
     }
 
     if (!right) {
-      return <div key={JSON.stringify({equation, cursor})}
+      return <div key={stringify({equation, cursor})}
                   className="submissions-edit-active"
                   onMouseDown={this._handleCursorReposition}
                   onMouseMove={this._stageCursorHighlight}
@@ -467,7 +468,7 @@ module.exports = React.createClass({
       </div>;
     }
 
-    return <div key={JSON.stringify({equation, cursor})}
+    return <div key={stringify({equation, cursor})}
                 className="submissions-edit-active"
                 onMouseDown={this._handleCursorReposition}
                 onMouseMove={this._stageCursorHighlight}
@@ -760,7 +761,7 @@ module.exports = React.createClass({
   },
 
   _handleSelection: function(event, start, end) {
-    debug('handle selection', JSON.stringify(arguments));
+    debug('handle selection', stringify(arguments));
     event.preventDefault();
 
     let args = editor.selectionToDiffArgs(event, start, end);
@@ -805,7 +806,7 @@ module.exports = React.createClass({
   },
 
   _appendDelta: async function(delta, cursor) {
-    debug('appendDelta', JSON.stringify(arguments));
+    debug('appendDelta', stringify(arguments));
     if (!delta) {
       return;
     }

@@ -3,6 +3,7 @@
 let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/teachers');
 let request = require('./request');
+let stringify = require('../../common/stringify');
 let users = require('./users');
 
 import type {FBTeacher} from '../../common/types';
@@ -25,7 +26,7 @@ exports.create = async function(options: Object, uid: string): Promise<void> {
 
   let ref = teachersRef.child(uid);
   await request(ref, 'set', teacher);
-  debug('create teacher ok', JSON.stringify(teacher));
+  debug('create teacher ok', stringify(teacher));
 };
 
 exports.get = async function(id: string): Promise<?FBTeacher> {
@@ -37,6 +38,6 @@ exports.get = async function(id: string): Promise<?FBTeacher> {
   }
 
   teacher.id = id;
-  debug('get teacher ok', JSON.stringify(teacher));
+  debug('get teacher ok', stringify(teacher));
   return teacher;
 };
