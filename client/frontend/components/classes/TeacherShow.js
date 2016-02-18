@@ -7,6 +7,7 @@ let assignment = require('../../helpers/assignment');
 let classes = require('../../store/classes');
 let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let debug = require('../../../common/debug')('components/classes/TeacherShow');
+let format = require('../../helpers/format');
 let students = require('../../store/students');
 
 module.exports = React.createClass({
@@ -81,10 +82,7 @@ module.exports = React.createClass({
       <ClassCode code={aClass.code} />
     </div>;
 
-    let studentList = this.state.students.map(student => {
-      return [`${student.first} ${student.last} (${student.username})`];
-    });
-
+    let studentList = this.state.students.map(format.student);
     let assignments = this.state.assignments.map((anAssignment, index) => {
       let completeSubmissionCount = assignment.getCompleteSubmissionCount(anAssignment);
       return [

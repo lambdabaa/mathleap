@@ -4,6 +4,7 @@ let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let debug = require('../../../common/debug')('components/classes/StudentList');
+let format = require('../../helpers/format');
 let session = require('../../session');
 let classes = require('../../store/classes');
 let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
@@ -66,8 +67,8 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let student = session.get('user');
-    let headerText = `${student.first}'s Classes`;
+    let {first} = session.get('user');
+    let headerText = first && first.length ? `${first}'s Classes` : 'My Classes';
     let classList = this.state.classes
       .filter(aClass => !!aClass)
       .map(aClass => {
@@ -81,7 +82,7 @@ module.exports = React.createClass({
                {aClass.name}
              </a>
            </div>,
-          `${aClass.teacher.title} ${aClass.teacher.last}`,
+           format.teacher(aClass.teacher),
           ''
         ];
       });
