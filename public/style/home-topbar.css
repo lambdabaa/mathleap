@@ -5,8 +5,14 @@
   color: white;
 }
 
+.home-container .topbar-text-logo {
+  width: 210px;
+}
+
 .home-container .topbar-actions {
   font-weight: bold;
+  max-width: 600px;
+  width: 600px;
 }
 
 .home-container .signup-button {
