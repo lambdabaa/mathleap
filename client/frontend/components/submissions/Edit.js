@@ -463,7 +463,7 @@ module.exports = React.createClass({
                   onMouseMove={this._stageCursorHighlight}
                   onMouseUp={this._commitCursorHighlight}>
         {times(cursor, renderChar)}
-        {isCursorVisible && <div className="submissions-edit-cursor unselectable">|</div>}
+        {isCursorVisible && <div className="submissions-edit-cursor unselectable"></div>}
         {times(equation.length - cursor + 1, i => renderChar(cursor + i))}
       </div>;
     }
@@ -478,7 +478,7 @@ module.exports = React.createClass({
         <div key="leftp0" className="submissions-edit-character unselectable">(</div>
       }
       {times(cursor, renderChar)}
-      {isCursorVisible && <div className="submissions-edit-cursor unselectable">|</div>}
+      {isCursorVisible && <div className="submissions-edit-cursor unselectable"></div>}
       {times(equation.length + 2 * append.length - cursor + 1, i => renderChar(cursor + i))}
     </div>;
   },
