@@ -112,7 +112,9 @@
   right: 0;
   top: 0;
   z-index: 10;
+  -moz-transition: opacity 0.5s;
   -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
 }
 
 .add-topic-flash.hidden {
