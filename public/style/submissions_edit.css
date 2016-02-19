@@ -172,7 +172,7 @@
 }
 
 .submissions-edit-character {
-  padding-left: 1px;
+  padding-left: 2px;
 }
 
 .submissions-edit-cursor + .submissions-edit-character {
@@ -180,16 +180,9 @@
 }
 
 .submissions-edit-cursor {
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  color: #3996f0;
-  font-size: 24px;
-  font-weight: bold;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  width: 1px;
+  background-color: #3996f0;
+  height: 20px;
+  width: 2px;
 }
 
 .submissions-edit-question-list > .button-inverse {
