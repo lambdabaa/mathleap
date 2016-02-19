@@ -634,13 +634,13 @@ module.exports = React.createClass({
         });
       case 'a':
         event.preventDefault();
-        return this.setState({cursor: 0});
+        return this.setState({cursor: 0, isCursorVisible: true});
       case 'd':
         event.preventDefault();
         return this._selectQuestion((num + 1) % responses.length);
       case 'e':
         event.preventDefault();
-        return this.setState({cursor: equation.length});
+        return this.setState({cursor: equation.length, isCursorVisible: true});
       case 'u':
         event.preventDefault();
         return this._selectQuestion(num === 0 ? responses.length - 1 : num - 1);
