@@ -65,8 +65,8 @@ module.exports = function(): React.Element {
       <br />
       <ul>
         <li><a href="http://www.corestandards.org/Math/Content/HSA/SSE/A/2/">HSA.SSE.A.2</a></li>
-        <li><a href="http://www.corestandards.org/Math/Content/HSA/APR/A/1/">HSA.SSE.A.1</a></li>
-        <li><a href="http://www.corestandards.org/Math/Content/HSA/APR/B/3/">HSA.SSE.B.3</a></li>
+        <li><a href="http://www.corestandards.org/Math/Content/HSA/APR/A/1/">HSA.APR.A.1</a></li>
+        <li><a href="http://www.corestandards.org/Math/Content/HSA/APR/B/3/">HSA.APR.B.3</a></li>
       </ul>
     </div>
   </div>;
