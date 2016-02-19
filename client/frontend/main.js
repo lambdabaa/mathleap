@@ -38,6 +38,7 @@ function observeLocation(router: Router): void {
     }
 
     switch (router.view) {
+      case '/common-core':
       case '/home':
       case '/privacy':
       case '/tos':
@@ -53,8 +54,9 @@ function observeLocation(router: Router): void {
 function createRouter(): Router {
   let router = new Router({miss: require('./components/NotFound')});
   router.route('/home', require('./components/Home'));
-  router.route('/tos', require('./components/Tos'));
+  router.route('/common-core', require('./components/CommonCore'));
   router.route('/privacy', require('./components/Privacy'));
+  router.route('/tos', require('./components/Tos'));
   router.route('/practice', require('./components/Practice'));
   router.route('/practice/new', require('./components/assignments/Create'));
   router.route('/practice/:id', require('./components/submissions/Show'));
