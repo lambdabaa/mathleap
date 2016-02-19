@@ -26,6 +26,7 @@ module.exports = React.createClass({
       isPracticeMode: user.role === 'student',
       topics: [],
       topic: null,
+      isTopicAdded: false,
       assignments: [],
       theAssignment: assignment.createAssignment()
     };
@@ -56,7 +57,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let {aClass, isPracticeMode} = this.state;
+    let {aClass, isPracticeMode, isTopicAdded} = this.state;
 
     let headerText = isPracticeMode ?
       'Practice Mode' :
@@ -78,6 +79,7 @@ module.exports = React.createClass({
     }
 
     return <div id="assignments-create">
+      <div className={`add-topic-flash ${isTopicAdded || 'hidden'}`}>✔ Assignment updated</div>
       <Topbar headerText={headerText} />
       <div className="view">
         <a className="backlink clickable-text" href={backlink}>{backlinkText}</a>
@@ -315,6 +317,12 @@ module.exports = React.createClass({
 
   _handleAddTopic: function() {
     this._updateAssignment('addTopic', arguments);
+    this.setState({isTopicAdded: true});
+    if (this.addTopicTimeout) {
+      clearTimeout(this.addTopicTimeout);
+    }
+
+    this.addTopicTimeout = setTimeout(() => this.setState({isTopicAdded: false}), 1500);
   },
 
   _handleIncrementTopicCount: function() {

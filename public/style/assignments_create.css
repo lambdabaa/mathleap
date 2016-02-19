@@ -93,3 +93,28 @@
   font-size: 30px;
   padding-right: 15px;
 }
+
+.add-topic-flash {
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  background-color: #b0eb3f;
+  color: #71ac00;
+  font-size: 20px;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  padding: 10px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  -webkit-transition: opacity 0.5s;
+}
+
+.add-topic-flash.hidden {
+  opacity: 0;
+}
