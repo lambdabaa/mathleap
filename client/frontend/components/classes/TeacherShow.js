@@ -82,7 +82,10 @@ module.exports = React.createClass({
       <ClassCode code={aClass.code} />
     </div>;
 
-    let studentList = this.state.students.map(format.student);
+    let studentList = this.state.students.map(student => {
+      return [format.student(student)];
+    });
+
     let assignments = this.state.assignments.map((anAssignment, index) => {
       let completeSubmissionCount = assignment.getCompleteSubmissionCount(anAssignment);
       return [

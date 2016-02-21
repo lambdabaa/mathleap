@@ -1,6 +1,8 @@
 /* @flow */
 
 let React = require('react');
+let debug = require('../../common/debug')('components/Tabular');
+let stringify = require('../../common/stringify');
 
 module.exports = function(props: Object): React.Element {
   return <div className={`tabular ${props.className || ''}`}>
@@ -27,11 +29,13 @@ function getHeaders({cols}): React.Element {
 }
 
 function getRows({cols, rows, selected}): React.Element {
+  debug('getRows', stringify({cols, rows}));
   return rows.map((row, rowIndex) => getRow(row, rowIndex, cols, selected));
 }
 
 function getRow(row: Array<React.Element>|Object, rowIndex: number,
                 cols: Array<?Object>, selected: number): React.Element {
+  debug('getRow', stringify(arguments));
   let className = `tabular-row ${selected === rowIndex && 'selected'}`;
   let height, rowStyle, tab;
   if (!Array.isArray(row)) {
