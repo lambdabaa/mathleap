@@ -1,3 +1,6 @@
+/* @flow */
+
+let Empty = require('./Empty');
 let React = require('react');
 let querystring = require('querystring');
 let users = require('../store/users');
@@ -5,7 +8,7 @@ let users = require('../store/users');
 module.exports = React.createClass({
   displayName: 'EdmodoHandler',
 
-  componentDidMount: function() {
+  componentDidMount: function(): void {
     let auth = querystring.parse(location.hash.substring(1));
     if ('error' in auth) {
       // Ruh roh
@@ -16,7 +19,7 @@ module.exports = React.createClass({
     users.edmodo(auth);
   },
 
-  render: function() {
-    return <div></div>;
+  render: function(): React.Element {
+    return <Empty />;
   }
 });

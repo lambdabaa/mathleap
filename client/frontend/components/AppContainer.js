@@ -1,51 +1,34 @@
+/* @flow */
+
 let $ = document.querySelector.bind(document);
+let App = require('./App');
 let React = require('react');
 let defer = require('../../common/defer');
 
-module.exports = React.createClass({
-  displayName: 'Container',
+class AppContainer extends React.Component {
+  constructor(props: Object) {
+    super(props);
 
-  getInitialState: function() {
-    return {
+    this._setRoute = this._setRoute.bind(this);
+    this._showModal = this._showModal.bind(this);
+    this._closeModal = this._closeModal.bind(this);
+    this._handleClickOverlay = this._handleClickOverlay.bind(this);
+    this._displayModalError = this._displayModalError.bind(this);
+
+    this.state = {
       modal: null,
       errorMessage: null,
       onceComponentUpdate: null
     };
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount(): void {
     let router = this.props.router;
     router.on('change', this._setRoute);
     this._setRoute();
-  },
+  }
 
-  render: function() {
-    return <div id="outer-container">
-      {
-        this.state.modal &&
-        <div className="overlay" onClick={this._handleOverlayClick}>
-          <div className="modal">
-            <div className="modal-header">
-              <div className="modal-logo"></div>
-              <div className="modal-exit" onClick={this._closeModal}>x</div>
-            </div>
-            <div className="modal-body">
-              {
-                this.state.errorMessage &&
-                <div className="modal-error">
-                  {this.state.errorMessage}
-                </div>
-              }
-              {this.state.modal}
-            </div>
-          </div>
-        </div>
-      }
-      <div id="inner-container">{this.state.route.element}</div>
-    </div>;
-  },
-
-  componentDidUpdate: function() {
+  componentDidUpdate(): void {
     let fn = this.state.onceComponentUpdate;
     if (!fn) {
       return;
@@ -53,9 +36,17 @@ module.exports = React.createClass({
 
     fn();
     this.setState({onceComponentUpdate: null});
-  },
+  }
 
-  _setRoute: function() {
+  render(): React.Element {
+    return <App modal={this.state.modal}
+                route={this.state.route}
+                errorMessage={this.state.errorMessage}
+                closeModal={this._closeModal}
+                clickOverlay={this._handleOverlayClick} />;
+  }
+
+  _setRoute() {
     let router = this.props.router;
     // Make sure to scroll to the top of the embedded view once we load it.
     this.componentDidUpdate = () => {
@@ -71,12 +62,13 @@ module.exports = React.createClass({
       route: router.load({
         showModal: this._showModal,
         closeModal: this._closeModal,
+        clickOverlay: this._handleOverlayClick,
         displayModalError: this._displayModalError
       })
     });
-  },
+  }
 
-  _showModal: function(modal) {
+  _showModal(modal: React.Element) {
     let deferred = defer();
     this.setState({
       modal: modal,
@@ -85,24 +77,27 @@ module.exports = React.createClass({
     });
 
     return deferred.promise;
-  },
+  }
 
-  _closeModal: function() {
+  _closeModal(): void {
     this.setState({modal: null});
-  },
+  }
 
-  _displayModalError: function(errorMessage) {
+  _displayModalError(errorMessage: string): void {
     this.setState({errorMessage});
-  },
+  }
 
-  _handleOverlayClick: function(event) {
+  _handleOverlayClick(event: MouseEvent) {
     // Normally we'd be able to stopPropagation on children
     // but https://github.com/facebook/react/issues/1691 seems
     // to be an issue. Instead check whether target is overlay.
+    // $FlowFixMe: Need to cast EventTarget to HTMLElement
     if (!event.target.classList.contains('overlay')) {
       return;
     }
 
     this._closeModal();
   }
-});
+}
+
+module.exports = AppContainer;

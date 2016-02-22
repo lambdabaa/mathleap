@@ -1,7 +1,7 @@
-*.js
-client/backend/math.js
-client/frontend/components/Privacy.js
-client/frontend/components/Tos.js
+/*.js
+/client/backend/math.js
+/client/frontend/components/Privacy.js
+/client/frontend/components/Tos.js
 
-build/**
-node_modules/**
+/build/**
+/node_modules/**

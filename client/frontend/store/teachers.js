@@ -10,7 +10,7 @@ import type {FBTeacher} from '../../common/types';
 
 let teachersRef = createSafeFirebaseRef('teachers');
 
-exports.create = async function(options: Object, uid: string): Promise<void> {
+exports.create = async function(options: Object, uid: ?string): Promise<void> {
   let teacher = {
     email: options.email || 'unknown-teacher@mathleap.org',
     title: options.title || 'Prof',

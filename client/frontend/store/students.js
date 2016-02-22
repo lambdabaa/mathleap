@@ -11,7 +11,7 @@ import type {FBStudent} from '../../common/types';
 
 let studentsRef = createSafeFirebaseRef('students');
 
-exports.create = async function(options: Object, uid: string): Promise<void> {
+exports.create = async function(options: Object, uid: ?string): Promise<void> {
   let student = {
     email: options.email ||
            (options.username ?

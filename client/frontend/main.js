@@ -4,7 +4,7 @@
  */
 
 let $ = document.querySelector.bind(document);
-let Container = require('./components/Container');
+let AppContainer = require('./components/AppContainer');
 let React = require('react');
 let ReactDOM = require('react-dom');
 let Router = require('./router');
@@ -13,7 +13,7 @@ let session = require('./session');
 function main(): void {
   let router = createRouter();
   observeLocation(router);
-  ReactDOM.render(<Container router={router} />, $('#container'));
+  ReactDOM.render(<AppContainer router={router} />, $('#container'));
 }
 
 function observeLocation(router: Router): void {
@@ -53,11 +53,11 @@ function observeLocation(router: Router): void {
 
 function createRouter(): Router {
   let router = new Router({miss: require('./components/NotFound')});
-  router.route('/home', require('./components/Home'));
+  router.route('/home', require('./components/HomeContainer'));
   router.route('/common-core', require('./components/CommonCore'));
   router.route('/privacy', require('./components/Privacy'));
   router.route('/tos', require('./components/Tos'));
-  router.route('/practice', require('./components/Practice'));
+  router.route('/practice', require('./components/PracticeContainer'));
   router.route('/practice/new', require('./components/assignments/Create'));
   router.route('/practice/:id', require('./components/submissions/Show'));
   router.route('/practice/:id/edit', require('./components/submissions/Edit'));
