@@ -17,7 +17,7 @@ let studentsRef = createSafeFirebaseRef('students');
 let teachersRef = createSafeFirebaseRef('teachers');
 
 exports.create = async function create(options: Object = {},
-                                       teacher: string): Promise<Object> {
+                                       teacher: ?string): Promise<Object> {
   debug('request add class');
   if (!teacher) {
     teacher = session.get('user').id;

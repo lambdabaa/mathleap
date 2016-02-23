@@ -125,7 +125,7 @@ exports.practice = async function(assignments: Array<Object>,
 };
 
 exports.findOrCreateSubmission = async function(classId: string,
-                                                assignment: FBAssignment): Promise<FBSubmission> {
+                                                assignment: FBAssignment): Promise<Object> {
   debug('findOrCreateStudentSubmission', stringify(arguments));
   if (!exports.containsStudentSubmission(assignment)) {
     await exports.createStudentSubmission(classId, assignment);
