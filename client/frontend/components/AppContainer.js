@@ -12,7 +12,7 @@ class AppContainer extends React.Component {
     this._setRoute = this._setRoute.bind(this);
     this._showModal = this._showModal.bind(this);
     this._closeModal = this._closeModal.bind(this);
-    this._handleClickOverlay = this._handleClickOverlay.bind(this);
+    this._handleOverlayClick = this._handleOverlayClick.bind(this);
     this._displayModalError = this._displayModalError.bind(this);
 
     this.state = {

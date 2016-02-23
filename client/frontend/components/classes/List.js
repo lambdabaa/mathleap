@@ -11,9 +11,9 @@ module.exports = function(props: Object): React.Element {
 
   switch (user.role) {
     case 'student':
-      return React.createElement(require('./StudentList'), props);
+      return React.createElement(require('./StudentListContainer'), props);
     case 'teacher':
-      return React.createElement(require('./TeacherList'), props);
+      return React.createElement(require('./TeacherListContainer'), props);
     default:
       throw new Error(`Unexpected user role ${user.role}`);
   }
