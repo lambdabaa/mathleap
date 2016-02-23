@@ -10,11 +10,11 @@ let submissions = require('../store/submissions');
 import type {
   AssignmentSection,
   FBAssignment,
-  FBResponse
+  FBResponse,
+  Range
 } from '../../common/types';
 
 type Highlight = Array<boolean>;
-type Range = {start: ?number, end: ?number};
 
 let inequalities = Object.freeze(['>', '≥', '<', '≤']);
 let skipStops = Object.freeze(['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']);

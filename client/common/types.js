@@ -1,5 +1,12 @@
 /* @flow */
 
+export type KeyboardEvent = {
+  key: string;
+  keyCode: number;
+  preventDefault: Function;
+  stopPropagation: Function;
+};
+
 export type AccessToken = {
   access_token: string;
   token_type: string;
