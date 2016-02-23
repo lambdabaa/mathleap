@@ -58,14 +58,14 @@ function createRouter(): Router {
   router.route('/privacy', require('./components/Privacy'));
   router.route('/tos', require('./components/Tos'));
   router.route('/practice', require('./components/PracticeContainer'));
-  router.route('/practice/new', require('./components/assignments/Create'));
-  router.route('/practice/:id', require('./components/submissions/Show'));
+  router.route('/practice/new', require('./components/assignments/CreateContainer'));
+  router.route('/practice/:id', require('./components/submissions/ShowContainer'));
   router.route('/practice/:id/edit', require('./components/submissions/Edit'));
   router.route('/classes', require('./components/classes/List'));
   router.route('/classes/:id', require('./components/classes/Show'));
   router.route(
     '/classes/:aClass/assignments/new',
-    require('./components/assignments/Create')
+    require('./components/assignments/CreateContainer')
   );
   router.route(
     '/classes/:aClass/assignments/:assignment',
