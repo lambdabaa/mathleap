@@ -537,7 +537,7 @@ module.exports = React.createClass({
       await submissions.submit(aClass, assignment || id, submission);
     } catch (error) {
       debug(error.toString());
-      alert('Error grading assignment! Please try submitting later.');
+      alert('Error grading assignment! Please try clicking submit again.');
       this.setState({isSubmissionPending: false});
       return;
     }
