@@ -3,10 +3,7 @@
  * @fileoverview Translate a keyboard event to a string character.
  */
 
-type KeyboardEvent = {
-  key: string;
-  keyCode: number;
-};
+import type {KeyboardEvent} from '../common/types';
 
 module.exports = function(event: KeyboardEvent): ?string {
   let chr;
