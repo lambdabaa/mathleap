@@ -21,7 +21,7 @@ module.exports = function(props: Object): React.Element {
   let rows = assignments.map(anAssignment => {
     return [
       <div className="clickable-text"
-           onClick={() => props.showAssignment.bind(anAssignment)}>
+           onClick={() => props.showAssignment(anAssignment)}>
         {anAssignment.name}
       </div>,
       anAssignment.deadline,

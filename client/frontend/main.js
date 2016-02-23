@@ -73,7 +73,7 @@ function createRouter(): Router {
   );
   router.route(
     '/classes/:aClass/assignments/:assignment/submissions/:submission',
-    require('./components/submissions/Show')
+    require('./components/submissions/ShowContainer')
   );
   router.route(
     '/classes/:aClass/assignments/:assignment/submissions/:submission/edit',
