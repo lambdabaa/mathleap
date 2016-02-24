@@ -8,6 +8,7 @@ let editor = require('../../helpers/editor');
 let {isEditorSupported} = require('../../isBrowserSupported');
 let map = require('lodash/collection/map');
 let {mapChar} = require('../../../common/string');
+let stmt = require('../../../common/stmt');
 let stringify = require('../../../common/stringify');
 let times = require('lodash/utility/times');
 
@@ -159,13 +160,14 @@ function renderQuestion(props: Object): Array<Array<React.Element>> {
 
 function renderChanges(props, equation, changes, append = '', leftParens = false,
                        rightParens = false): React.Element {
+  let symbol = stmt.getStmtSymbol(equation) || '=';
   return <div className="submissions-edit-active">
     {
       (() => {
         function renderEquationChar(chr, index) {
           let style = {};
           // TODO(gaye): Need to handle non-equality statements...
-          let changeIndex = index >= equation.indexOf('=') ?
+          let changeIndex = index >= equation.indexOf(symbol) ?
             index - append.length :
             index;
           let change = changes[changeIndex];
@@ -194,7 +196,7 @@ function renderChanges(props, equation, changes, append = '', leftParens = false
           </div>;
         }
 
-        let [left, right] = equation.split('=');
+        let [left, right] = equation.split(symbol);
         if (!right) {
           // TODO(gaye): This is still ignoring statements other
           //     than equality.
@@ -234,7 +236,7 @@ function renderChanges(props, equation, changes, append = '', leftParens = false
             })
           )
           .concat(
-            [renderEquationChar('=', left.length + append.length)]
+            [renderEquationChar(symbol, left.length + append.length)]
           )
           .concat(
             rightParens &&
@@ -280,7 +282,7 @@ function renderResults(props, equation, cursor, append = '', leftParens = false,
   }
 
   let {highlight, drag, isCursorVisible} = props;
-  let [left, right] = equation.split('=');
+  let {left, right} = stmt.getLeftAndRight(equation);
   highlight = editor.applyDragToHighlight(highlight, cursor, drag);
 
   function renderChar(index) {

@@ -166,5 +166,19 @@ module.exports = [
         "instruction": "Factor."
       }
     ]
+  },
+
+  {
+    "name": "Inequalities in one variable",
+    "types": [
+      {
+        "name": "One step inequalities",
+        "example": "-8p > -80"
+      },
+      {
+        "name": "Two step inequalities",
+        "example": "p / 3 - 3 > 0"
+      }
+    ]
   }
 ];
