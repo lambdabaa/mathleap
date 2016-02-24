@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+require('babel-polyfill');
+
 const createQuestion = require('../build/client/backend/createAssignment').createQuestion;
 const readline = require('mz/readline').createInterface({
   input: process.stdin,
