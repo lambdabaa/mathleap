@@ -23,18 +23,18 @@ class AppContainer extends React.Component {
   }
 
   componentWillMount(): void {
-    let router = this.props.router;
+    let {router} = this.props;
     router.on('change', this._setRoute);
     this._setRoute();
   }
 
   componentDidUpdate(): void {
-    let fn = this.state.onceComponentUpdate;
-    if (!fn) {
+    let {onceComponentUpdate} = this.state;
+    if (!onceComponentUpdate) {
       return;
     }
 
-    fn();
+    onceComponentUpdate();
     this.setState({onceComponentUpdate: null});
   }
 
@@ -46,8 +46,8 @@ class AppContainer extends React.Component {
                 clickOverlay={this._handleOverlayClick} />;
   }
 
-  _setRoute() {
-    let router = this.props.router;
+  _setRoute(): void {
+    let {router} = this.props;
     // Make sure to scroll to the top of the embedded view once we load it.
     this.componentDidUpdate = () => {
       let topbar = $('.topbar');
@@ -68,7 +68,7 @@ class AppContainer extends React.Component {
     });
   }
 
-  _showModal(modal: React.Element) {
+  _showModal(modal: React.Element): Promise<void> {
     let deferred = defer();
     this.setState({
       modal: modal,
@@ -87,7 +87,7 @@ class AppContainer extends React.Component {
     this.setState({errorMessage});
   }
 
-  _handleOverlayClick(event: MouseEvent) {
+  _handleOverlayClick(event: MouseEvent): void {
     // Normally we'd be able to stopPropagation on children
     // but https://github.com/facebook/react/issues/1691 seems
     // to be an issue. Instead check whether target is overlay.
