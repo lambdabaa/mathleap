@@ -333,6 +333,89 @@ createQuestion['Clever distribution'] = function(): Array<AssignmentQuestion> {
   });
 };
 
+createQuestion['One step inequalities'] =
+    function(count: number, exclude: Array<Numeric> = []): Array<AssignmentQuestion> {
+  exclude = exclude.map((solution: Numeric): number => {
+    // This is always going to be a string. We handle the extra number case to appease flow.
+    return typeof solution === 'number' ? solution : parseInt(solution.substring(2));
+  });
+  let solutions = generate.compositeList(count, exclude);
+  return solutions.map((solution: number): AssignmentQuestion => {
+    let stmt, opposite;
+    if (generate.boolean()) {
+      stmt = '>';
+      opposite = '<';
+    } else {
+      stmt = '<';
+      opposite = '>';
+    }
+
+    let x = generate.letter();
+    let instruction = `Solve the inequality for ${x}.`;
+    let question;
+    if (generate.boolean()) {
+      // Ax ? B
+      let a = generate.integer();
+      let b = a * solution;
+      question = a > 0 ? `${a}${x}${stmt}${b}` : `${a}${x}${opposite}${b}`;
+    } else {
+      // x/A ? B
+      let a = generate.factor(solution, [0]);
+      let b = solution / a;
+      question = a > 0 ? `${x}/${a}${stmt}${b}` : `${x}/${a}${opposite}${b}`;
+    }
+
+    return {instruction, question, solution: `${x}${stmt}${solution}`};
+  });
+};
+
+createQuestion['Two step inequalities'] =
+    function(count: number, exclude: Array<Numeric> = []): Array<AssignmentQuestion> {
+  exclude = exclude.map((solution: Numeric): number => {
+    // This is always going to be a string. We handle the extra number case to appease flow.
+    return typeof solution === 'number' ? solution : parseInt(solution.substring(2));
+  });
+
+  let solutions = generate.compositeList(count, exclude);
+  return solutions.map((solution: number): AssignmentQuestion => {
+    let stmt, opposite;
+    if (generate.boolean()) {
+      stmt = '>';
+      opposite = '<';
+    } else {
+      stmt = '<';
+      opposite = '>';
+    }
+
+    let x = generate.letter();
+    let instruction = `Solve the inequality for ${x}.`;
+    let question;
+    if (generate.boolean()) {
+      // Ax+B ? C
+      let a = generate.integer();
+      let b = generate.integer();
+      let c = a * solution + b;
+      if (b >= 0) {
+        b = `+${b}`;
+      }
+
+      question = a > 0 ? `${a}${x}${b}${stmt}${c}` : `${a}${x}${b}${opposite}${c}`;
+    } else {
+      // x/A+B ? C
+      let a = generate.factor(solution, [0]);
+      let b = generate.integer();
+      let c = solution / a + b;
+      if (b >= 0) {
+        b = `+${b}`;
+      }
+
+      question = a > 0 ? `${x}/${a}${b}${stmt}${c}` : `${x}/${a}${b}${opposite}${c}`;
+    }
+
+    return {instruction, question, solution: `${x}${stmt}${solution}`};
+  });
+};
+
 function createFractionMultiplications(invert: boolean, count: number,
                                        exclude: Array<Numeric> = []): Array<AssignmentQuestion> {
   // TODO(gaye): There are better ways to do this, but for now

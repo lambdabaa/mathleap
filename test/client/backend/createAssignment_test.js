@@ -306,4 +306,76 @@ suite('service/createAssignment', function() {
       instruction.should.match(instructionForm);
     });
   });
+
+  test('One step inequalities', () => {
+    let questions = createQuestion['One step inequalities'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {instruction, question, solution} = aQuestion;
+      if (question.indexOf('/') !== -1) {
+        question.should.match(/^([a-z])\/(-?\d+)([>,<])(-?\d+)$/);
+        let x = RegExp.$1;
+        let a = parseInt(RegExp.$2);
+        let stmt = RegExp.$3;
+        let b = RegExp.$4;
+        instruction.should.equal(`Solve the inequality for ${x}.`);
+
+        if (a < 0) {
+          stmt = stmt === '>' ? '<' : '>';
+        }
+
+        solution.should.equal(`${x}${stmt}${b * a}`);
+        return;
+      }
+
+      question.should.match(/^(-?\d+)([a-z])([>,<])(-?\d+)$/);
+      let a = RegExp.$1;
+      let x = RegExp.$2;
+      let stmt = RegExp.$3;
+      let b = RegExp.$4;
+      instruction.should.equal(`Solve the inequality for ${x}.`);
+      if (a < 0) {
+        stmt = stmt === '>' ? '<' : '>';
+      }
+
+      solution.should.equal(`${x}${stmt}${b / a}`);
+    });
+  });
+
+  test('Two step inequalities', () => {
+    let questions = createQuestion['Two step inequalities'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {instruction, question, solution} = aQuestion;
+      if (question.indexOf('/') !== -1) {
+        question.should.match(/^([a-z])\/(-?\d+)([+,-]\d+)([>,<])(-?\d+)$/);
+        let x = RegExp.$1;
+        let a = parseInt(RegExp.$2);
+        let b = parseInt(RegExp.$3);
+        let stmt = RegExp.$4;
+        let c = parseInt(RegExp.$5);
+        instruction.should.equal(`Solve the inequality for ${x}.`);
+
+        if (a < 0) {
+          stmt = stmt === '>' ? '<' : '>';
+        }
+
+        solution.should.equal(`${x}${stmt}${(c - b) * a}`);
+        return;
+      }
+
+      question.should.match(/^(-?\d+)([a-z])([+,-]\d+)([>,<])(-?\d+)$/);
+      let a = parseInt(RegExp.$1);
+      let x = RegExp.$2;
+      let b = parseInt(RegExp.$3);
+      let stmt = RegExp.$4;
+      let c = parseInt(RegExp.$5);
+      instruction.should.equal(`Solve the inequality for ${x}.`);
+      if (a < 0) {
+        stmt = stmt === '>' ? '<' : '>';
+      }
+
+      solution.should.equal(`${x}${stmt}${(c - b) / a}`);
+    });
+  });
 });
