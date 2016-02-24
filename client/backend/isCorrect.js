@@ -3,6 +3,7 @@
 let deepEqual = require('lodash/lang/isEqual');
 let parse = require('./parse');
 let {reduceChar} = require('../common/string');
+let stmt = require('../common/stmt');
 let stringify = require('./stringify');
 
 import type {AssignmentQuestion} from '../common/types';
@@ -34,7 +35,7 @@ check['1 variable expression'] = check['2 variable expression'] =
 };
 
 check['1 variable equation'] = function(actual: string, expected: string): boolean {
-  let [left, right] = actual.split('=');
+  let {left, right} = stmt.getLeftAndRight(actual);
   if (left === expected || right === expected) {
     // Handle the case of actual => 'x=10', expected => '10'
     return true;
@@ -44,8 +45,12 @@ check['1 variable equation'] = function(actual: string, expected: string): boole
 };
 
 check['2 variable equation'] = function(actual: string, expected: string): boolean {
-  let [actualLeft, actualRight] = actual.split('=');
-  let [expectedLeft, expectedRight] = expected.split('=');
+  let actualParts = stmt.getLeftAndRight(actual);
+  let actualLeft = actualParts.left;
+  let actualRight = actualParts.right;
+  let expectedParts = stmt.getLeftAndRight(expected);
+  let expectedLeft = expectedParts.left;
+  let expectedRight = expectedParts.right;
 
   if (actualLeft === expectedLeft) {
     return check['1 variable expression'](actualRight, expectedRight);
@@ -62,6 +67,10 @@ check['2 variable equation'] = function(actual: string, expected: string): boole
   return false;
 };
 
+check['1 variable inequality'] = function(actual: string, expected: string): boolean {
+  return actual === expected;
+};
+
 check['difference of squares'] = function(actual: string, expected: string): boolean {
   let [actualLeft, actualRight] = parse(actual).data[0].value.data
     .map((x: Object): Object => x.value);
@@ -72,8 +81,8 @@ check['difference of squares'] = function(actual: string, expected: string): boo
 };
 
 function getAnswerType(solution: string): string {
-  let isEquation = solution.indexOf('=') !== -1;
-  if (!isEquation) {
+  let stmtType = stmt.getStmtType(solution);
+  if (stmtType === 'expression') {
     if (isDifferenceOfSquares(solution)) {
       // Special case for difference of squares
       return 'difference of squares';
@@ -81,7 +90,7 @@ function getAnswerType(solution: string): string {
   }
 
   let count = getVariables(solution).length;
-  return `${count} variable ${isEquation ? 'equation' : 'expression'}`;
+  return `${count} variable ${stmtType}`;
 }
 
 function getVariables(expr: string): Array<string> {

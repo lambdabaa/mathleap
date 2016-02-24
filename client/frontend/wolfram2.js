@@ -4,6 +4,7 @@ let Xhr = require('./xhr');
 let {apiUrl} = require('./constants');
 let debug = require('../common/debug')('wolfram2');
 let flatten = require('lodash/array/flatten');
+let {getStmtType} = require('../common/stmt');
 let {mapChar} = require('../common/string');
 let querystring = require('querystring');
 let uniq = require('lodash/array/uniq');
@@ -15,7 +16,8 @@ let uniq = require('lodash/array/uniq');
 exports.isEqual = async function(a: string, b: string,
                                  instruction: string = ''): Promise<boolean> {
   debug('check equivalence', a, b);
-  let check = a.indexOf('==') !== -1 ? 'Equation' : 'Expr';
+  let stmtType = getStmtType(a);
+  let check = stmtType === 'expression' ? 'Expr' : 'Equation';
   let url = `${apiUrl}/equal/`;
   let vars = exports.getVariables(a, b, instruction);
   debug('vars', vars);

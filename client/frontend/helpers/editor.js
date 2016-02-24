@@ -5,6 +5,7 @@ let charFromKeyEvent = require('../charFromKeyEvent');
 let debug = require('../../common/debug')('helpers/editor');
 let includes = require('lodash/collection/includes');
 let {someValue} = require('../../common/array');
+let stmt = require('../../common/stmt');
 let submissions = require('../store/submissions');
 
 import type {
@@ -16,7 +17,6 @@ import type {
 
 type Highlight = Array<boolean>;
 
-let inequalities = Object.freeze(['>', '≥', '<', '≤']);
 let skipStops = Object.freeze(['=', '>', '≥', '<', '≤', '+', '-', '*', '/', '^']);
 
 exports.getInstruction = function(assignment: FBAssignment, index: number): string {
@@ -41,19 +41,10 @@ exports.getInstruction = function(assignment: FBAssignment, index: number): stri
     }
   }
 
-  let isInequality = inequalities.some((symbol: string): boolean => {
-    return question.indexOf(symbol) !== -1;
-  });
-
-  if (isInequality) {
-    return 'Solve the inequality.';
-  }
-
-  if (question.indexOf('=') !== -1) {
-    return 'Solve the equation.';
-  }
-
-  return 'Simplify the expression.';
+  let stmtType = stmt.getStmtType(question);
+  return stmtType === 'equation' || stmtType === 'inequality' ?
+    `Solve the ${stmtType}.` :
+    'Simplify the expression.';
 };
 
 exports.moveCursorLeft = function(cursor: number, equation: string): number {
@@ -110,18 +101,17 @@ exports.applyFirstChar = async function(event: Object, state: Object): Promise<O
   }
 
   let {equation, cursor} = state;
-  let split = equation.indexOf('=');
+  let split = stmt.getStmtSplit(equation);
   cursor = cursor <= split ? split + 1 : equation.length + 2;
 
+  let {left, right} = stmt.getLeftAndRight(equation);
   let [leftParens, rightParens] = await Promise.all(
-    equation
-      .split('=')
-      .map(async function(expression: string): Promise<boolean> {
-        let expressionPriority = await bridge('getPriority', expression);
-        // $FlowFixMe: Flow thinks operator wasn't initialized wtf?
-        let operatorPriority = getOperatorPriority(operator);
-        return operatorPriority > expressionPriority;
-      })
+    [left, right].map(async function(expression: string): Promise<boolean> {
+      let expressionPriority = await bridge('getPriority', expression);
+      // $FlowFixMe: Flow thinks operator wasn't initialized wtf?
+      let operatorPriority = getOperatorPriority(operator);
+      return operatorPriority > expressionPriority;
+    })
   );
 
   return {append: operator, cursor, leftParens, rightParens};
@@ -131,7 +121,7 @@ exports.applyBothSidesChar = function(event: Object, state: Object): ?Object {
   let {append, cursor, equation, leftParens, rightParens} = state;
 
   let offset;
-  let split = equation.indexOf('=');
+  let split = stmt.getStmtSplit(equation);
   if (cursor <= split + append.length) {
     cursor = split + append.length;
     offset = 1;
@@ -252,7 +242,12 @@ exports.commitDelta = async function(aClass: string, assignment: string,
                                      equation: string, append: string,
                                      leftParens: boolean, rightParens: boolean): Promise<void> {
   let {work} = responses[num];
-  let [left, right] = equation.split('=');
+  let {left, right} = stmt.getLeftAndRight(equation);
+  // Check whether we need to flip inequality direction.
+  let symbol = stmt.getStmtSymbol(equation);
+  let nextSymbol = isInequalityFlip(symbol, append) ?
+    getOppositeStmtSymbol(symbol) :
+    symbol;
   let result = right ?
     [
       {value: left, parens: leftParens},
@@ -262,7 +257,7 @@ exports.commitDelta = async function(aClass: string, assignment: string,
       let {value, parens} = side;
       return `${parens ? '(' : ''}${value}${parens ? ')' : ''}${append}`;
     })
-    .join('=') :
+    .join(nextSymbol) :
     left;
 
   await submissions.commitDelta(
@@ -348,5 +343,29 @@ function getOperatorPriority(operator: string): number {
       return 3;
     default:
       throw new Error(`Unexpected operator ${operator}`);
+  }
+}
+
+function isInequalityFlip(symbol: string, append: string): boolean {
+  debug('test inequality flip', symbol, append);
+  if (symbol === '=') {
+    return false;
+  }
+
+  return /^[*,/]-.+$/.test(append);
+}
+
+function getOppositeStmtSymbol(symbol: string): string {
+  switch (symbol) {
+    case '>':
+      return '<';
+    case '<':
+      return '>';
+    case '≥':
+      return '≤';
+    case '≤':
+      return '≥';
+    default:
+      throw new Error(`${symbol} has no opposite`);
   }
 }
