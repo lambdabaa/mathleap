@@ -197,6 +197,8 @@ module.exports = React.createClass({
                  dismissTutorial={this._dismissTutorial}
                  handleSubmit={this._handleSubmit}
                  selectQuestion={this._selectQuestion}
+                 nextQuestion={this._handleNextQuestion}
+                 prevQuestion={this._handlePrevQuestion}
                  showHelpDialog={this._showHelpDialog}
                  hideHelpDialog={this._hideHelpDialog}
                  repositionCursor={this._handleCursorReposition}
@@ -224,6 +226,16 @@ module.exports = React.createClass({
       undos: [],
       redos: []
     });
+  },
+
+  _handleNextQuestion: function(): void {
+    let {num, responses} = this.state;
+    this._selectQuestion((num + 1) % responses.length);
+  },
+
+  _handlePrevQuestion: function(): void {
+    let {num, responses} = this.state;
+    this._selectQuestion(num === 0 ? responses.length - 1 : num - 1);
   },
 
   _handleKeyDown: async function(event: KeyboardEvent): Promise<void> {
