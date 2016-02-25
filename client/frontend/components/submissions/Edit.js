@@ -150,12 +150,18 @@ function renderQuestion(props: Object): Array<Array<React.Element>> {
     });
   }
 
-  return <Tabular className="submissions-edit-question dark"
-                  cols={[
-                    {content: 'History', width: 325},
-                    {content: 'Results (select and edit here)', width: 325}
-                  ]}
-                  rows={rows} />;
+  return <div className="submissions-edit-question">
+    <Tabular className="dark"
+             cols={[
+               {content: 'History', width: 325},
+               {content: 'Results (select and edit here)', width: 325}
+             ]}
+             rows={rows} />;
+    <div className="next-and-previous">
+      <div className="button-inverse" onClick={props.nextQuestion}>Next</div>
+      <div className="button" onClick={props.prevQuestion}>Previous</div>
+    </div>
+  </div>;
 }
 
 function renderChanges(props, equation, changes, append = '', leftParens = false,

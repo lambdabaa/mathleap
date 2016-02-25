@@ -190,3 +190,23 @@
 .submissions-edit-question-list > .button-inverse {
   margin-top: 15px;
 }
+
+.next-and-previous {
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  float: right;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  margin-top: 15px;
+  width: 350px;
+}
+
+.next-and-previous > .button,
+.next-and-previous > .button-inverse {
+  width: 120px;
+}
