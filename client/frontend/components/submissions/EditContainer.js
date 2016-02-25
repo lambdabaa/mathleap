@@ -170,7 +170,7 @@ module.exports = React.createClass({
     }
 
     if (typeof num === 'number') {
-      let step = $('.submissions-edit-question .tabular-row:last-child')
+      let step = $('.submissions-edit-question .tabular-row:last-child');
       if (step && !isElementVisible(step)) {
         step.focus();
       }
