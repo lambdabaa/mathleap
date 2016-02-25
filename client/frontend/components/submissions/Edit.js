@@ -158,8 +158,8 @@ function renderQuestion(props: Object): Array<Array<React.Element>> {
              ]}
              rows={rows} />;
     <div className="next-and-previous">
-      <div className="button-inverse" onClick={props.nextQuestion}>Next</div>
       <div className="button" onClick={props.prevQuestion}>Previous</div>
+      <div className="button-inverse" onClick={props.nextQuestion}>Next</div>
     </div>
   </div>;
 }
