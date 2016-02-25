@@ -150,7 +150,7 @@ function renderQuestion(props: Object): Array<Array<React.Element>> {
     });
   }
 
-  return <Tabular className="dark"
+  return <Tabular className="submissions-edit-question dark"
                   cols={[
                     {content: 'History', width: 325},
                     {content: 'Results (select and edit here)', width: 325}

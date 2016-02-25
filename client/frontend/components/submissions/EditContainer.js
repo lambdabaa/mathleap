@@ -12,6 +12,7 @@ let clone = require('lodash/lang/cloneDeep');
 let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let debug = require('../../../common/debug')('components/submissions/Edit');
 let editor = require('../../helpers/editor');
+let isElementVisible = require('../../isElementVisible');
 let {mapChar} = require('../../../common/string');
 let preventDefault = require('../../preventDefault');
 let session = require('../../session');
@@ -143,6 +144,28 @@ module.exports = React.createClass({
     document.removeEventListener('keypress', preventDefault);
   },
 
+  componentDidUpdate: function(): void {
+    if (this.didCommitDelta) {
+      // Make sure that the latest step is scrolled into view.
+      // $FlowFixMe
+      this.didCommitDelta = false;
+      let step = $('.submissions-edit-question .tabular-row:last-child');
+      if (step && !isElementVisible(step)) {
+        step.scrollIntoView();
+      }
+    }
+
+    if (this.didSelectQuestion) {
+      // Make sure selected question is scrolled into view.
+      // $FlowFixMe
+      this.didSelectQuestion = false;
+      let question = $('.submissions-edit-question-list .tabular-row.selected');
+      if (question && !isElementVisible(question)) {
+        question.scrollIntoView();
+      }
+    }
+  },
+
   _tick: function() {
     this.setState({isCursorVisible: !this.state.isCursorVisible});
   },
@@ -186,6 +209,8 @@ module.exports = React.createClass({
     let {responses} = this.state;
     let {work} = responses[num];
     let equation = work[work.length - 1].state[0];
+    // $FlowFixMe
+    this.didSelectQuestion = true;
     this.setState({
       num,
       equation,
@@ -525,6 +550,8 @@ module.exports = React.createClass({
       rightParens
     );
 
+    // $FlowFixMe
+    this.didCommitDelta = true;
     // This will reset all of our work on the current state.
     this._selectQuestion(num);
   },
