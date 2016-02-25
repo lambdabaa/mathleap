@@ -89,7 +89,6 @@ module.exports = React.createClass({
   // $FlowFixMe
   componentWillMount: async function(): Promise<void> {
     let {aClass, assignment, submission, id} = this.props;
-
     if (aClass) {
       // $FlowFixMe
       this.isPracticeMode = false;
@@ -145,6 +144,11 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function(): void {
+    let {num, responses} = this.state;
+    if (responses && responses.length && num == null) {
+      return this._selectQuestion(0);
+    }
+
     if (this.didCommitDelta) {
       // Make sure that the latest step is scrolled into view.
       // $FlowFixMe
@@ -162,6 +166,13 @@ module.exports = React.createClass({
       let question = $('.submissions-edit-question-list .tabular-row.selected');
       if (question && !isElementVisible(question)) {
         question.scrollIntoView();
+      }
+    }
+
+    if (typeof num === 'number') {
+      let step = $('.submissions-edit-question .tabular-row:last-child')
+      if (step && !isElementVisible(step)) {
+        step.focus();
       }
     }
   },
