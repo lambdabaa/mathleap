@@ -163,7 +163,8 @@
   padding: 2px;
 }
 
-.submissions-edit-active {
+.submissions-edit-active,
+.submissions-edit-changes {
   -ms-flex-align: center;
   -webkit-align-items: center;
   align-items: center;
@@ -171,6 +172,12 @@
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+}
+
+.submissions-edit-active {
+  background-image: url("./style/images/green-arrow.png");
+  background-position: right;
+  background-repeat: no-repeat;
 }
 
 .submissions-edit-character {
