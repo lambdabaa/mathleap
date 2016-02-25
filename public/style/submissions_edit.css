@@ -22,13 +22,15 @@
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  height: 400px;
   -ms-flex-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
-  overflow-x: hidden;
-  overflow-y: scroll;
   position: relative;
+}
+
+.submissions-edit-workspace .tabular-rows {
+  height: 400px;
+  overflow-y: scroll;
 }
 
 .submissions-edit-help-button {
