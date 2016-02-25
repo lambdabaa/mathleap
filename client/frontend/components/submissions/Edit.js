@@ -284,7 +284,7 @@ function renderResults(props, equation, cursor, append = '', leftParens = false,
   // The way we've patched rendering for https://github.com/gaye/ml/issues/71 here is pretty cute
   // and confusing. This will get cleaned up but in the meantime beware!
   if (typeof cursor !== 'number') {
-    return <div className="unselectable">{equation}</div>;
+    return <div className="submissions-edit-inactive unselectable">{`\`${equation}\``}</div>;
   }
 
   let {highlight, drag, isCursorVisible} = props;

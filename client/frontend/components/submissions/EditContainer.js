@@ -1,4 +1,5 @@
 /* @flow */
+/* global MathJax */
 
 let $ = document.querySelector.bind(document);
 let Edit = require('./Edit');
@@ -134,6 +135,16 @@ module.exports = React.createClass({
     if (tutorial) {
       tutorial.scrollIntoView();
     }
+
+    // $FlowFixMe
+    if (MathJax != null) {
+      MathJax.Hub.Config({
+        displayAlign: 'left',
+        showMathMenu: false,
+        showMathMenuMSIE: false,
+        showProcessingMessages: false
+      });
+    }
   },
 
   componentWillUnmount: function(): void {
@@ -175,6 +186,18 @@ module.exports = React.createClass({
         step.focus();
       }
     }
+
+    let typesetList = Array.from(document.getElementsByClassName('submissions-edit-inactive'));
+    typesetList.forEach((el: HTMLElement): void => {
+      // $FlowFixMe
+      if (MathJax == null) {
+        debug('MathJax not loaded!');
+        return;
+      }
+
+      let {Hub} = MathJax;
+      Hub.Queue(['Typeset', Hub, el]);
+    });
   },
 
   _tick: function() {
