@@ -7,7 +7,7 @@ module.exports = async function preloadImage(url: string): Promise<void> {
   await Promise.resolve();
 
   // Check to make sure we haven't already loaded.
-  let loaded = Array.from($('.preload-image')).some((el: HTMLElement): boolean => {
+  let loaded = Array.from($('.preload-image')).some((el: HTMLImageElement): boolean => {
     return el.src.indexOf(url) !== -1;
   });
 
