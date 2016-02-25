@@ -12,9 +12,9 @@ module.exports = function(props: Object): React.Element {
     <div className="view">
       {
         ((): React.Element => {
+          let backlink, backlinkText;
           switch (user.role) {
             case 'student':
-              let backlink, backlinkText;
               if (isPracticeMode) {
                 backlink = `#!/practice/`;
                 backlinkText = <span>&lt; Practice sessions</span>;
@@ -23,15 +23,24 @@ module.exports = function(props: Object): React.Element {
                 backlinkText = <span>&lt; {aClass && aClass.name}</span>;
               }
 
-              return <a className="backlink clickable-text" href={backlink}>{backlinkText}</a>;
+              break;
             case 'teacher':
-              return <a className="backlink clickable-text"
-                        href={`#!/classes/${classId}/assignments/${assignment.id}/`}>
-                &lt; {assignment && assignment.name}
-              </a>;
+              if (isTestMode(user)) {
+                backlink = `#!/classes/${classId}/`;
+                backlinkText = <span>&lt; {aClass && aClass.name}</span>;
+              } else {
+                backlink = `#!/classes/${classId}/assignments/${assignment.id}/`;
+                backlinkText = <span>&lt; {assignment && assignment.name}</span>;
+              }
+
+              break;
             default:
               throw new Error(`Unexpected user role ${user.role}`);
           }
+
+          return <a className="backlink clickable-text" href={backlink}>
+            {backlinkText}
+          </a>;
         })()
       }
       <Tabular cols={[
@@ -83,4 +92,8 @@ function renderError(response: Object): React.Element {
       {work[errorLine].state[0]}
     </span>
   </div>;
+}
+
+function isTestMode(user: Object): boolean {
+  return location.hash.indexOf(user.id) !== -1;
 }
