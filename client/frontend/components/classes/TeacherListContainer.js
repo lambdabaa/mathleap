@@ -7,6 +7,7 @@ let TeacherList = require('./TeacherList');
 let classes = require('../../store/classes');
 let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let debug = require('../../../common/debug')('components/classes/TeacherListContainer');
+let preloadImage = require('../../preloadImage');
 let session = require('../../session');
 let stringify = require('../../../common/stringify');
 
@@ -37,6 +38,7 @@ module.exports = React.createClass({
 
   componentDidMount: function(): void {
     this._updateClasses(this.state);
+    preloadImage('public/style/images/color_picker_triangle.png');
   },
 
   componentWillUpdate: function(props: Object, state: Object): void {
