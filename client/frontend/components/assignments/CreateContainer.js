@@ -1,6 +1,7 @@
 /* @flow */
 
 let Create = require('./Create');
+let KaTeXContainer = require('../KaTeXContainer');
 let React = require('react');
 let ReactFire = require('reactfire');
 let Tabular = require('../Tabular');
@@ -126,7 +127,10 @@ module.exports = React.createClass({
     let {preview, created, deadline} = theAssignment;
     // $FlowFixMe: preview definitely exists but flow doesn't know that.
     let rows = preview.map((question, index) => {
-      return [`${index + 1}.`, question.question];
+      return [
+        `${index + 1}.`,
+        <KaTeXContainer ascii={question.question} />
+      ];
     });
 
     this.props.showModal(

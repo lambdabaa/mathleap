@@ -2,6 +2,7 @@
 .*/build/*
 .*/node_modules/babel-*
 .*/node_modules/fbjs/*
+.*/node_modules/match-at/*
 
 [include]
 .*/client/*

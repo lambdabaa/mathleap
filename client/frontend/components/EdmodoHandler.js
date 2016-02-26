@@ -5,10 +5,12 @@ let React = require('react');
 let querystring = require('querystring');
 let users = require('../store/users');
 
-module.exports = React.createClass({
-  displayName: 'EdmodoHandler',
+class EdmodoHandler extends React.Component {
+  constructor(props: Object) {
+    super(props);
+  }
 
-  componentDidMount: function(): void {
+  componentDidMount(): void {
     let auth = querystring.parse(location.hash.substring(1));
     if ('error' in auth) {
       // Ruh roh
@@ -17,9 +19,11 @@ module.exports = React.createClass({
     }
 
     users.edmodo(auth);
-  },
+  }
 
-  render: function(): React.Element {
+  render(): React.Element {
     return <Empty />;
   }
-});
+}
+
+module.exports = EdmodoHandler;

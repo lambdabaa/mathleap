@@ -29,7 +29,7 @@
 
     "statement": [
       ["top EQUALS top", "$$ = yy.createNode('statement', ['equals', $1, $3]);"],
-      ["top LT topo", "$$ = yy.createNode('statement', ['lt', $1, $3]);"],
+      ["top LT top", "$$ = yy.createNode('statement', ['lt', $1, $3]);"],
       ["top GT top", "$$ = yy.createNode('statement', ['gt', $1, $3]);"],
       ["top LTEQ top", "$$ = yy.createNode('statement', ['lteq', $1, $3]);"],
       ["top GTEQ top", "$$ = yy.createNode('statement', ['gteq', $1, $3]);"]

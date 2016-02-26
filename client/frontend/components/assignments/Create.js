@@ -3,6 +3,7 @@
  * @fileoverview Assignment generator.
  */
 
+let KaTeXContainer = require('../KaTeXContainer');
 let Moment = require('moment');
 let ClassCode = require('../ClassCode');
 let React = require('react');
@@ -72,17 +73,35 @@ function renderTopics(props: Object): React.Element {
 
 function renderQuestionTypes(props: Object): React.Element {
   let cols = [
-    {content: 'Question Type', width: 350},
-    {content: '', width: 150},
-    {content: '', width: 50, align: 'right'}
+    {content: 'Question Type', width: 260},
+    {content: 'Example', width: 260, align: 'center'},
+    {content: '', width: 30, align: 'right'}
   ];
 
   let {topic} = props;
   let rows = topic ?
     topic.types.map((aType: Object): Array<React.Element | string> => {
+      let fontSize;
+      switch (aType.name) {
+        case 'Differing polynomial coefficients':
+          fontSize = '12px';
+          break;
+        default:
+          fontSize = '14px';
+          break;
+      }
+
+      let example;
+      if (topic.name === 'Expressions with variables') {
+        example = aType.example;
+      } else {
+        example = <KaTeXContainer ascii={aType.example}
+                                  style={{fontSize, textAlign: 'center !important'}} />;
+      }
+
       return [
         aType.name,
-        `e.g. ${aType.example}`,
+        example,
         <img className="list-action-btn"
              src="public/style/images/add_btn.png"
              onClick={() => props.addTopic(topic, aType)} />

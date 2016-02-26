@@ -1,9 +1,10 @@
 /* @flow */
 /**
- * @fileoverview Conversion from parsed math tree to string.
+ * @fileoverview Conversion from parsed math tree to TeX.
  */
 
 let {isNegativeOne} = require('./mathNode');
+let parse = require('./parse');
 let {partition} = require('../common/array');
 
 import type {Node} from './parse';
@@ -11,27 +12,27 @@ import type {Node} from './parse';
 let symbol = Object.freeze({
   equals: '=',
   lt: '<',
-  lteq: '≤',
-  gteq: '≥',
+  lteq: '\\lte',
+  gteq: '\\gte',
   gt: '>'
 });
 
 let handleNode = {
   statement(node: Node): string {
     let [statement, left, right] = node.data;
-    return `${stringify(left)} ${symbol[statement]} ${stringify(right)}`;
+    return `${texifyNode(left)}${symbol[statement]}${texifyNode(right)}`;
   },
 
   termlist(node: Node, parentPriority: number): string {
     let result = node.data
       .map(function(term: Object, index: number): string {
         return index === 0 ?
-          `${term.negate ? '-' : ''}${stringify(term.value, 2)}` :
-          `${term.negate ? '-' : '+'} ${stringify(term.value, 2)}`;
+          `${term.negate ? '-' : ''}${texifyNode(term.value, 2)}` :
+          `${term.negate ? '-' : '+'}${texifyNode(term.value, 2)}`;
       })
-      .join(' ');
+      .join('');
 
-    return parentPriority < 2 ? `(${result})` : result;
+    return parentPriority < 2 ? `\\left(${result}\\right)` : result;
   },
 
   factorlist(node: Node, parentPriority: number): string {
@@ -52,35 +53,27 @@ let handleNode = {
       negateBottom = true;
     }
 
-    let topstring = top.length ? stringifyFactors(top) : '1';
+    let topstring = top.length ? texifyFactors(top) : '1';
     if (!bottom.length) {
       return negateTop ? `-${topstring}` : topstring;
     }
 
-    if (top.length > 1) {
-      topstring = `(${topstring})`;
-    }
-
-    let bottomstring = stringifyFactors(bottom);
-    if (bottom.length > 1) {
-      bottomstring = `(${bottomstring})`;
-    }
-
-    let result = `${topstring} / ${bottomstring}`;
+    let bottomstring = texifyFactors(bottom);
+    let result = `\\frac{${topstring}}{${bottomstring}}`;
     if (negateTop !== negateBottom) {
       result = `-${result}`;
     }
 
-    return parentPriority < 1 ? `(${result})` : result;
+    return parentPriority < 1 ? `\\left(${result}\\right)` : result;
   },
 
   fun(node: Node): string {
     let funType = node.data[0];
     switch (funType) {
       case 'abs':
-        return `|${stringify(node.data[1])}|`;
+        return `|${texifyNode(node.data[1])}|`;
       case 'power':
-        return `${stringify(node.data[1], 0)} ^ ${stringify(node.data[2], 0)}`;
+        return `${texifyNode(node.data[1], 0)}^{${texifyNode(node.data[2], 0)}}`;
       default:
         throw new Error(`Unrecognized funType ${funType}`);
     }
@@ -91,14 +84,22 @@ let handleNode = {
   }
 };
 
-function stringify(node: Node, parentPriority: number = Infinity): string {
+function texify(node: Node | string): string {
+  if (typeof node === 'string') {
+    node = parse(node);
+  }
+
+  return texifyNode(node);
+}
+
+function texifyNode(node: Node, parentPriority: number = Infinity): string {
   return handleNode[node.nodeType](node, parentPriority);
 }
 
-function stringifyFactors(factors: Array<Object>): string {
+function texifyFactors(factors: Array<Object>): string {
   return factors
-    .map((factor: Object): string => stringify(factor.value, 1))
-    .join(' * ');
+    .map((factor: Object): string => texifyNode(factor.value, 1))
+    .join('\\cdot ');
 }
 
-module.exports = stringify;
+module.exports = texify;

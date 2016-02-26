@@ -1,5 +1,6 @@
 /* @flow */
 
+let KaTeXContainer = require('../KaTeXContainer');
 let React = require('react');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
@@ -97,11 +98,10 @@ function renderQuestionList(props: Object): Array<Array<React.Element>> {
            onClick={() => props.selectQuestion(index)}>
         {index + 1}
       </div>,
-      <div key={`question-${index}`}
-           className="clickable-text"
-           onClick={() => props.selectQuestion(index)}>
-        {aResponse.question.question}
-      </div>
+      <KaTeXContainer key={`question-${index}`}
+                      style={{cursor: 'pointer'}}
+                      onClick={() => props.selectQuestion(index)}
+                      ascii={aResponse.question.question} />
     ];
   });
 
@@ -284,7 +284,7 @@ function renderResults(props, equation, cursor, append = '', leftParens = false,
   // The way we've patched rendering for https://github.com/gaye/ml/issues/71 here is pretty cute
   // and confusing. This will get cleaned up but in the meantime beware!
   if (typeof cursor !== 'number') {
-    return <div className="unselectable">{equation}</div>;
+    return <KaTeXContainer ascii={equation} />;
   }
 
   let {highlight, drag, isCursorVisible} = props;
