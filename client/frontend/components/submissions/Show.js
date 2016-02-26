@@ -1,5 +1,6 @@
 /* @flow */
 
+let KaTeXContainer = require('../KaTeXContainer');
 let React = require('react');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
@@ -44,12 +45,12 @@ module.exports = function(props: Object): React.Element {
         })()
       }
       <Tabular cols={[
-                 {content: '', width: 40},
-                 {content: 'Question', width: 300},
-                 'Response',
-                 'Answer Key',
-                 {content: 'Error', width: 325},
-                 {content: 'Result', width: 40}
+                 {content: '', width: 30},
+                 {content: 'Question', width: 250},
+                 {content: 'Response', width: 250},
+                 {content: 'Answer Key', width: 220},
+                 {content: 'Error', width: 250},
+                 {content: '', width: 20}
                ]}
                rows={renderResults(props)} />
     </div>
@@ -64,9 +65,9 @@ function renderResults(props: Object): Array<Array<React.Element | string>> {
     let correct = marks[index];
     return [
       `${index + 1}.`,
-      question.question,
-      answer,
-      question.solution,
+      <KaTeXContainer ascii={question.question} />,
+      <KaTeXContainer ascii={answer} />,
+      <KaTeXContainer ascii={question.solution} />,
       correct ? <div></div> : renderError(response),
       correct ?
         <div style={{color: '#71ac00'}}>✔</div> :

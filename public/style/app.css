@@ -193,3 +193,7 @@ select {
   top: -2000px;
   z-index: -100;
 }
+
+.katex-container {
+  text-overflow: ellipsis;
+}

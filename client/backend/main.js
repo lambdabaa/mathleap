@@ -14,6 +14,7 @@ proxy({
     isCorrect: require('./isCorrect'),
     parse: require('./parse'),
     ping: async function() {},
-    stringify: require('./stringify')
+    stringify: require('./stringify'),
+    texify: require('./texify')
   }
 });
