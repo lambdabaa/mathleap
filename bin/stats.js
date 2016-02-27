@@ -1,4 +1,5 @@
 const flatten = require('lodash/array/flatten');
+const flattenDeep = require('lodash/array/flattenDeep');
 const fs = require('mz/fs');
 const values = require('lodash/object/values');
 
@@ -57,6 +58,16 @@ async function main() {
     .map(practice => practice.submission)
     .filter(practice => practice.complete);
 
+  let all = submits.concat(practices.map(practice => practice.submission));
+  let questions = flatten(
+    all.map(submission => {
+      return values(submission.responses).filter(response => {
+        // Check to make sure that the student did some work on this response.
+        return Object.keys(response.work).length > 1;
+      })
+    })
+  );
+
   console.log();
   console.log('Teachers:', teachers.length);
   console.log('Classes:', classes.length);
@@ -65,6 +76,7 @@ async function main() {
   console.log('Submissions:', submits.length);
   console.log('Practices:', practices.length);
   console.log('Completed practices:', finishes.length);
+  console.log('Questions solved:', questions.length);
   console.log();
 }
 
