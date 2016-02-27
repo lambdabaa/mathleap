@@ -98,13 +98,13 @@ select {
 }
 
 .button-action {
-  background-color: #eb241d;
+  background-color: #71ac00;
   color: white;
 }
 
 .button-action:active,
 .button-action:hover {
-  background-color: red;
+  background-color: green;
 }
 
 .button-disabled {

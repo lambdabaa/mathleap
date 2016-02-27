@@ -53,14 +53,14 @@ module.exports = function(props: Object): React.Element {
                  cols={[
                    {content: 'Assignment', width: 190},
                    {content: 'Deadline', width: 120},
-                   {content: 'Submissions', width: 90},
+                   {content: 'Submissions', width: 110},
                    {content: 'Avg.', width: 90},
                    {
                      content: <img className="list-action-btn"
                       src="public/style/images/add_btn.png"
                       style={{float: 'right'}}
                       onClick={props.createAssignment} />,
-                     width: 100
+                     width: 80
                    }
                   ]}
                  rows={assignments} />
