@@ -1,6 +1,8 @@
 /* @flow */
 
 export type KeyboardEvent = {
+  ctrlKey: boolean;
+  metaKey: boolean;
   key: string;
   keyCode: number;
   preventDefault: Function;

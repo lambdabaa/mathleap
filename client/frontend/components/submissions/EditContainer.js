@@ -10,6 +10,7 @@ let charFromKeyEvent = require('../../charFromKeyEvent');
 let classes = require('../../store/classes');
 let clone = require('lodash/lang/cloneDeep');
 let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
+let ctrlOrMeta = require('../../ctrlOrMeta');
 let debug = require('../../../common/debug')('components/submissions/Edit');
 let editor = require('../../helpers/editor');
 let isElementVisible = require('../../isElementVisible');
@@ -278,7 +279,7 @@ module.exports = React.createClass({
       return this._handleShiftKey(event);
     }
 
-    if (event.ctrlKey || event.metaKey) {
+    if (ctrlOrMeta(event)) {
       return this._handleCtrlKey(event);
     }
 
@@ -324,7 +325,7 @@ module.exports = React.createClass({
         return this.setState({cursor, highlight, isCursorVisible: true});
       case 'R':
       case 'Z':
-        if (event.ctrlKey) {
+        if (ctrlOrMeta(event)) {
           return this._handleRedo();
         }
 
@@ -474,6 +475,8 @@ module.exports = React.createClass({
           {
             key: 'Backspace',
             keyCode: 8,
+            ctrlKey: false,
+            metaKey: false,
             preventDefault: () => {},
             stopPropagation: () => {}
           },
