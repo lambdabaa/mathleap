@@ -5,12 +5,9 @@ let stringify = require('../../../client/backend/stringify');
 suite('backend/math', () => {
   [
     '1 + 1',
-    '2 * x',
     'y = 2 * (x + 1)',
     'x - (y + (2 - x)) = 0',
-    '(3 * y) / (x / 2) = 0',
     '3 * |x + 2|',
-    '3 * |x - |y - 2 * x||',
     '|-2|',
     '|7 * -2| - 5 * |5 - 7|'
   ].forEach(testCase => {
@@ -18,7 +15,10 @@ suite('backend/math', () => {
   });
 
   [
-    ['3x ^ 2', '3 * x ^ 2']
+    ['3x ^ 2', '3 * x ^ 2'],
+    ['2 * x', '2x'],
+    ['(3 * y) / (x / 2) = 0', '(3y) / (x / 2) = 0'],
+    ['3 * |x - |y - 2 * x||', '3 * |x - |y - 2x||']
   ].forEach(testCase => {
     test(testCase[0], () => assert.equal(stringify(parse(testCase[0])), testCase[1]));
   });

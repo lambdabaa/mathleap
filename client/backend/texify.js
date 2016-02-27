@@ -3,7 +3,7 @@
  * @fileoverview Conversion from parsed math tree to TeX.
  */
 
-let {isNegativeOne} = require('./mathNode');
+let mathNode = require('./mathNode');
 let parse = require('./parse');
 let {partition} = require('../common/array');
 
@@ -42,13 +42,13 @@ let handleNode = {
     );
 
     let negateTop = false;
-    if (top.length > 1 && isNegativeOne(top[0])) {
+    if (top.length > 1 && mathNode.isNegativeOne(top[0])) {
       top = top.slice(1);
       negateTop = true;
     }
 
     let negateBottom = false;
-    if (bottom.length > 1 && isNegativeOne(bottom[0])) {
+    if (bottom.length > 1 && mathNode.isNegativeOne(bottom[0])) {
       bottom = bottom.slice(1);
       negateBottom = true;
     }
@@ -97,6 +97,14 @@ function texifyNode(node: Node, parentPriority: number = Infinity): string {
 }
 
 function texifyFactors(factors: Array<Object>): string {
+  if (factors.length === 2) {
+    // Special case for Ax
+    if (mathNode.isConstant(factors[0]) &&
+        mathNode.isVariable(factors[1])) {
+      return texifyNode(factors[0].value, 1) + texifyNode(factors[1].value, 1);
+    }
+  }
+
   return factors
     .map((factor: Object): string => texifyNode(factor.value, 1))
     .join('\\cdot ');
