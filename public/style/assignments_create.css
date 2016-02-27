@@ -52,6 +52,16 @@
   width: 125px;
 }
 
+.assignments-create-label.button {
+  margin-right: 5px;
+  width: 80px;
+}
+
+.assignments-create-value.button-inverse {
+  margin-left: 5px;
+  width: 80px;
+}
+
 .topic-ratio-chart {
   display: -ms-flexbox;
   display: -webkit-flex;

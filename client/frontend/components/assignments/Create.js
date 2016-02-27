@@ -204,12 +204,10 @@ function renderPracticeSummary(props: Object): React.Element {
     ],
     [
       <div className="assignments-create-summary">
-        <div className="assignments-create-label clickable-text"
-             onClick={props.preview}>
+        <div className="assignments-create-label button" onClick={props.preview}>
           Preview
         </div>
-        <div className="assignments-create-value clickable-text"
-             onClick={props.start}>
+        <div className="assignments-create-value button-inverse" onClick={props.start}>
           Start
         </div>
       </div>
@@ -262,12 +260,10 @@ function renderRealSummary(props: Object): React.Element {
     ],
     [
       <div className="assignments-create-summary">
-        <div className="assignments-create-label clickable-text"
-             onClick={props.preview}>
+        <div className="assignments-create-label button" onClick={props.preview}>
           Preview
         </div>
-        <div className="assignments-create-value clickable-text"
-             onClick={props.assign}>
+        <div className="assignments-create-value button-inverse" onClick={props.assign}>
           Assign
         </div>
       </div>
