@@ -58,7 +58,8 @@ select {
 }
 
 .button,
-.button-inverse {
+.button-inverse,
+.button-action {
   border-radius: 6px;
   cursor: pointer;
   font-size: 24px;
@@ -94,6 +95,16 @@ select {
 
 .button-inverse:active {
   background-color: #6ab0f4;
+}
+
+.button-action {
+  background-color: #eb241d;
+  color: white;
+}
+
+.button-action:active,
+.button-action:hover {
+  background-color: red;
 }
 
 .button-disabled {

@@ -31,8 +31,7 @@ module.exports = function(props: Object): React.Element {
       anAssignment.deadline,
       `${completeSubmissionCount} / ${students.length}`,
       completeSubmissionCount > 0 ? averages[index] : 'n / a',
-      <div className="clickable-text emph"
-           style={{color: '#eb241d' }}
+      <div className="button-action try-it-button"
            onClick={() => props.tryAssignment(anAssignment)}>
         Try it!
       </div>
@@ -52,15 +51,16 @@ module.exports = function(props: Object): React.Element {
                  rows={studentList} />
         <Tabular className="classes-show-assignments"
                  cols={[
-                   {content: 'Assignment', width: 200},
-                   {content: 'Deadline', width: 130},
-                   {content: 'Submissions', width: 100},
-                   {content: 'Avg.', width: 100},
+                   {content: 'Assignment', width: 190},
+                   {content: 'Deadline', width: 120},
+                   {content: 'Submissions', width: 90},
+                   {content: 'Avg.', width: 90},
                    {
                      content: <img className="list-action-btn"
                       src="public/style/images/add_btn.png"
+                      style={{float: 'right'}}
                       onClick={props.createAssignment} />,
-                     width: 60
+                     width: 100
                    }
                   ]}
                  rows={assignments} />
