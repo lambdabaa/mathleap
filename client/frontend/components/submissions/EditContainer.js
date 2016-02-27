@@ -323,6 +323,7 @@ module.exports = React.createClass({
         cursor = Math.max(cursor + 1);
         return this.setState({cursor, highlight, isCursorVisible: true});
       case 'R':
+      case 'Z':
         if (event.ctrlKey) {
           return this._handleRedo();
         }
