@@ -156,7 +156,7 @@ function renderQuestion(props: Object): Array<Array<React.Element>> {
                {content: 'History', width: 325},
                {content: 'Results (select and edit here)', width: 325}
              ]}
-             rows={rows} />;
+             rows={rows} />
     <div className="next-and-previous">
       <div className="button" onClick={props.prevQuestion}>Previous</div>
       <div className="button-inverse" onClick={props.nextQuestion}>Next</div>
