@@ -64,7 +64,8 @@ exports.teacher = function(teacher: FBTeacher): string {
 exports.solution = function(question: AssignmentQuestion): string {
   let solution = '' + question.solution;
   let variable;
-  if (/^Solve for ([a-z])\.$/.test(question.instruction)) {
+  if (question.instruction && /^Solve for ([a-z])\.$/.test(question.instruction)) {
+    // $FlowFixMe
     variable = RegExp.$1;
   } else {
     return solution;
