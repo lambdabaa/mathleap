@@ -8,6 +8,7 @@ class HomeContainer extends React.Component {
   constructor(props: Object) {
     super(props);
     this._tick = this._tick.bind(this);
+    this._handleSelectScreenshot = this._handleSelectScreenshot.bind(this);
     this.state = {screenshot: 0};
   }
 
