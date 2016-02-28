@@ -191,12 +191,14 @@ exports.getStudentStatus = function(assignment: FBAssignment): string {
   return submission.complete ? 'Submitted' : 'In progress';
 };
 
-exports.getCompleteSubmissionCount = function(assignment: FBAssignment): number {
-  let {id} = session.get('user');
+exports.getCompleteSubmissionCount = function(assignment: FBAssignment,
+                                              students: Array<FBStudent>): number {
   return reduce(
     filter(assignment.submissions, function(submission: FBSubmission, key: string): boolean {
-      // Don't count any possible test / teacher submissions.
-      return key !== id;
+      // Make sure this is an actual student.
+      return students.some((student: FBStudent) => {
+        return student.id && student.id === key;
+      });
     }),
     function(count: number, submission: FBSubmission) {
       return count + (submission.complete ? 1 : 0);

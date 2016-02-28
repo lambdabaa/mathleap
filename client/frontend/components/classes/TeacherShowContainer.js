@@ -9,6 +9,8 @@ let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let debug = require('../../../common/debug')('components/classes/TeacherShow');
 let students = require('../../store/students');
 
+import type {FBStudent} from '../../../common/types';
+
 module.exports = React.createClass({
   displayName: 'classes/TeacherShow',
 
@@ -73,9 +75,13 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
+    let students = this.state.students.filter((student: ?FBStudent) => {
+      return student != null;
+    });
+
     return <TeacherShow id={this.props.id}
                         aClass={this.state.aClass}
-                        students={this.state.students}
+                        students={students}
                         assignments={this.state.assignments}
                         averages={this.state.averages}
                         createAssignment={this._handleCreateAssignment}

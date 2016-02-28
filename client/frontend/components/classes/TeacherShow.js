@@ -22,7 +22,7 @@ module.exports = function(props: Object): React.Element {
   });
 
   let assignments = props.assignments.map((anAssignment, index) => {
-    let completeSubmissionCount = assignment.getCompleteSubmissionCount(anAssignment);
+    let completeSubmissionCount = assignment.getCompleteSubmissionCount(anAssignment, students);
     return [
       <a className="clickable-text"
          href={`#!/classes/${id}/assignments/${anAssignment['.key']}/`}>
