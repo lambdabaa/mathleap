@@ -75,13 +75,13 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
-    let students = this.state.students.filter((student: ?FBStudent) => {
+    let studentList = this.state.students.filter((student: ?FBStudent) => {
       return student != null;
     });
 
     return <TeacherShow id={this.props.id}
                         aClass={this.state.aClass}
-                        students={students}
+                        students={studentList}
                         assignments={this.state.assignments}
                         averages={this.state.averages}
                         createAssignment={this._handleCreateAssignment}

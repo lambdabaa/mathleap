@@ -192,11 +192,11 @@ exports.getStudentStatus = function(assignment: FBAssignment): string {
 };
 
 exports.getCompleteSubmissionCount = function(assignment: FBAssignment,
-                                              students: Array<FBStudent>): number {
+                                              studentList: Array<FBStudent>): number {
   return reduce(
     filter(assignment.submissions, function(submission: FBSubmission, key: string): boolean {
       // Make sure this is an actual student.
-      return students.some((student: FBStudent) => {
+      return studentList.some((student: FBStudent) => {
         return student.id && student.id === key;
       });
     }),

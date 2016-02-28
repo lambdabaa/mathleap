@@ -36,12 +36,8 @@ check['1 variable expression'] = check['2 variable expression'] =
 
 check['1 variable equation'] = function(actual: string, expected: string): boolean {
   let {left, right} = stmt.getLeftAndRight(actual);
-  if (left === expected || right === expected) {
-    // Handle the case of actual => 'x=10', expected => '10'
-    return true;
-  }
-
-  return false;
+  return left === expected && /^[a-z]$/.test(right) ||
+         right === expected && /^[a-z]$/.test(left);
 };
 
 check['2 variable equation'] = function(actual: string, expected: string): boolean {
