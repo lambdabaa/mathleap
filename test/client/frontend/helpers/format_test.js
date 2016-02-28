@@ -45,4 +45,14 @@ suite('helpers/format', () => {
   test('#teacher w/o title', () => {
     format.teacher({last: 'Aye'}).should.equal('Aye');
   });
+
+  test('#solution when number', () => {
+    format.solution({
+      question: 'x+5=10',
+      instruction: 'Solve for x.',
+      solution: 5
+    })
+    .should
+    .equal('x=5');
+  });
 });

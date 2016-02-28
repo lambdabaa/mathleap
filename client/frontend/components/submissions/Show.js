@@ -4,6 +4,7 @@ let KaTeXContainer = require('../KaTeXContainer');
 let React = require('react');
 let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
+let format = require('../../helpers/format');
 let helper = require('../../helpers/submission');
 
 module.exports = function(props: Object): React.Element {
@@ -67,7 +68,7 @@ function renderResults(props: Object): Array<Array<React.Element | string>> {
       `${index + 1}.`,
       <KaTeXContainer ascii={question.question} />,
       <KaTeXContainer ascii={answer} />,
-      <KaTeXContainer ascii={question.solution} />,
+      <KaTeXContainer ascii={format.solution(question)} />,
       correct ? <div></div> : renderError(response),
       correct ?
         <div style={{color: '#71ac00'}}>✔</div> :

@@ -1,6 +1,9 @@
 /* @flow */
 
+let stmt = require('../../common/stmt');
+
 import type {
+  AssignmentQuestion,
   FBStudent,
   FBTeacher
 } from '../../common/types';
@@ -56,4 +59,17 @@ exports.teacher = function(teacher: FBTeacher): string {
   }
 
   return parts.join(' ');
+};
+
+exports.solution = function(question: AssignmentQuestion): string {
+  let solution = '' + question.solution;
+  let variable;
+  if (/^Solve for ([a-z])\.$/.test(question.instruction)) {
+    variable = RegExp.$1;
+  } else {
+    return solution;
+  }
+
+  let type = stmt.getStmtType(solution);
+  return type === 'expression' ? `${variable}=${solution}` : solution;
 };
