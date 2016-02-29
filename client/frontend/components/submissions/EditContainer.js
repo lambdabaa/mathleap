@@ -13,6 +13,7 @@ let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
 let ctrlOrMeta = require('../../ctrlOrMeta');
 let debug = require('../../../common/debug')('components/submissions/Edit');
 let editor = require('../../helpers/editor');
+let firebaseChild = require('../../firebaseChild');
 let isElementVisible = require('../../isElementVisible');
 let {mapChar} = require('../../../common/string');
 let preventDefault = require('../../preventDefault');
@@ -20,7 +21,11 @@ let session = require('../../session');
 let stringify = require('../../../common/stringify');
 let submissions = require('../../store/submissions');
 
-import type {KeyboardEvent, Range} from '../../../common/types';
+import type {
+  FBResponse,
+  KeyboardEvent,
+  Range
+} from '../../../common/types';
 
 module.exports = React.createClass({
   displayName: 'submissions/Edit',
@@ -31,7 +36,7 @@ module.exports = React.createClass({
     return {
       aClass: {},
       assignment: {},
-      responses: [],
+      submission: [],
 
       // Whether the keyboard shortcuts are shown.
       isHelpDialogShown: false,
@@ -89,13 +94,18 @@ module.exports = React.createClass({
 
   // $FlowFixMe
   componentWillMount: async function(): Promise<void> {
+    let redirect = this._isSubmissionComplete();
+    if (redirect) {
+      return this._redirectToShowSubmission();
+    }
+
     let {aClass, assignment, submission, id} = this.props;
     if (aClass) {
       // $FlowFixMe
       this.isPracticeMode = false;
       this.bindAsArray(
-        createSafeFirebaseRef(`classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
-        'responses'
+        createSafeFirebaseRef(`classes/${aClass}/assignments/${assignment}/submissions/${submission}/`),
+        'submission'
       );
 
       let [theClass, theAssignment] = await Promise.all([
@@ -109,8 +119,8 @@ module.exports = React.createClass({
       this.isPracticeMode = true;
       let user = session.get('user');
       this.bindAsArray(
-        createSafeFirebaseRef(`students/${user.id}/assignments/${id}/submission/responses`),
-        'responses'
+        createSafeFirebaseRef(`students/${user.id}/assignments/${id}/submission/`),
+        'submission'
       );
 
       let theAssignment = await assignments.getPractice(id);
@@ -144,8 +154,16 @@ module.exports = React.createClass({
     document.removeEventListener('keypress', preventDefault);
   },
 
+  componentWillUpdate: function(props: Object, state: Object): void {
+    let redirect = this._isSubmissionComplete(state);
+    if (redirect) {
+      return this._redirectToShowSubmission();
+    }
+  },
+
   componentDidUpdate: function(): void {
-    let {num, responses} = this.state;
+    let {num} = this.state;
+    let responses = this._getResponses();
     if (responses && responses.length && num == null) {
       return this._selectQuestion(0);
     }
@@ -187,7 +205,7 @@ module.exports = React.createClass({
     return <Edit aClass={this.state.aClass}
                  classId={this.props.aClass}
                  assignment={this.state.assignment}
-                 responses={this.state.responses}
+                 responses={this._getResponses()}
                  isHelpDialogShown={this.state.isHelpDialogShown}
                  num={this.state.num}
                  cursor={this.state.cursor}
@@ -218,9 +236,31 @@ module.exports = React.createClass({
                  commitCursorHighlight={this._commitCursorHighlight} />;
   },
 
+  _getResponses: function(): Array<FBResponse> {
+    let {submission} = this.state;
+    return firebaseChild.findArrayChild(submission);
+  },
+
+  _isSubmissionComplete: function(state: ?Object): boolean {
+    if (!state) {
+      state = this.state;
+    }
+
+    let {submission} = state;
+    let complete = firebaseChild.findByKey(submission, 'complete');
+    return typeof complete === 'boolean' ? complete : false;
+  },
+
+  _redirectToShowSubmission: function(): void {
+    location.hash = location.hash
+      .split('/')
+      .filter((part: string) => part.length && part !== 'edit')
+      .join('/');
+  },
+
   _selectQuestion: function(num: number): void {
     debug('select question', num);
-    let {responses} = this.state;
+    let responses = this._getResponses();
     let {work} = responses[num];
     let equation = work[work.length - 1].state[0];
     // $FlowFixMe
@@ -241,12 +281,14 @@ module.exports = React.createClass({
   },
 
   _handleNextQuestion: function(): void {
-    let {num, responses} = this.state;
+    let {num} = this.state;
+    let responses = this._getResponses();
     this._selectQuestion((num + 1) % responses.length);
   },
 
   _handlePrevQuestion: function(): void {
-    let {num, responses} = this.state;
+    let {num} = this.state;
+    let responses = this._getResponses();
     this._selectQuestion(num === 0 ? responses.length - 1 : num - 1);
   },
 
@@ -336,7 +378,8 @@ module.exports = React.createClass({
   },
 
   _handleCtrlKey: function(event: KeyboardEvent) {
-    let {responses, num, cursor, equation} = this.state;
+    let {num, cursor, equation} = this.state;
+    let responses = this._getResponses();
     switch (event.key) {
       case 'ArrowLeft':
         event.preventDefault();
@@ -506,7 +549,8 @@ module.exports = React.createClass({
     }
 
     let {aClass, assignment, submission} = this.props;
-    let {responses, num} = this.state;
+    let {num} = this.state;
+    let responses = this._getResponses();
     let {work} = responses[num];
     this.setState({redos: []});
     await submissions.popDelta(aClass, assignment, submission, num, work);
@@ -546,7 +590,8 @@ module.exports = React.createClass({
     }
 
     this._saveState();
-    let {responses, num, deltas} = this.state;
+    let {num, deltas} = this.state;
+    let responses = this._getResponses();
     let {work} = responses[num];
     let {state} = work[work.length - 1];
     deltas.push(delta);
@@ -563,7 +608,8 @@ module.exports = React.createClass({
 
   _commitDelta: async function(): Promise<void> {
     let {aClass, assignment, submission, id} = this.props;
-    let {responses, num, changes, equation, append, leftParens, rightParens} = this.state;
+    let {num, changes, equation, append, leftParens, rightParens} = this.state;
+    let responses = this._getResponses();
     await editor.commitDelta(
       aClass,
       assignment || id,

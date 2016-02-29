@@ -6,9 +6,12 @@ let Show = require('./Show');
 let assignments = require('../../store/assignments');
 let classes = require('../../store/classes');
 let createSafeFirebaseRef = require('../../createSafeFirebaseRef');
+let firebaseChild = require('../../firebaseChild');
 let helper = require('../../helpers/submission');
 let session = require('../../session');
 let students = require('../../store/students');
+
+import type {FBResponse} from '../../../common/types';
 
 module.exports = React.createClass({
   displayName: 'submissions/Show',
@@ -20,14 +23,19 @@ module.exports = React.createClass({
       headerText: '',
       aClass: {},
       assignment: {},
+      submission: {},
       student: {},
-      responses: [],
       marks: []
     };
   },
 
   // $FlowFixMe
   componentWillMount: async function(): Promise<void> {
+    let redirect = this._isSubmissionIncomplete();
+    if (redirect) {
+      return this._redirectToEditSubmission();
+    }
+
     let {aClass, assignment, submission, id} = this.props;
     let user = session.get('user');
 
@@ -35,8 +43,8 @@ module.exports = React.createClass({
       // $FlowFixMe
       this.isPracticeMode = false;
       this.bindAsArray(
-        createSafeFirebaseRef(`classes/${aClass}/assignments/${assignment}/submissions/${submission}/responses`),
-        'responses'
+        createSafeFirebaseRef(`classes/${aClass}/assignments/${assignment}/submissions/${submission}/`),
+        'submission'
       );
 
       let [theClass, theAssignment] = await Promise.all([
@@ -57,8 +65,8 @@ module.exports = React.createClass({
       // $FlowFixMe
       this.isPracticeMode = true;
       this.bindAsArray(
-        createSafeFirebaseRef(`students/${user.id}/assignments/${id}/submission/responses`),
-        'responses'
+        createSafeFirebaseRef(`students/${user.id}/assignments/${id}/submission/`),
+        'submission'
       );
 
       let theAssignment = await assignments.getPractice(id);
@@ -70,6 +78,11 @@ module.exports = React.createClass({
   },
 
   componentWillUpdate: function(props: Object, state: Object): void {
+    let redirect = this._isSubmissionIncomplete(state);
+    if (redirect) {
+      return this._redirectToEditSubmission();
+    }
+
     this._updateHeaderText(state);
     this._updateMarks(state);
   },
@@ -79,7 +92,8 @@ module.exports = React.createClass({
       return;
     }
 
-    let {student, assignment, responses} = state;
+    let {student, assignment} = state;
+    let responses = this._getResponses();
     let user = session.get('user');
     if (user.role === 'teacher') {
       if (typeof assignment.name !== 'string' ||
@@ -100,17 +114,16 @@ module.exports = React.createClass({
   },
 
   _updateMarks: async function(state: Object): Promise<void> {
-    if (state.marks.length === state.responses.length) {
+    let responses = this._getResponses(state);
+    if (state.marks.length === responses.length) {
       return;
     }
 
-    let marks = await Promise.all(
-      state.responses.map(response => {
-        let {question, work} = response;
-        let answer = work[work.length - 1].state[0];
-        return helper.isCorrect(question, answer, work);
-      })
-    );
+    let marks = await Promise.all(responses.map(response => {
+      let {question, work} = response;
+      let answer = work[work.length - 1].state[0];
+      return helper.isCorrect(question, answer, work);
+    }));
 
     this.setState({marks});
   },
@@ -122,8 +135,39 @@ module.exports = React.createClass({
                  classId={this.props.aClass}
                  assignment={this.state.assignment}
                  student={this.state.student}
-                 responses={this.state.responses}
+                 responses={this._getResponses()}
                  marks={this.state.marks}
                  isPracticeMode={this.isPracticeMode} />;
+  },
+
+  _getResponses: function(state: ?Object): Array<FBResponse> {
+    if (!state) {
+      state = this.state;
+    }
+
+    let {submission} = state;
+    return firebaseChild.findArrayChild(submission);
+  },
+
+  _isSubmissionIncomplete: function(state: ?Object): boolean {
+    if (!state) {
+      state = this.state;
+    }
+
+    let {submission} = state;
+    let complete = firebaseChild.findByKey(submission, 'complete');
+    return typeof complete === 'boolean' ? !complete : false;
+  },
+
+  _redirectToEditSubmission: function(): void {
+    if (location.hash.indexOf('edit') !== -1) {
+      return;
+    }
+
+    location.hash = location.hash
+      .split('/')
+      .filter((part: string) => !!part.length)
+      .concat('edit')
+      .join('/');
   }
 });
