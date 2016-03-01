@@ -86,13 +86,17 @@ function renderError(response: Object): React.Element {
 
   return <div>
     <span>Step: </span>
-    <span style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
-      {work[errorLine - 1].state[0]}
-    </span>
-    <span>→</span>
-    <span style={{backgroundColor: 'rgba(226, 37, 23, 0.5)'}}>
-      {work[errorLine].state[0]}
-    </span>
+    <KaTeXContainer ascii={work[errorLine - 1].state[0]}
+                    style={{
+                      backgroundColor: 'rgba(176, 235, 63, 0.5)',
+                      display: 'inline-block'
+                    }} />
+    <span style={{margin: '0 5px'}}>→</span>
+    <KaTeXContainer ascii={work[errorLine].state[0]}
+                    style={{
+                      backgroundColor: 'rgba(226, 37, 23, 0.5)',
+                      display: 'inline-block'
+                    }} />
   </div>;
 }
 
