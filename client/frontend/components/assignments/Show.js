@@ -46,7 +46,7 @@ function renderSubmissions(props: Object): Array<Array<React.Element | string>> 
     return [
       format.student(student),
       status,
-      submission.complete ? grades[key] : 'n / a'
+      submission && submission.complete ? grades[key] : 'n / a'
     ];
   });
 }
