@@ -1,6 +1,6 @@
 /* @flow */
 
-let Empty = require('./Empty');
+let Message = require('./Message');
 let React = require('react');
 let querystring = require('querystring');
 let users = require('../store/users');
@@ -22,7 +22,7 @@ class EdmodoHandler extends React.Component {
   }
 
   render(): React.Element {
-    return <Empty />;
+    return <Message message="Loading classes from Edmodo..." />;
   }
 }
 

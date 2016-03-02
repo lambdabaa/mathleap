@@ -208,3 +208,10 @@ select {
 .katex-container {
   text-overflow: ellipsis;
 }
+
+.big-message {
+  font-size: 36px;
+  padding: 50px;
+  text-align: center;
+  width: 100%;
+}

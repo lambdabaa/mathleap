@@ -1,13 +1,13 @@
 /* @flow */
 
-let Empty = require('./Empty');
+let Message = require('./Message');
 let React = require('react');
 let {renderToString} = require('katex');
 
 module.exports = function(props: Object): React.Element {
   let {tex} = props;
   if (typeof tex !== 'string') {
-    return <Empty />;
+    return <Message />;
   }
 
   let html = renderToString(tex);
