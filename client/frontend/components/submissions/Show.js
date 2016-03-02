@@ -85,7 +85,6 @@ function renderError(response: Object): React.Element {
   }
 
   return <div>
-    <span>Step: </span>
     <KaTeXContainer ascii={work[errorLine - 1].state[0]}
                     style={{
                       backgroundColor: 'rgba(176, 235, 63, 0.5)',
