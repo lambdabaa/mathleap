@@ -223,7 +223,7 @@ module.exports = function(props: Object): React.Element {
       <div className="watch-the-video">WATCH THE VIDEO</div>
       <div className="home-container">
         <video className="explainer"
-               src="public/videos/mathleap.mp4"
+               src="public/videos/demo.mp4"
                preload="auto"
                width="1050"
                controls>
