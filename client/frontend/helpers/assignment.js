@@ -212,29 +212,27 @@ exports.getAverage = async function(assignment: FBAssignment): Promise<string> {
   let grades = await Promise.all(
     filter(assignment.submissions, function(submission: FBSubmission, key: string): boolean {
       // Don't count any possible test / teacher submissions.
-      return submission.complete && key !== id;
+      return !!key && key !== id && submission.complete;
     })
     .map((submission: FBSubmission): Promise<string> => {
       return submissionHelper.getSubmissionGrade(submission.responses);
     })
   );
 
-  let {total, possible} = grades.reduce(
-    function(counts: Object, grade: string): Object {
-      let [aTotal, aPossible] = grade.split('/').map(x => parseInt(x));
-      return {
-        total: counts.total + aTotal,
-        possible: counts.possible + aPossible
-      };
-    },
-    {total: 0, possible: 0}
-  );
-
-  if (possible === 0) {
+  if (!grades.length) {
     return 'n / a';
   }
 
-  return `${round(100 * total / possible)}%`;
+  let {avg} = grades.reduce(
+    (acc: Object, next: string) => {
+      let grade = eval(`100 * ${next}`);
+      let nextAvg = (acc.count * acc.avg + grade) / (acc.count + 1);
+      return {count: acc.count + 1, avg: nextAvg};
+    },
+    {count: 0, avg: 0}
+  );
+
+  return `${round(avg)}%`;
 };
 
 exports.getTopics = function(assignment: FBAssignment): Array<string> {

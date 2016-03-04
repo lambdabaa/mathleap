@@ -17,6 +17,10 @@ module.exports = function(props: Object): React.Element {
          href={`#!/classes/${classId}/`}>
         &lt; {aClass && aClass.name}
       </a>
+      <a className="insights-dashboard-link"
+         href={`#!/classes/${classId}/assignments/${theAssignment.id}/insights/`}>
+        Class Performance
+      </a>
       <Tabular cols={[
                  {content: 'Student', width: 495},
                  'Status',

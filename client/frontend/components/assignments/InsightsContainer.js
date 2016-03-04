@@ -1,8 +1,8 @@
 /* @flow */
 
+let Insights = require('./Insights');
 let React = require('react');
 let ReactFire = require('reactfire');
-let Show = require('./Show');
 let assignment = require('../../helpers/assignment');
 let assignments = require('../../store/assignments');
 let classes = require('../../store/classes');
@@ -11,6 +11,8 @@ let students = require('../../store/students');
 let submissionHelper = require('../../helpers/submission');
 
 module.exports = React.createClass({
+  displayName: 'InsightsContainer',
+
   mixins: [ReactFire],
 
   getInitialState: function(): Object {
@@ -69,7 +71,10 @@ module.exports = React.createClass({
           return;
         }
 
-        grades[key] = await submissionHelper.getSubmissionGrade(submission.responses);
+
+        if (submission.complete) {
+          grades[key] = await submissionHelper.getSubmissionGrade(submission.responses);
+        }
       })
     );
 
@@ -77,10 +82,10 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
-    return <Show aClass={this.state.aClass}
-                 classId={this.props.aClass}
-                 theAssignment={this.state.theAssignment}
-                 students={this.state.students}
-                 grades={this.state.grades} />;
+    return <Insights aClass={this.state.aClass}
+                     classId={this.props.aClass}
+                     theAssignment={this.state.theAssignment}
+                     students={this.state.students}
+                     grades={this.state.grades} />;
   }
 });
