@@ -272,6 +272,20 @@ exports.commitDelta = async function(aClass: string, assignment: string,
   );
 };
 
+exports.commitAnswer = async function(aClass: string, assignment: string,
+                                      submission: string, responses: Array<FBResponse>,
+                                      num: number, answer: string): Promise<void> {
+  let {work} = responses[num];
+  await submissions.commitAnswer(
+    aClass,
+    assignment,
+    submission,
+    num,
+    work,
+    [answer]
+  );
+};
+
 
 exports.eventToCursorPosition = function(event: MouseEvent): number {
   // $FlowFixMe: Flow doesn't think that the event.target can be HTMLElement

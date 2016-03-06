@@ -14,14 +14,17 @@ let ctrlOrMeta = require('../../ctrlOrMeta');
 let debug = require('../../../common/debug')('components/submissions/Edit');
 let editor = require('../../helpers/editor');
 let firebaseChild = require('../../firebaseChild');
+let getQuestionType = require('../../getQuestionType');
 let isElementVisible = require('../../isElementVisible');
 let {mapChar} = require('../../../common/string');
 let preventDefault = require('../../preventDefault');
 let session = require('../../session');
 let stringify = require('../../../common/stringify');
 let submissions = require('../../store/submissions');
+let waitFor = require('../../../common/waitFor');
 
 import type {
+  AssignmentSection,
   FBResponse,
   KeyboardEvent,
   Range
@@ -43,6 +46,9 @@ module.exports = React.createClass({
 
       // index of active equation
       num: null,
+
+      // response environment
+      questionType: 'equation-editor',
 
       // position of cursor in active equation
       cursor: null,
@@ -128,10 +134,6 @@ module.exports = React.createClass({
     } else {
       throw new Error('Nowhere to find responses!');
     }
-
-    // $FlowFixMe
-    document.addEventListener('keydown', this._handleKeyDown, true);
-    document.addEventListener('keypress', preventDefault);
   },
 
   componentDidMount: function(): void {
@@ -150,7 +152,7 @@ module.exports = React.createClass({
   componentWillUnmount: function(): void {
     clearInterval(this.interval);
     // $FlowFixMe
-    document.removeEventListener('keydown', this._handleKeyDown, true);
+    document.removeEventListener('keydown', this._handleKeyDown);
     document.removeEventListener('keypress', preventDefault);
   },
 
@@ -159,13 +161,32 @@ module.exports = React.createClass({
     if (redirect) {
       return this._redirectToShowSubmission();
     }
+
+    let {questionType} = state;
+    if (questionType === 'equation-editor') {
+      if (!this.isKeyboardOn) {
+        debug('Turn on keyboard');
+        // $FlowFixMe
+        this.isKeyboardOn = true;
+        // $FlowFixMe
+        document.addEventListener('keydown', this._handleKeyDown);
+        document.addEventListener('keypress', preventDefault);
+      }
+    } else if (this.isKeyboardOn) {
+      debug('Turn off keyboard');
+      // $FlowFixMe
+      this.isKeyboardOn = false;
+      document.removeEventListener('keydown', this._handleKeyDown);
+      document.removeEventListener('keypress', preventDefault);
+    }
   },
 
   componentDidUpdate: function(): void {
     let {num} = this.state;
     let responses = this._getResponses();
     if (responses && responses.length && num == null) {
-      return this._selectQuestion(0);
+      this._selectQuestion(0);
+      return;
     }
 
     if (this.didCommitDelta) {
@@ -208,6 +229,7 @@ module.exports = React.createClass({
                  responses={this._getResponses()}
                  isHelpDialogShown={this.state.isHelpDialogShown}
                  num={this.state.num}
+                 questionType={this.state.questionType}
                  cursor={this.state.cursor}
                  highlight={this.state.highlight}
                  equation={this.state.equation}
@@ -229,6 +251,7 @@ module.exports = React.createClass({
                  selectQuestion={this._selectQuestion}
                  nextQuestion={this._handleNextQuestion}
                  prevQuestion={this._handlePrevQuestion}
+                 commitAnswer={this._commitAnswer}
                  showHelpDialog={this._showHelpDialog}
                  hideHelpDialog={this._hideHelpDialog}
                  repositionCursor={this._handleCursorReposition}
@@ -258,15 +281,18 @@ module.exports = React.createClass({
       .join('/');
   },
 
-  _selectQuestion: function(num: number): void {
+  _selectQuestion: async function(num: number): Promise<void> {
     debug('select question', num);
     let responses = this._getResponses();
     let {work} = responses[num];
     let equation = work[work.length - 1].state[0];
     // $FlowFixMe
     this.didSelectQuestion = true;
+    let questionType = await this._getQuestionType(num);
+    debug('question type', questionType);
     this.setState({
       num,
+      questionType,
       equation,
       append: '',
       leftParens: false,
@@ -378,8 +404,7 @@ module.exports = React.createClass({
   },
 
   _handleCtrlKey: function(event: KeyboardEvent) {
-    let {num, cursor, equation} = this.state;
-    let responses = this._getResponses();
+    let {cursor, equation} = this.state;
     switch (event.key) {
       case 'ArrowLeft':
         event.preventDefault();
@@ -398,13 +423,13 @@ module.exports = React.createClass({
         return this.setState({cursor: 0, isCursorVisible: true});
       case 'd':
         event.preventDefault();
-        return this._selectQuestion((num + 1) % responses.length);
+        return this._handlePrevQuestion();
       case 'e':
         event.preventDefault();
         return this.setState({cursor: equation.length, isCursorVisible: true});
       case 'u':
         event.preventDefault();
-        return this._selectQuestion(num === 0 ? responses.length - 1 : num - 1);
+        return this._handleNextQuestion();
       case 'z':
         event.preventDefault();
         return this._handleUndo();
@@ -606,6 +631,20 @@ module.exports = React.createClass({
     });
   },
 
+  _commitAnswer: async function(answer: string): Promise<void> {
+    let {aClass, assignment, submission, id} = this.props;
+    let {num} = this.state;
+    let responses = this._getResponses();
+    await editor.commitAnswer(
+      aClass,
+      assignment || id,
+      submission,
+      responses,
+      num,
+      answer
+    );
+  },
+
   _commitDelta: async function(): Promise<void> {
     let {aClass, assignment, submission, id} = this.props;
     let {num, changes, equation, append, leftParens, rightParens} = this.state;
@@ -691,5 +730,28 @@ module.exports = React.createClass({
 
   _dismissTutorial: function() {
     this.setState({isTutorialDismissed: true});
+  },
+
+  _getQuestionType: async function(num: number): Promise<string> {
+    await waitFor(() => {
+      let {assignment} = this.state;
+      return assignment && assignment.composition;
+    });
+
+    let {assignment} = this.state;
+    let {composition} = assignment;
+    if (typeof composition === 'string') {
+      composition = JSON.parse(composition);
+      assignment.composition = composition;
+      this.setState({assignment});
+    }
+
+    let count = 0;
+    let section = composition.find((aSection: AssignmentSection): boolean => {
+      count += aSection.count;
+      return num < count;
+    });
+
+    return getQuestionType(section.type.name);
   }
 });

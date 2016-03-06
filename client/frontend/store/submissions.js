@@ -80,6 +80,16 @@ exports.commitDelta = async function(classId: string, assignmentId: string,
   debug('commit delta ok');
 };
 
+exports.commitAnswer = async function(classId: string, assignmentId: string,
+                                      submissionId: string, question: number,
+                                      work: Array<Object>, state: Array<string>): Promise<void> {
+  debug('commit answer', stringify(arguments));
+  let ref = getSubmissionRef(classId, assignmentId, submissionId);
+  let next = ref.child(`/responses/${question}/work/1`);
+  await request(next, 'set', {operation: 'answer', state});
+  debug('commit answer ok');
+};
+
 exports.popDelta = async function(classId: string, assignmentId: string,
                                   submissionId: string, question: string,
                                   work: Array<Object>): Promise<void> {
