@@ -198,6 +198,19 @@
   margin-top: 15px;
 }
 
+.submissions-edit-question {
+  width: 690px;
+}
+
+.submissions-edit-simple-question {
+  padding: 30px;
+}
+
+.submissions-edit-answer {
+  margin-bottom: 274px;
+  margin-top: 30px;
+}
+
 .next-and-previous {
   -ms-flex-align: center;
   -webkit-align-items: center;

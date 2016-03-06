@@ -3,6 +3,7 @@
 let EquationEditor = require('./EquationEditor');
 let QuestionList = require('./QuestionList');
 let React = require('react');
+let TextInputResponse = require('./TextInputResponse');
 let Topbar = require('../Topbar');
 let TutorialContainer = require('./TutorialContainer');
 let editor = require('../../helpers/editor');
@@ -32,16 +33,17 @@ module.exports = function(props: Object): React.Element {
     classId,
     assignment,
     num,
+    questionType,
     isHelpDialogShown,
     isTutorialDismissed,
-    isPracticeMode
+    isPractice
   } = props;
 
   let headerText, backlink, backlinkText;
-  if (isPracticeMode) {
+  if (isPractice) {
     headerText = 'Practice Mode';
     backlink = '#!/practice/';
-    backlinkText = <span>&lt; Practice sessions</span>;
+    backlinkText = '< Practice sessions';
   } else {
     headerText = assignment.name || '';
     backlink = `#!/classes/${classId}/`;
@@ -68,18 +70,36 @@ module.exports = function(props: Object): React.Element {
       </div>
       <div className="submissions-edit-workspace">
         {React.createElement(QuestionList, props)}
-        {React.createElement(EquationEditor, props)}
+        {
+          (() => {
+            let ctor;
+            switch (questionType) {
+              case 'equation-editor':
+                ctor = EquationEditor;
+                break;
+              case 'text-input-response':
+                ctor = TextInputResponse;
+                break;
+            }
+
+            return React.createElement(ctor, props);
+          })()
+        }
         {isHelpDialogShown && renderHelpDialog(props)}
-        <img className="submissions-edit-help-button"
-             src="public/style/images/question-mark.png"
-             onClick={props.showHelpDialog} />
+        {
+          questionType === 'equation-editor' ?
+            <img className="submissions-edit-help-button"
+                 src="public/style/images/question-mark.png"
+                 onClick={props.showHelpDialog} /> :
+            ''
+        }
       </div>
       <div className="tutorial-buffer"></div>
     </div>
     {
-      isTutorialDismissed ?
-        '' :
-        <TutorialContainer dismiss={props.dismissTutorial} />
+      questionType === 'equation-editor' && !isTutorialDismissed ?
+        <TutorialContainer dismiss={props.dismissTutorial} /> :
+        ''
     }
   </div>;
 };
