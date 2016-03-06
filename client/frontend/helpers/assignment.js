@@ -38,7 +38,14 @@ exports.createAssignment = function(): Assignment {
 };
 
 exports.getSize = function(assignment: Assignment): number {
-  return assignment.composition.reduce((acc, part) => acc + part.count, 0);
+  let result;
+  try {
+    result = assignment.composition.reduce((acc, part) => acc + part.count, 0);
+  } catch (error) {
+    result = 0;
+  }
+
+  return result;
 };
 
 exports.addTopic = function(assignment: Assignment, topic: QuestionTopic,
