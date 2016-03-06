@@ -54,12 +54,11 @@ module.exports = React.createClass({
 
   _handleKeyDown: async function(event: KeyboardEvent): Promise<void> {
     if (event.key === 'Enter') {
-      await this.props.commitAnswer(this.state.answer);
       return this.props.nextQuestion();
     }
 
     if (!ctrlOrMeta(event)) {
-      return;
+      return this.props.commitAnswer(this.state.answer);
     }
 
     switch (event.key) {
