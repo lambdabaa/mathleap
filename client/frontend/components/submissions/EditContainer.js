@@ -423,13 +423,13 @@ module.exports = React.createClass({
         return this.setState({cursor: 0, isCursorVisible: true});
       case 'd':
         event.preventDefault();
-        return this._handlePrevQuestion();
+        return this._handleNextQuestion();
       case 'e':
         event.preventDefault();
         return this.setState({cursor: equation.length, isCursorVisible: true});
       case 'u':
         event.preventDefault();
-        return this._handleNextQuestion();
+        return this._handlePrevQuestion();
       case 'z':
         event.preventDefault();
         return this._handleUndo();
