@@ -8,7 +8,8 @@ import {
   FBAssignment,
   FBResponse,
   FBQuestionStep,
-  FBStudent
+  FBStudent,
+  FBSubmission
 } from '../../common/types';
 
 exports.getHeaderText = async function(student: FBStudent, assignment: FBAssignment,
@@ -62,4 +63,32 @@ exports.getSubmissionGrade = async function(responses: Array<FBResponse>): Promi
   }
 
   return `${correct} / ${responses.length}`;
+};
+
+exports.computeQuestionToCorrect = async function(submissions: Array<FBSubmission>): Object {
+  let result = {};
+  await Promise.all(
+    submissions.map((submission: FBSubmission): Promise => {
+      return Promise.all(
+        submission.responses.map(async (response: FBResponse, index: number): Promise => {
+          if (!(index in result)) {
+            result[index] = 0;
+          }
+
+          let {question, work} = response;
+          let answer = work[work.length - 1].state[0];
+          let isCorrect = await exports.isCorrect(question, answer, work);
+          if (isCorrect) {
+            result[index] += 1;
+          }
+        })
+      );
+    })
+  );
+
+  for (let question in result) {
+    result[question] /= submissions.length;
+  }
+
+  return result;
 };
