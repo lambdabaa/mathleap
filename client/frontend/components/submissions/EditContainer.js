@@ -733,14 +733,13 @@ module.exports = React.createClass({
   },
 
   _getQuestionType: async function(num: number): Promise<string> {
-    await waitFor(() => !!this.state.assignment);
+    await waitFor(() => {
+      let {assignment} = this.state;
+      return assignment && assignment.composition;
+    });
+
     let {assignment} = this.state;
     let {composition} = assignment;
-    if (!composition) {
-      // Legacy before we were saving assignment composition.
-      return 'equation-editor';
-    }
-
     if (typeof composition === 'string') {
       composition = JSON.parse(composition);
       assignment.composition = composition;
