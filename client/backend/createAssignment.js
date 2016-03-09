@@ -6,6 +6,7 @@
 let debug = require('../common/debug')('createAssignment');
 let flatten = require('lodash/array/flatten');
 let find = require('lodash/collection/find');
+let formatDecimal = require('./formatDecimal');
 let fraction = require('./fraction');
 let generate = require('./generate');
 let groupBy = require('lodash/collection/groupBy');
@@ -22,6 +23,7 @@ import type {
   AssignmentSection,
   Numeric
 } from '../common/types';
+
 
 /**
  * createQuestion functions get called with two arguments:
@@ -87,6 +89,39 @@ createQuestion['Simple exponentiation'] = function(): Array<AssignmentQuestion> 
 
     let base = round(Math.pow(solution, 1 / root));
     return {question: `${base}^${root}`, solution};
+  });
+};
+
+createQuestion['Decimal addition'] = function(): Array<AssignmentQuestion> {
+  let solutions = generate.floatList(...arguments);
+  return solutions.map((solution: number): AssignmentQuestion => {
+    let a = generate.boundedFloat(0, solution);
+    let b = formatDecimal(solution - a);
+    return {question: `${a}+${b}`, solution};
+  });
+};
+
+createQuestion['Decimal subtraction'] = function(): Array<AssignmentQuestion> {
+  let solutions = generate.floatList(...arguments);
+  return solutions.map((solution: number): AssignmentQuestion => {
+    let a = generate.boundedFloat(solution);
+    let b = formatDecimal(a - solution);
+    return {question: `${a}-${b}`, solution};
+  });
+};
+
+/**
+ * TODO
+createQuestion['Decimal multiplication'] = function(): Array<AssignmentQuestion> {
+};
+*/
+
+createQuestion['Decimal division'] = function(): Array<AssignmentQuestion> {
+  let solutions = generate.floatList(...arguments);
+  return solutions.map((solution: number): AssignmentQuestion => {
+    let denom = generate.float();
+    let num = formatDecimal(solution * denom, 4);
+    return {question: `${num}/${denom}`, solution};
   });
 };
 

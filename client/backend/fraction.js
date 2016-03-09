@@ -2,16 +2,15 @@
 
 let mathjs = require('mathjs');
 
-mathjs.config({number: 'fraction'});
+let fraction = mathjs.create({number: 'fraction'});
+let {format} = fraction;
 
-let {format} = mathjs;
-
-mathjs.format = (frac: Object): string => {
+fraction.format = (frac: Object): string => {
   let [num, denom] = format(frac).split('/');
   return denom === '1' ? num : `${num}/${denom}`;
 };
 
-mathjs.toDecimal = (input: Object|string): number => {
+fraction.toDecimal = (input: Object|string): number => {
   if (typeof input === 'string') {
     input = mathjs.eval(input);
   }
@@ -19,4 +18,4 @@ mathjs.toDecimal = (input: Object|string): number => {
   return input.s * input.n / input.d;
 };
 
-module.exports = mathjs;
+module.exports = fraction;

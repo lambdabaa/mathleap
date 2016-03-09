@@ -39,6 +39,29 @@ const chrs = Object.freeze([
   'v', 'w', 'x', 'y', 'z'
 ]);
 
+const singleDigits = range(1, 10);
+
+function singleDigit(): number {
+  return sample(singleDigits);
+}
+
+function randomFloat(): number {
+  let integral = sample(singleDigits);
+  let decimal = Math.random() > 0.25 ?
+    singleDigit() :
+    10 * singleDigit() + singleDigit();
+  return parseFloat(`${integral}.${decimal}`);
+}
+
+function randomBoundedFloat(low: number = 0, high: number = 100): number {
+  let result;
+  do {
+    result = randomFloat();
+  } while (result <= low || result >= high);
+
+  return result;
+}
+
 function randomPower(): number {
   let small = range(-10, 10);
   let tiny = range(0, 3);
@@ -119,6 +142,7 @@ let integer = rand.get.bind(rand, sample.bind(null, integers));
 
 exports.absBoundedInteger = absBoundedInteger;
 exports.boolean = sample.bind(null, [true, false]);
+exports.boundedFloat = randomBoundedFloat;
 exports.boundedFraction = boundedFraction;
 exports.chrs = chrs;
 exports.composite = composite;
@@ -129,6 +153,8 @@ exports.compositeList = rand.list.bind(rand, exports.composite);
 exports.composites = composites;
 exports.factor = factor;
 exports.factorList = rand.list.bind(rand, factor);
+exports.float = rand.get.bind(rand, randomFloat);
+exports.floatList = rand.list.bind(rand, exports.float);
 exports.fraction = rand.get.bind(rand, assignToFraction.bind(exports, integer));
 exports.fractionList = rand.list.bind(rand, exports.fraction);
 exports.integer = integer;
