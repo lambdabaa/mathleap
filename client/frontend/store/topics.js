@@ -180,5 +180,23 @@ module.exports = [
         "example": "p / 3 - 3 > 0"
       }
     ]
+  },
+
+  {
+    "name": "Decimals",
+    "types": [
+      {
+        "name": "Decimal addition",
+        "example": "2.3 + 5.1"
+      },
+      {
+        "name": "Decimal subtraction",
+        "example": "4.8 - 1.3"
+      },
+      {
+        "name": "Decimal division",
+        "example": "5.94 / 5.4"
+      }
+    ]
   }
 ];

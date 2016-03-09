@@ -1,5 +1,8 @@
 let {createQuestion} = require('../../../client/backend/createAssignment');
+let formatDecimal = require('../../../client/backend/formatDecimal');
 let mathjs = require('mathjs');
+
+mathjs.config({number: 'fraction'});
 
 suite('service/createAssignment', function() {
   test('Simple addition', () => {
@@ -51,6 +54,48 @@ suite('service/createAssignment', function() {
       let b = parseInt(RegExp.$2, 10);
       let quotient = a / b;
       quotient.should.equal(solution);
+    });
+  });
+
+  test('Decimal addition', () => {
+    let questions = createQuestion['Decimal addition'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      question.should.match(/^(\d\.\d+)\+(\d\.\d+)$/);
+      question.length.should.be.lt(10);
+      let a = parseFloat(RegExp.$1);
+      let b = parseFloat(RegExp.$2);
+      let sum = formatDecimal(a + b);
+      sum.should.equal(solution);
+    });
+  });
+
+  test('Decimal subtraction', () => {
+    let questions = createQuestion['Decimal subtraction'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      question.should.match(/^(\d\.\d+)\-(\d\.\d+)$/);
+      question.length.should.be.lt(10);
+      let a = parseFloat(RegExp.$1);
+      let b = parseFloat(RegExp.$2);
+      let sum = formatDecimal(a - b);
+      sum.should.equal(solution);
+    });
+  });
+
+  test('Decimal division', () => {
+    let questions = createQuestion['Decimal division'](10);
+    questions.should.have.length(10);
+    questions.forEach(aQuestion => {
+      let {question, solution} = aQuestion;
+      question.should.match(/^(\d+\.\d+)\/(\d\.\d+)$/);
+      question.length.should.be.lt(13);
+      let a = parseFloat(RegExp.$1);
+      let b = parseFloat(RegExp.$2);
+      let sum = formatDecimal(a / b, 4);
+      sum.should.equal(solution);
     });
   });
 

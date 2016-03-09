@@ -90,10 +90,24 @@ suite('generate', () => {
       Math.abs(numerator).should.be.lte(Math.abs(denominator));
     });
   });
+
+  test('#float', () => {
+    checkFloat(generate.float());
+  });
+
+  test('#floatList', () => {
+    let result = generate.floatList(10);
+    result.forEach(checkFloat);
+    result.should.have.length(10);
+  });
 });
 
 function checkInteger(integer) {
   integer.toString().should.match(/^-?\d+$/);
+}
+
+function checkFloat(maybeFloat) {
+  maybeFloat.toString().should.match(/^\d\.\d+$/);
 }
 
 function checkComposite(composite) {
