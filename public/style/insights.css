@@ -1,0 +1,17 @@
+.insights-question {
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.insights-question-index {
+  padding-right: 20px;
+}
+
+.insights-percentage {
+  font-weight: bold;
+  padding: 5px;
+}

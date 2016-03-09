@@ -21,7 +21,8 @@ module.exports = React.createClass({
       theAssignment: {},
       students: [],
       studentIds: [],
-      grades: {}
+      grades: {},
+      questionToCorrect: {}
     };
   },
 
@@ -63,7 +64,8 @@ module.exports = React.createClass({
     // but it's our job to turn those into actual students.
     let ids = state.studentIds.map(obj => obj['.value']);
     let update = await Promise.all(ids.map(students.get));
-    let grades = state.grades;
+    let {grades} = state;
+    let submissions = [];
     await Promise.all(
       update.map(async (aStudent) => {
         let {key, submission} = assignment.getSubmission(state.theAssignment, aStudent);
@@ -71,14 +73,19 @@ module.exports = React.createClass({
           return;
         }
 
-
         if (submission.complete) {
+          submissions.push(submission);
           grades[key] = await submissionHelper.getSubmissionGrade(submission.responses);
         }
       })
     );
 
-    this.setState({students: update, grades});
+    let questionToCorrect = await submissionHelper.computeQuestionToCorrect(submissions);
+    this.setState({
+      students: update,
+      grades,
+      questionToCorrect
+    });
   },
 
   render: function(): React.Element {
@@ -86,6 +93,7 @@ module.exports = React.createClass({
                      classId={this.props.aClass}
                      theAssignment={this.state.theAssignment}
                      students={this.state.students}
-                     grades={this.state.grades} />;
+                     grades={this.state.grades}
+                     questionToCorrect={this.state.questionToCorrect} />;
   }
 });

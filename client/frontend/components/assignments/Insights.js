@@ -1,11 +1,14 @@
 /* @flow */
 
 let {Chart} = require('react-google-charts');
+let KaTeXContainer = require('../KaTeXContainer');
 let Message = require('../Message');
 let React = require('react');
+let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let countBy = require('lodash/collection/countBy');
 let map = require('lodash/collection/map');
+let redToGreen = require('../../redToGreen');
 let round = require('../../round');
 
 module.exports = function(props: Object): React.Element {
@@ -43,6 +46,31 @@ module.exports = function(props: Object): React.Element {
                title: `Distribution of Grades on ${theAssignment.name}`,
                legend: {position: 'none'}
              }} />
+      <Tabular cols={['Question', 'Percentage Correct']}
+               rows={renderQuestionToCorrect(props)} />
     </div>
   </div>;
 };
+
+function renderQuestionToCorrect(props: Object): Array<Array<React.Element | string>> {
+  let {questionToCorrect, theAssignment} = props;
+  return map(
+    questionToCorrect,
+    (correct: number, question: string): Array<React.Element | string> => {
+      let index = parseInt(question);
+      let percentage = `${round(100 * correct)}%`;
+      let style = {
+        backgroundColor: redToGreen(correct),
+        width: percentage
+      };
+
+      return [
+        <div className="insights-question">
+          <div className="insights-question-index">{index + 1}</div>
+          <KaTeXContainer ascii={theAssignment.questions[index].question} />
+        </div>,
+        <div className="insights-percentage" style={style}>{percentage}</div>
+      ];
+    }
+  );
+}
