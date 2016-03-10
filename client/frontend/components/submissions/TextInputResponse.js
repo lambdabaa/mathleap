@@ -22,6 +22,8 @@ module.exports = React.createClass({
     if (work.length > 1) {
       let answer = work[work.length - 1].state[0];
       this.setState({answer});
+    } else {
+      this.setState({answer: ''});
     }
   },
 
