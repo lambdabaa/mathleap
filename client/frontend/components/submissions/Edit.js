@@ -57,7 +57,7 @@ module.exports = function(props: Object): React.Element {
         <div className="service-outage">
           Solving problems in this browser not supported. Please use an
           up-to-date version of a desktop browser like
-          <a href="https://mozilla.org/firefox/">Firefox</a>.
+          <a href="https://www.google.com/chrome/">Google Chrome</a>.
         </div>
     }
     <Topbar headerText={headerText} />

@@ -51,7 +51,7 @@ module.exports = function(props: Object): React.Element {
         <div className="service-outage">
           Browser not supported. Please use an
           up-to-date version of a desktop browser like
-          <a href="https://mozilla.org/firefox/">Firefox</a>.
+          <a href="https://www.google.com/chrome/">Google Chrome</a>.
         </div>
     }
     <div className="panel panel-0">
