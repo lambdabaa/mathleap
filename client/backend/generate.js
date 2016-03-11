@@ -31,6 +31,12 @@ const superComposites = Object.freeze([
   12, 16, 18, 20, 24
 ]);
 
+const largeComposites = Object.freeze([
+  10, 12, 14, 15, 16, 18,
+  20, 21, 22, 24, 25, 26,
+  27, 28, 30
+]);
+
 const chrs = Object.freeze([
   'a', 'b', 'c',
   'g', 'h', 'j',
@@ -90,6 +96,20 @@ function factor(value: number, exclude: ?Array<Numeric> | Object): number {
   return rand.get(gen, exclude);
 }
 
+function randomPositiveFactor(value: number): number {
+  let positives = range(2, Math.floor(Math.sqrt(Math.abs(value))) + 1);
+  return sample(
+    positives.filter((candidate: number): boolean => {
+      return value % candidate === 0;
+    })
+  );
+}
+
+function positiveFactor(value: number, exclude: ?Array<Numeric> | Object): number {
+  let gen = randomPositiveFactor.bind(null, value);
+  return rand.get(gen, exclude);
+}
+
 function compositeFactor(value: number): number {
   return sample(
     composites.filter((candidate: number): boolean => {
@@ -138,6 +158,7 @@ function boundedFraction(bounds: {numerator: Range; denominator: Range}): string
 }
 
 let composite = rand.get.bind(rand, sample.bind(null, composites));
+let largeComposite = rand.get.bind(rand, sample.bind(null, largeComposites));
 let integer = rand.get.bind(rand, sample.bind(null, integers));
 
 exports.absBoundedInteger = absBoundedInteger;
@@ -159,7 +180,11 @@ exports.fraction = rand.get.bind(rand, assignToFraction.bind(exports, integer));
 exports.fractionList = rand.list.bind(rand, exports.fraction);
 exports.integer = integer;
 exports.integerList = rand.list.bind(rand, exports.integer);
+exports.largeComposite = largeComposite;
+exports.largeCompositeList = rand.list.bind(rand, exports.largeComposite);
 exports.letter = rand.get.bind(rand, sample.bind(null, chrs));
+exports.positiveFactor = positiveFactor;
+exports.positiveFactorList = rand.list.bind(rand, positiveFactor);
 exports.power = rand.get.bind(rand, randomPower);
 exports.powerList = rand.list.bind(rand, exports.power);
 exports.superComposite = rand.get.bind(rand, sample.bind(null, superComposites));

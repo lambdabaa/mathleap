@@ -110,11 +110,22 @@ createQuestion['Decimal subtraction'] = function(): Array<AssignmentQuestion> {
   });
 };
 
-/**
- * TODO
-createQuestion['Decimal multiplication'] = function(): Array<AssignmentQuestion> {
+createQuestion['Decimal multiplication'] = function(count: number,
+                                                    exclude: Array<number>): Array<AssignmentQuestion> {
+  // All of the excluded things should be 2 digit floats like 5.3.
+  let multiples = Array.isArray(exclude) ?
+    exclude.map((x: number): number => 10 * x) :
+    [];
+  let solutions = generate.largeCompositeList(count, multiples);
+  return solutions.map((solution: number): AssignmentQuestion => {
+    // Now we need to divide the solution by 10.
+    let a = generate.positiveFactor(solution);
+    let b = formatDecimal(solution / a);
+    a = formatDecimal(0.1 * a);
+    solution = formatDecimal(0.1 * solution);
+    return {question: `${a}*${b}`, solution};
+  });
 };
-*/
 
 createQuestion['Decimal division'] = function(): Array<AssignmentQuestion> {
   let solutions = generate.floatList(...arguments);
