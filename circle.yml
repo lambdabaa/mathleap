@@ -10,6 +10,7 @@ test:
   pre:
     - npm run lint
     - npm run flow
+  timeout: 180s
 deployment:
   production:
     branch: master
