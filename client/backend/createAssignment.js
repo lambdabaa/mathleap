@@ -121,9 +121,10 @@ createQuestion['Decimal multiplication'] = function(count: number,
     // Now we need to divide the solution by 10.
     let a = generate.positiveFactor(solution);
     let b = formatDecimal(solution / a);
-    a = formatDecimal(0.1 * a);
-    solution = formatDecimal(0.1 * solution);
-    return {question: `${a}*${b}`, solution};
+    return {
+      question: `${formatDecimal(0.1 * a)}*${b}`,
+      solution: formatDecimal(0.1 * solution)
+    };
   });
 };
 
