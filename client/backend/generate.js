@@ -3,6 +3,7 @@
  * @fileoverview Utility methods to generate random data.
  */
 
+let formatDecimal = require('./formatDecimal');
 let fraction = require('./fraction');
 let normalizeFraction = require('./normalizeFraction');
 let rand = require('./rand');
@@ -60,12 +61,16 @@ function randomFloat(): number {
 }
 
 function randomBoundedFloat(low: number = 0, high: number = 100): number {
-  let result;
-  do {
-    result = randomFloat();
-  } while (result <= low || result >= high);
+  if (typeof low === 'string') {
+    low = parseFloat(low);
+  }
+  if (typeof high === 'string') {
+    high = parseFloat(high);
+  }
 
-  return result;
+  let range = high - low;
+  let magnitude = Math.random() * range;
+  return parseFloat(formatDecimal(low + magnitude, 1));
 }
 
 function randomPower(): number {

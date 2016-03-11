@@ -57,14 +57,13 @@ suite('service/createAssignment', function() {
     });
   });
 
-  // TODO(gaye): Timeouts?
-  test.skip('Decimal addition', () => {
+  test('Decimal addition', () => {
     let questions = createQuestion['Decimal addition'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
-      question.should.match(/^(\d\.\d+)\+(\d\.\d+)$/);
-      question.length.should.be.lt(10);
+      question.should.match(/^(\d+\.?\d*)\+(\d+\.?\d*)$/);
+      question.length.should.be.lt(12);
       let a = parseFloat(RegExp.$1);
       let b = parseFloat(RegExp.$2);
       let sum = formatDecimal(a + b);
@@ -72,14 +71,13 @@ suite('service/createAssignment', function() {
     });
   });
 
-  // TODO(gaye): Timeouts?
-  test.skip('Decimal subtraction', () => {
+  test('Decimal subtraction', () => {
     let questions = createQuestion['Decimal subtraction'](10);
     questions.should.have.length(10);
     questions.forEach(aQuestion => {
       let {question, solution} = aQuestion;
-      question.should.match(/^(\d\.\d+)\-(\d\.\d+)$/);
-      question.length.should.be.lt(10);
+      question.should.match(/^(\d+\.?\d*)\-(\d+\.?\d*)$/);
+      question.length.should.be.lt(12);
       let a = parseFloat(RegExp.$1);
       let b = parseFloat(RegExp.$2);
       let sum = formatDecimal(a - b);
