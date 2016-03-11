@@ -50,6 +50,28 @@ module.exports = [
   },
 
   {
+    "name": "Decimals",
+    "types": [
+      {
+        "name": "Decimal addition",
+        "example": "2.3 + 5.1"
+      },
+      {
+        "name": "Decimal subtraction",
+        "example": "4.8 - 1.3"
+      },
+      {
+        "name": "Decimal multiplication",
+        "example": "3.1 * 8.8"
+      },
+      {
+        "name": "Decimal division",
+        "example": "5.94 / 5.4"
+      }
+    ]
+  },
+
+  {
     "name": "Fractions",
     "types": [
       {
@@ -178,28 +200,6 @@ module.exports = [
       {
         "name": "Two step inequalities",
         "example": "p / 3 - 3 > 0"
-      }
-    ]
-  },
-
-  {
-    "name": "Decimals",
-    "types": [
-      {
-        "name": "Decimal addition",
-        "example": "2.3 + 5.1"
-      },
-      {
-        "name": "Decimal subtraction",
-        "example": "4.8 - 1.3"
-      },
-      {
-        "name": "Decimal multiplication",
-        "example": "3.1 * 8.8"
-      },
-      {
-        "name": "Decimal division",
-        "example": "5.94 / 5.4"
       }
     ]
   }

@@ -68,9 +68,8 @@ function randomBoundedFloat(low: number = 0, high: number = 100): number {
     high = parseFloat(high);
   }
 
-  let range = high - low;
-  let magnitude = Math.random() * range;
-  return parseFloat(formatDecimal(low + magnitude, 1));
+  let diff = Math.random() * (high - low);
+  return parseFloat(formatDecimal(low + diff, 1));
 }
 
 function randomPower(): number {
