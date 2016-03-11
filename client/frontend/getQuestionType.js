@@ -14,6 +14,7 @@ function getQuestionType(name: string): string {
     case 'Simple absolute value':
     case 'Decimal addition':
     case 'Decimal subtraction':
+    case 'Decimal multiplication':
     case 'Decimal division':
     case 'Adding and subtracting fractions':
     case 'Multiplying fractions':
