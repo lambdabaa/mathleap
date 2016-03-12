@@ -11,7 +11,11 @@ import type {FBStudent} from '../../../common/types';
 module.exports = function(props: Object): React.Element {
   let {aClass, classId, theAssignment} = props;
   return <div id="assignments-show">
-    <Topbar headerText={theAssignment ? theAssignment.name : ''} />
+    <Topbar headerText={theAssignment ? theAssignment.name : ''}
+            showModal={props.showModal}
+            displayModalError={props.displayModalError}
+            displayModalSuccess={props.displayModalSuccess}
+            clearMessages={props.clearMessages} />
     <div className="view">
       <a className="backlink clickable-text"
          href={`#!/classes/${classId}/`}>

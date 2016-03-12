@@ -10,7 +10,11 @@ let helper = require('../../helpers/submission');
 module.exports = function(props: Object): React.Element {
   let {user, headerText, aClass, classId, assignment, isPracticeMode} = props;
   return <div id="submissions-show">
-    <Topbar headerText={headerText} />
+    <Topbar headerText={headerText}
+            showModal={props.showModal}
+            displayModalError={props.displayModalError}
+            displayModalSuccess={props.displayModalSuccess}
+            clearMessages={props.clearMessages} />
     <div className="view">
       {
         ((): React.Element => {

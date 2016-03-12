@@ -137,7 +137,11 @@ module.exports = React.createClass({
                  student={this.state.student}
                  responses={this._getResponses()}
                  marks={this.state.marks}
-                 isPracticeMode={this.isPracticeMode} />;
+                 isPracticeMode={this.isPracticeMode}
+                 showModal={this.props.showModal}
+                 displayModalError={this.props.displayModalError}
+                 displayModalSuccess={this.props.displayModalSuccess}
+                 clearMessages={this.props.clearMessages} />;
   },
 
   _getResponses: function(state: ?Object): Array<FBResponse> {

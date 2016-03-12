@@ -81,6 +81,10 @@ module.exports = React.createClass({
                  classId={this.props.aClass}
                  theAssignment={this.state.theAssignment}
                  students={this.state.students}
-                 grades={this.state.grades} />;
+                 grades={this.state.grades}
+                 showModal={this.props.showModal}
+                 displayModalError={this.props.displayModalError}
+                 displayModalSuccess={this.props.displayModalSuccess}
+                 clearMessages={this.props.clearMessages} />;
   }
 });

@@ -60,7 +60,11 @@ module.exports = function(props: Object): React.Element {
           <a href="https://www.google.com/chrome/">Google Chrome</a>.
         </div>
     }
-    <Topbar headerText={headerText} />
+    <Topbar headerText={headerText}
+            showModal={props.showModal}
+            displayModalError={props.displayModalError}
+            displayModalSuccess={props.displayModalSuccess}
+            clearMessages={props.clearMessages} />
     <div className="view">
       <div className="subbar">
         <a className="backlink clickable-text" href={backlink}>{backlinkText}</a>

@@ -31,7 +31,11 @@ module.exports = function(props: Object): React.Element {
   data = data.concat(rows);
 
   return <div id="assignments-insights">
-    <Topbar headerText={`${theAssignment.name || ''} Performance`} />
+    <Topbar headerText={`${theAssignment.name || ''} Performance`}
+            showModal={props.showModal}
+            displayModalError={props.displayModalError}
+            displayModalSuccess={props.displayModalSuccess}
+            clearMessages={props.clearMessages} />
     <div className="view">
       <a className="backlink clickable-text"
          href={`#!/classes/${classId}/assignments/${theAssignment.id}/`}>
