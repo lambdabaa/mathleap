@@ -361,13 +361,31 @@ async function handleLogin(props: Object): Promise<void> {
   debug('login');
   await props.showModal(
     <div className="login-form">
-      <input type="text" className="login-email"
-             placeholder="Email or username" />
+      <input type="text" className="login-email" placeholder="Email or username" />
       <input type="password" className="login-password" placeholder="Password"
              onKeyDown={handleEnter(onLoginSubmit.bind(this, props))} />
       <div className="login-submit button-inverse"
            onClick={onLoginSubmit.bind(this, props)}>
         Log in
+      </div>
+      <div className="clickable-text reset-password-link"
+           onClick={handleResetPassword.bind(this, props)}>
+        Forgot your password?
+      </div>
+    </div>
+  );
+
+  $('.login-email').focus();
+}
+
+async function handleResetPassword(props: Object): Promise<void> {
+  debug('reset password');
+  await props.showModal(
+    <div className="reset-password-form">
+      <input type="text" className="login-email" placeholder="Email" />
+      <div className="login-submit button-inverse"
+           onClick={onResetPasswordSubmit.bind(this, props)}>
+        Reset password
       </div>
     </div>
   );
@@ -390,6 +408,7 @@ function handleEdmodo(): void {
 
 async function onTeacherSubmit(props: Object): Promise<void> {
   debug('teacher submit');
+  props.clearMessages();
   let {title, first, last, email, password} = getTeacherData();
   try {
     await teachers.create({title, first, last, email, password});
@@ -403,6 +422,7 @@ async function onTeacherSubmit(props: Object): Promise<void> {
 
 async function onStudentSubmit(props: Object): Promise<void> {
   debug('student submit');
+  props.clearMessages();
   let {first, last, username, password} = getStudentData();
   let email = `${username}@mathleap.org`;
   try {
@@ -426,6 +446,27 @@ async function onLoginSubmit(props: Object): Promise<void> {
   }
 
   props.closeModal();
+}
+
+async function onResetPasswordSubmit(props: Object): Promise<void> {
+  debug('reset password submit');
+  props.clearMessages();
+  let {uid} = getLoginData();
+  try {
+    if (!uid || !uid.length) {
+      throw new Error('Enter an email to reset your password.');
+    }
+
+    if (!uid.includes('@')) {
+      throw new Error('Invalid email address.');
+    }
+
+    await users.resetPassword(uid);
+  } catch (error) {
+    return props.displayModalError(error.message);
+  }
+
+  props.displayModalSuccess('Check your email for a temporary password.');
 }
 
 function getTeacherData(): Object {
@@ -457,7 +498,8 @@ function getStudentData(): Object {
 function getLoginData(): Object {
   // $FlowFixMe: Flow complains that HTMLElement doesn't have value.
   let uid = $('.login-email').value;
+  let passwordEl = $('.login-password');
   // $FlowFixMe: Flow complains that HTMLElement doesn't have value.
-  let password = $('.login-password').value;
+  let password = passwordEl ? passwordEl.value : '';
   return {uid, password};
 }

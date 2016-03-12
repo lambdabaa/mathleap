@@ -15,9 +15,11 @@ module.exports = function(props: Object): React.Element {
           <div className="modal-body">
             {
               props.errorMessage &&
-              <div className="modal-error">
-                {props.errorMessage}
-              </div>
+              <div className="modal-error">{props.errorMessage}</div>
+            }
+            {
+              props.successMessage &&
+              <div className="modal-success">{props.successMessage}</div>
             }
             {props.modal}
           </div>

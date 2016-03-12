@@ -1,6 +1,7 @@
 /* @flow */
 
 let Edmodo = require('../edmodo');
+let Firebase = require('firebase/lib/firebase-web');
 let classes = require('./classes');
 let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/users');
@@ -22,6 +23,7 @@ type Credentials = {
   password: string;
 };
 
+let root = new Firebase('https://mathleap.firebaseio.com');
 let baseRef = createSafeFirebaseRef();
 let studentsRef = baseRef.child('students');
 let teachersRef = baseRef.child('teachers');
@@ -80,6 +82,10 @@ exports.logout = function(): void {
   }
 
   session.clear();
+};
+
+exports.resetPassword = function(email: string): Promise<void> {
+  return request(root, 'resetPassword', {email});
 };
 
 function isStudent(user: Object): boolean {

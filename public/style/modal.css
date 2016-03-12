@@ -28,6 +28,14 @@
   padding: 10px;
 }
 
+.modal-success {
+  background-color: #b0eb3f;
+  border: 1px solid black;
+  color: black;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
 .modal-logo {
   background-image: url("style/images/logo.svg");
   background-size: 100%;

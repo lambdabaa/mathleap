@@ -56,6 +56,8 @@ class HomeContainer extends React.Component {
                  selectScreenshot={this._handleSelectScreenshot}
                  showModal={this.props.showModal}
                  displayModalError={this.props.displayModalError}
+                 displayModalSuccess={this.props.displayModalSuccess}
+                 clearMessages={this.props.clearMessages}
                  closeModal={this.props.closeModal} />;
   }
 

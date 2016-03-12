@@ -14,10 +14,13 @@ class AppContainer extends React.Component {
     this._closeModal = this._closeModal.bind(this);
     this._handleOverlayClick = this._handleOverlayClick.bind(this);
     this._displayModalError = this._displayModalError.bind(this);
+    this._displayModalSuccess = this._displayModalSuccess.bind(this);
+    this._clearMessages = this._clearMessages.bind(this);
 
     this.state = {
       modal: null,
       errorMessage: null,
+      successMessage: null,
       onceComponentUpdate: null
     };
   }
@@ -42,7 +45,9 @@ class AppContainer extends React.Component {
     return <App modal={this.state.modal}
                 route={this.state.route}
                 errorMessage={this.state.errorMessage}
+                successMessage={this.state.successMessage}
                 closeModal={this._closeModal}
+                clearMessages={this._clearMessages}
                 clickOverlay={this._handleOverlayClick} />;
   }
 
@@ -63,7 +68,9 @@ class AppContainer extends React.Component {
         showModal: this._showModal,
         closeModal: this._closeModal,
         clickOverlay: this._handleOverlayClick,
-        displayModalError: this._displayModalError
+        displayModalError: this._displayModalError,
+        displayModalSuccess: this._displayModalSuccess,
+        clearMessages: this._clearMessages
       })
     });
   }
@@ -73,6 +80,7 @@ class AppContainer extends React.Component {
     this.setState({
       modal: modal,
       errorMessage: null,
+      successMessage: null,
       onceComponentUpdate: deferred.resolve
     });
 
@@ -85,6 +93,14 @@ class AppContainer extends React.Component {
 
   _displayModalError(errorMessage: string): void {
     this.setState({errorMessage});
+  }
+
+  _displayModalSuccess(successMessage: string): void {
+    this.setState({successMessage});
+  }
+
+  _clearMessages(): void {
+    this.setState({successMessage: null, errorMessage: null});
   }
 
   _handleOverlayClick(event: MouseEvent): void {

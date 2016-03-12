@@ -22,3 +22,7 @@
 #home .topbar-action {
   color: white;
 }
+
+.reset-password-link {
+  padding-top: 10px;
+}
