@@ -34,7 +34,11 @@ module.exports = function(props: Object): React.Element {
 
   return <div id="assignments-create">
     <div className={`add-topic-flash ${isTopicAdded || 'hidden'}`}>✔ Assignment updated</div>
-    <Topbar headerText={headerText} />
+    <Topbar headerText={headerText}
+            showModal={props.showModal}
+            displayModalError={props.displayModalError}
+            displayModalSuccess={props.displayModalSuccess}
+            clearMessages={props.clearMessages} />
     <div className="view">
       <a className="backlink clickable-text" href={backlink}>{backlinkText}</a>
       <div className="assignments-create-level">

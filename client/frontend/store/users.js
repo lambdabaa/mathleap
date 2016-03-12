@@ -88,6 +88,11 @@ exports.resetPassword = function(email: string): Promise<void> {
   return request(root, 'resetPassword', {email});
 };
 
+exports.changePassword = function(data: Object): Promise<void> {
+  debug('change password', JSON.stringify(data));
+  return request(root, 'changePassword', data);
+};
+
 function isStudent(user: Object): boolean {
   return 'type' in user ?
     user.type === 'student' :                    // edmodo account

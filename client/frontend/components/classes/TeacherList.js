@@ -39,7 +39,11 @@ module.exports = function(props: Object): React.Element {
   });
 
   return <div id="classes-teacher-list">
-    <Topbar headerText={headerText} />
+    <Topbar headerText={headerText}
+            showModal={props.showModal}
+            displayModalError={props.displayModalError}
+            displayModalSuccess={props.displayModalSuccess}
+            clearMessages={props.clearMessages} />
     <Tabular className="view" cols={cols} rows={rows} />
     {
       rows.length ?

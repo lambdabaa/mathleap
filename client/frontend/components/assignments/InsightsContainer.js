@@ -94,6 +94,10 @@ module.exports = React.createClass({
                      theAssignment={this.state.theAssignment}
                      students={this.state.students}
                      grades={this.state.grades}
-                     questionToCorrect={this.state.questionToCorrect} />;
+                     questionToCorrect={this.state.questionToCorrect}
+                     showModal={this.props.showModal}
+                     displayModalError={this.props.displayModalError}
+                     displayModalSuccess={this.props.displayModalSuccess}
+                     clearMessages={this.props.clearMessages} />;
   }
 });
