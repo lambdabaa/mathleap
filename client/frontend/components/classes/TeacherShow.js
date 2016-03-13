@@ -50,8 +50,7 @@ function TeacherShow(props: Object): React.Element {
           'Click on an assignment below to view student submissions.' :
           <div>
             Great. Now share the class code <span className="emph">{aClass.code}</span>
-            with your students and click the plus sign in the upper right corner
-            to assign some problems.`
+            with your students and click the plus sign below to assign some problems.`
           </div>
       }
     </div>
