@@ -12,27 +12,23 @@ module.exports = React.createClass({
   mixins: [LinkedStateMixin],
 
   getInitialState: function(): Object {
-    return {answer: ''};
+    return {answer: '', num: null};
   },
 
   componentWillMount: function() {
-    let {responses, num} = this.props;
-    let response = responses[num];
-    let {work} = response;
-    if (work.length > 1) {
-      let answer = work[work.length - 1].state[0];
-      this.setState({answer});
-    } else {
-      this.setState({answer: ''});
-    }
+    this._bootstrap(this.props);
+  },
+
+  componentWillReceiveProps: function(props: Object) {
+    this._bootstrap(props);
   },
 
   componentDidMount: function() {
-    let element = ReactDOM.findDOMNode(this);
-    let input = element.getElementsByClassName('submissions-edit-answer')[0];
-    if (input) {
-      input.focus();
-    }
+    this._focus();
+  },
+
+  componentDidUpdate: function() {
+    this._focus();
   },
 
   render: function(): React.Element {
@@ -54,8 +50,33 @@ module.exports = React.createClass({
     </div>;
   },
 
+  _bootstrap: function(props: Object) {
+    let {responses, num} = props;
+    if (props.num === this.state.num) {
+      return;
+    }
+
+    let response = responses[num];
+    let {work} = response;
+    if (work.length <= 1) {
+      return this.setState({answer: ''});
+    }
+
+    let answer = work[work.length - 1].state[0];
+    this.setState({answer, num});
+  },
+
+  _focus: function() {
+    let element = ReactDOM.findDOMNode(this);
+    let input = element.getElementsByClassName('submissions-edit-answer')[0];
+    if (input) {
+      input.focus();
+    }
+  },
+
   _handleKeyDown: async function(event: KeyboardEvent): Promise<void> {
     if (event.key === 'Enter') {
+      await this.props.commitAnswer(this.state.answer);
       return this.props.nextQuestion();
     }
 
