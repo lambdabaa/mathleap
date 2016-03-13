@@ -49,6 +49,9 @@
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
   width: 125px;
 }
 
