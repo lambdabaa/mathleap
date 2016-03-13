@@ -11,7 +11,7 @@ let Tabular = require('../Tabular');
 let Topbar = require('../Topbar');
 let assignment = require('../../helpers/assignment');
 
-module.exports = function(props: Object): React.Element {
+function Create(props: Object): React.Element {
   let {aClass, classId, isPracticeMode, isTopicAdded} = props;
   let headerText = isPracticeMode ?
     'Practice Mode' :
@@ -51,7 +51,7 @@ module.exports = function(props: Object): React.Element {
       </div>
     </div>
   </div>;
-};
+}
 
 function renderTopics(props: Object): React.Element {
   let {topic, topics} = props;
@@ -278,3 +278,5 @@ function renderRealSummary(props: Object): React.Element {
     cols={[{content: 'Assignment Summary', width: 250}]}
     rows={rows} />;
 }
+
+module.exports = Create;

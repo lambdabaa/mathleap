@@ -4,7 +4,7 @@ let Message = require('./Message');
 let React = require('react');
 let {renderToString} = require('katex');
 
-module.exports = function(props: Object): React.Element {
+function KaTeX(props: Object): React.Element {
   let {tex} = props;
   if (typeof tex !== 'string') {
     return <Message />;
@@ -22,4 +22,6 @@ module.exports = function(props: Object): React.Element {
       }
     )
   );
-};
+}
+
+module.exports = KaTeX;

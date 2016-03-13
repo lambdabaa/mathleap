@@ -7,7 +7,7 @@ let Topbar = require('../Topbar');
 let format = require('../../helpers/format');
 let helper = require('../../helpers/submission');
 
-module.exports = function(props: Object): React.Element {
+function Show(props: Object): React.Element {
   let {user, headerText, aClass, classId, assignment, isPracticeMode} = props;
   return <div id="submissions-show">
     <Topbar headerText={headerText}
@@ -60,7 +60,7 @@ module.exports = function(props: Object): React.Element {
                rows={renderResults(props)} />
     </div>
   </div>;
-};
+}
 
 function renderResults(props: Object): Array<Array<React.Element | string>> {
   let {responses, marks} = props;
@@ -106,3 +106,5 @@ function renderError(response: Object): React.Element {
 function isTestMode(user: Object): boolean {
   return location.hash.indexOf(user.id) !== -1;
 }
+
+module.exports = Show;

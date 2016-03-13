@@ -13,7 +13,7 @@ let students = require('../store/students');
 let teachers = require('../store/teachers');
 let users = require('../store/users');
 
-module.exports = function(props: Object): React.Element {
+function Home(props: Object): React.Element {
   let actions = [
     <a key="community"
        className="topbar-action clickable-text"
@@ -281,7 +281,7 @@ module.exports = function(props: Object): React.Element {
       </div>
     </div>
   </div>;
-};
+}
 
 function handleVideoPlay(props: Object): Promise {
   debug('play video');
@@ -503,3 +503,5 @@ function getLoginData(): Object {
   let password = passwordEl ? passwordEl.value : '';
   return {uid, password};
 }
+
+module.exports = Home;

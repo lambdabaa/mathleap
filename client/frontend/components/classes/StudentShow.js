@@ -7,7 +7,7 @@ let Topbar = require('../Topbar');
 let assignment = require('../../helpers/assignment');
 let users = require('../../store/users');
 
-module.exports = function(props: Object): React.Element {
+function StudentShow(props: Object): React.Element {
   let {aClass, assignments} = props;
 
   let headerText = <div className="classes-show-header">
@@ -51,4 +51,6 @@ module.exports = function(props: Object): React.Element {
                rows={rows} />
     </div>
   </div>;
-};
+}
+
+module.exports = StudentShow;

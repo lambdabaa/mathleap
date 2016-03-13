@@ -8,7 +8,7 @@ let format = require('../../helpers/format');
 
 import type {FBStudent} from '../../../common/types';
 
-module.exports = function(props: Object): React.Element {
+function Show(props: Object): React.Element {
   let {aClass, classId, theAssignment} = props;
   return <div id="assignments-show">
     <Topbar headerText={theAssignment ? theAssignment.name : ''}
@@ -33,7 +33,7 @@ module.exports = function(props: Object): React.Element {
                rows={renderSubmissions(props)} />
     </div>
   </div>;
-};
+}
 
 function renderSubmissions(props: Object): Array<Array<React.Element | string>> {
   let {aClass, theAssignment, students, grades} = props;
@@ -58,3 +58,5 @@ function renderSubmissions(props: Object): Array<Array<React.Element | string>> 
     ];
   });
 }
+
+module.exports = Show;

@@ -7,7 +7,7 @@ let helper = require('../helpers/user');
 let session = require('../session');
 let users = require('../store/users');
 
-module.exports = function(props: Object): React.Element {
+function Topbar(props: Object): React.Element {
   let user = session.get('user');
   return <div className="topbar">
     <a className="topbar-logo" href={`#!/${user ? 'classes' : 'home'}/`} />
@@ -42,7 +42,7 @@ module.exports = function(props: Object): React.Element {
       }
     </div>
   </div>;
-};
+}
 
 async function handleAccount(props: Object, user: Object): Promise {
   debug('account settings');
@@ -90,3 +90,5 @@ function getPasswordData(): Object {
   let check = $('.new-password-check').value;
   return {prev, next, check};
 }
+
+module.exports = Topbar;

@@ -5,7 +5,7 @@ let React = require('react');
 let user = require('../../helpers/user');
 let users = require('../../store/users');
 
-module.exports = function(props: Object): React.Element {
+function List(props: Object): React.Element {
   if (user.isTeacher()) {
     return React.createElement(require('./TeacherListContainer'), props);
   }
@@ -16,4 +16,6 @@ module.exports = function(props: Object): React.Element {
 
   Promise.resolve().then(users.logout);
   return <Message message="Redirecting to homepage..." />;
-};
+}
+
+module.exports = List;

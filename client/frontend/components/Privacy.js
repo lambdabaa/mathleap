@@ -3,7 +3,7 @@
 let React = require('react');
 let Topbar = require('./Topbar');
 
-module.exports = function(): React.Element {
+function Privacy(): React.Element {
   return <div id="privacy">
     <Topbar headerText="Privacy Policy" actions={[]} />
     <div className="view">
@@ -116,4 +116,6 @@ module.exports = function(): React.Element {
       </p>
     </div>
   </div>;
-};
+}
+
+module.exports = Privacy;

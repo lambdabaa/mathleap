@@ -3,7 +3,7 @@
 let React = require('react');
 let Topbar = require('./Topbar');
 
-module.exports = function(): React.Element {
+function Tos(): React.Element {
   return <div id="tos">
     <Topbar headerText="Terms of Service" actions={[]} />
     <div className="view">
@@ -153,4 +153,6 @@ module.exports = function(): React.Element {
       </p>
     </div>
   </div>;
-};
+}
+
+module.exports = Tos;

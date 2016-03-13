@@ -2,12 +2,12 @@
 
 let React = require('react');
 
-module.exports = function(props: Object): React.Element {
+function Tabular(props: Object): React.Element {
   return <div className={`tabular ${props.className || ''}`}>
     <div className="tabular-headers">{getHeaders(props)}</div>
     <div className="tabular-rows">{getRows(props)}</div>
   </div>;
-};
+}
 
 function getHeaders({cols}): React.Element {
   return cols.map((col, index) => {
@@ -67,3 +67,5 @@ function getCell(cell: React.Element, cellIndex: number,
     {cell}
   </div>;
 }
+
+module.exports = Tabular;

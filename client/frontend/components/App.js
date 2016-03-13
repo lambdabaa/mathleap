@@ -2,7 +2,7 @@
 
 let React = require('react');
 
-module.exports = function(props: Object): React.Element {
+function App(props: Object): React.Element {
   return <div id="outer-container">
     {
       props.modal &&
@@ -28,4 +28,6 @@ module.exports = function(props: Object): React.Element {
     }
     <div id="inner-container">{props.route.element}</div>
   </div>;
-};
+}
+
+module.exports = App;

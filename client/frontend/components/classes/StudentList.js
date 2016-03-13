@@ -6,7 +6,7 @@ let Topbar = require('../Topbar');
 let format = require('../../helpers/format');
 let users = require('../../store/users');
 
-module.exports = function(props: Object): React.Element {
+function StudentList(props: Object): React.Element {
   let {first, classes} = props;
   let headerText = first && first.length ? `${first}'s Classes` : 'My Classes';
   let classList = classes
@@ -59,4 +59,6 @@ module.exports = function(props: Object): React.Element {
         </div>
     }
   </div>;
-};
+}
+
+module.exports = StudentList;

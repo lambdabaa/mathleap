@@ -9,7 +9,7 @@ let stmt = require('../../../common/stmt');
 let stringify = require('../../../common/stringify');
 let times = require('lodash/utility/times');
 
-module.exports = function(props: Object): React.Element {
+function EquationEditor(props: Object): React.Element {
   let {responses, num, equation, append, cursor, leftParens, rightParens} = props;
   let rows = [];
   let response = responses[num];
@@ -50,7 +50,7 @@ module.exports = function(props: Object): React.Element {
       <div className="button-inverse" onClick={props.nextQuestion}>Next</div>
     </div>
   </div>;
-};
+}
 
 function renderChanges(props, equation, changes, append = '', leftParens = false,
                        rightParens = false): React.Element {
@@ -259,3 +259,5 @@ function renderResults(props, equation, cursor, append = '', leftParens = false,
     {times(equation.length + 2 * append.length - cursor + 1, i => renderChar(cursor + i))}
   </div>;
 }
+
+module.exports = EquationEditor;

@@ -3,7 +3,7 @@
 let React = require('react');
 let times = require('lodash/utility/times');
 
-module.exports = function(props: Object): React.Element {
+function Tutorial(props: Object): React.Element {
   let {carousel} = props;
   let screens = getScreens();
   let screen = screens[carousel];
@@ -30,7 +30,7 @@ module.exports = function(props: Object): React.Element {
       }
     </div>
   </div>;
-};
+}
 
 function getScreens(): Array<React.Element> {
   return [
@@ -81,3 +81,5 @@ function getScreens(): Array<React.Element> {
     </div>
   ];
 }
+
+module.exports = Tutorial;

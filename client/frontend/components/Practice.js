@@ -6,7 +6,7 @@ let Topbar = require('./Topbar');
 let assignment = require('../helpers/assignment');
 let users = require('../store/users');
 
-module.exports = function(props: Object): React.Element {
+function Practice(props: Object): React.Element {
   let {assignments} = props;
   let rows = assignments.map(anAssignment => {
     // We're storing this as a JSON string in FB since
@@ -59,4 +59,6 @@ module.exports = function(props: Object): React.Element {
       }
     </div>
   </div>;
-};
+}
+
+module.exports = Practice;

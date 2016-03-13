@@ -4,7 +4,7 @@ let KaTeXContainer = require('../KaTeXContainer');
 let React = require('react');
 let Tabular = require('../Tabular');
 
-module.exports = function(props: Object): React.Element {
+function QuestionList(props: Object): React.Element {
   let {responses, num, isSubmissionPending} = props;
   let questions = responses.map((aResponse: Object, index: number) => {
     return [
@@ -35,4 +35,6 @@ module.exports = function(props: Object): React.Element {
         <div className="button-inverse" onClick={props.handleSubmit}>Submit</div>
     }
   </div>;
-};
+}
+
+module.exports = QuestionList;

@@ -27,7 +27,7 @@ let actionHotkeys = Object.freeze({
   'ctrl shift z': 'Redo'
 });
 
-module.exports = function(props: Object): React.Element {
+function Edit(props: Object): React.Element {
   let {
     aClass,
     classId,
@@ -106,7 +106,7 @@ module.exports = function(props: Object): React.Element {
         ''
     }
   </div>;
-};
+}
 
 function renderHelpDialog(props: Object): React.Element {
   return <div className="submissions-edit-help-dialog"
@@ -139,3 +139,5 @@ function renderHotkey(explanation: string, shortcut: string): React.Element {
     </div>
   </div>;
 }
+
+module.exports = Edit;

@@ -7,7 +7,7 @@ let Topbar = require('../Topbar');
 let assignment = require('../../helpers/assignment');
 let format = require('../../helpers/format');
 
-module.exports = function(props: Object): React.Element {
+function TeacherShow(props: Object): React.Element {
   let {aClass, id, students, averages} = props;
   let headerText = <div className="classes-show-header">
     <div className="classes-show-header-title"
@@ -80,4 +80,6 @@ module.exports = function(props: Object): React.Element {
       }
     </div>
   </div>;
-};
+}
+
+module.exports = TeacherShow;

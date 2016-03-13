@@ -2,7 +2,7 @@
 
 let React = require('react');
 
-module.exports = function(): React.Element {
+function NotFound(): React.Element {
   return <div id="not-found">
     <div className="container">
       <div className="text">
@@ -17,4 +17,6 @@ module.exports = function(): React.Element {
       <div className="mascot"></div>
     </div>
   </div>;
-};
+}
+
+module.exports = NotFound;

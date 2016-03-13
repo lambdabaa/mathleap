@@ -6,7 +6,7 @@ let Topbar = require('../Topbar');
 let {getPalette} = require('../../colors');
 let handleEnter = require('../../handleEnter');
 
-module.exports = function(props: Object): React.Element {
+function TeacherList(props: Object): React.Element {
   let {teacher, classes, editable} = props;
   let headerText = `${teacher.title} ${teacher.last}'s Classes`;
 
@@ -54,7 +54,7 @@ module.exports = function(props: Object): React.Element {
         </div>
     }
   </div>;
-};
+}
 
 function renderMutableClass(props: Object, aClass: Object,
                             index: number): React.Element {
@@ -115,3 +115,5 @@ function renderImmutableClass(props: Object, aClass: Object,
          onClick={() => props.editClass(index, 'name')} />
     </div>;
 }
+
+module.exports = TeacherList;

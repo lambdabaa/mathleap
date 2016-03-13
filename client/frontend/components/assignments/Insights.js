@@ -11,7 +11,7 @@ let map = require('lodash/collection/map');
 let redToGreen = require('../../redToGreen');
 let round = require('../../round');
 
-module.exports = function(props: Object): React.Element {
+function Insights(props: Object): React.Element {
   let {classId, theAssignment, grades} = props;
   let data = [['Grade', 'Count']];
   let rows = map(
@@ -54,7 +54,7 @@ module.exports = function(props: Object): React.Element {
                rows={renderQuestionToCorrect(props)} />
     </div>
   </div>;
-};
+}
 
 function renderQuestionToCorrect(props: Object): Array<Array<React.Element | string>> {
   let {questionToCorrect, theAssignment} = props;
@@ -78,3 +78,5 @@ function renderQuestionToCorrect(props: Object): Array<Array<React.Element | str
     }
   );
 }
+
+module.exports = Insights;

@@ -3,7 +3,7 @@
 let React = require('react');
 let Topbar = require('./Topbar');
 
-module.exports = function(): React.Element {
+function CommonCore(): React.Element {
   return <div id="common-core">
     <Topbar headerText="Common Core" actions={[]} />
     <div className="view">
@@ -70,4 +70,6 @@ module.exports = function(): React.Element {
       </ul>
     </div>
   </div>;
-};
+}
+
+module.exports = CommonCore;
