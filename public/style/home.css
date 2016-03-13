@@ -23,7 +23,7 @@
   color: white;
 }
 
-#home .topbar-action:hover {
+#home :not(.signup-button).topbar-action:hover {
   border-bottom: 1px solid white;
 }
 
