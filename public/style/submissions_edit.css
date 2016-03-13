@@ -230,3 +230,9 @@
 .next-and-previous > .button-inverse {
   width: 120px;
 }
+
+#submissions-edit .classes-list-ftu > a {
+  border-bottom: 1px solid white;
+  color: white;
+  margin-left: 5px;
+}

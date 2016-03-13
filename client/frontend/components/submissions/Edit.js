@@ -65,6 +65,10 @@ function Edit(props: Object): React.Element {
             displayModalError={props.displayModalError}
             displayModalSuccess={props.displayModalSuccess}
             clearMessages={props.clearMessages} />
+    <div className="view classes-list-ftu">
+      First time here? Learn how to show your work with the
+        <a href="#!/documentation/" target="_blank">usage guide</a>.
+    </div>
     <div className="view">
       <div className="subbar">
         <a className="backlink clickable-text" href={backlink}>{backlinkText}</a>
