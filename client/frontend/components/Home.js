@@ -15,23 +15,23 @@ let users = require('../store/users');
 
 function Home(props: Object): React.Element {
   let actions = [
-    <a key="community"
+    <a key="common-core"
        className="topbar-action clickable-text"
-       href="https://blog.mathleap.org/"
+       href="#!/common-core/"
        target="_blank">
-      COMMUNITY
-    </a>,
-    <a key="learn-more"
-       className="topbar-action clickable-text"
-       href="/public/learn-more.pdf"
-       target="_blank">
-      LEARN MORE
+      COMMON CORE
     </a>,
     <div key="demo"
          className="topbar-action clickable-text"
          onClick={handleVideoPlay.bind(this, props)}>
       DEMO
     </div>,
+    <a key="community"
+       className="topbar-action clickable-text"
+       href="https://blog.mathleap.org/"
+       target="_blank">
+      COMMUNITY
+    </a>,
     <div key="login"
          className="topbar-action clickable-text"
          onClick={handleLogin.bind(this, props)}>
@@ -266,7 +266,6 @@ function Home(props: Object): React.Element {
           <div className="legal-jargon">
             <div className="legal-top">© 2016 MathLeap, Inc.</div>
             <div className="legal-bottom">
-              <a className="legal-link" href="#!/common-core/">Common Core</a>
               <a className="legal-link" href="#!/tos/">Terms</a>
               <a className="legal-link" href="#!/privacy/">Privacy</a>
               <a className="legal-link" href="mailto:info@mathleap.org">Contact Us</a>

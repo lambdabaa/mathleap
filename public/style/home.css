@@ -23,6 +23,10 @@
   color: white;
 }
 
+#home .topbar-action:hover {
+  border-bottom: 1px solid white;
+}
+
 .reset-password-link {
   padding-top: 10px;
 }
