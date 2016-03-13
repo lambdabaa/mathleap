@@ -49,6 +49,15 @@ function TeacherShow(props: Object): React.Element {
          href="#!/classes/">
         &lt; Classes
       </a>
+      {
+        studentList.length || assignments.length ?
+          '' :
+          <div className="classes-list-ftu">
+            Great. Now share the class code <span className="emph">{aClass.code}</span>
+            with your students and click the plus sign in the upper right corner
+            to assign some problems.
+          </div>
+      }
       <div className="classes-show-container">
         <Tabular className="classes-show-students"
                  cols={[{content: 'Students', width: 250}]}
@@ -69,15 +78,6 @@ function TeacherShow(props: Object): React.Element {
                   ]}
                  rows={assignments} />
       </div>
-      {
-        studentList.length || assignments.length ?
-          '' :
-          <div className="classes-list-ftu">
-            Great. Now share the class code <span className="emph">{aClass.code}</span>
-            with your students and click the plus sign in the upper right corner
-            to assign some problems.
-          </div>
-      }
     </div>
   </div>;
 }

@@ -38,25 +38,27 @@ function Practice(props: Object): React.Element {
                 Log out
               </div>
             ]} />
+    {
+      rows.length ?
+        '' :
+        <div className="view classes-list-ftu">
+          Click the plus sign below to choose problems to practice.
+        </div>
+    }
     <div className="view">
       <Tabular className="practice-mode"
                cols={[
-                 {content: 'Topics', width: 660},
+                 {content: 'Topics', width: 620},
                  {content: 'Created', width: 140},
-                 {content: 'Problems', width: 140}
+                 {content: 'Problems', width: 140},
+                 {
+                   content: <a className="practice-create-assignment" href="#!/practice/new/">
+                              <img className="list-action-btn" src="public/style/images/add_btn.png" />
+                            </a>,
+                   width: 40
+                 }
                ]}
                rows={rows} />
-      <a className="practice-create-assignment" href="#!/practice/new/">
-        <img className="list-action-btn" src="public/style/images/add_btn.png" />
-      </a>
-      {
-        rows.length ?
-          '' :
-          <div className="view classes-list-ftu">
-            Click the plus sign in the upper right corner to choose
-            problems to practice.
-          </div>
-      }
     </div>
   </div>;
 }
