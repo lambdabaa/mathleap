@@ -44,20 +44,22 @@ function TeacherShow(props: Object): React.Element {
             displayModalError={props.displayModalError}
             displayModalSuccess={props.displayModalSuccess}
             clearMessages={props.clearMessages} />
+    <div className="view classes-list-ftu">
+      {
+        studentList.length && assignments.length ?
+          'Click on an assignment below to view student submissions.' :
+          <div>
+            Great. Now share the class code <span className="emph">{aClass.code}</span>
+            with your students and click the plus sign in the upper right corner
+            to assign some problems.`
+          </div>
+      }
+    </div>
     <div className="view">
       <a className="backlink clickable-text"
          href="#!/classes/">
         &lt; Classes
       </a>
-      {
-        studentList.length || assignments.length ?
-          '' :
-          <div className="classes-list-ftu">
-            Great. Now share the class code <span className="emph">{aClass.code}</span>
-            with your students and click the plus sign in the upper right corner
-            to assign some problems.
-          </div>
-      }
       <div className="classes-show-container">
         <Tabular className="classes-show-students"
                  cols={[{content: 'Students', width: 250}]}

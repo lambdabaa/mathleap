@@ -9,13 +9,20 @@ let format = require('../../helpers/format');
 import type {FBStudent} from '../../../common/types';
 
 function Show(props: Object): React.Element {
-  let {aClass, classId, theAssignment} = props;
+  let {aClass, classId, theAssignment, students} = props;
   return <div id="assignments-show">
     <Topbar headerText={theAssignment ? theAssignment.name : ''}
             showModal={props.showModal}
             displayModalError={props.displayModalError}
             displayModalSuccess={props.displayModalSuccess}
             clearMessages={props.clearMessages} />
+    <div className="view classes-list-ftu">
+      {
+        students.length ?
+          'Click on a completed submission to view student work.' :
+          'Once students join your class, you can view submissions here.'
+      }
+    </div>
     <div className="view">
       <a className="backlink clickable-text"
          href={`#!/classes/${classId}/`}>
