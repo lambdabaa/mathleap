@@ -1,15 +1,15 @@
 /* @flow */
 
 module.exports = function(magnitude: number): string {
-  if (magnitude <= 0.25) {
+  if (magnitude <= 0.60) {
     return 'red';
   }
 
-  if (magnitude <= 0.5) {
+  if (magnitude <= 0.75) {
     return 'orange';
   }
 
-  if (magnitude <= 0.75) {
+  if (magnitude <= 0.85) {
     return 'yellow';
   }
 
