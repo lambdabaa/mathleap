@@ -34,8 +34,11 @@
 }
 
 .classes-list-ftu {
-  font-size: 24px;
+  background-color: rgba(109,63,199, 0.8);
+  color: white;
+  font-size: 20px;
   margin-top: 30px;
+  padding: 10px;
   text-align: center;
 }
 
