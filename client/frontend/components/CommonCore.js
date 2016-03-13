@@ -23,6 +23,8 @@ function CommonCore(): React.Element {
       <ul>
         <li><a href="http://www.corestandards.org/Math/Content/6/NS/A/1/">6.NS.A.1</a></li>
         <li><a href="http://www.corestandards.org/Math/Content/6/NS/B/2/">6.NS.B.2</a></li>
+        <li><a href="http://www.corestandards.org/Math/Content/6/NS/B/2/">6.NS.B.3</a></li>
+        <li><a href="http://www.corestandards.org/Math/Content/6/NS/C/7/">6.NS.C.7</a></li>
       </ul>
       <br />
       <h3><a href="http://www.corestandards.org/Math/Content/6/EE/">Expressions & Equations for Grade 6 (6.EE)</a></h3>
@@ -37,9 +39,11 @@ function CommonCore(): React.Element {
       <h3><a href="http://www.corestandards.org/Math/Content/7/NS/">The Number System for Grade 7 (7.NS)</a></h3>
       <br />
       <ul>
+        <li><a href="http://www.corestandards.org/Math/Content/7/NS/A/1/">7.NS.A.1</a></li>
         <li><a href="http://www.corestandards.org/Math/Content/7/NS/A/1/c/">7.NS.A.1.c</a></li>
         <li><a href="http://www.corestandards.org/Math/Content/7/NS/A/1/d/">7.NS.A.1.d</a></li>
         <li><a href="http://www.corestandards.org/Math/Content/7/NS/A/2/">7.NS.A.2</a></li>
+        <li><a href="http://www.corestandards.org/Math/Content/7/NS/A/2/c/">7.NS.A.2.c</a></li>
       </ul>
       <br />
       <h3><a href="http://www.corestandards.org/Math/Content/7/EE/">Expressions & Equations for Grade 7 (7.EE)</a></h3>
