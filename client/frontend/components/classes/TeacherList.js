@@ -44,15 +44,14 @@ function TeacherList(props: Object): React.Element {
             displayModalError={props.displayModalError}
             displayModalSuccess={props.displayModalSuccess}
             clearMessages={props.clearMessages} />
+    <div className="view classes-list-ftu">
+      {
+        rows.length ?
+          'Click on a class to create assignments and view submissions.' :
+          'Welcome to MathLeap! To create a class, click the plus sign below.'
+      }
+    </div>
     <Tabular className="view" cols={cols} rows={rows} />
-    {
-      rows.length ?
-        '' :
-        <div className="view classes-list-ftu">
-          Welcome to MathLeap! To create a class, click
-          the plus sign in the upper right corner.
-        </div>
-    }
   </div>;
 }
 

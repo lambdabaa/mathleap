@@ -36,6 +36,15 @@ function StudentList(props: Object): React.Element {
                 Log out
               </div>
             ]} />
+    <div className="view classes-list-ftu">
+      {
+        classList.length ?
+          'Click on a class to take assignments and see your submissions.' :
+          `Welcome to MathLeap! To join a class with a student code, click
+           the plus sign below. If you just want to practice, click
+           Practice Mode on the navigation bar.`
+      }
+    </div>
     <Tabular className="view"
              cols={[
                {content: 'Class', width: 660},
@@ -49,15 +58,6 @@ function StudentList(props: Object): React.Element {
                }
              ]}
              rows={classList} />
-    {
-      classList.length ?
-        '' :
-        <div className="view classes-list-ftu">
-          Welcome to MathLeap! To join a class with a student code, click
-          the plus sign in the upper right corner. If you just want to practice,
-          click Practice Mode on the navigation bar.
-        </div>
-    }
   </div>;
 }
 
