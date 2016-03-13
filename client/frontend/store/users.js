@@ -112,20 +112,18 @@ async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
     return teacher;
   }
 
-  // $FlowFixMe: Flow doesn't know about Promise.all.
-  let [groups] = await Promise.all([
-    client.getGroups(),
-    teachers.create(
-      {
-        email: user.email,
-        title: user.title,
-        first: user.first_name,
-        last: user.last_name,
-        misc: user
-      },
-      user.id
-    )
-  ]);
+  teacher = await teachers.create(
+    {
+      email: user.email,
+      title: user.title,
+      first: user.first_name,
+      last: user.last_name,
+      misc: user
+    },
+    user.id
+  );
+
+  let groups = await client.getGroups();
 
   // We also want to import the teacher's classes.
   await Promise.all(
