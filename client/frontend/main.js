@@ -23,7 +23,6 @@ function observeLocation(router: Router): void {
   }
 
   session.on('user', function(user: Object): void {
-    console.log('Got user', user);
     if (user) {
       if (router.view === '/home' || router.view instanceof RegExp) {
         location.hash = '#!/classes/';
