@@ -3,6 +3,7 @@
 let $ = document.querySelector.bind(document);
 let React = require('react');
 let debug = require('../../common/debug')('Topbar');
+let helper = require('../helpers/user');
 let session = require('../session');
 let users = require('../store/users');
 
@@ -28,7 +29,7 @@ module.exports = function(props: Object): React.Element {
             </div>
           ];
 
-          if (user.role === 'teacher') {
+          if (helper.isTeacher() && !helper.isEdmodoUser()) {
             actions.unshift(
               <div className="topbar-action clickable-text" onClick={handleAccount.bind(this, props, user)}>
                 Account

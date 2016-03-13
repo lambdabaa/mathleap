@@ -1,20 +1,19 @@
 /* @flow */
 
+let Message = require('../Message');
 let React = require('react');
-let session = require('../../session');
+let user = require('../../helpers/user');
+let users = require('../../store/users');
 
 module.exports = function(props: Object): React.Element {
-  let user = session.get('user');
-  if (!user) {
-    return <h1>Redirecting to homepage</h1>;
+  if (user.isTeacher()) {
+    return React.createElement(require('./TeacherListContainer'), props);
   }
 
-  switch (user.role) {
-    case 'student':
-      return React.createElement(require('./StudentListContainer'), props);
-    case 'teacher':
-      return React.createElement(require('./TeacherListContainer'), props);
-    default:
-      throw new Error(`Unexpected user role ${user.role}`);
+  if (user.isStudent()) {
+    return React.createElement(require('./StudentListContainer'), props);
   }
+
+  Promise.resolve().then(users.logout);
+  return <Message message="Redirecting to homepage..." />;
 };

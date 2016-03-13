@@ -82,6 +82,7 @@ exports.logout = function(): void {
   }
 
   session.clear();
+  session.emit('user', null);  // Just in case
 };
 
 exports.resetPassword = function(email: string): Promise<void> {
