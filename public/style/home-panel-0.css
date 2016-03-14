@@ -14,8 +14,8 @@
 }
 
 .chrome-web-store {
-  bottom: 50%;
-  left: -10px;
+  bottom: 25%;
+  left: -2px;
   position: absolute;
   z-index: 1;
 }
