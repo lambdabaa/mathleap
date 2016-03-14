@@ -40,8 +40,8 @@ function StudentList(props: Object): React.Element {
       {
         classList.length ?
           'Click on a class to take assignments and see your submissions.' :
-          `Welcome to MathLeap! To join a class with a student code, click
-           the plus sign below. If you just want to practice, click
+          `Welcome to MathLeap! To join a class, click the plus sign below
+           and enter your class code. If you just want to practice, click
            Practice Mode on the navigation bar.`
       }
     </div>
