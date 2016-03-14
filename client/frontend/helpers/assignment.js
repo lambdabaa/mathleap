@@ -55,7 +55,12 @@ exports.addTopic = function(assignment: Assignment, topic: QuestionTopic,
     return assignment;
   }
 
-  let color = colors.random();
+  let color = colors.random(
+    assignment.composition.map((section: AssignmentSection): string => {
+      return section.color;
+    })
+  );
+
   assignment.composition.push({topic, type, color, count: 1});
   assignment.preview = null;
   return assignment;

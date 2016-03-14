@@ -3,6 +3,7 @@
  * @fileoverview MathLeap color palette.
  */
 
+let rand = require('../common/rand');
 let sample = require('lodash/collection/sample');
 
 exports.colors = [
@@ -32,6 +33,8 @@ exports.colors = [
   '#c0003d'
 ];
 
+let randomColor = sample.bind(null, exports.colors);
+
 exports.getPalette = function(cols: number): Array<Array<string>> {
   return exports.colors.reduce(
     function(result: Array<Array<string>>, color: string, index: number): Array<Array<string>> {
@@ -47,4 +50,4 @@ exports.getPalette = function(cols: number): Array<Array<string>> {
   );
 };
 
-exports.random = sample.bind(null, exports.colors);
+exports.random = rand.get.bind(rand, randomColor);
