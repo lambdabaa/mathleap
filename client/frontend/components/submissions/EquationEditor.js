@@ -78,13 +78,16 @@ function renderChanges(props, equation, changes, append = '', leftParens = false
               throw new Error(`Unexpected change token ${change}`);
           }
 
-          return <div key={index} style={style}>
+          return <div className="submissions-edit-character"
+                      key={index}
+                      style={style}>
             <span style={{color: 'black'}}>{chr}</span>
           </div>;
         }
 
         function renderAppendChar(chr, index) {
-          return <div key={index}
+          return <div className="submissions-edit-character"
+                      key={index}
                       style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>
             <span style={{color: 'black'}}>{chr}</span>
           </div>;
