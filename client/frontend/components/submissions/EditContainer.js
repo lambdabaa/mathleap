@@ -19,6 +19,7 @@ let isElementVisible = require('../../isElementVisible');
 let {mapChar} = require('../../../common/string');
 let preventDefault = require('../../preventDefault');
 let session = require('../../session');
+let stmt = require('../../../common/stmt');
 let stringify = require('../../../common/stringify');
 let submissions = require('../../store/submissions');
 let waitFor = require('../../../common/waitFor');
@@ -384,12 +385,20 @@ module.exports = React.createClass({
         }
 
         cursor = Math.max(cursor - 1);
+        if (cursor === stmt.getStmtSplit(equation)) {
+          return this._complainSymbolHighlight();
+        }
+
         highlight[cursor] = !highlight[cursor];
         return this.setState({cursor, highlight, isCursorVisible: true});
       case 'ArrowRight':
         event.preventDefault();
         if (cursor === equation.length) {
           return;
+        }
+
+        if (cursor === stmt.getStmtSplit(equation)) {
+          return this._complainSymbolHighlight();
         }
 
         highlight[cursor] = !highlight[cursor];
@@ -714,12 +723,36 @@ module.exports = React.createClass({
     debug('commit cursor highlight', event);
     event.stopPropagation();
 
-    let {highlight, cursor, drag} = this.state;
+    let {equation, highlight, cursor, drag} = this.state;
+    highlight = editor.applyDragToHighlight(highlight, cursor, drag);
+
+    if (drag != null) {
+      let index = stmt.getStmtSplit(equation);
+      if (index !== -1) {
+        if (cursor < index && drag >= index ||
+            cursor > index && drag <= index ||
+            cursor === index && drag > index) {
+          return this._complainSymbolHighlight();
+        }
+      }
+
+      cursor = drag > cursor ?
+        Math.min(equation.length, drag + 1) :
+        drag;
+    }
+
     this.setState({
-      highlight: editor.applyDragToHighlight(highlight, cursor, drag),
+      highlight,
       isMousePressed: false,
+      isCursorVisible: true,
+      cursor,
       drag: null
     });
+  },
+
+  _complainSymbolHighlight: function() {
+    alert('Please operate on one side at a time!');
+    this.setState({isMousePressed: false, drag: null});
   },
 
   _showHelpDialog: function() {

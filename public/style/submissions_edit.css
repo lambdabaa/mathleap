@@ -172,6 +172,7 @@
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  font-size: 17px;
 }
 
 .submissions-edit-active {
