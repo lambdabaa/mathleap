@@ -125,11 +125,16 @@ exports.submit = async function(classId: string, assignmentId: string,
 
       await Promise.all(
         map(work, async function(step: FBQuestionStep, j: string): Promise {
-          let eql = await isEqual(
-            step.state[0].replace('=', '=='),
-            question.solution.toString().replace('=', '=='),
-            question.instruction
-          );
+          let eql;
+          try {
+            eql = await isEqual(
+              step.state[0].replace('=', '=='),
+              question.solution.toString().replace('=', '=='),
+              question.instruction
+            );
+          } catch (error) {
+            eql = false;
+          }
 
           debug(`Checking step ${j} ${step.state[0]}... `, eql ? '✔' : '✗');
           let errorRef = submissionRef.child(`/responses/${i}/work/${j}/error`);
