@@ -317,7 +317,7 @@ exports.eventToCursorPosition = function(event: MouseEvent): number {
     }
   );
 
-  return typeof pos === 'number' ? pos : children.length;
+  return typeof pos === 'number' ? pos : children.length - 1;
 };
 
 exports.applyDragToHighlight = function(highlight: Highlight, cursor: number,
