@@ -238,7 +238,7 @@ function renderResults(props, equation, cursor, append = '', leftParens = false,
 
   if (!right) {
     return <div key={stringify({equation, cursor})}
-                className="submissions-edit-active"
+                className="submissions-edit-active unselectable"
                 onMouseDown={props.repositionCursor}
                 onMouseMove={props.stageCursorHighlight}
                 onMouseUp={props.commitCursorHighlight}>
@@ -249,7 +249,7 @@ function renderResults(props, equation, cursor, append = '', leftParens = false,
   }
 
   return <div key={stringify({equation, cursor})}
-              className="submissions-edit-active"
+              className="submissions-edit-active unselectable"
               onMouseDown={props.repositionCursor}
               onMouseMove={props.stageCursorHighlight}
               onMouseUp={props.commitCursorHighlight}>
