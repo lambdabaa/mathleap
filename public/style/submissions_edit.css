@@ -176,9 +176,9 @@
 }
 
 .submissions-edit-active {
-  background-image: url("./style/images/green-arrow.png");
-  background-position: right;
-  background-repeat: no-repeat;
+  background-color: white;
+  border: 1px solid #999;
+  padding: 5px;
 }
 
 .submissions-edit-character {
