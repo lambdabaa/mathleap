@@ -148,6 +148,8 @@ module.exports = React.createClass({
     if (tutorial) {
       tutorial.scrollIntoView();
     }
+
+    this.props.onload();
   },
 
   componentWillUnmount: function(): void {

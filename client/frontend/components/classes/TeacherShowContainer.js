@@ -38,6 +38,7 @@ module.exports = React.createClass({
 
   componentDidMount: function(): void {
     this._updateStudents(this.state);
+    this.props.onload();
   },
 
   componentWillUpdate: function(props: Object, state: Object): void {

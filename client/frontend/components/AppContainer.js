@@ -18,6 +18,7 @@ class AppContainer extends React.Component {
     this._clearMessages = this._clearMessages.bind(this);
 
     this.state = {
+      isLoading: false,
       modal: null,
       errorMessage: null,
       successMessage: null,
@@ -44,6 +45,7 @@ class AppContainer extends React.Component {
   render(): React.Element {
     return <App modal={this.state.modal}
                 route={this.state.route}
+                isLoading={this.state.isLoading}
                 errorMessage={this.state.errorMessage}
                 successMessage={this.state.successMessage}
                 closeModal={this._closeModal}
@@ -52,6 +54,7 @@ class AppContainer extends React.Component {
   }
 
   _setRoute(): void {
+    this.setState({isLoading: true});
     let {router} = this.props;
     // Make sure to scroll to the top of the embedded view once we load it.
     this.componentDidUpdate = () => {
@@ -63,16 +66,17 @@ class AppContainer extends React.Component {
       delete this.componentDidUpdate;
     };
 
-    this.setState({
-      route: router.load({
-        showModal: this._showModal,
-        closeModal: this._closeModal,
-        clickOverlay: this._handleOverlayClick,
-        displayModalError: this._displayModalError,
-        displayModalSuccess: this._displayModalSuccess,
-        clearMessages: this._clearMessages
-      })
+    let route = router.load({
+      showModal: this._showModal,
+      closeModal: this._closeModal,
+      clickOverlay: this._handleOverlayClick,
+      displayModalError: this._displayModalError,
+      displayModalSuccess: this._displayModalSuccess,
+      clearMessages: this._clearMessages,
+      onload: () => this.setState({isLoading: false})
     });
+
+    this.setState({route});
   }
 
   _showModal(modal: React.Element): Promise<void> {

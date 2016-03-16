@@ -2,7 +2,8 @@
 
 let React = require('react');
 
-function NotFound(): React.Element {
+function NotFound(props: Object): React.Element {
+  props.onload();
   return <div id="not-found">
     <div className="container">
       <div className="text">

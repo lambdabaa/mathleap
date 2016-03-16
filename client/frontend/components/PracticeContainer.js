@@ -27,6 +27,10 @@ module.exports = React.createClass({
     );
   },
 
+  componentDidMount: function() {
+    this.props.onload();
+  },
+
   render: function(): React.Element {
     return <Practice assignments={this.state.assignments}
                      openPractice={this._handleOpenPractice} />;

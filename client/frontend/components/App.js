@@ -1,9 +1,11 @@
 /* @flow */
 
+let Loading = require('./Loading');
 let React = require('react');
 
 function App(props: Object): React.Element {
   return <div id="outer-container">
+    {props.isLoading && <Loading />}
     {
       props.modal &&
       <div className="overlay" onClick={props.clickOverlay}>

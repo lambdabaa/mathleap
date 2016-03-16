@@ -21,13 +21,7 @@ clean:
 		public/backend.js \
 		public/backend.min.js
 
-public/frontend.min.js: public/frontend.js
-	./node_modules/.bin/uglifyjs \
-		--output $@ \
-		--screw-ie8 \
-		-- $<
-
-public/backend.min.js: public/backend.js
+public/%.min.js: public/%.js
 	./node_modules/.bin/uglifyjs \
 		--compress \
 		--mangle \

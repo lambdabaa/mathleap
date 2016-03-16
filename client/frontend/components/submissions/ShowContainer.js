@@ -126,6 +126,9 @@ module.exports = React.createClass({
     }));
 
     this.setState({marks});
+    if (marks.length) {
+      this.props.onload();
+    }
   },
 
   render: function(): React.Element {
