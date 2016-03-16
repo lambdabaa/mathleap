@@ -3,6 +3,7 @@
 let $ = document.querySelector.bind(document);
 let App = require('./App');
 let React = require('react');
+let debug = require('../../common/debug')('AppContainer');
 let defer = require('../../common/defer');
 
 class AppContainer extends React.Component {
@@ -73,7 +74,22 @@ class AppContainer extends React.Component {
       displayModalError: this._displayModalError,
       displayModalSuccess: this._displayModalSuccess,
       clearMessages: this._clearMessages,
-      onload: () => this.setState({isLoading: false})
+      onpending: () => {
+        if (this.state.isLoading) {
+          return;
+        }
+
+        debug('pending');
+        this.setState({isLoading: true});
+      },
+      onload: () => {
+        if (!this.state.isLoading) {
+          return;
+        }
+
+        debug('load');
+        this.setState({isLoading: false});
+      }
     });
 
     this.setState({route});

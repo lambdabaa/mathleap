@@ -148,8 +148,6 @@ module.exports = React.createClass({
     if (tutorial) {
       tutorial.scrollIntoView();
     }
-
-    this.props.onload();
   },
 
   componentWillUnmount: function(): void {
@@ -226,12 +224,17 @@ module.exports = React.createClass({
 
 
   render: function(): React.Element {
+    let {num, isSubmissionPending} = this.state;
+    if (typeof num === 'number' && !isSubmissionPending) {
+      this.props.onload();
+    }
+
     return <Edit aClass={this.state.aClass}
                  classId={this.props.aClass}
                  assignment={this.state.assignment}
                  responses={this._getResponses()}
                  isHelpDialogShown={this.state.isHelpDialogShown}
-                 num={this.state.num}
+                 num={num}
                  questionType={this.state.questionType}
                  cursor={this.state.cursor}
                  highlight={this.state.highlight}
@@ -247,7 +250,7 @@ module.exports = React.createClass({
                  isMousePressed={this.state.isMousePressed}
                  drag={this.state.drag}
                  isTutorialDismissed={this.state.isTutorialDismissed}
-                 isSubmissionPending={this.state.isSubmissionPending}
+                 isSubmissionPending={isSubmissionPending}
                  isPractice={this.isPracticeMode}
                  showModal={this.props.showModal}
                  displayModalError={this.props.displayModalError}
@@ -685,12 +688,14 @@ module.exports = React.createClass({
 
   _handleSubmit: async function(): Promise<void> {
     debug('submit assignment');
+    this.props.onpending();
     let {aClass, assignment, submission, id} = this.props;
     this.setState({isSubmissionPending: true});
     try {
       await submissions.submit(aClass, assignment || id, submission);
     } catch (error) {
       debug(error.toString());
+      this.props.onload();
       alert('Error grading assignment! Please try clicking submit again.');
       this.setState({isSubmissionPending: false});
       return;

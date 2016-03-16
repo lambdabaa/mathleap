@@ -39,7 +39,6 @@ module.exports = React.createClass({
   componentDidMount: function(): void {
     this._updateClasses(this.state);
     preloadImage('public/style/images/color_picker_triangle.png');
-    this.props.onload();
   },
 
   componentWillUpdate: function(props: Object, state: Object): void {
@@ -82,6 +81,7 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
+    this.props.onload();
     return <TeacherList teacher={session.get('user')}
                         classes={this.state.classes}
                         editable={this.state.editable}

@@ -13,6 +13,7 @@ let session = require('./session');
 function main(): void {
   let router = createRouter();
   observeLocation(router);
+  router.start();
   ReactDOM.render(<AppContainer router={router} />, $('#container'));
 }
 
@@ -91,7 +92,6 @@ function createRouter(): Router {
     require('./components/EdmodoHandler')
   );
 
-  router.start();
   return router;
 }
 

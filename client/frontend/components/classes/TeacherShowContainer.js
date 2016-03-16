@@ -38,7 +38,6 @@ module.exports = React.createClass({
 
   componentDidMount: function(): void {
     this._updateStudents(this.state);
-    this.props.onload();
   },
 
   componentWillUpdate: function(props: Object, state: Object): void {
@@ -76,6 +75,7 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
+    this.props.onload();
     let studentList = this.state.students.filter((student: ?FBStudent) => {
       return student != null;
     });
