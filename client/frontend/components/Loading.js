@@ -11,7 +11,7 @@ class Loading extends React.Component {
   }
 
   componentDidMount() {
-    this.interval = setInterval(this._tick, 500);
+    this.interval = setInterval(this._tick, 250);
   }
 
   componentWillUnmount() {
