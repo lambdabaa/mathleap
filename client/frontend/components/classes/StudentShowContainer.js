@@ -25,6 +25,10 @@ module.exports = React.createClass({
     this.setState({aClass});
   },
 
+  componentDidMount: function() {
+    this.props.onload();
+  },
+
   render: function(): React.Element {
     return <StudentShow aClass={this.state.aClass}
                         assignments={this.state.assignments}

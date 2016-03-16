@@ -13,6 +13,7 @@ class HomeContainer extends React.Component {
   }
 
   componentDidMount(): void {
+    this.props.onload();
     let clouds = Array.from(document.getElementsByClassName('cloud'));
     clouds.forEach((cloud: HTMLElement): void => {
       // All of the clouds start out in different positions

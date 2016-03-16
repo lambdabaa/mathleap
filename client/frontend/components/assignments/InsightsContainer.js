@@ -86,6 +86,12 @@ module.exports = React.createClass({
       grades,
       questionToCorrect
     });
+
+    if (update.length &&
+        Object.keys(grades).length &&
+        Object.keys(questionToCorrect).length) {
+      this.props.onload();
+    }
   },
 
   render: function(): React.Element {

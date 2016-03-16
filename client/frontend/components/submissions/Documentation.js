@@ -3,7 +3,8 @@
 let React = require('react');
 let Topbar = require('../Topbar');
 
-function Documentation(): React.Element {
+function Documentation(props: Object): React.Element {
+  props.onload();
   return <div id="documentation">
     <Topbar headerText="Introduction to the Math Editor" />
     <div className="view">

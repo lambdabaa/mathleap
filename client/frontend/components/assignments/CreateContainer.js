@@ -55,6 +55,13 @@ module.exports = React.createClass({
     this.setState({aClass});
   },
 
+  componentDidUpdate: function() {
+    let {topics} = this.state;
+    if (topics.length > 0) {
+      this.props.onload();
+    }
+  },
+
   render: function(): React.Element {
     return <Create user={this.state.user}
                    aClass={this.state.aClass}

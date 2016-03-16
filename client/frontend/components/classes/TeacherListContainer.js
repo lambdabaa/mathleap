@@ -39,6 +39,7 @@ module.exports = React.createClass({
   componentDidMount: function(): void {
     this._updateClasses(this.state);
     preloadImage('public/style/images/color_picker_triangle.png');
+    this.props.onload();
   },
 
   componentWillUpdate: function(props: Object, state: Object): void {

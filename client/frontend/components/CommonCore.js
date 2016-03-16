@@ -3,7 +3,8 @@
 let React = require('react');
 let Topbar = require('./Topbar');
 
-function CommonCore(): React.Element {
+function CommonCore(props: Object): React.Element {
+  props.onload();
   return <div id="common-core">
     <Topbar headerText="Common Core" actions={[]} />
     <div className="view">

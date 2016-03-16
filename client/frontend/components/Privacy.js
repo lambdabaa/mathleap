@@ -3,7 +3,8 @@
 let React = require('react');
 let Topbar = require('./Topbar');
 
-function Privacy(): React.Element {
+function Privacy(props: Object): React.Element {
+  props.onload();
   return <div id="privacy">
     <Topbar headerText="Privacy Policy" actions={[]} />
     <div className="view">
