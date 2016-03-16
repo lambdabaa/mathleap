@@ -137,6 +137,7 @@ module.exports = React.createClass({
                  aClass={this.state.aClass}
                  classId={this.props.aClass}
                  assignment={this.state.assignment}
+                 submission={this.props.submission}
                  student={this.state.student}
                  responses={this._getResponses()}
                  marks={this.state.marks}

@@ -95,17 +95,14 @@ module.exports = React.createClass({
       isTutorialDismissed: false,
 
       // Whether we're waiting for a submit action
-      isSubmissionPending: false
+      isSubmissionPending: false,
+
+      isReadOnly: false
     };
   },
 
   // $FlowFixMe
   componentWillMount: async function(): Promise<void> {
-    let redirect = this._isSubmissionComplete();
-    if (redirect) {
-      return this._redirectToShowSubmission();
-    }
-
     let {aClass, assignment, submission, id} = this.props;
     if (aClass) {
       // $FlowFixMe
@@ -148,6 +145,8 @@ module.exports = React.createClass({
     if (tutorial) {
       tutorial.scrollIntoView();
     }
+
+    this._checkForReadOnlyView();
   },
 
   componentWillUnmount: function(): void {
@@ -158,11 +157,6 @@ module.exports = React.createClass({
   },
 
   componentWillUpdate: function(props: Object, state: Object): void {
-    let redirect = this._isSubmissionComplete(state);
-    if (redirect) {
-      return this._redirectToShowSubmission();
-    }
-
     let {questionType} = state;
     if (questionType === 'equation-editor') {
       if (!this.isKeyboardOn) {
@@ -216,6 +210,8 @@ module.exports = React.createClass({
         step.focus();
       }
     }
+
+    this._checkForReadOnlyView();
   },
 
   _tick: function() {
@@ -226,7 +222,7 @@ module.exports = React.createClass({
   render: function(): React.Element {
     let {num, isSubmissionPending} = this.state;
     if (typeof num === 'number' && !isSubmissionPending) {
-      this.props.onload();
+      setTimeout(this.props.onload, 0);
     }
 
     return <Edit aClass={this.state.aClass}
@@ -252,6 +248,7 @@ module.exports = React.createClass({
                  isTutorialDismissed={this.state.isTutorialDismissed}
                  isSubmissionPending={isSubmissionPending}
                  isPractice={this.isPracticeMode}
+                 isReadOnly={this.state.isReadOnly}
                  showModal={this.props.showModal}
                  displayModalError={this.props.displayModalError}
                  displayModalSuccess={this.props.displayModalSuccess}
@@ -282,13 +279,6 @@ module.exports = React.createClass({
     let {submission} = state;
     let complete = firebaseChild.findByKey(submission, 'complete');
     return typeof complete === 'boolean' ? complete : false;
-  },
-
-  _redirectToShowSubmission: function(): void {
-    location.hash = location.hash
-      .split('/')
-      .filter((part: string) => part.length && part !== 'edit')
-      .join('/');
   },
 
   _selectQuestion: async function(num: number): Promise<void> {
@@ -797,5 +787,17 @@ module.exports = React.createClass({
     });
 
     return getQuestionType(section.type.name);
+  },
+
+  _checkForReadOnlyView: function() {
+    if (this.state.isReadOnly || !this._isSubmissionComplete()) {
+      // Either we already know this is read only or it isn't.
+      return;
+    }
+
+    clearInterval(this.interval);
+    document.removeEventListener('keydown', this._handleKeyDown);
+    document.removeEventListener('keypress', preventDefault);
+    this.setState({isCursorVisible: false, isReadOnly: true});
   }
 });

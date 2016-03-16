@@ -52,7 +52,7 @@ class HomeContainer extends React.Component {
   }
 
   render(): React.Element {
-    this.props.onload();
+    setTimeout(this.props.onload, 0);
     return <Home screenshot={this.state.screenshot}
                  selectScreenshot={this._handleSelectScreenshot}
                  showModal={this.props.showModal}

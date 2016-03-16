@@ -3,7 +3,7 @@
 let React = require('react');
 
 function NotFound(props: Object): React.Element {
-  props.onload();
+  setTimeout(props.onload, 0);
   return <div id="not-found">
     <div className="container">
       <div className="text">

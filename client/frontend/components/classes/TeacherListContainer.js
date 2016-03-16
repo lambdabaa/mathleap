@@ -81,7 +81,7 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
-    this.props.onload();
+    setTimeout(this.props.onload, 0);
     return <TeacherList teacher={session.get('user')}
                         classes={this.state.classes}
                         editable={this.state.editable}

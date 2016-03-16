@@ -5,7 +5,7 @@ let React = require('react');
 let Tabular = require('../Tabular');
 
 function QuestionList(props: Object): React.Element {
-  let {responses, num, isSubmissionPending} = props;
+  let {responses, num, isSubmissionPending, isReadOnly} = props;
   let questions = responses.map((aResponse: Object, index: number) => {
     return [
       <div key={`number-${index}`}
@@ -30,7 +30,7 @@ function QuestionList(props: Object): React.Element {
               rows={questions}
               selected={num} />
     {
-      isSubmissionPending ?
+      isSubmissionPending || isReadOnly ?
         <div className="button-inverse button-disabled">Submit</div> :
         <div className="button-inverse" onClick={props.handleSubmit}>Submit</div>
     }

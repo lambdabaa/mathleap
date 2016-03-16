@@ -28,7 +28,7 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
-    this.props.onload();
+    setTimeout(this.props.onload, 0);
     return <Practice assignments={this.state.assignments}
                      openPractice={this._handleOpenPractice} />;
   },

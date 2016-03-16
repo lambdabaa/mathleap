@@ -69,7 +69,7 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
-    this.props.onload();
+    setTimeout(this.props.onload, 0);
     return <StudentList first={this.state.first}
                         classes={this.state.classes}
                         addClass={this._handleAddClass} />;

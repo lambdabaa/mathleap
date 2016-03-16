@@ -38,7 +38,6 @@ module.exports = React.createClass({
 
   componentDidMount: function(): void {
     this._updateStudents(this.state);
-    this.props.onload();
   },
 
   componentWillUpdate: function(props: Object, state: Object): void {
@@ -78,6 +77,7 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
+    setTimeout(this.props.onload, 0);
     return <Show aClass={this.state.aClass}
                  classId={this.props.aClass}
                  theAssignment={this.state.theAssignment}

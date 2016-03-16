@@ -4,7 +4,7 @@ let React = require('react');
 let Topbar = require('./Topbar');
 
 function Privacy(props: Object): React.Element {
-  props.onload();
+  setTimeout(props.onload, 0);
   return <div id="privacy">
     <Topbar headerText="Privacy Policy" actions={[]} />
     <div className="view">

@@ -2,6 +2,7 @@
 
 let EquationEditor = require('./EquationEditor');
 let QuestionList = require('./QuestionList');
+let ROTextInputResponse = require('./ROTextInputResponse');
 let React = require('react');
 let TextInputResponse = require('./TextInputResponse');
 let Topbar = require('../Topbar');
@@ -36,7 +37,8 @@ function Edit(props: Object): React.Element {
     questionType,
     isHelpDialogShown,
     isTutorialDismissed,
-    isPractice
+    isPractice,
+    isReadOnly
   } = props;
 
   let headerText, backlink, backlinkText;
@@ -82,11 +84,12 @@ function Edit(props: Object): React.Element {
           (() => {
             let ctor;
             switch (questionType) {
-              case 'equation-editor':
-                ctor = EquationEditor;
-                break;
               case 'text-input-response':
-                ctor = TextInputResponse;
+                ctor = isReadOnly ? ROTextInputResponse : TextInputResponse;
+                break;
+              case 'equation-editor':
+              default:
+                ctor = EquationEditor;
                 break;
             }
 
