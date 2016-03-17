@@ -31,7 +31,8 @@ function Topbar(props: Object): React.Element {
 
           if (helper.isTeacher() && !helper.isEdmodoUser()) {
             actions.unshift(
-              <div className="topbar-action clickable-text" onClick={handleAccount.bind(this, props, user)}>
+              <div className="topbar-action clickable-text"
+                   onClick={handleAccount.bind(this, props, user)}>
                 Account
               </div>
             );
@@ -49,9 +50,15 @@ async function handleAccount(props: Object, user: Object): Promise {
   props.clearMessages();
   await props.showModal(
     <div className="update-password-form">
-      <input type="password" className="old-password" placeholder="Current password or reset token" />
-      <input type="password" className="new-password" placeholder="New password" />
-      <input type="password" className="new-password-check" placeholder="Repeat password" />
+      <input type="password"
+             className="old-password"
+             placeholder="Current password or reset token" />
+      <input type="password"
+             className="new-password"
+             placeholder="New password" />
+      <input type="password"
+             className="new-password-check"
+             placeholder="Repeat password" />
       <div className="change-password-submit button-inverse"
            onClick={onChangePassword.bind(this, props, user)}>
         Change password

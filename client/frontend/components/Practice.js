@@ -53,8 +53,8 @@ function Practice(props: Object): React.Element {
                  {content: 'Problems', width: 140},
                  {
                    content: <a className="practice-create-assignment" href="#!/practice/new/">
-                              <img className="list-action-btn" src="public/style/images/add_btn.png" />
-                            </a>,
+                     <img className="list-action-btn" src="public/style/images/add_btn.png" />
+                   </a>,
                    width: 40
                  }
                ]}

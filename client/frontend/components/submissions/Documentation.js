@@ -24,10 +24,12 @@ function Documentation(props: Object): React.Element {
         Applying a function to both sides of a statement encompasses operations like
         adding a number to both sides of an equation and taking the logarithm of each
         side of an inequality. Simplifying an expression within a statement includes
-        operations like rewriting an expression like <span className="emph"
-                                                           style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>x + x</span>
+        operations like rewriting an expression like
+        <span className="emph"
+              style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>x + x</span>
         to <span className="emph"
-                 style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>2x</span> and canceling out terms like
+                 style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>2x</span>
+        and canceling out terms like
         <span className="emph"
               style={{backgroundColor: 'rgba(266, 37, 23, 0.5)'}}>x - x</span>.
       </p>
@@ -37,8 +39,10 @@ function Documentation(props: Object): React.Element {
       <p>
         In order to apply a simple function like <span className="emph">f(x) = x + 5</span>
         to each side of a statement (ie adding 5 to both sides), simply click on the active
-        problem and type <span className="emph"
-                               style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>+5</span>. Hit <span className="emph">ENTER</span>
+        problem and type
+        <span className="emph"
+              style={{backgroundColor: 'rgba(176, 235, 63, 0.5)'}}>+5</span>. Hit
+        <span className="emph">ENTER</span>
         to save your changes. Typing other basic operators like
         <span className="emph">-</span>,
         <span className="emph">*</span>,
@@ -65,26 +69,34 @@ function Documentation(props: Object): React.Element {
       <h2>Simplifying an expression</h2>
       <br />
       <p>
-        In order to simplify an expression like <span className="emph"
-                                                      style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>x + x</span>
-        to <span className="emph"
-                 style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>2x</span>, students can highlight the initial expression
+        In order to simplify an expression like
         <span className="emph"
-              style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>x + x</span> and type <span className="emph">BACKSPACE</span>
+              style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>x + x</span>
+        to <span className="emph"
+                 style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>2x</span>,
+        students can highlight the initial expression
+        <span className="emph"
+              style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>x + x</span>
+        and type <span className="emph">BACKSPACE</span>
         followed by the replacement expression
         <span className="emph"
-              style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>2x</span>. Hitting <span className="emph">ENTER</span>
-        saves the changes made during a step. An expression can be highlighted using a keyboard or a mouse on a desktop
+              style={{backgroundColor: 'rgba(57, 150, 240, 0.5)'}}>2x</span>.
+        Hitting <span className="emph">ENTER</span>
+        saves the changes made during a step. An expression can be highlighted
+        using a keyboard or a mouse on a desktop
         browser. To highlight an expression using the keyboard, position the
-        <span style={{color: '#3996f0', fontSize: '24px', fontWeight: 'bold'}}>|</span> cursor using the arrow keys ← and →
-        and then highlight characters to the left with shift + ← or to the right with shift + →.
+        <span style={{color: '#3996f0', fontSize: '24px', fontWeight: 'bold'}}>|</span>
+        cursor using the arrow keys ← and →
+        and then highlight characters to the left with shift + ←
+        or to the right with shift + →.
         Simple clicking and dragging works to highlight an expression using the mouse.
       </p>
       <br />
       <p>
         Canceling terms is even easier. To cancel an expression like
         <span className="emph"
-              style={{backgroundColor: 'rgba(266, 37, 23, 0.5)'}}>2 - 2</span>, simply highlight it and
+              style={{backgroundColor: 'rgba(266, 37, 23, 0.5)'}}>2 - 2</span>,
+        simply highlight it and
         use <span className="emph">BACKSPACE</span>. As in the other operations,
         <span className="emph">ENTER</span> saves your work.
       </p>

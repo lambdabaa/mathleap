@@ -110,8 +110,8 @@ createQuestion['Decimal subtraction'] = function(): Array<AssignmentQuestion> {
   });
 };
 
-createQuestion['Decimal multiplication'] = function(count: number,
-                                                    exclude: Array<number>): Array<AssignmentQuestion> {
+createQuestion['Decimal multiplication'] =
+    function(count: number, exclude: Array<number>): Array<AssignmentQuestion> {
   // All of the excluded things should be 2 digit floats like 5.3.
   let multiples = Array.isArray(exclude) ?
     exclude.map((x: number): number => 10 * x) :

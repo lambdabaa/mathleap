@@ -42,7 +42,9 @@ function TeacherList(props: Object): React.Element {
   });
 
   return <div id="classes-teacher-list">
-    <div className={`add-topic-flash ${isClipboardSuccess || 'hidden'}`}>✔ Code copied to clipboard</div>
+    <div className={`add-topic-flash ${isClipboardSuccess || 'hidden'}`}>
+      ✔ Code copied to clipboard
+    </div>
     <Topbar headerText={headerText}
             showModal={props.showModal}
             displayModalError={props.displayModalError}
