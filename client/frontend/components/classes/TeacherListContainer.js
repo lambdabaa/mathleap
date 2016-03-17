@@ -1,6 +1,7 @@
 /* @flow */
 
 let $ = document.querySelector.bind(document);
+let Clipboard = require('clipboard');
 let React = require('react');
 let ReactFire = require('reactfire');
 let TeacherList = require('./TeacherList');
@@ -39,6 +40,18 @@ module.exports = React.createClass({
   componentDidMount: function(): void {
     this._updateClasses(this.state);
     preloadImage('public/style/images/color_picker_triangle.png');
+    let clipboard = new Clipboard('.octicon-clippy');
+    clipboard.on('success', () => {
+      this.setState({isClipboardSuccess: true});
+      if (this.clipboardTimeout) {
+        clearTimeout(this.clipboardTimeout);
+      }
+
+      // $FlowFixMe
+      this.clipboardTimeout = setTimeout(() => {
+        this.setState({isClipboardSuccess: false});
+      }, 1500);
+    });
   },
 
   componentWillUpdate: function(props: Object, state: Object): void {
@@ -85,6 +98,7 @@ module.exports = React.createClass({
     return <TeacherList teacher={session.get('user')}
                         classes={this.state.classes}
                         editable={this.state.editable}
+                        isClipboardSuccess={this.state.isClipboardSuccess}
                         showModal={this.props.showModal}
                         displayModalError={this.props.displayModalError}
                         displayModalSuccess={this.props.displayModalSuccess}

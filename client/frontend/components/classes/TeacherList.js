@@ -7,7 +7,7 @@ let {getPalette} = require('../../colors');
 let handleEnter = require('../../handleEnter');
 
 function TeacherList(props: Object): React.Element {
-  let {teacher, classes, editable} = props;
+  let {teacher, classes, editable, isClipboardSuccess} = props;
   let headerText = `${teacher.title} ${teacher.last}'s Classes`;
 
   let cols = [
@@ -30,7 +30,10 @@ function TeacherList(props: Object): React.Element {
           renderMutableClass(props, aClass, index) :
           renderImmutableClass(props, aClass, index);
       })(),
-      aClass.code,
+      <div>
+        <span className="octicon octicon-clippy" data-clipboard-text={aClass.code}></span>
+        <span id={aClass.code}>{aClass.code}</span>
+      </div>,
       aClass.students ? Object.keys(aClass.students).length : 0,
       <img className="list-action-btn"
            src="public/style/images/delete_btn.png"
@@ -39,6 +42,7 @@ function TeacherList(props: Object): React.Element {
   });
 
   return <div id="classes-teacher-list">
+    <div className={`add-topic-flash ${isClipboardSuccess || 'hidden'}`}>✔ Code copied to clipboard</div>
     <Topbar headerText={headerText}
             showModal={props.showModal}
             displayModalError={props.displayModalError}
