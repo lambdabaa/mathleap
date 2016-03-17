@@ -75,7 +75,7 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
-    this.props.onload();
+    setTimeout(this.props.onload, 0);
     let studentList = this.state.students.filter((student: ?FBStudent) => {
       return student != null;
     });

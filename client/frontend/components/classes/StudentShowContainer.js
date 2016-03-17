@@ -26,7 +26,7 @@ module.exports = React.createClass({
   },
 
   render: function(): React.Element {
-    this.props.onload();
+    setTimeout(this.props.onload, 0);
     return <StudentShow aClass={this.state.aClass}
                         assignments={this.state.assignments}
                         showAssignment={this._handleShowAssignment} />;

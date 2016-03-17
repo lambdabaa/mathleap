@@ -4,7 +4,7 @@ let React = require('react');
 let Topbar = require('./Topbar');
 
 function CommonCore(props: Object): React.Element {
-  props.onload();
+  setTimeout(props.onload, 0);
   return <div id="common-core">
     <Topbar headerText="Common Core" actions={[]} />
     <div className="view">

@@ -4,7 +4,7 @@ let React = require('react');
 let Topbar = require('./Topbar');
 
 function Tos(props: Object): React.Element {
-  props.onload();
+  setTimeout(props.onload, 0);
   return <div id="tos">
     <Topbar headerText="Terms of Service" actions={[]} />
     <div className="view">
