@@ -38,7 +38,9 @@ function Edit(props: Object): React.Element {
     isHelpDialogShown,
     isTutorialDismissed,
     isPractice,
-    isReadOnly
+    isReadOnly,
+    status,
+    isStatusShown
   } = props;
 
   let headerText, backlink, backlinkText;
@@ -62,6 +64,7 @@ function Edit(props: Object): React.Element {
           <a href="https://www.google.com/chrome/">Google Chrome</a>.
         </div>
     }
+    <div className={`add-topic-flash ${isStatusShown || 'hidden'}`}>{status}</div>
     <Topbar headerText={headerText}
             showModal={props.showModal}
             displayModalError={props.displayModalError}

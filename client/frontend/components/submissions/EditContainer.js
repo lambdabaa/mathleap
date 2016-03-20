@@ -97,7 +97,11 @@ module.exports = React.createClass({
       // Whether we're waiting for a submit action
       isSubmissionPending: false,
 
-      isReadOnly: false
+      isReadOnly: false,
+
+      status: '',
+
+      isStatusShown: false
     };
   },
 
@@ -177,7 +181,7 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function(): void {
-    let {num} = this.state;
+    let {num, isStatusShown} = this.state;
     let responses = this._getResponses();
     if (responses && responses.length && num == null) {
       this._selectQuestion(0);
@@ -209,6 +213,15 @@ module.exports = React.createClass({
       if (step && !isElementVisible(step)) {
         step.focus();
       }
+    }
+
+    if (isStatusShown && !this.statusTimeout) {
+      // $FlowFixMe
+      this.statusTimeout = setTimeout(() => {
+        this.setState({isStatusShown: false});
+        // $FlowFixMe
+        this.statusTimeout = null;
+      }, 1500);
     }
 
     this._checkForReadOnlyView();
@@ -249,6 +262,8 @@ module.exports = React.createClass({
                  isSubmissionPending={isSubmissionPending}
                  isPractice={this.isPracticeMode}
                  isReadOnly={this.state.isReadOnly}
+                 status={this.state.status}
+                 isStatusShown={this.state.isStatusShown}
                  showModal={this.props.showModal}
                  displayModalError={this.props.displayModalError}
                  displayModalSuccess={this.props.displayModalSuccess}
@@ -302,7 +317,8 @@ module.exports = React.createClass({
       cursor: equation.length,
       deltas: [],
       undos: [],
-      redos: []
+      redos: [],
+      status: null
     });
   },
 
@@ -504,7 +520,7 @@ module.exports = React.createClass({
     event.preventDefault();
     return this._appendDelta(
       {type: 'cancel', range: [cursor, cursor]},
-      cursor - 1
+      cursor - 1,
     );
   },
 
@@ -623,7 +639,19 @@ module.exports = React.createClass({
     }
 
     this._saveState();
-    let {num, deltas} = this.state;
+    let {num, deltas, status, isStatusShown} = this.state;
+    if (!deltas.length) {
+      isStatusShown = true;
+      switch (delta.type) {
+        case 'cancel':
+          status = 'Cancelling term(s)...';
+          break;
+        case 'replace':
+          status = 'Simplifying expression...';
+          break;
+      }
+    }
+
     let responses = this._getResponses();
     let {work} = responses[num];
     let {state} = work[work.length - 1];
@@ -635,7 +663,9 @@ module.exports = React.createClass({
       equation: result,
       changes,
       cursor,
-      highlight: mapChar(result, () => false)
+      highlight: mapChar(result, () => false),
+      status,
+      isStatusShown
     });
   },
 

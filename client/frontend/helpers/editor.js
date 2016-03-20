@@ -80,13 +80,26 @@ exports.moveCursorRight = function(cursor: number, equation: string): number {
 };
 
 exports.applyFirstChar = async function(event: Object, state: Object): Promise<Object> {
-  let operator;
+  let operator, status;
   switch (event.key) {
     case '+':
+      status = 'Adding to both sides...';
+      operator = event.key;
+      break;
     case '-':
+      status = 'Subtracting from both sides...';
+      operator = event.key;
+      break;
     case '*':
+      status = 'Multiplying both sides...';
+      operator = event.key;
+      break;
     case '/':
+      status = 'Dividing both sides...';
+      operator = event.key;
+      break;
     case '^':
+      status = 'Raising both sides to a power...';
       operator = event.key;
       break;
     default:
@@ -114,7 +127,7 @@ exports.applyFirstChar = async function(event: Object, state: Object): Promise<O
     })
   );
 
-  return {append: operator, cursor, leftParens, rightParens};
+  return {append: operator, cursor, leftParens, rightParens, status, isStatusShown: true};
 };
 
 exports.applyBothSidesChar = function(event: Object, state: Object): ?Object {
