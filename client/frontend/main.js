@@ -8,13 +8,18 @@ let AppContainer = require('./components/AppContainer');
 let React = require('react');
 let ReactDOM = require('react-dom');
 let Router = require('./router');
+let optimizely = require('./optimizely');
 let session = require('./session');
 
 function main(): void {
   let router = createRouter();
   observeLocation(router);
   router.start();
-  ReactDOM.render(<AppContainer router={router} />, $('#container'));
+  ReactDOM.render(
+    <AppContainer router={router} />,
+    $('#container'),
+    () => optimizely.activate(5375052401)
+  );
 }
 
 function observeLocation(router: Router): void {
