@@ -26,7 +26,9 @@ function main(): void {
         // Only run one of primary/secondary splash experiment
         Math.random() > 0.5 ? 5370741565 : 5384720737
       ].forEach((experimentId: number) => {
-        window.optimizely.push(['activate', experimentId]);
+        if (window.optimizely && window.optimizely.push) {
+          window.optimizely.push(['activate', experimentId]);
+        }
       });
     }
   );
