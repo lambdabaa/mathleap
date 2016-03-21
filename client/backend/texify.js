@@ -36,6 +36,7 @@ let handleNode = {
   },
 
   factorlist(node: Node, parentPriority: number): string {
+    node = flattenFactorlist(node);
     let [top, bottom] = partition(
       node.data,
       (factor: Object): boolean => !factor.invert
@@ -97,17 +98,85 @@ function texifyNode(node: Node, parentPriority: number = Infinity): string {
 }
 
 function texifyFactors(factors: Array<Object>): string {
-  if (factors.length === 2) {
+  if (factors.length === 2 &&
+      mathNode.isConstant(factors[0]) &&
+      mathNode.isVariable(factors[1])) {
     // Special case for Ax
-    if (mathNode.isConstant(factors[0]) &&
-        mathNode.isVariable(factors[1])) {
-      return texifyNode(factors[0].value, 1) + texifyNode(factors[1].value, 1);
-    }
+    return texifyNode(factors[0].value, 1) + texifyNode(factors[1].value, 1);
+  }
+
+  if (factors.length === 3 &&
+      mathNode.isNegativeOne(factors[0]) &&
+      mathNode.isConstant(factors[1]) &&
+      mathNode.isVariable(factors[2])) {
+    // -Ax
+    return '-' + texifyNode(factors[1].value, 1) + texifyNode(factors[2].value, 1);
   }
 
   return factors
     .map((factor: Object): string => texifyNode(factor.value, 1))
     .join('\\cdot ');
+}
+
+// Problem is nested factorlists:
+//
+// {
+//   "nodeType": "factorlist",
+//   "data": [
+//     {
+//       "value": {
+//         "nodeType": "factorlist",
+//         "data": [
+//           {
+//             "value": {
+//               "nodeType": "atom",
+//               "data": ["number",-1]
+//             },
+//             "invert":false
+//           },
+//           {
+//             "value": {
+//               "nodeType": "atom",
+//               "data": ["number","17"]
+//             },
+//             "negate":false
+//           }
+//         ]
+//       },
+//       "invert":false
+//     },
+//     {
+//       "value": {
+//         "nodeType": "atom",
+//         "data": ["variable", "b"]
+//       },
+//       "invert": false
+//     }
+//   ]
+// }
+//
+// Not sure why this is being parsed but adding hack
+// to handle here until we do more investigation.
+function flattenFactorlist(node: Node): Node {
+  let factors = [];
+  let queue = node.data;
+
+  while (queue.length) {
+    let {value, invert} = queue.shift();
+    if ('invert' in value) {
+      invert = invert !== value.invert;
+    }
+
+    if (value.nodeType !== 'factorlist') {
+      factors.push({value, invert});
+      continue;
+    }
+
+    queue = value.data.concat(queue);
+  }
+
+  node.data = factors;
+  return node;
 }
 
 module.exports = texify;
