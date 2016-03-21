@@ -14,7 +14,19 @@ function main(): void {
   let router = createRouter();
   observeLocation(router);
   router.start();
-  ReactDOM.render(<AppContainer router={router} />, $('#container'));
+  ReactDOM.render(
+    <AppContainer router={router} />,
+    $('#container'),
+    () => {
+      [
+        5357871655,
+        5384611902,
+        5370741565
+      ].forEach((experimentId: number) => {
+        window.optimizely.push(['activate', experimentId]);
+      });
+    }
+  );
 }
 
 function observeLocation(router: Router): void {
