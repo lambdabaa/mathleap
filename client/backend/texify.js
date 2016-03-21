@@ -98,17 +98,14 @@ function texifyNode(node: Node, parentPriority: number = Infinity): string {
 }
 
 function texifyFactors(factors: Array<Object>): string {
-  if (factors.length === 2 &&
-      mathNode.isConstant(factors[0]) &&
-      mathNode.isVariable(factors[1])) {
+  if (factors.length === 2 && mathNode.isConstant(factors[0])) {
     // Special case for Ax
     return texifyNode(factors[0].value, 1) + texifyNode(factors[1].value, 1);
   }
 
   if (factors.length === 3 &&
       mathNode.isNegativeOne(factors[0]) &&
-      mathNode.isConstant(factors[1]) &&
-      mathNode.isVariable(factors[2])) {
+      mathNode.isConstant(factors[1])) {
     // -Ax
     return '-' + texifyNode(factors[1].value, 1) + texifyNode(factors[2].value, 1);
   }
