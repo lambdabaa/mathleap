@@ -19,10 +19,12 @@ function main(): void {
     $('#container'),
     () => {
       [
+        // Splash button
         5357871655,
+        // Benefits copy
         5384611902,
-        5370741565,
-        5384720737
+        // Only run one of primary/secondary splash experiment
+        Math.random() > 0.5 ? 5370741565 : 5384720737
       ].forEach((experimentId: number) => {
         window.optimizely.push(['activate', experimentId]);
       });
