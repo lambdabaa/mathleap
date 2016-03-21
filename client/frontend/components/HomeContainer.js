@@ -2,6 +2,7 @@
 
 let Home = require('./Home');
 let React = require('react');
+let optimizely = require('../optimizely');
 let preloadImage = require('../preloadImage');
 
 class HomeContainer extends React.Component {
@@ -45,6 +46,15 @@ class HomeContainer extends React.Component {
       'public/style/images/screenshot-2.png',
       'public/style/images/screenshot-3.png'
     ].forEach(preloadImage);
+
+    optimizely.activate([
+      // Splash button
+      5357871655,
+      // Benefits copy
+      5384611902,
+      // Only run one of primary/secondary splash experiment
+      optimizely.oneOf([5370741565, 5384720737])
+    ]);
   }
 
   componentWillUnmount(): void {

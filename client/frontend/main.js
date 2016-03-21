@@ -14,24 +14,7 @@ function main(): void {
   let router = createRouter();
   observeLocation(router);
   router.start();
-  ReactDOM.render(
-    <AppContainer router={router} />,
-    $('#container'),
-    () => {
-      [
-        // Splash button
-        5357871655,
-        // Benefits copy
-        5384611902,
-        // Only run one of primary/secondary splash experiment
-        Math.random() > 0.5 ? 5370741565 : 5384720737
-      ].forEach((experimentId: number) => {
-        if (window.optimizely && window.optimizely.push) {
-          window.optimizely.push(['activate', experimentId]);
-        }
-      });
-    }
-  );
+  ReactDOM.render(<AppContainer router={router} />, $('#container'));
 }
 
 function observeLocation(router: Router): void {
