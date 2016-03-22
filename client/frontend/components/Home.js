@@ -266,8 +266,8 @@ function Home(props: Object): React.Element {
           <div className="legal-jargon">
             <div className="legal-top">© 2016 MathLeap, Inc.</div>
             <div className="legal-bottom">
-              <a className="legal-link" href="#!/tos/">Terms</a>
-              <a className="legal-link" href="#!/privacy/">Privacy</a>
+              <a className="legal-link" href="#!/tos/" target="_blank">Terms</a>
+              <a className="legal-link" href="#!/privacy/" target="_blank">Privacy</a>
               <a className="legal-link" href="mailto:info@mathleap.org">Contact Us</a>
             </div>
           </div>
