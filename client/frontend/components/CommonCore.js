@@ -6,7 +6,7 @@ let Topbar = require('./Topbar');
 function CommonCore(props: Object): React.Element {
   setTimeout(props.onload, 0);
   return <div id="common-core">
-    <Topbar headerText="Common Core" actions={[]} />
+    <Topbar headerText="Common Core" />
     <div className="view">
       <p>
         Many school districts in the US are moving quickly to adopt common core standards

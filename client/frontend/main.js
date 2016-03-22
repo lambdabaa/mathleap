@@ -9,12 +9,14 @@ let React = require('react');
 let ReactDOM = require('react-dom');
 let Router = require('./router');
 let optimizely = require('./optimizely');
+let page = require('./page');
 let session = require('./session');
 
 function main(): void {
   let router = createRouter();
   observeLocation(router);
   router.start();
+  page.setRouter(router);
   ReactDOM.render(
     <AppContainer router={router} />,
     $('#container'),
@@ -43,17 +45,10 @@ function observeLocation(router: Router): void {
       return;
     }
 
-    switch (router.view) {
-      case '/common-core':
-      case '/documentation':
-      case '/home':
-      case '/privacy':
-      case '/tos':
-        break;
-      default:
-        // User is logged out and viewing a page only logged in users
-        // should be able to. Kick them back to homepage.
-        location.hash = '#!/home/';
+    if (page.getPermissions() === 'restricted') {
+      // User is logged out and viewing a page only logged in users
+      // should be able to. Kick them back to homepage.
+      location.hash = '#!/home/';
     }
   });
 }

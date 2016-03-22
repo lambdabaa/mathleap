@@ -4,6 +4,7 @@ let $ = document.querySelector.bind(document);
 let React = require('react');
 let debug = require('../../common/debug')('Topbar');
 let helper = require('../helpers/user');
+let page = require('../page');
 let session = require('../session');
 let users = require('../store/users');
 
@@ -20,29 +21,52 @@ function Topbar(props: Object): React.Element {
         </div>
     }
     <div className="topbar-actions">
-      {
-        props.actions ||
-        (() => {
-          let actions = [
-            <div className="topbar-action clickable-text" onClick={users.logout}>
-              Log out
-            </div>
-          ];
-
-          if (helper.isTeacher() && !helper.isEdmodoUser()) {
-            actions.unshift(
-              <div className="topbar-action clickable-text"
-                   onClick={handleAccount.bind(this, props, user)}>
-                Account
-              </div>
-            );
-          }
-
-          return actions;
-        })()
-      }
+      {props.actions || renderDefaultActions(props)}
     </div>
   </div>;
+}
+
+function renderDefaultActions(props: Object): Array<React.Element> {
+  return page.getPermissions() === 'open' ?
+    renderOpenActions() :
+    renderRestrictedActions(props);
+}
+
+function renderOpenActions(): Array<React.Element> {
+  return [
+    ['Common Core', 'common-core'],
+    ['Privacy', 'privacy'],
+    ['Terms', 'tos'],
+    ['Home', 'home']
+  ].map((link: Array<string>): React.Element => {
+    let [text, href] = link;
+    let className = 'topbar-action';
+    if (text === 'Home') {
+      className += ' signup-button';
+    }
+
+    return <a className={className} href={`#!/${href}/`}>{text}</a>;
+  });
+}
+
+function renderRestrictedActions(props: Object): Array<React.Element> {
+  let user = session.get('user');
+  let actions = [
+    <div className="topbar-action clickable-text" onClick={users.logout}>
+      Log out
+    </div>
+  ];
+
+  if (helper.isTeacher() && !helper.isEdmodoUser()) {
+    actions.unshift(
+      <div className="topbar-action clickable-text"
+           onClick={handleAccount.bind(this, props, user)}>
+        Account
+      </div>
+    );
+  }
+
+  return actions;
 }
 
 async function handleAccount(props: Object, user: Object): Promise {

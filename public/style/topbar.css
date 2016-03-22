@@ -72,3 +72,10 @@
   color: black;
   margin-left: 10px;
 }
+
+.topbar .signup-button {
+  background-color: #31a4cb;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 6px;
+}
