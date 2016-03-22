@@ -11,15 +11,16 @@ function TeacherList(props: Object): React.Element {
   let headerText = `${teacher.title} ${teacher.last}'s Classes`;
 
   let cols = [
-    {content: 'Class', width: 680},
+    {content: 'Class', width: 620},
     {content: 'Code', width: 155},
     {content: 'Students', width: 77.5},
     {
-      content: <img className="list-action-btn"
-                    src="public/style/images/add_btn.png"
-                    onClick={props.addClass} />,
-      align: 'right',
-      width: 77.5
+      content: <div className="button-action try-it-button tabular-button"
+                    onClick={props.addClass}>
+        + Class
+      </div>,
+      align: 'center',
+      width: 137.5
     }
   ];
 
@@ -54,7 +55,7 @@ function TeacherList(props: Object): React.Element {
       {
         rows.length ?
           'Click on a class to create assignments and view submissions.' :
-          'Welcome to MathLeap! To create a class, click the plus sign below.'
+          'Welcome to MathLeap! To create a class, click the plus button below.'
       }
     </div>
     <Tabular className="view" cols={cols} rows={rows} />

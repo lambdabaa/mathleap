@@ -13,7 +13,7 @@
 }
 
 .tabular-headers {
-  height: 30px;
+  height: 40px;
 }
 
 .tabular-header {
@@ -62,4 +62,9 @@
 
 .dark .tabular-row:nth-child(even) {
   background-color: #f2f2f2;
+}
+
+.tabular-button {
+  float: right;
+  width: 110px;
 }

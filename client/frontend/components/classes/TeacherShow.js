@@ -31,7 +31,7 @@ function TeacherShow(props: Object): React.Element {
       anAssignment.deadline,
       `${completeSubmissionCount} / ${students.length}`,
       completeSubmissionCount > 0 ? averages[index] : 'n / a',
-      <div className="button-action try-it-button"
+      <div className="button-inverse try-it-button"
            onClick={() => props.tryAssignment(anAssignment)}>
         Try it!
       </div>
@@ -50,7 +50,7 @@ function TeacherShow(props: Object): React.Element {
           'Click on an assignment below to view student submissions.' :
           <div>
             Great. Now share the class code <span className="emph">{aClass.code}</span>
-            with your students and click the plus sign below to assign some problems.
+            with your students and click the plus button below to assign some problems.
           </div>
       }
     </div>
@@ -65,16 +65,16 @@ function TeacherShow(props: Object): React.Element {
                  rows={studentList} />
         <Tabular className="classes-show-assignments"
                  cols={[
-                   {content: 'Assignment', width: 190},
+                   {content: 'Assignment', width: 180},
                    {content: 'Deadline', width: 120},
-                   {content: 'Submissions', width: 110},
-                   {content: 'Avg.', width: 90},
+                   {content: 'Done', width: 70},
+                   {content: 'Avg.', width: 70},
                    {
-                     content: <img className="list-action-btn"
-                      src="public/style/images/add_btn.png"
-                      style={{float: 'right'}}
-                      onClick={props.createAssignment} />,
-                     width: 80
+                     content: <div className="button-action try-it-button"
+                                   onClick={props.createAssignment}>
+                      + Assignment
+                     </div>,
+                     width: 150
                    }
                   ]}
                  rows={assignments} />

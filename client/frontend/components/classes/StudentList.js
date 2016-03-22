@@ -40,7 +40,7 @@ function StudentList(props: Object): React.Element {
       {
         classList.length ?
           'Click on a class to take assignments and see your submissions.' :
-          `Welcome to MathLeap! To join a class, click the plus sign below
+          `Welcome to MathLeap! To join a class, click the plus button below
            and enter your class code. If you just want to practice, click
            Practice Mode on the navigation bar.`
       }
@@ -50,9 +50,10 @@ function StudentList(props: Object): React.Element {
                {content: 'Class', width: 660},
                {content: 'Teacher', width: 165},
                {
-                 content: <img className="list-action-btn"
-                               src="public/style/images/add_btn.png"
-                               onClick={props.addClass} />,
+                 content: <div className="button-action try-it-button tabular-button"
+                               onClick={props.addClass}>
+                   + Class
+                 </div>,
                  align: 'right',
                  width: 165
                }

@@ -20,7 +20,8 @@ function Practice(props: Object): React.Element {
         {assignment.getTopics(anAssignment).join(', ')}
       </div>,
       anAssignment.created,
-      assignment.getSize(anAssignment)
+      assignment.getSize(anAssignment),
+      ''
     ];
   });
 
@@ -42,20 +43,21 @@ function Practice(props: Object): React.Element {
       rows.length ?
         '' :
         <div className="view classes-list-ftu">
-          Click the plus sign below to choose problems to practice.
+          Click the plus button below to choose problems to practice.
         </div>
     }
     <div className="view">
       <Tabular className="practice-mode"
                cols={[
-                 {content: 'Topics', width: 620},
-                 {content: 'Created', width: 140},
-                 {content: 'Problems', width: 140},
+                 {content: 'Topics', width: 640},
+                 {content: 'Created', width: 120},
+                 {content: 'Size', width: 70},
                  {
-                   content: <a className="practice-create-assignment" href="#!/practice/new/">
-                     <img className="list-action-btn" src="public/style/images/add_btn.png" />
+                   content: <a className="practice-create-assignment button-action try-it-button tabular-button"
+                               href="#!/practice/new/">
+                     + Practice
                    </a>,
-                   width: 40
+                   width: 110
                  }
                ]}
                rows={rows} />
