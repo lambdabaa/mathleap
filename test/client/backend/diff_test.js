@@ -195,4 +195,28 @@ suite('backend/diff', () => {
       'highlight'
     ]);
   });
+
+  test('#getChanges move cursor after delete', () => {
+    diff.getChanges(
+      [
+        {pos: 0, chr: 8, highlight: 3},
+        {pos: 4, chr: '/'.charCodeAt(0), highlight: null},
+        {pos: 5, chr: '-'.charCodeAt(0), highlight: null},
+        {pos: 6, chr: '1'.charCodeAt(0), highlight: null},
+        {pos: 7, chr: '7'.charCodeAt(0), highlight: null}
+      ],
+      '-17b=85'
+    )
+    .should
+    .deep
+    .equal([
+      'strikethrough',
+      'strikethrough',
+      'strikethrough',
+      'none',
+      'none',
+      'none',
+      'none'
+    ]);
+  });
 });

@@ -44,7 +44,7 @@ type BlocksAndCursor = {blocks: Array<Block>, cursor: number};
  * Temporary bridge from api that the frontend expects to our
  * existing backend thing.
  */
-module.exports = function(statement: string, deltas: Array<DeltaV2>): Diff  {
+function diff(statement: string, deltas: Array<DeltaV2>): Diff  {
   debug('diff', statement, stringify(deltas));
   let adapted = flatten(
     deltas.map((delta: DeltaV2): Array<DeltaV1> => {
@@ -84,10 +84,10 @@ module.exports = function(statement: string, deltas: Array<DeltaV2>): Diff  {
     result: module.exports.applyDiff(adapted, statement),
     changes: module.exports.getChanges(adapted, statement)
   };
-};
+}
 
 
-module.exports.applyDiff = function applyDiff(deltas: Array<DeltaV1>, stmt: string): string {
+function applyDiff(deltas: Array<DeltaV1>, stmt: string): string {
   if (!deltas.length) {
     return stmt;
   }
@@ -95,10 +95,9 @@ module.exports.applyDiff = function applyDiff(deltas: Array<DeltaV1>, stmt: stri
   debug('applyDiff', stringify(arguments));
   let [head, ...tail] = deltas;
   return applyDiff(tail, applyDeltaToStatement(stmt, head));
-};
+}
 
-module.exports.getChanges = function getChanges(deltas: Array<DeltaV1>,
-                                                stmt: string): Array<string> {
+function getChanges(deltas: Array<DeltaV1>, stmt: string): Array<string> {
   let {blocks} = deltas.reduce(
     function(data: BlocksAndCursor, delta: DeltaV1): BlocksAndCursor {
       let fn = delta.highlight ? handleHighlight : handleChar;
@@ -118,7 +117,7 @@ module.exports.getChanges = function getChanges(deltas: Array<DeltaV1>,
       return span(...block.range).map(() => block.type);
     })
   );
-};
+}
 
 function applyDeltaToStatement(stmt: string, delta: DeltaV1): string {
   let {pos, chr, highlight} = delta;
@@ -362,7 +361,6 @@ function handleInnerSelection(blocks: Array<Block>, index: number, chr: Char,
 function handleChar(blocks: Array<Block>, cursor: number,
                     delta: DeltaV1): Array<Block> | BlocksAndCursor {
   debug('handleChar', stringify(arguments));
-  let block = blocks[cursor];
   let {chr, pos} = delta;
   if (chr === 8) {
     // There are 3 cases to think about for backspace no highlight.
@@ -379,6 +377,7 @@ function handleChar(blocks: Array<Block>, cursor: number,
       });
     }
 
+    let block = blocks[cursor];
     switch (block.len) {
       case 0:
         return handleHighlight(blocks, cursor, {
@@ -401,12 +400,56 @@ function handleChar(blocks: Array<Block>, cursor: number,
     }
   }
 
+  let blockAndIndex = getSelectedBlock(blocks, delta.pos);
+  if (blockAndIndex == null) {
+    return insertGhostBlock(blocks, delta, blocks.length);
+  }
+
+  let {block, index} = blockAndIndex;
+  if (block.type === 'none') {
+    return insertGhostBlock(blocks, delta, index);
+  }
+
   // If it's not backspace then we just need to extend the active block.
   return replaceIndex(blocks, cursor, {
     type: 'highlight',
     range: block.range,
     len: block.len + 1
   });
+}
+
+function insertGhostBlock(blocks: Array<Block>, delta: DeltaV1,
+                            index: number): BlocksAndCursor {
+  let last = blocks[blocks.length - 1];
+  let block = {type: 'ghost', len: 1, range: [last.range[1], last.range[1]]};
+  if (index === blocks.length) {
+    // Does this not totally screw up our notion of range?
+    return {blocks: blocks.concat(block), cursor: delta.pos + 1};
+  }
+
+  let prev = blocks[index];
+  let split = getBlockIndex(blocks, delta.pos, true /* inclusive */);
+  if (index === blocks.length - 1 && split === last.len) {
+    return {blocks: blocks.concat(block), cursor: delta.pos + 1};
+  }
+
+  let left = {
+    type: 'none',
+    len: split,
+    range: [prev.range[0], prev.range[0] + split]
+  };
+
+  let right = {
+    type: 'none',
+    len: prev.len - split,
+    range: [prev.range[0] + split, prev.range[1]]
+  };
+
+  block.range = [prev.range[0] + split, prev.range[0] + split];
+  return {
+    blocks: replaceIndex(blocks, index, [left, right, block]),
+    cursor: delta.pos + 1
+  };
 }
 
 /**
@@ -428,6 +471,22 @@ function getSelectedBlocks(blocks: Array<Block>, left: number,
   return results;
 }
 
+function getSelectedBlock(blocks: Array<Block>, marker: number): ?BlockAndIndex {
+  let pos = 0;
+  for (let index = 0; index < blocks.length; index++) {
+    let block = blocks[index];
+    let {len} = block;
+    if (block.type === 'none' && marker < pos + len ||
+        block.type !== 'none' && marker <= pos + len) {
+      return {index, block};
+    }
+
+    pos += len;
+  }
+
+  return null;
+}
+
 /**
  * Normalize a position on the list of blocks to the block in which it lands.
  */
@@ -447,3 +506,7 @@ function getBlockIndex(blocks: Array<Block>, marker: ?number, inclusive: boolean
 
   return -1;
 }
+
+module.exports = diff;
+module.exports.applyDiff = applyDiff;
+module.exports.getChanges = getChanges;
