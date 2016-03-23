@@ -160,16 +160,28 @@ function flattenFactorlist(node: Node): Node {
 
   while (queue.length) {
     let {value, invert} = queue.shift();
-    if ('invert' in value) {
-      invert = invert !== value.invert;
-    }
-
     if (value.nodeType !== 'factorlist') {
       factors.push({value, invert});
       continue;
     }
 
-    queue = value.data.concat(queue);
+    queue = value.data
+      .map((x: Node) => {
+        if (typeof invert === 'boolean' && typeof x.invert === 'boolean') {
+          return {value: x.value, invert: invert !== x.invert};
+        }
+
+        if (typeof invert === 'boolean') {
+          return {value: x.value, invert};
+        }
+
+        if (typeof x.invert === 'boolean') {
+          return x;
+        }
+
+        return {value: x.value, invert: false};
+      })
+      .concat(queue);
   }
 
   node.data = factors;
