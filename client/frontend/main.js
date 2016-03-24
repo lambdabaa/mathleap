@@ -17,11 +17,7 @@ function main(): void {
   observeLocation(router);
   router.start();
   page.setRouter(router);
-  ReactDOM.render(
-    <AppContainer router={router} />,
-    $('#container'),
-    () => optimizely.activate(5375052401)
-  );
+  ReactDOM.render(<AppContainer router={router} />, $('#container'));
 }
 
 function observeLocation(router: Router): void {
