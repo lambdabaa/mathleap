@@ -8,7 +8,6 @@ let AppContainer = require('./components/AppContainer');
 let React = require('react');
 let ReactDOM = require('react-dom');
 let Router = require('./router');
-let optimizely = require('./optimizely');
 let page = require('./page');
 let session = require('./session');
 
