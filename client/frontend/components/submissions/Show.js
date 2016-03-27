@@ -49,8 +49,7 @@ function Show(props: Object): React.Element {
           </a>;
         })()
       }
-      <a className="insights-dashboard-link"
-         href={`#!/classes/${classId}/assignments/${assignment.id}/submissions/${submission}/edit/`}>
+      <a className="insights-dashboard-link" href={`${location.hash}edit/`}>
         View Submission
       </a>
       <Tabular cols={[
