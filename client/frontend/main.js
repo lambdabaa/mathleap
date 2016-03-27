@@ -9,6 +9,7 @@ let React = require('react');
 let ReactDOM = require('react-dom');
 let Router = require('./router');
 let page = require('./page');
+let preloadImage = require('./preloadImage');
 let session = require('./session');
 
 function main(): void {
@@ -17,6 +18,7 @@ function main(): void {
   router.start();
   page.setRouter(router);
   ReactDOM.render(<AppContainer router={router} />, $('#container'));
+  preloadImage('public/style/images/spinner.gif');
 }
 
 function observeLocation(router: Router): void {
