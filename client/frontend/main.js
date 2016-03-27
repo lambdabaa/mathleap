@@ -85,8 +85,13 @@ function createRouter(): Router {
   );
 
   router.route(
-    /^#[^\/]*access_token=[^\/]*$/,
+    /^#[^\/]*access_token=[^\/]+$/,
     require('./components/EdmodoHandler')
+  );
+
+  router.route(
+    /^#[^\/]*access_token=[^\/]+.+googleapis.+/,
+    require('./components/GoogleHandler')
   );
 
   return router;

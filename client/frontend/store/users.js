@@ -2,6 +2,7 @@
 
 let Edmodo = require('../edmodo');
 let Firebase = require('firebase/lib/firebase-web');
+let Google = require('../google');
 let classes = require('./classes');
 let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/users');
@@ -28,7 +29,8 @@ let baseRef = createSafeFirebaseRef();
 let studentsRef = baseRef.child('students');
 let teachersRef = baseRef.child('teachers');
 
-let client;
+let edmodo;
+let google;
 let subscription;
 
 exports.create = async function(credentials: Credentials): Promise<string> {
@@ -59,14 +61,31 @@ exports.login = async function(credentials: Credentials): Promise<void> {
 };
 
 exports.edmodo = async function(auth: AccessToken): Promise<void> {
-  client = new Edmodo(auth);
-  let user = await client.getUser();
+  edmodo = new Edmodo(auth);
+  let user = await edmodo.getUser();
   debug('Got edmodo user', stringify(user));
   // Stringify edmodo user id.
   user.id = '' + user.id;
   let result = await findOrCreateEdmodoUser(user);
   if (!result) {
     debug('Failed to find or create edmodo user', stringify(user));
+    location.hash = '#!/home/';
+    return;
+  }
+
+  result.id = user.id;
+  session.set('auth', auth);
+  session.set('user', result);
+};
+
+exports.google = async function(auth: AccessToken): Promise<void> {
+  google = new Google(auth);
+  let user = await google.getUser();
+  debug('Got google user', stringify(user));
+  user.id = `google-${user.id}`;
+  let result = await findOrCreateGoogleUser(user);
+  if (!result) {
+    debug('Failed to find or create google user', stringify(user));
     location.hash = '#!/home/';
     return;
   }
@@ -105,6 +124,25 @@ function findOrCreateEdmodoUser(user: Object): Promise<?FBTeacher | ?FBStudent> 
   return fn(user);
 }
 
+async function findOrCreateGoogleUser(user: Object): Promise<?FBTeacher | ?FBStudent> {
+  let teacher = await teachers.get(user.id);
+  if (teacher) {
+    return teacher;
+  }
+
+  await teachers.create(
+    {
+      email: user.emails[0].value,
+      first: user.name.givenName,
+      last: user.name.familyName,
+      misc: user
+    },
+    user.id
+  );
+
+  return await teachers.get(user.id);
+}
+
 /* eslint-disable camelcase */
 async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
   let teacher = await teachers.get(user.id);
@@ -112,7 +150,7 @@ async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
     return teacher;
   }
 
-  teacher = await teachers.create(
+  await teachers.create(
     {
       email: user.email,
       title: user.title,
@@ -123,7 +161,7 @@ async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
     user.id
   );
 
-  let groups = await client.getGroups();
+  let groups = await edmodo.getGroups();
 
   // We also want to import the teacher's classes.
   await Promise.all(
@@ -131,7 +169,7 @@ async function findOrCreateEdmodoTeacher(user: Object): Promise<FBTeacher> {
       // $FlowFixMe: Flow doesn't know about Promise.all.
       let [aClass, members] = await Promise.all([
         classes.create({title: group.title, misc: group}, user.id),
-        client.getGroupMemberships(group.id)
+        edmodo.getGroupMemberships(group.id)
       ]);
 
       await Promise.all(

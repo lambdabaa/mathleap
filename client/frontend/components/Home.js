@@ -5,7 +5,7 @@ let React = require('react');
 let Topbar = require('./Topbar');
 let bowser = require('bowser');
 let debug = require('../../common/debug')('components/Home');
-let {edmodoId} = require('../constants');
+let {edmodoId, googleId} = require('../constants');
 let handleEnter = require('../handleEnter');
 let isBrowserSupported = require('../isBrowserSupported');
 let querystring = require('querystring');
@@ -312,6 +312,8 @@ async function handleTeacher(props: Object): Promise<void> {
   debug('teacher');
   await props.showModal(
     <div className="teacher-form">
+      {renderGoogleLogin()}
+      <div className="alternate-signup">OR</div>
       <select className="teacher-title">
       <option>Mr.</option>
       <option>Mrs.</option>
@@ -360,6 +362,8 @@ async function handleLogin(props: Object): Promise<void> {
   debug('login');
   await props.showModal(
     <div className="login-form">
+      {renderGoogleLogin()}
+      <div className="alternate-signup">OR</div>
       <input type="text" className="login-email" placeholder="Email or username" />
       <input type="password" className="login-password" placeholder="Password"
              onKeyDown={handleEnter(onLoginSubmit.bind(this, props))} />
@@ -392,7 +396,21 @@ async function handleResetPassword(props: Object): Promise<void> {
   $('.login-email').focus();
 }
 
-function handleEdmodo(): void {
+function handleGoogle() {
+  /* eslint-disable camelcase */
+  let urlparams = querystring.stringify({
+    response_type: 'token',
+    client_id: googleId,
+    redirect_uri: `${location.protocol}//${location.host}`,
+    scope: 'profile email',
+    include_granted_scopes: true
+  });
+  /* eslint-enable camelcase */
+
+  location.replace(`https://accounts.google.com/o/oauth2/v2/auth?${urlparams}`);
+}
+
+function handleEdmodo() {
   /* eslint-disable camelcase */
   let urlparams = querystring.stringify({
     client_id: edmodoId,
@@ -503,4 +521,12 @@ function getLoginData(): Object {
   return {uid, password};
 }
 
+function renderGoogleLogin(): React.Element {
+  return <div className="google-signin-button"
+       onClick={handleGoogle}>
+    <img src="public/style/images/google-signin-normal.png" />
+    <span className="google-signin-button-divider">|</span>
+    <span className="google-signin-button-text">Log in with Google</span>
+  </div>;
+}
 module.exports = Home;

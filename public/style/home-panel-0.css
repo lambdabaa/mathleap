@@ -348,3 +348,34 @@
   position: absolute;
   width: 100%;
 }
+
+.google-signin-button {
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  background-color: #d34836;
+  color: white;
+  cursor: pointer;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  font-size: 20px;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 1px 15px 1px 1px;
+  text-align: right;
+  width: 230px;
+}
+
+.google-signin-button-divider {
+  color: #f2f2f2;
+  font-size: 36px;
+}
+
+.alternate-signup {
+  font-weight: bold;
+  margin: 15px 0;
+  text-align: center;
+}
