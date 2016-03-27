@@ -31,9 +31,9 @@ function TeacherList(props: Object): React.Element {
           renderMutableClass(props, aClass, index) :
           renderImmutableClass(props, aClass, index);
       })(),
-      <div>
-        <span className="octicon octicon-clippy" data-clipboard-text={aClass.code}></span>
-        <span id={aClass.code}>{aClass.code}</span>
+      <div className="classes-list-clipboard-container">
+        <div className="copy-to-clipboard" data-clipboard-text={aClass.code}></div>
+        <div id={aClass.code}>{aClass.code}</div>
       </div>,
       aClass.students ? Object.keys(aClass.students).length : 0,
       <img className="list-action-btn"

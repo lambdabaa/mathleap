@@ -52,7 +52,19 @@
   margin-right: 5px;
 }
 
-.octicon-clippy {
+.classes-list-clipboard-container {
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.copy-to-clipboard {
+  background-image: url("style/images/copy-to-clipboard_btn.png");
   cursor: pointer;
+  height: 25px;
   margin-right: 3px;
+  width: 25px;
 }

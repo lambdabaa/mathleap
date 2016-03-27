@@ -40,7 +40,7 @@ module.exports = React.createClass({
   componentDidMount: function(): void {
     this._updateClasses(this.state);
     preloadImage('public/style/images/color_picker_triangle.png');
-    let clipboard = new Clipboard('.octicon-clippy');
+    let clipboard = new Clipboard('.copy-to-clipboard');
     clipboard.on('success', () => {
       this.setState({isClipboardSuccess: true});
       if (this.clipboardTimeout) {
