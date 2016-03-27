@@ -8,7 +8,7 @@ let format = require('../../helpers/format');
 let helper = require('../../helpers/submission');
 
 function Show(props: Object): React.Element {
-  let {user, headerText, aClass, classId, assignment, isPracticeMode, submission} = props;
+  let {user, headerText, aClass, classId, assignment, isPracticeMode} = props;
   return <div id="submissions-show">
     <Topbar headerText={headerText}
             showModal={props.showModal}
