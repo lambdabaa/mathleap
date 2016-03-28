@@ -114,7 +114,9 @@
 }
 
 .how-it-works-copy-header {
+  font-size: 18px;
   font-weight: bold;
+  text-decoration: underline;
 }
 
 .how-it-works-copy-0 {
