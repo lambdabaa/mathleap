@@ -18,5 +18,9 @@ module.exports = async function preloadImage(url: string): Promise<void> {
   let image = document.createElement('img');
   image.src = url;
   image.classList.add('preload-image');
+  image.onload = () => {
+    image.parentNode.removeChild(image);
+  };
+
   document.body.appendChild(image);
 };
