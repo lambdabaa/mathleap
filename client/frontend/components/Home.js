@@ -194,7 +194,7 @@ function Home(props: Object): React.Element {
             <div className="how-it-works-copy how-it-works-copy-1"
                  style={props.screenshot !== 1 ? {opacity: '0.25'} : {}}
                  onClick={props.selectScreenshot.bind(props, 1)}>
-              <div className="how-it-works-copy-header">Students solve problems online</div>
+              <div className="how-it-works-copy-header">Solve problems online</div>
               <div className="how-it-works-copy-body">
                 Students show their work using an online problem editor
                 that helps them visualize their steps.
