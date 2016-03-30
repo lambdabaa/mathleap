@@ -2,9 +2,11 @@
 
 let React = require('react');
 let Tabular = require('../Tabular');
+let TeacherFTU = require('./TeacherFTU');
 let Topbar = require('../Topbar');
 let {getPalette} = require('../../colors');
 let handleEnter = require('../../handleEnter');
+let user = require('../../helpers/user');
 
 function TeacherList(props: Object): React.Element {
   let {teacher, classes, editable, isClipboardSuccess} = props;
@@ -43,6 +45,9 @@ function TeacherList(props: Object): React.Element {
   });
 
   return <div id="classes-teacher-list">
+    {
+      user.isFTU(teacher) ? <TeacherFTU user={teacher} /> : ''
+    }
     <div className={`add-topic-flash ${isClipboardSuccess || 'hidden'}`}>
       ✔ Code copied to clipboard
     </div>

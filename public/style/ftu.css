@@ -1,0 +1,41 @@
+#teacher-ftu {
+  background-color: white;
+  height: 100vh;
+  position: fixed;
+  z-index: 200;
+}
+
+#teacher-ftu > .view {
+  align-items: center;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 1050px;
+}
+
+.ftu-header {
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+.ftu-subheader {
+  font-size: 20px;
+}
+
+.ftu-video {
+  margin: 15px 0 30px 0;
+  width: 720px;
+}
+
+.continue-button {
+  background-color: #31a4cb;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 10px;
+}

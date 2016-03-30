@@ -3,6 +3,7 @@
 let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/teachers');
 let request = require('./request');
+let session = require('../session');
 let stringify = require('../../common/stringify');
 let users = require('./users');
 
@@ -17,7 +18,8 @@ exports.create = async function(options: Object, uid: ?string): Promise<void> {
     first: options.first || '',
     last: options.last || '',
     role: 'teacher',
-    misc: options.misc || {}
+    misc: options.misc || {},
+    ftu: true
   };
 
   if (uid == null) {
@@ -40,4 +42,13 @@ exports.get = async function(id: string): Promise<?FBTeacher> {
   teacher.id = id;
   debug('get teacher ok', stringify(teacher));
   return teacher;
+};
+
+exports.clearFTU = async function(teacher: FBTeacher): Promise {
+  let ref = teachersRef.child(teacher.id);
+  let ftu = ref.child('ftu');
+  await request(ftu, 'set', false);
+  // TODO: This is not ideal...
+  let user = await exports.get(teacher.id);
+  session.set('user', user);
 };

@@ -23,18 +23,21 @@ module.exports = React.createClass({
     return {
       classes: [],
       classIds: [],
-      editable: null
+      editable: null,
+      teacher: session.get('user')
     };
   },
 
   componentWillMount: function(): void {
-    let teacher = session.get('user');
+    let {teacher} = this.state;
     this.bindAsArray(
       teachersRef
         .child(teacher.id)
         .child('classes'),
       'classIds'
     );
+
+    session.on('user', user => this.setState({teacher: user}));
   },
 
   componentDidMount: function(): void {
@@ -86,7 +89,7 @@ module.exports = React.createClass({
       //
       // 1. we just started editing
       // 2. we are editing
-      // 3. we're editing the nam
+      // 3. we're editing the name
       return;
     }
 

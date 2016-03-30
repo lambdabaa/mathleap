@@ -79,7 +79,7 @@ export type FBPractice = {
 };
 
 export type FBTeacher = {
-  id: ?string;
+  id: string;
   email: string;
   first: string;
   last: string;

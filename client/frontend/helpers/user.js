@@ -16,3 +16,8 @@ exports.isEdmodoUser = function(): boolean {
   let user = session.get('user');
   return user && /^\d+$/.test(user.id);
 };
+
+exports.isFTU = function(): boolean {
+  let user = session.get('user');
+  return user && user.ftu;
+};
