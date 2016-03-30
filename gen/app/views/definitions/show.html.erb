@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Fmt:</strong>
+  <%= @definition.fmt %>
+</p>
+
+<p>
+  <strong>Variables:</strong>
+  <%= @definition.variables %>
+</p>
+
+<p>
+  <strong>Constants:</strong>
+  <%= @definition.constants %>
+</p>
+
+<p>
+  <strong>Constraints:</strong>
+  <%= @definition.constraints %>
+</p>
+
+<%= link_to 'Edit', edit_definition_path(@definition) %> |
+<%= link_to 'Back', definitions_path %>
