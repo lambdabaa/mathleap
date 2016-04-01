@@ -5,6 +5,7 @@ let LinkedStateMixin = require('react-addons-linked-state-mixin');
 let React = require('react');
 let ReactDOM = require('react-dom');
 let ctrlOrMeta = require('../../ctrlOrMeta');
+let sleep = require('../../../common/sleep');
 
 import type {KeyboardEvent} from '../../../common/types';
 
@@ -80,6 +81,7 @@ module.exports = React.createClass({
       return this.props.nextQuestion();
     }
 
+    await sleep(0);
     if (!ctrlOrMeta(event)) {
       return this.props.commitAnswer(this.state.answer);
     }
