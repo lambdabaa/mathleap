@@ -15,7 +15,7 @@ function email(req: express.request, res: express.response) {
   let {to, subject, html, text} = req.body;
   client.sendEmail(
     {
-      from: 'hello@mathleap.org',
+      from: 'Gareth Aye <hello@mathleap.org>',
       subject,
       message: html,
       altText: text,
