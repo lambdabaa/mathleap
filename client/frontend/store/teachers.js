@@ -43,7 +43,7 @@ encourage you to watch our short
 </p>
 <p>
 We're adding new features and content every week, and if you
-<a href="https://twitter.com/mathleapinc>follow us on Twitter</a>
+<a href="https://twitter.com/mathleapinc">follow us on Twitter</a>
 or
 <a href="https://facebook.com/mathleap">like us on Facebook</a>
 you'll be the first to hear about it.
