@@ -30,14 +30,14 @@ exports.create = async function(options: Object, uid: ?string): Promise<void> {
   let ref = teachersRef.child(uid);
   await request(ref, 'set', teacher);
   debug('create teacher ok', stringify(teacher));
-  await ses.sendEmail(
+  ses.sendEmail(
     options.email,
     '∮ Welcome to MathLeap',
     `<p>Hi ${teacher.first},</p>
 <p>
 I noticed you signed up for MathLeap -- welcome to the community! I'm Gareth, a mathematician
 and the creator of the site. You can reach me personally at gareth@mathleap.org with any requests
-or questions you have. If you're wondering how you can leverage MathLeap in your classes, I
+or questions. If you're wondering how you can leverage MathLeap in your classes, I
 encourage you to watch our short
 <a href="https://mathleap.org/public/videos/demo.mp4">demo video</a>.
 </p>
@@ -59,7 +59,7 @@ Excited to have you join the site. Enjoy MathLeap!
 
 I noticed you signed up for MathLeap -- welcome to the community! I'm Gareth, a mathematician
 and the creator of the site. You can reach me personally at gareth@mathleap.org with any requests
-or questions you have. If you're wondering how you can leverage MathLeap in your classes, I
+or questions. If you're wondering how you can leverage MathLeap in your classes, I
 encourage you to watch our short demo video at https://mathleap.org/public/videos/demo.mp4.
 
 We're adding new features and content every week, and if you follow us on
