@@ -9,9 +9,7 @@ function sendEmail(to: string, subject: string, html: string,
   let req = new Xhr();
   let body = JSON.stringify({to, subject, html, text});
   req.open('POST', url, true /* async */);
-  req.setRequestHeader('Content-type', 'application/json');
-  req.setRequestHeader('Content-length', body.length);
-  req.setRequestHeader('Connection', 'close');
+  req.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
   return req.send(body);
 }
 
