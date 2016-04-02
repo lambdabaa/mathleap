@@ -30,6 +30,15 @@
   justify-content: center;
 }
 
+.legal-link-column {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+
 .legal-bottom {
   display: -ms-flexbox;
   display: -webkit-flex;

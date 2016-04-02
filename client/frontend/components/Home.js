@@ -266,9 +266,18 @@ function Home(props: Object): React.Element {
           <div className="legal-jargon">
             <div className="legal-top">© 2016 MathLeap, Inc.</div>
             <div className="legal-bottom">
-              <a className="legal-link" href="#!/tos/" target="_blank">Terms</a>
-              <a className="legal-link" href="#!/privacy/" target="_blank">Privacy</a>
-              <a className="legal-link" href="mailto:info@mathleap.org">Contact Us</a>
+              <div className="legal-link-column">
+                <a className="legal-link" href="https://blog.mathleap.org" target="_blank">Blog</a>
+                <a className="legal-link" href="#!/common-core/" target="_blank">Standards</a>
+              </div>
+              <div className="legal-link-column">
+                <a className="legal-link" href="#!/press/" target="_blank">Press</a>
+                <a className="legal-link" href="mailto:info@mathleap.org">Contact</a>
+              </div>
+              <div className="legal-link-column">
+                <a className="legal-link" href="#!/tos/" target="_blank">Terms</a>
+                <a className="legal-link" href="#!/privacy/" target="_blank">Privacy</a>
+              </div>
             </div>
           </div>
           <div className="fish-and-wave"></div>

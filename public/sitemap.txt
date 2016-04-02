@@ -1,6 +1,7 @@
 https://mathleap.org/#!/common-core/
 https://mathleap.org/#!/documentation/
 https://mathleap.org/#!/home/
+https://mathleap.org/#!/press/
 https://mathleap.org/#!/privacy/
 https://mathleap.org/#!/tos/
 https://blog.mathleap.org/

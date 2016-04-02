@@ -5,6 +5,7 @@ let App = require('./App');
 let React = require('react');
 let debug = require('../../common/debug')('AppContainer');
 let defer = require('../../common/defer');
+let page = require('../page');
 
 class AppContainer extends React.Component {
   constructor(props: Object) {
@@ -64,6 +65,7 @@ class AppContainer extends React.Component {
         topbar.scrollIntoView();
       }
 
+      page.setTitle();
       delete this.componentDidUpdate;
     };
 

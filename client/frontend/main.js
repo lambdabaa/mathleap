@@ -55,6 +55,7 @@ function createRouter(): Router {
   router.route('/home', require('./components/HomeContainer'));
   router.route('/common-core', require('./components/CommonCore'));
   router.route('/documentation', require('./components/submissions/Documentation'));
+  router.route('/press', require('./components/Press'));
   router.route('/privacy', require('./components/Privacy'));
   router.route('/tos', require('./components/Tos'));
   router.route('/practice', require('./components/PracticeContainer'));

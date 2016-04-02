@@ -33,20 +33,20 @@ function renderDefaultActions(props: Object): Array<React.Element> {
 }
 
 function renderOpenActions(): Array<React.Element> {
-  return [
-    ['Common Core', 'common-core'],
-    ['Privacy', 'privacy'],
-    ['Terms', 'tos'],
-    ['Home', 'home']
-  ].map((link: Array<string>): React.Element => {
-    let [text, href] = link;
-    let className = 'topbar-action';
-    if (text === 'Home') {
-      className += ' signup-button';
-    }
+  return [<a className="topbar-action" href="https://blog.mathleap.org" target="_blank">Blog</a>]
+    .concat([
+      ['Press', 'press'],
+      ['Common Core', 'common-core'],
+      ['Home', 'home']
+    ].map((link: Array<string>): React.Element => {
+      let [text, href] = link;
+      let className = 'topbar-action';
+      if (text === 'Home') {
+        className += ' signup-button';
+      }
 
-    return <a className={className} href={`#!/${href}/`}>{text}</a>;
-  });
+      return <a className={className} href={`#!/${href}/`}>{text}</a>;
+    }));
 }
 
 function renderRestrictedActions(props: Object): Array<React.Element> {
