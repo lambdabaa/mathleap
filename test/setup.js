@@ -8,12 +8,18 @@ require('babel-core/register')(
   )
 );
 
+
 // jsdom
 global.document = require('jsdom').jsdom(`
   <!DOCTYPE html>
   <html>
-  <head></head>
-  <body></body>
+  <head>
+    <script>
+      ${require('fs').readFileSync(__dirname + '/../public/aws-sdk-2.2.48.min.js', {encoding: 'utf8'})}
+    </script>
+  </head>
+  <body>
+  </body>
   </html>
 `);
 
@@ -21,6 +27,7 @@ global.window = document.defaultView;
 Object.keys(window).forEach(key => {
   global[key] = global[key] || window[key];
 });
+
 
 // chai
 global.should = require('chai').should();
