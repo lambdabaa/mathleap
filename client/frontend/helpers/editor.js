@@ -335,12 +335,20 @@ exports.eventToCursorPosition = function(event: MouseEvent): number {
 
 exports.applyDragToHighlight = function(highlight: Highlight, cursor: number,
                                         drag: number): Highlight {
+  let prev;
   return highlight.map(function(value: boolean, index: number): boolean {
-    return drag === null ||
-           index > cursor - 1 && index > drag ||
-           index < cursor && index < drag ?
-      value :
-      !value;
+    if (drag == null ||
+        index > cursor - 1 && index > drag ||
+        index < cursor && index < drag) {
+      return value;
+    }
+
+    if (prev != null) {
+      return prev;
+    }
+
+    prev = !value;
+    return prev;
   });
 };
 
