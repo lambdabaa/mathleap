@@ -3,7 +3,6 @@
 let $ = document.querySelector.bind(document);
 let React = require('react');
 let Topbar = require('./Topbar');
-let bowser = require('bowser');
 let debug = require('../../common/debug')('components/Home');
 let {edmodoId, googleId} = require('../constants');
 let handleEnter = require('../handleEnter');
