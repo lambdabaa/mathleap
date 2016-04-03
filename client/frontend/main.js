@@ -52,7 +52,17 @@ function observeLocation(router: Router): void {
 
 function createRouter(): Router {
   let router = new Router({miss: require('./components/NotFound')});
-  router.route('/home', require('./components/HomeContainer'));
+  if (window.homepage) {
+    router.route(
+      '/home',
+      window.homepage === 'a' ?
+        require('./components/HomeContainer') :
+        require('./components/Home2Container')
+    );
+  } else {
+    router.route('/home', require('./components/HomeContainer'));
+  }
+
   router.route('/common-core', require('./components/CommonCore'));
   router.route('/documentation', require('./components/submissions/Documentation'));
   router.route('/press', require('./components/Press'));

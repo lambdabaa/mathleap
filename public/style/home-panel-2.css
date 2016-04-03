@@ -1,11 +1,32 @@
 .panel-2 {
   background-color: #0076a8;
   background-image: url("style/images/mountain.svg");
-  background-position: center;
+  background-position: center bottom;
   background-repeat: no-repeat;
   background-size: 100%;
   height: 566px;
-  padding: 60px 0 0 0;
+  padding-top: 60px;
+}
+
+.home2 .panel-2 {
+  height: 950px;
+  padding-top: 0;
+}
+
+.home2 .tagline {
+  margin: 15px auto 0;
+}
+
+.home2 .subline {
+  color: white;
+}
+
+.home2 .subline > .emph {
+  border-bottom: 1px solid white;
+}
+
+.home2 .start-buttons {
+  height: 160px;
 }
 
 .how-it-works {

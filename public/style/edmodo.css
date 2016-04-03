@@ -13,8 +13,8 @@
   width: 0px;
   right: 7px;
   display: inline-block;
-  border-left: 1px solid #2567a8;
-  border-right: 1px solid #4b8dce;
+  border-left: 1px solid #2e0088;
+  border-right: 1px solid #6d3fc7;
   height:inherit;
 }
 
@@ -33,8 +33,8 @@ button.login-edmodo-button {
   padding: 0 14px 0 28px;
   border-radius: 2px;
   cursor: pointer;
-  background-color: #3784d3;
-  box-shadow: 0 2px 0 #276bb0;
+  background-color: #3d00b4;
+  box-shadow: 0 2px 0 #2e0088;
   border:0;
   height:38px;
 }
@@ -42,7 +42,7 @@ button.login-edmodo-button {
 button.login-edmodo-button:hover {
   text-decoration: none;
   color: white;
-  background-color: #2d7bcc;
+  background-color: #3d00b4;
 }
 
 button.login-edmodo-button p {
