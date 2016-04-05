@@ -17,7 +17,30 @@
   </div>
   <div class="field">
     <%= f.label :constraints %><br>
-    <%= f.text_field :constraints %>
+    <% 10.times do |i| %>
+      <%= text_field_tag(
+            "constraint_#{i}_0".to_sym,
+            @constraints[i] && @constraints[i][:args][0]
+          ) %>
+      <%= select_tag(
+            "constraint_#{i}_type",
+            options_for_select([
+              ['equals', 0],
+              ['less than', 1],
+              ['greater than', 2],
+              ['less than or equal to', 3],
+              ['greater than or equal to', 4],
+              ['is divisible by', 5],
+              ['is factor of', 6],
+              ['is decimal', 7]
+            ])
+          ) %>
+      <%= text_field_tag(
+            "constraint_#{i}_1".to_sym,
+            @constraints[i] && @constraints[i][:args][1]
+          ) %>
+      <br />
+    <% end %>
   </div>
   <div class="actions">
     <%= f.submit %>

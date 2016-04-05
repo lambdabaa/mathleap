@@ -22,7 +22,7 @@
         <td><%= definition.constraints %></td>
         <td><%= link_to 'Show', definition %></td>
         <td><%= link_to 'Edit', edit_definition_path(definition) %></td>
-        <td><%= link_to 'Destroy', definition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= button_to 'Delete', definition, :method => :delete %></td>
       </tr>
     <% end %>
   </tbody>
