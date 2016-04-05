@@ -41,38 +41,6 @@ tests to pass since we speak to remote apis. In addition, the debug logs
 are currently disabled by default while running tests. In order to turn them
 on, set `DEBUG=1` (ie `DEBUG=1 npm test`).
 
-### Question generation
-
-There's an experimental question generation service in `gen/` that's
-a rails app that runs on jruby. After you've installed
-
-+ OpenJDK 8
-+ [RVM](https://rvm.io/)
-+ JRuby 1.7.24 (`rvm install jruby-1.7.24`)
-+ Postgresql
-
-you can do something like
-
-```
-> su - postgres  # switch to postgres user
-> psql
-
-# Within psql prompt
-create role gen with createdb login password 'gen';
-
-# After exiting psql from the mathleap/gen directory
-> gem install bundler
-> bundle install
-> rake db:create
-> rake db:migrate
-> gem install foreman
-> foreman start
-
-# We should now be up and running on localhost:3000
-```
-
-Ping gareth on slack if you run into any issues.
-
 ### Submitting a patch
 
 1. Fork the repo.
