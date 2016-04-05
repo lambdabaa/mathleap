@@ -1,4 +1,4 @@
-let {eachChar, mapChar, reduceChar} = require('../../../client/common/string');
+let {eachChar, mapChar, filterChar, reduceChar} = require('../../../client/common/string');
 
 suite('string', () => {
   test('#mapChar', () => {
@@ -12,6 +12,16 @@ suite('string', () => {
       'l',
       'o'
     ]);
+  });
+
+  test('#filterChar', () => {
+    filterChar('Ax=B', chr => {
+      let code = chr.charCodeAt(0);
+      return code >= 65 && code <= 90;
+    })
+    .should
+    .deep
+    .equal(['A', 'B']);
   });
 
   test('#eachChar', () => {

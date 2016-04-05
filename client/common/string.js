@@ -12,6 +12,17 @@ exports.mapChar = function(str: string, fn: (chr: string, i: number) => any): Ar
   return result;
 };
 
+exports.filterChar = function(str: string, fn: (chr: string, i: number) => boolean): Array<string> {
+  let result = [];
+  exports.eachChar(str, (chr: string, index: number): void => {
+    if (fn(chr, index)) {
+      result.push(chr);
+    }
+  });
+
+  return result;
+};
+
 exports.eachChar = function(str: string, fn: (chr: string, i: number) => any): void {
   for (let i = 0; i < str.length; i++) {
     let chr = str.charAt(i);

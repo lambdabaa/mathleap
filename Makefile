@@ -6,10 +6,12 @@ FRONTEND_JS = $(shell find client/frontend -name "*.js")
 FRONTEND_BUILT = $(patsubst client/frontend/%.js, build/client/frontend/%.js, $(FRONTEND_JS))
 SERVER_JS = $(shell find server -name "*.js")
 SERVER_BUILT = $(patsubst server/%.js, build/server/%.js, $(SERVER_JS))
+GEN_JS = $(shell find gen -name "*.js")
+GEN_BUILT = $(patsubst gen/%.js, build/gen/%.js, $(GEN_JS))
 CSS = $(shell find public/style -name "*.css")
 
 .PHONY: all
-all: public/frontend.min.js public/backend.min.js public/mathleap.min.css $(SERVER_BUILT)
+all: public/frontend.min.js public/backend.min.js public/mathleap.min.css $(SERVER_BUILT) $(GEN_BUILT)
 
 .PHONY: clean
 clean:
@@ -40,6 +42,10 @@ build/client/%.js: client/%.js
 	./node_modules/.bin/babel $< -o $@
 
 build/server/%.js: server/%.js
+	@mkdir -p "$(@D)"
+	./node_modules/.bin/babel $< -o $@
+
+build/gen/%.js: gen/%.js
 	@mkdir -p "$(@D)"
 	./node_modules/.bin/babel $< -o $@
 
