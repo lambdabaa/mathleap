@@ -5,7 +5,6 @@ let backtracking = require('./backtracking');
 let clone = require('lodash/lang/cloneDeep');
 let debug = require('../client/common/debug')('listProblems');
 let {filterChar, mapChar} = require('../client/common/string');
-let forEach = require('lodash/collection/forEach');
 let range = require('lodash/utility/range');
 let uniq = require('lodash/array/uniq');
 let values = require('lodash/object/values');

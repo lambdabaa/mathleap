@@ -31,7 +31,7 @@ module.exports = React.createClass({
               let valueLink = {
                 value: constraint,
                 requestChange: this._handleConstraintChange.bind(this, index)
-              }
+              };
 
               return <div className="config-constraint">
                 <input type="text"
@@ -42,7 +42,7 @@ module.exports = React.createClass({
                   <img src="public/style/images/add_btn.png"
                        onClick={this._handleNewConstraint} />
                 }
-              </div>
+              </div>;
             })
           }
         </div>
@@ -61,7 +61,7 @@ module.exports = React.createClass({
     </div>;
   },
 
-  _handleConstraintChange: function(index: number, newValue) {
+  _handleConstraintChange: function(index: number, newValue: string) {
     let {constraints} = this.state;
     constraints[index] = newValue;
     this.setState({constraints});
@@ -73,7 +73,7 @@ module.exports = React.createClass({
     this.setState({constraints});
   },
 
-  _handleSearch: async function() {
+  _handleSearch: async function(): Promise {
     let {format, constraints} = this.state;
     constraints = constraints.filter(c => c.length > 0);
     let it = listProblems({format, constraints});
