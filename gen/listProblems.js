@@ -70,15 +70,15 @@ function* listProblems(aProblem: Problem): Generator {
   for (let next of bt) {
     let stmt = aProblem.format;
     let vars = {};
-    forEach(next.value, (value, key) => {
+    for (let key in next) {
+      let value = next[key];
       if (isLowerCase(key)) {
         vars[key] = value;
-        return;
+        continue;
       }
 
       stmt = stmt.replace(new RegExp(key, 'g'), '' + value);
-    });
-
+    }
 
     yield {stmt, vars};
   }

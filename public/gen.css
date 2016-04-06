@@ -1,0 +1,18 @@
+.gen {
+  display: -webkit-flex;
+  display: flex;
+  height: 100%;
+  margin: 0 auto;
+  width: 990px;
+}
+
+.gen > * {
+  width: 50%;
+}
+
+.config-constraint {
+  -webkit-align-items: center;
+  align-items: center;
+  display: -webkit-flex;
+  display: flex;
+}

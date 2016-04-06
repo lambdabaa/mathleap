@@ -11,7 +11,7 @@ GEN_BUILT = $(patsubst gen/%.js, build/gen/%.js, $(GEN_JS))
 CSS = $(shell find public/style -name "*.css")
 
 .PHONY: all
-all: public/frontend.min.js public/backend.min.js public/mathleap.min.css $(SERVER_BUILT) $(GEN_BUILT)
+all: public/frontend.min.js public/backend.min.js public/gen.min.js public/mathleap.min.css $(SERVER_BUILT)
 
 .PHONY: clean
 clean:
@@ -21,7 +21,9 @@ clean:
 		public/frontend.js \
 		public/frontend.min.js \
 		public/backend.js \
-		public/backend.min.js
+		public/backend.min.js \
+		public/gen.js \
+		public/gen.min.js
 
 public/%.min.js: public/%.js
 	./node_modules/.bin/uglifyjs \
@@ -36,6 +38,9 @@ public/frontend.js: $(FRONTEND_BUILT) $(COMMON_BUILT)
 
 public/backend.js: $(BACKEND_BUILT) $(COMMON_BUILT) build/client/backend/math.js
 	./node_modules/.bin/browserify build/client/backend/main.js -o $@
+
+public/gen.js: $(GEN_BUILT) $(COMMON_BUILT)
+	./node_modules/.bin/browserify build/gen/main.js -o $@
 
 build/client/%.js: client/%.js
 	@mkdir -p "$(@D)"
