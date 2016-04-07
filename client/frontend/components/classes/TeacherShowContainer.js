@@ -104,6 +104,6 @@ module.exports = React.createClass({
     let {key, submission} = await assignment.findOrCreateSubmission(classId, anAssignment);
     location.hash = submission.complete ?
       `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}` :
-      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}/edit`;
+      `#!/classes/${classId}/assignments/${assignmentId}/submissions/${key}/edit/`;
   }
 });
