@@ -273,6 +273,12 @@ exports.commitDelta = async function(aClass: string, assignment: string,
     .join(nextSymbol) :
     left;
 
+  try {
+    await bridge('parse', result);
+  } catch (error) {
+    throw new Error('Bad math input');
+  }
+
   await submissions.commitDelta(
     aClass,
     assignment,
@@ -288,6 +294,12 @@ exports.commitDelta = async function(aClass: string, assignment: string,
 exports.commitAnswer = async function(aClass: string, assignment: string,
                                       submission: string, responses: Array<FBResponse>,
                                       num: number, answer: string): Promise<void> {
+  try {
+    await bridge('parse', answer);
+  } catch (error) {
+    throw new Error('Bad math input');
+  }
+
   let {work} = responses[num];
   await submissions.commitAnswer(
     aClass,

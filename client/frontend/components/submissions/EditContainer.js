@@ -668,32 +668,50 @@ module.exports = React.createClass({
     let {aClass, assignment, submission, id} = this.props;
     let {num} = this.state;
     let responses = this._getResponses();
-    await editor.commitAnswer(
-      aClass,
-      assignment || id,
-      submission,
-      responses,
-      num,
-      answer
-    );
+    try {
+      await editor.commitAnswer(
+        aClass,
+        assignment || id,
+        submission,
+        responses,
+        num,
+        answer
+      );
+    } catch (error) {
+      if (error.message === 'Bad math input') {
+        return alert('Invalid math expression!');
+      }
+    }
   },
 
   _commitDelta: async function(): Promise<void> {
     let {aClass, assignment, submission, id} = this.props;
     let {num, changes, equation, append, leftParens, rightParens} = this.state;
     let responses = this._getResponses();
-    await editor.commitDelta(
-      aClass,
-      assignment || id,
-      submission,
-      responses,
-      num,
-      changes,
-      equation,
-      append,
-      leftParens,
-      rightParens
-    );
+    let {work} = responses[num];
+
+    try {
+      await editor.commitDelta(
+        aClass,
+        assignment || id,
+        submission,
+        responses,
+        num,
+        changes,
+        equation,
+        append,
+        leftParens,
+        rightParens
+      );
+    } catch (error) {
+      if (error.message === 'No changes made') {
+        return alert('You haven\'t made any changes in the current step!');
+      }
+
+      if (error.message === 'Bad math input') {
+        return alert('Invalid math expression!');
+      }
+    }
 
     // $FlowFixMe
     this.didCommitDelta = true;

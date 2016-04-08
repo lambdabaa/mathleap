@@ -66,8 +66,7 @@ exports.commitDelta = async function(classId: string, assignmentId: string,
   } else if (appends[0].length) {
     operation = 'both-sides';
   } else {
-    // TODO(gaye): Handle add equation.
-    operation = 'noop';
+    throw new Error('No changes made');
   }
 
   // TODO(gaye): Use atomic update.
