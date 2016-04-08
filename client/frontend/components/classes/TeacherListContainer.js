@@ -98,7 +98,7 @@ module.exports = React.createClass({
 
   render: function(): React.Element {
     setTimeout(this.props.onload, 0);
-    return <TeacherList teacher={session.get('user')}
+    return <TeacherList teacher={this.state.teacher}
                         classes={this.state.classes}
                         editable={this.state.editable}
                         isClipboardSuccess={this.state.isClipboardSuccess}

@@ -21,7 +21,8 @@ exports.create = async function(options: Object, uid: ?string): Promise<void> {
     last: options.last || '',
     username: options.username || 'student',
     role: 'student',
-    misc: options.misc || {}
+    misc: options.misc || {},
+    scratchpadFtu: true
   };
 
   if (uid == null) {
@@ -54,4 +55,13 @@ exports.createPractice = async function(details: Object): Promise<string> {
   await request(ref, 'set', details);
   let refparts = ref.toString().split('/');
   return refparts[refparts.length - 1];
+};
+
+exports.clearScratchpadFtu = async function(student: FBStudent): Promise {
+  let ref = studentsRef.child(student.id);
+  let ftu = ref.child('scratchpadFtu');
+  await request(ftu, 'set', false);
+  // TODO: This is not ideal...
+  let user = await exports.get(student.id);
+  session.set('user', user);
 };

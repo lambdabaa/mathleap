@@ -71,7 +71,7 @@ function createRouter(): Router {
   router.route('/practice', require('./components/PracticeContainer'));
   router.route('/practice/new', require('./components/assignments/CreateContainer'));
   router.route('/practice/:id', require('./components/submissions/ShowContainer'));
-  router.route('/practice/:id/edit', require('./components/submissions/EditContainer'));
+  router.route('/practice/:id/edit', require('./components/submissions/ProblemEditor'));
   router.route('/classes', require('./components/classes/List'));
   router.route('/classes/:id', require('./components/classes/Show'));
   router.route(
@@ -92,7 +92,7 @@ function createRouter(): Router {
   );
   router.route(
     '/classes/:aClass/assignments/:assignment/submissions/:submission/edit',
-    require('./components/submissions/EditContainer')
+    require('./components/submissions/ProblemEditor')
   );
 
   router.route(

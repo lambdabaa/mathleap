@@ -95,6 +95,13 @@ exports.google = async function(auth: AccessToken): Promise<void> {
   session.set('user', result);
 };
 
+exports.clearScratchpadFtu = function(): Promise {
+  let user = session.get('user');
+  return isStudent(user) ?
+    students.clearScratchpadFtu(user) :
+    teachers.clearScratchpadFtu(user);
+};
+
 exports.logout = function(): void {
   if (subscription) {
     subscription.cancel();
