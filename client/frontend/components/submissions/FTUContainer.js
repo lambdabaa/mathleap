@@ -86,7 +86,7 @@ class FTUContainer extends React.Component {
                        ]
                      ]}
                      selected={num} />
-            <div className="button-inverse" onClick={this._exitTutorial}>Move on</div>
+            <div className="button-inverse" onClick={this._exitTutorial}>Move On</div>
           </div>
           <div className="submissions-edit-question">
             <Tabular className="dark"
@@ -929,7 +929,7 @@ class FTUContainer extends React.Component {
 
     rows.push([
       'Now you\'re all set to get started!',
-      'Click the Move on button below.'
+      'Click the Move On button below.'
     ]);
 
     return rows;
