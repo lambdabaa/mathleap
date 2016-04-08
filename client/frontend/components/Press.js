@@ -20,6 +20,33 @@ function Press(props: Object): React.Element {
         Aye, Gareth. <a href="http://knoxec.com/2015/11/05/go-big-start-here-a-guest-blog-by-gareth-aye/">Go Big. Start Here: A Guest Blog by Gareth Aye</a>.
         <span style={{fontStyle: 'italic'}}> knoxec.com</span>. 11 Nov. 2015. Web.
       </div>
+      <div className="press-release">
+        <h2>Press Release</h2>
+        <br />
+        <p>
+          MathLeap is a web application that automates student feedback for
+          pre-algebra and algebra classes. What makes our software unique
+          compared to other automated grading systems is that we allow students
+          to show their work and provide personalized feedback that promotes
+          learning. MathLeap was founded by Gareth Aye, a graduate of
+          Middlebury College who spent three years building Firefox OS at
+          Mozilla. He's building a team with expertise across education,
+          design, and data science to take MathLeap to the next level.
+        </p>
+        <br />
+        <h3>History</h3>
+        <br />
+        <p>
+          After launching into beta with <a href="https://knoxschools.org/">Knox County Schools </a>
+          at the end of January 2016, MathLeap won the
+          <a href="https://demolicious.in"> demo competition</a> at Startup Week Portland
+          and launched on the <a href="https://www.edmodo.com/store/app/mathleap">Edmodo
+          marketplace</a> in February. In March, MathLeap became a featured app on Edmodo
+          and grew to 3000 users. In April, the team is turning their focus to meeting 100%
+          of the common core standards for US-based Algebra 1 classes by the 2016-17 school
+          year.
+        </p>
+      </div>
     </div>
   </div>;
 }
