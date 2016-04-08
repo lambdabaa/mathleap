@@ -6,7 +6,6 @@ let ROTextInputResponse = require('./ROTextInputResponse');
 let React = require('react');
 let TextInputResponse = require('./TextInputResponse');
 let Topbar = require('../Topbar');
-let TutorialContainer = require('./TutorialContainer');
 let editor = require('../../helpers/editor');
 let {isEditorSupported} = require('../../isBrowserSupported');
 let map = require('lodash/collection/map');
@@ -36,7 +35,6 @@ function Edit(props: Object): React.Element {
     num,
     questionType,
     isHelpDialogShown,
-    isTutorialDismissed,
     isPractice,
     isReadOnly,
     status,
@@ -70,10 +68,6 @@ function Edit(props: Object): React.Element {
             displayModalError={props.displayModalError}
             displayModalSuccess={props.displayModalSuccess}
             clearMessages={props.clearMessages} />
-    <div className="view classes-list-ftu">
-      First time here? Learn how to show your work with the
-        <a href="#!/documentation/" target="_blank">usage guide</a>.
-    </div>
     <div className="view">
       <div className="subbar">
         <a className="backlink clickable-text" href={backlink}>{backlinkText}</a>
@@ -108,13 +102,7 @@ function Edit(props: Object): React.Element {
             ''
         }
       </div>
-      <div className="tutorial-buffer"></div>
     </div>
-    {
-      questionType === 'equation-editor' && !isTutorialDismissed ?
-        <TutorialContainer dismiss={props.dismissTutorial} /> :
-        ''
-    }
   </div>;
 }
 

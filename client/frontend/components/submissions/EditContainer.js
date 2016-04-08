@@ -91,9 +91,6 @@ module.exports = React.createClass({
       // Dragged highlight end
       drag: null,
 
-      // Whether user dismissed tutorial
-      isTutorialDismissed: false,
-
       // Whether we're waiting for a submit action
       isSubmissionPending: false,
 
@@ -258,7 +255,6 @@ module.exports = React.createClass({
                  redos={this.state.redos}
                  isMousePressed={this.state.isMousePressed}
                  drag={this.state.drag}
-                 isTutorialDismissed={this.state.isTutorialDismissed}
                  isSubmissionPending={isSubmissionPending}
                  isPractice={this.isPracticeMode}
                  isReadOnly={this.state.isReadOnly}
@@ -268,7 +264,6 @@ module.exports = React.createClass({
                  displayModalError={this.props.displayModalError}
                  displayModalSuccess={this.props.displayModalSuccess}
                  clearMessages={this.props.clearMessages}
-                 dismissTutorial={this._dismissTutorial}
                  handleSubmit={this._handleSubmit}
                  selectQuestion={this._selectQuestion}
                  nextQuestion={this._handleNextQuestion}
@@ -790,10 +785,6 @@ module.exports = React.createClass({
   _hideHelpDialog: function() {
     debug('Hide help dialog');
     this.setState({isHelpDialogShown: false});
-  },
-
-  _dismissTutorial: function() {
-    this.setState({isTutorialDismissed: true});
   },
 
   _getQuestionType: async function(num: number): Promise<string> {

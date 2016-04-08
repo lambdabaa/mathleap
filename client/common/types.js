@@ -78,6 +78,8 @@ export type FBPractice = {
   submission: Object;
 };
 
+export type FBUser = FBTeacher | FBStudent;
+
 export type FBTeacher = {
   id: string;
   email: string;
@@ -85,15 +87,18 @@ export type FBTeacher = {
   last: string;
   role: string;
   title: string;
+  ftu: boolean;
+  scratchpadFtu: boolean;
 };
 
 export type FBStudent = {
-  id: ?string;
+  id: string;
   email: string;
   first: string;
   last: string;
   role: string;
   username: string;
+  scratchpadFtu: boolean;
 };
 
 export type FBSubmission = {
