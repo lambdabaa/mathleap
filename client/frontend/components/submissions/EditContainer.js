@@ -688,7 +688,6 @@ module.exports = React.createClass({
     let {aClass, assignment, submission, id} = this.props;
     let {num, changes, equation, append, leftParens, rightParens} = this.state;
     let responses = this._getResponses();
-    let {work} = responses[num];
 
     try {
       await editor.commitDelta(
