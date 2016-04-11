@@ -4,7 +4,7 @@
  */
 
 let formatDecimal = require('./formatDecimal');
-let fraction = require('./fraction');
+let fraction = require('../common/fraction');
 let normalizeFraction = require('./normalizeFraction');
 let rand = require('../common/rand');
 let range = require('lodash/utility/range');
