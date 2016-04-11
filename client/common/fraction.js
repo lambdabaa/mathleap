@@ -27,6 +27,7 @@ fraction.equals = (one: Object|string, other: Object|string): boolean => {
     other = fraction.eval(other);
   }
 
+  // $FlowFixMe
   return ['n', 'd'].every(field => one[field] === other[field]);
 };
 
