@@ -53,10 +53,6 @@ module.exports = React.createClass({
 
   _bootstrap: function(props: Object) {
     let {responses, num} = props;
-    if (props.num === this.state.num) {
-      return;
-    }
-
     let response = responses[num];
     let {work} = response;
     if (work.length <= 1) {
