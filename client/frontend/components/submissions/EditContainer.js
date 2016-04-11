@@ -307,7 +307,7 @@ module.exports = React.createClass({
       append: '',
       leftParens: false,
       rightParens: false,
-      changes: mapChar(equation, () => 'none'),
+      changes: [[0, equation]],
       highlight: mapChar(equation, () => false),
       cursor: equation.length,
       deltas: [],
@@ -668,20 +668,14 @@ module.exports = React.createClass({
     let {aClass, assignment, submission, id} = this.props;
     let {num} = this.state;
     let responses = this._getResponses();
-    try {
-      await editor.commitAnswer(
-        aClass,
-        assignment || id,
-        submission,
-        responses,
-        num,
-        answer
-      );
-    } catch (error) {
-      if (error.message === 'Bad math input') {
-        return alert('Invalid math expression!');
-      }
-    }
+    await editor.commitAnswer(
+      aClass,
+      assignment || id,
+      submission,
+      responses,
+      num,
+      answer
+    );
   },
 
   _commitDelta: async function(): Promise<void> {

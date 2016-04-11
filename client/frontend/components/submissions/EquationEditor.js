@@ -3,7 +3,10 @@
 let KaTeXContainer = require('../KaTeXContainer');
 let React = require('react');
 let Tabular = require('../Tabular');
+let clone = require('lodash/lang/cloneDeep');
 let editor = require('../../helpers/editor');
+let findIndex = require('lodash/array/findIndex');
+let flatten = require('lodash/array/flatten');
 let {mapChar} = require('../../../common/string');
 let stmt = require('../../../common/stmt');
 let stringify = require('../../../common/stringify');
@@ -54,13 +57,89 @@ function EquationEditor(props: Object): React.Element {
 
 function renderChanges(props, equation, changes, append = '', leftParens = false,
                        rightParens = false): React.Element {
+  let version = getDiffVersion(changes);
+  let render;
+  switch (version) {
+    case '1':
+      render = renderV1DiffChanges;
+      break;
+    case '2':
+      render = renderV2DiffChanges;
+      break;
+  }
+
+  // $FlowFixMe
+  return render(props, equation, changes, append, leftParens, rightParens);
+}
+
+/**
+ * This one takes changes from Google's diff-match-patch.
+ */
+function renderV2DiffChanges(props, equation, changes, append,
+                             leftParens, rightParens): React.Element {
+  changes = clone(changes);
+  let symbol = stmt.getStmtSymbol(equation);
+  let symbolIndex = symbol ?
+    findIndex(changes, change => change[1].indexOf(symbol !== -1)) :
+    -1;
+
+  if (symbolIndex !== -1) {
+    let symbolChange = changes[symbolIndex];
+    let [before, after] = symbolChange[1].split(symbol);
+    changes.splice(
+      symbolIndex,
+      1,
+      [symbolChange[0], before],
+      [1, leftParens ? ')' : ''],
+      [1, append],
+      [symbolChange[0], symbol],
+      [1, rightParens ? '(' : ''],
+      [symbolChange[0], after || '']
+    );
+
+    changes.unshift([1, leftParens ? '(' : '']);
+    changes.push([1, rightParens ? ')' : '']);
+    changes.push([1, append]);
+  }
+
+  return <div className="submissions-edit-changes unselectable">
+    {
+      flatten(
+        changes.map((change, index) => {
+          return mapChar(change[1], (chr, chrIndex) => {
+            let style;
+            switch (change[0]) {
+              case -1:
+                style = {backgroundColor: 'rgba(226, 37, 23, 0.5)'};
+                break;
+              case 0:
+                style = {};
+                break;
+              case 1:
+                style = {backgroundColor: 'rgba(176, 235, 63, 0.5)'};
+                break;
+            }
+
+            return <div key={`${index}+${chrIndex}`}
+                        className="submissions-edit-changes unselectable"
+                        style={style}>
+              {chr}
+            </div>;
+          });
+        })
+      )
+    }
+  </div>;
+}
+
+function renderV1DiffChanges(props, equation, changes, append,
+                             leftParens, rightParens): React.Element {
   let symbol = stmt.getStmtSymbol(equation) || '=';
   return <div className="submissions-edit-changes unselectable">
     {
       (() => {
         function renderEquationChar(chr, index) {
           let style = {};
-          // TODO(gaye): Need to handle non-equality statements...
           let changeIndex = index >= equation.indexOf(symbol) ?
             index - append.length :
             index;
@@ -261,6 +340,10 @@ function renderResults(props, equation, cursor, append = '', leftParens = false,
     {isCursorVisible && <div className="submissions-edit-cursor unselectable"></div>}
     {times(equation.length + 2 * append.length - cursor + 1, i => renderChar(cursor + i))}
   </div>;
+}
+
+function getDiffVersion(diff): string {
+  return Array.isArray(diff[0]) ? '2' : '1';
 }
 
 module.exports = EquationEditor;

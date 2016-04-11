@@ -251,7 +251,7 @@ exports.getHighlights = function(highlight: Highlight): Array<Range> {
 
 exports.commitDelta = async function(aClass: string, assignment: string,
                                      submission: string, responses: Array<FBResponse>,
-                                     num: number, changes: Array<string>,
+                                     num: number, changes: Array<Array<number | string>>,
                                      equation: string, append: string,
                                      leftParens: boolean, rightParens: boolean): Promise<void> {
   let {work} = responses[num];
@@ -294,12 +294,6 @@ exports.commitDelta = async function(aClass: string, assignment: string,
 exports.commitAnswer = async function(aClass: string, assignment: string,
                                       submission: string, responses: Array<FBResponse>,
                                       num: number, answer: string): Promise<void> {
-  try {
-    await bridge('parse', answer);
-  } catch (error) {
-    throw new Error('Bad math input');
-  }
-
   let {work} = responses[num];
   await submissions.commitAnswer(
     aClass,

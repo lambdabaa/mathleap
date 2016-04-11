@@ -2,7 +2,6 @@
 
 let createSafeFirebaseRef = require('../createSafeFirebaseRef');
 let debug = require('../../common/debug')('store/assignments');
-let includes = require('lodash/collection/includes');
 let {isEqual} = require('./wolframs');
 let map = require('lodash/collection/map');
 let request = require('./request');
@@ -51,7 +50,7 @@ exports.list = async function(classId: string,
 
 exports.commitDelta = async function(classId: string, assignmentId: string,
                                      submissionId: string, question: number,
-                                     work: Array<Object>, changes: Array<Array<string>>,
+                                     work: Array<Object>, changes: Array<Array<Array<number | string>>>,
                                      appends: Array<string>, state: Array<string>): Promise<void> {
   debug('commit delta', stringify(arguments));
   let ref = getSubmissionRef(classId, assignmentId, submissionId);
@@ -59,10 +58,8 @@ exports.commitDelta = async function(classId: string, assignmentId: string,
   let next = ref.child(`/responses/${question}/work/${work.length}`);
 
   let operation;
-  if (includes(changes[0], 'highlight')) {
-    operation = 'replace';
-  } else if (includes(changes[0], 'strikethrough')) {
-    operation = 'cancel';
+  if (changes[0].length > 1) {
+    operation = 'rewrite';
   } else if (appends[0].length) {
     operation = 'both-sides';
   } else {

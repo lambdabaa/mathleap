@@ -25,6 +25,7 @@
  *     to list of deltas to apply.
  */
 
+let DiffMatchPatch = require('diff-match-patch');
 let debug = require('../common/debug')('diff');
 let {eachChar} = require('../common/string');
 let flatten = require('lodash/array/flatten');
@@ -35,16 +36,25 @@ let stringify = require('../common/stringify');
 type Char = string | number;  // char code or string length 1.
 type DeltaV1 = {chr: Char; pos: number; highlight: ?number};
 type DeltaV2 = {type: string, range: Array<number>, replacement: string};
-type Diff = {result: string, changes: Array<string>};
+type DiffV2 = {result: string, changes: Array<Array<number | string>>};
 type Block = {type: string, range: Array<number>, len: number};
 type BlockAndIndex = {block: Block, index: number};
 type BlocksAndCursor = {blocks: Array<Block>, cursor: number};
+
+let dmp = new DiffMatchPatch();
 
 /**
  * Temporary bridge from api that the frontend expects to our
  * existing backend thing.
  */
-function diff(statement: string, deltas: Array<DeltaV2>): Diff  {
+function diff(statement: string, deltas: Array<DeltaV2>): DiffV2  {
+  let adapted = bridge(statement, deltas);
+  let result = module.exports.applyDiff(adapted, statement);
+  let changes = dmp.diff_main(statement, result);
+  return {result, changes};
+}
+
+function bridge(statement: string, deltas: Array<DeltaV2>): Array<DeltaV1> {
   debug('diff', statement, stringify(deltas));
   let adapted = flatten(
     deltas.map((delta: DeltaV2): Array<DeltaV1> => {
@@ -79,13 +89,8 @@ function diff(statement: string, deltas: Array<DeltaV2>): Diff  {
   );
 
   debug('adapted to old api', stringify(adapted));
-
-  return {
-    result: module.exports.applyDiff(adapted, statement),
-    changes: module.exports.getChanges(adapted, statement)
-  };
+  return adapted;
 }
-
 
 function applyDiff(deltas: Array<DeltaV1>, stmt: string): string {
   if (!deltas.length) {
