@@ -4,6 +4,7 @@ let Xhr = require('./xhr');
 let {apiUrl} = require('./constants');
 let debug = require('../common/debug')('wolfram2');
 let flatten = require('lodash/array/flatten');
+let fraction = require('../common/fraction');
 let {getStmtType} = require('../common/stmt');
 let {mapChar} = require('../common/string');
 let querystring = require('querystring');
@@ -20,6 +21,10 @@ exports.isEqual = async function(a: string, b: string,
   let check = stmtType === 'expression' ? 'Expr' : 'Equation';
   let url = `${apiUrl}/equal/`;
   let vars = exports.getVariables(a, b, instruction);
+  if (vars === '{}') {
+    return fraction.equals(a, b);
+  }
+
   debug('vars', vars);
   let req = new Xhr();
   req.open(
@@ -44,7 +49,7 @@ exports.getVariables = function(a: string, b: string, instruction: string): stri
   let re = /^Evaluate when [a-z] is -?\d+( and [a-z] is -?\d+)*\.$/;
   if (!re.test(instruction)) {
     let vars = exports.extractVariablesFromMany(a, b);
-    return `{${vars.length ? vars.join(',') : 'x'}}`;
+    return `{${vars.join(',')}}`;
   }
 
   let matches = instruction.match(/[a-z] is -?\d+/g);

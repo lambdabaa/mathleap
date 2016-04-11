@@ -18,4 +18,16 @@ fraction.toDecimal = (input: Object|string): number => {
   return input.s * input.n / input.d;
 };
 
+fraction.equals = (one: Object|string, other: Object|string): boolean => {
+  if (typeof one === 'string') {
+    one = fraction.eval(one);
+  }
+
+  if (typeof other === 'string') {
+    other = fraction.eval(other);
+  }
+
+  return ['n', 'd'].every(field => one[field] === other[field]);
+};
+
 module.exports = fraction;
