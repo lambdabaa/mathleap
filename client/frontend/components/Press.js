@@ -9,6 +9,10 @@ function Press(props: Object): React.Element {
     <Topbar headerText="Press" />
     <div className="view">
       <div className="citation">
+        Gallivan, Joe. <a href="http://portlandtribune.com/but/239-news/301375-178778-solve-for-">Solve for $</a>.
+        <span style={{fontStyle: 'italic'}}> portlandtribune.com</span>. Portland Tribune, 10 Apr. 2016. Web.
+      </div>
+      <div className="citation">
         Turoczy, Rick. <a href="http://siliconflorist.com/2016/03/29/add-mathleap-offers-forehead-slappingly-awesome-algebra-tool-students-educators/">Add it up: MathLeap offers a forehead slappingly awesome algebra tool for students and educators</a>.
         <span style={{fontStyle: 'italic'}}> siliconflorist.com</span>. Silicon Florist, 19 Mar. 2016. Web.
       </div>
